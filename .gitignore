@@ -5,3 +5,5 @@ content/giftcards.json
 .claude/
 .DS_Store
 *.bak
+content/uploads/
+assets/uploads/

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: radagerdi
+    runtime: node
+    plan: starter
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /
+    disk:
+      name: radagerdi-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /data

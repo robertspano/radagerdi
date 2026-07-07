@@ -13,11 +13,14 @@ const path = require('path');
 const crypto = require('crypto');
 
 const ROOT = __dirname;
-const CONTENT_DIR = path.join(ROOT, 'content');
+// Mutable data lives in DATA_DIR — locally ./content, on Render a persistent disk (/data)
+const CONTENT_DIR = process.env.DATA_DIR || path.join(ROOT, 'content');
 const CONTENT_FILE = path.join(CONTENT_DIR, 'content.json');
 const AUTH_FILE = path.join(CONTENT_DIR, 'auth.json');
 const GIFT_FILE = path.join(CONTENT_DIR, 'giftcards.json');
-const UPLOAD_DIR = path.join(ROOT, 'assets', 'uploads');
+const UPLOAD_DIR = path.join(CONTENT_DIR, 'uploads');
+const LEGACY_UPLOAD_DIR = path.join(ROOT, 'assets', 'uploads');
+const IS_HTTPS = !!process.env.RENDER; // behind Render's TLS proxy → mark session cookie Secure
 const PORT = process.env.PORT || 8787;
 const DEFAULT_PASSWORD = 'radagerdi';
 
@@ -96,6 +99,9 @@ function serveStatic(req, res, urlPath) {
   // prevent path traversal
   const full = path.normalize(path.join(ROOT, rel));
   if (!full.startsWith(ROOT)) return send(res, 403, 'Forbidden');
+  serveFile(req, res, full);
+}
+function serveFile(req, res, full) {
   fs.stat(full, (err, st) => {
     if (err || !st.isFile()) return send(res, 404, 'Not found');
     const ext = path.extname(full).toLowerCase();
@@ -131,7 +137,7 @@ async function handleAPI(req, res, url) {
     const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
     if (verifyPassword(body.password || '')) {
       return sendJSON(res, 200, { ok: true }, {
-        'Set-Cookie': `cms_session=${sessionToken()}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`
+        'Set-Cookie': `cms_session=${sessionToken()}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000${IS_HTTPS ? '; Secure' : ''}`
       });
     }
     return sendJSON(res, 401, { ok: false, error: 'Rangt lykilorð' });
@@ -219,7 +225,7 @@ async function handleAPI(req, res, url) {
     if (!verifyPassword(body.current || '')) return sendJSON(res, 401, { error: 'Núverandi lykilorð er rangt' });
     if (!body.next || String(body.next).length < 4) return sendJSON(res, 400, { error: 'Nýtt lykilorð verður að vera a.m.k. 4 stafir' });
     setPassword(body.next);
-    return sendJSON(res, 200, { ok: true }, { 'Set-Cookie': `cms_session=${sessionToken()}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000` });
+    return sendJSON(res, 200, { ok: true }, { 'Set-Cookie': `cms_session=${sessionToken()}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000${IS_HTTPS ? '; Secure' : ''}` });
   }
   return sendJSON(res, 404, { error: 'Óþekkt slóð' });
 }
@@ -235,6 +241,15 @@ http.createServer(async (req, res) => {
     }
     if (url.pathname === '/skann' || url.pathname === '/skann/') {
       return serveStatic(req, res, '/cms/skann.html');
+    }
+    // uploaded images live on the data disk (mutable), served under the same URL as before
+    if (url.pathname.startsWith('/assets/uploads/')) {
+      const name = path.basename(decodeURIComponent(url.pathname));
+      const onDisk = path.join(UPLOAD_DIR, name);
+      if (fs.existsSync(onDisk)) return serveFile(req, res, onDisk);
+      const legacy = path.join(LEGACY_UPLOAD_DIR, name);
+      if (fs.existsSync(legacy)) return serveFile(req, res, legacy);
+      return send(res, 404, 'Not found');
     }
     if (/^\/gjafabref\/[a-f0-9]{16,64}$/.test(url.pathname)) {
       return serveStatic(req, res, '/cms/wallet.html');

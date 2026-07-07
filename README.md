@@ -1,4 +1,21 @@
-# Ráðagerði — staðbundin eftirmynd af radagerdi.is
+# Ráðagerði — vefur, CMS og gjafabréf
+
+## Hýsing á Render (allt virkt á netinu)
+
+Repo-ið er tilbúið fyrir [Render](https://render.com) — `render.yaml` lýsir öllu:
+
+1. Stofnaðu aðgang á render.com (innskráning með GitHub er einfaldast).
+2. **New + → Blueprint** → veldu repo-ið `robertspano/radagerdi` → **Apply**.
+3. Render setur upp þjóninn + 1GB gagnadisk (`/data`) sjálfkrafa (Starter, ~7$/mán).
+4. Vefurinn birtist á `https://radagerdi.onrender.com` (eða álíka) — þar virkar **allt**: vefur, `/admin`, gjafabréf og `/skann` (HTTPS → myndavélin virkar á síma/iPad).
+5. **Fyrsta verk: breyttu lykilorðinu** (⋯ → Breyta lykilorði) — sjálfgefið er `radagerdi`.
+
+Gögn (efni, gjafabréf, myndir) geymast á disknum og lifa af allar enduruppfærslur.
+Eigið lén (t.d. undirlén af radagerdi.is) er hægt að tengja í Render → Settings → Custom Domains.
+
+---
+
+# Staðbundin eftirmynd af radagerdi.is
 
 Sjálfstæð (offline) eftirmynd af vefsíðunni <https://www.radagerdi.is/>.
 Allt HTML, CSS, letur, myndir, myndbönd og Webflow-JS er sótt og vísanir

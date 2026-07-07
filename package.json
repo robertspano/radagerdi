@@ -1,0 +1,12 @@
+{
+  "name": "radagerdi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ráðagerði veitingahús — vefur, CMS og gjafabréf",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
