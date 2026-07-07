@@ -11,6 +11,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const passkit = require('./cms/pass.js');
 
 const ROOT = __dirname;
 // Mutable data lives in DATA_DIR — locally ./content, on Render a persistent disk (/data)
@@ -145,6 +146,10 @@ async function handleAPI(req, res, url) {
   if (p === '/api/logout' && req.method === 'POST') {
     return sendJSON(res, 200, { ok: true }, { 'Set-Cookie': 'cms_session=; Path=/; Max-Age=0' });
   }
+  // public: is Apple Wallet pass signing configured? (wallet page shows/hides the button)
+  if (p === '/api/pass-status' && req.method === 'GET') {
+    return sendJSON(res, 200, { available: passkit.isConfigured(CONTENT_DIR) });
+  }
   // public: read one gift card (the unguessable id in the URL is the bearer secret)
   const gcPub = p.match(/^\/api\/giftcards\/([a-f0-9]{16,64})$/);
   if (gcPub && req.method === 'GET') {
@@ -250,6 +255,23 @@ http.createServer(async (req, res) => {
       const legacy = path.join(LEGACY_UPLOAD_DIR, name);
       if (fs.existsSync(legacy)) return serveFile(req, res, legacy);
       return send(res, 404, 'Not found');
+    }
+    // Apple Wallet pass download: /gjafabref/<id>/pass  →  signed .pkpass
+    const passMatch = url.pathname.match(/^\/gjafabref\/([a-f0-9]{16,64})\/pass$/);
+    if (passMatch) {
+      const g = readJSON(GIFT_FILE, { cards: {} });
+      const card = g.cards[passMatch[1]];
+      if (!card) return send(res, 404, 'Gjafabréf fannst ekki');
+      const proto = (req.headers['x-forwarded-proto'] || (IS_HTTPS ? 'https' : 'http')).split(',')[0];
+      const baseUrl = proto + '://' + (req.headers['x-forwarded-host'] || req.headers.host || 'localhost');
+      let pk;
+      try { pk = passkit.buildPass(card, baseUrl, CONTENT_DIR); }
+      catch (e) { console.error('pass error', e); return send(res, 500, 'Villa við gerð passa'); }
+      if (!pk) return send(res, 503, 'Apple Wallet er ekki uppsett ennþá (vantar Apple-skírteini)');
+      return send(res, 200, pk, {
+        'Content-Type': 'application/vnd.apple.pkpass',
+        'Content-Disposition': 'attachment; filename="radagerdi-gjafabref.pkpass"',
+      });
     }
     if (/^\/gjafabref\/[a-f0-9]{16,64}$/.test(url.pathname)) {
       return serveStatic(req, res, '/cms/wallet.html');

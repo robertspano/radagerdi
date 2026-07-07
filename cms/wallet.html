@@ -35,6 +35,10 @@
   .hist .row:last-child{border-bottom:none}
   .hist .neg{color:var(--red);font-weight:700}
   .hist .pos{color:var(--green);font-weight:700}
+  .walletbtn{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:14px;background:#000;color:#fff;
+    border-radius:14px;padding:15px;font-size:15.5px;font-weight:600;text-decoration:none;letter-spacing:.01em;
+    box-shadow:0 8px 24px rgba(0,0,0,.22);transition:transform .1s}
+  .walletbtn:active{transform:scale(.985)}
   .save{background:#fff;border-radius:16px;margin-top:14px;padding:16px 18px;box-shadow:0 8px 24px rgba(40,70,45,.08);font-size:13.5px;color:#555;line-height:1.55}
   .save b{color:var(--ink)}
   .err{text-align:center;margin-top:60px;color:#8a8f96}
@@ -60,6 +64,10 @@
       <h3>Hreyfingar</h3>
       <div id="histrows"></div>
     </div>
+    <a id="addwallet" class="walletbtn" href="#" hidden>
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2.6" stroke="#fff" stroke-width="1.7"/><path d="M3 9.6h18" stroke="#fff" stroke-width="1.7"/><rect x="14.2" y="12.6" width="4.8" height="3.2" rx="1.1" fill="#fff"/></svg>
+      Bæta í Apple Wallet
+    </a>
     <div class="save" id="save"></div>
     <div class="foot">Ráðagerði Veitingahús · Seltjarnarnesi · 546 1700</div>
   </div>
@@ -103,7 +111,17 @@
       ).join('');
     }
   }
-  renderQR(); renderSaveHint(); load();
+  async function initWalletBtn() {
+    try {
+      const s = await (await fetch('/api/pass-status')).json();
+      if (s.available) {
+        const a = document.getElementById('addwallet');
+        a.href = location.pathname + '/pass';
+        a.hidden = false;
+      }
+    } catch (e) { }
+  }
+  renderQR(); renderSaveHint(); initWalletBtn(); load();
   // refresh the balance whenever the customer re-opens the card (e.g. right after staff scanned it)
   document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
   window.addEventListener('focus', load);
