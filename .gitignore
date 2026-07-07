@@ -1,0 +1,7 @@
+# private — never publish
+content/auth.json
+content/giftcards.json
+# local/system
+.claude/
+.DS_Store
+*.bak

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skanni · Ráðagerði</title>
+<link rel="icon" href="/assets/63bddf55571e7c33b03fb181_radagerdi-32x32 v2.png">
+<script src="/cms/vendor/jsQR.js"></script>
+<style>
+  :root{--green:#629F67;--red:#FF3031;--ink:#14161a}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--ink);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:18px 16px 40px}
+  .wrap{width:min(460px,100%)}
+  h1{font-size:15px;letter-spacing:.14em;text-transform:uppercase;text-align:center;margin:6px 0 16px}
+  h1 b{color:var(--red)}
+  .cam{position:relative;border-radius:20px;overflow:hidden;background:#000;aspect-ratio:1/1}
+  .cam video{width:100%;height:100%;object-fit:cover;display:block}
+  .cam .frame{position:absolute;inset:14%;border:3px solid rgba(255,255,255,.85);border-radius:18px;pointer-events:none;
+    box-shadow:0 0 0 999px rgba(0,0,0,.28)}
+  .status{text-align:center;font-size:13px;color:#aab0ba;margin:12px 0 0;min-height:18px}
+  .manual{display:flex;gap:8px;margin-top:14px}
+  .manual input{flex:1;background:#23262d;border:1.5px solid #33373f;border-radius:12px;padding:13px 14px;color:#fff;font-size:14px;outline:none}
+  .manual input:focus{border-color:var(--green)}
+  .manual button{background:#2d313a;color:#fff;border:none;border-radius:12px;padding:0 18px;font-size:14px;font-weight:600;cursor:pointer}
+  .panel{background:#fff;color:#1a1b1f;border-radius:20px;padding:20px;margin-top:16px;display:none}
+  .panel.show{display:block}
+  .panel .nm{font-size:18px;font-weight:800;margin:0}
+  .panel .ph{font-size:13px;color:#888;margin:2px 0 12px}
+  .panel .balrow{display:flex;justify-content:space-between;align-items:baseline;background:#f2f6f2;border-radius:12px;padding:12px 14px}
+  .panel .balrow .l{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#6b8f70}
+  .panel .balrow .v{font-size:24px;font-weight:800;color:var(--green)}
+  .panel label{display:block;font-size:12.5px;font-weight:600;color:#555;margin:16px 0 6px}
+  .panel input{width:100%;border:1.5px solid #dfe2e6;border-radius:12px;padding:14px;font-size:17px;font-weight:700;outline:none}
+  .panel input:focus{border-color:var(--green)}
+  .panel .go{width:100%;margin-top:12px;background:var(--red);color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:800;cursor:pointer}
+  .panel .go:disabled{opacity:.5}
+  .result{background:var(--green);color:#fff;border-radius:20px;padding:22px;margin-top:16px;display:none;text-align:center}
+  .result.show{display:block}
+  .result .big{font-size:26px;font-weight:800;margin:4px 0}
+  .result .rem{background:rgba(0,0,0,.2);display:inline-block;border-radius:10px;padding:8px 14px;margin-top:10px;font-weight:700}
+  .result button{margin-top:16px;background:#fff;color:var(--green);border:none;border-radius:12px;padding:12px 22px;font-size:14px;font-weight:800;cursor:pointer}
+  .err{color:#ffb3ba;text-align:center;font-size:13.5px;margin-top:10px;min-height:17px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>RÁÐAGERÐI <b>SKANNI</b></h1>
+    <div class="cam"><video id="video" playsinline muted></video><div class="frame"></div></div>
+    <div class="status" id="status">Ræsi myndavél…</div>
+    <div class="manual">
+      <input id="manual" placeholder="…eða límdu hlekk / sláðu inn kóða gjafabréfs">
+      <button id="manualGo" type="button">Sækja</button>
+    </div>
+    <div class="err" id="err"></div>
+
+    <div class="panel" id="panel">
+      <p class="nm" id="nm"></p>
+      <p class="ph" id="ph"></p>
+      <div class="balrow"><span class="l">Inneign</span><span class="v" id="bal"></span></div>
+      <label for="amount">Upphæð til að draga af (kr.)</label>
+      <input id="amount" type="number" inputmode="numeric" placeholder="0">
+      <button class="go" id="redeem" type="button">Draga af inneign</button>
+    </div>
+
+    <div class="result" id="result">
+      <div>Dregið af gjafabréfi</div>
+      <div class="big" id="resAmount"></div>
+      <div>Ný inneign: <b id="resBal"></b></div>
+      <div class="rem" id="resRem" hidden></div>
+      <button id="next" type="button">Skanna næsta</button>
+    </div>
+  </div>
+<script>
+  const kr = n => new Intl.NumberFormat('is-IS').format(n) + ' kr.';
+  const $ = s => document.querySelector(s);
+  let currentCard = null, scanning = true;
+
+  // staff only — bounce to login if not authed
+  fetch('/api/session').then(r => r.json()).then(s => { if (!s.authed) location.replace('/admin?next=' + encodeURIComponent('/skann')); });
+
+  function extractId(text) {
+    const m = String(text).match(/gjafabref\/([a-f0-9]{16,64})/i) || String(text).trim().match(/^([a-f0-9]{16,64})$/i);
+    return m ? m[1].toLowerCase() : null;
+  }
+  function beep() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination); o.frequency.value = 880; g.gain.value = .12;
+      o.start(); setTimeout(() => { o.stop(); ctx.close(); }, 140);
+    } catch (e) { }
+    if (navigator.vibrate) navigator.vibrate(80);
+  }
+  async function showCard(id) {
+    $('#err').textContent = '';
+    const r = await fetch('/api/giftcards/' + id, { cache: 'no-store' });
+    if (!r.ok) { $('#err').textContent = 'Gjafabréf fannst ekki'; return; }
+    const { card } = await r.json();
+    currentCard = card; scanning = false;
+    beep();
+    $('#panel').classList.add('show'); $('#result').classList.remove('show');
+    $('#nm').textContent = card.name;
+    $('#ph').textContent = card.phone || '';
+    $('#bal').textContent = kr(card.balance);
+    $('#status').textContent = 'Gjafabréf fundið ✓';
+    $('#amount').value = ''; $('#amount').focus();
+  }
+  $('#manualGo').onclick = () => { const id = extractId($('#manual').value); if (id) showCard(id); else $('#err').textContent = 'Ógildur kóði eða hlekkur'; };
+  $('#manual').addEventListener('keydown', e => { if (e.key === 'Enter') $('#manualGo').click(); });
+  $('#redeem').onclick = async () => {
+    const amount = Math.round(Number($('#amount').value));
+    if (!(amount > 0)) { $('#err').textContent = 'Sláðu inn upphæð'; return; }
+    $('#redeem').disabled = true;
+    const r = await fetch('/api/giftcards/' + currentCard.id + '/redeem', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount })
+    });
+    const j = await r.json(); $('#redeem').disabled = false;
+    if (!r.ok || !j.ok) { $('#err').textContent = j.error || 'Villa'; return; }
+    $('#panel').classList.remove('show');
+    $('#result').classList.add('show');
+    $('#resAmount').textContent = '−' + kr(j.deducted);
+    $('#resBal').textContent = kr(j.balance);
+    $('#resRem').hidden = !(j.remainder > 0);
+    if (j.remainder > 0) $('#resRem').textContent = 'Eftirstöðvar til greiðslu: ' + kr(j.remainder);
+    beep();
+  };
+  $('#next').onclick = () => { $('#result').classList.remove('show'); currentCard = null; scanning = true; $('#status').textContent = 'Beindu myndavélinni að QR-kóðanum'; };
+
+  // ---- camera scanning: BarcodeDetector if available, else jsQR ----
+  async function startCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      $('#status').textContent = 'Myndavél er ekki í boði hér (þarf HTTPS eða localhost) — notaðu reitinn að ofan';
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      const video = $('#video'); video.srcObject = stream; await video.play();
+      $('#status').textContent = 'Beindu myndavélinni að QR-kóðanum';
+      let detector = null;
+      if ('BarcodeDetector' in window) { try { detector = new BarcodeDetector({ formats: ['qr_code'] }); } catch (e) { } }
+      const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      async function tick() {
+        if (scanning && video.readyState === 4) {
+          let text = null;
+          if (detector) {
+            try { const codes = await detector.detect(video); if (codes.length) text = codes[0].rawValue; } catch (e) { }
+          } else if (window.jsQR) {
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            const d = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(d.data, d.width, d.height, { inversionAttempts: 'dontInvert' });
+            if (code) text = code.data;
+          }
+          if (text) { const id = extractId(text); if (id) { await showCard(id); } }
+        }
+        setTimeout(tick, detector ? 200 : 300);
+      }
+      tick();
+    } catch (e) {
+      $('#status').textContent = 'Ekki náðist í myndavélina — notaðu reitinn að ofan';
+    }
+  }
+  startCamera();
+</script>
+</body>
+</html>
