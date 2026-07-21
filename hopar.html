@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hópar · Ráðagerði</title>
+<link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
+<link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:swap}
+  :root{--gr:#1B7C38;--red:#F0392F;--bg:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:'Montserrat',sans-serif;color:var(--gr)}
+
+  /* red top bar */
+  .bar{background:var(--red);color:#fff;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:26px 34px}
+  .bar .heim{justify-self:start;color:#fff;text-decoration:none;font-size:15px;font-weight:500;letter-spacing:.08em;border-bottom:1.5px solid rgba(255,255,255,.85);padding-bottom:3px}
+  .bar .brand{font-family:'Windsord',serif;font-size:30px;letter-spacing:.1em;color:#fff;text-decoration:none}
+  .bar .soc{justify-self:end;display:flex;gap:20px}
+  .bar .soc a{color:#fff;display:flex}
+
+  .wrap{max-width:1560px;margin:0 auto;padding:0 20px}
+
+  /* green info box */
+  .gbox{border:3px solid var(--gr);border-radius:26px;overflow:hidden;margin-top:52px}
+  .gbox-top{background:var(--gr);color:#fff;text-align:center;padding:60px 40px 54px}
+  .gbox-top h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(30px,3.4vw,54px);letter-spacing:.04em;margin:0;text-transform:uppercase;line-height:1.5}
+  .gbox-top h1 .line2{display:inline-block;margin-top:26px;border-bottom:3px solid #fff;padding-bottom:6px}
+  .gbox-bot{background:#fff;text-align:center;padding:88px 40px 92px}
+  .gbox-bot p{font-size:clamp(17px,1.7vw,23px);line-height:2;margin:0;max-width:1240px;margin:0 auto}
+
+  /* three menu columns */
+  .mcols{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin:84px 0 120px;text-align:center}
+  .mcols .lbl{font-size:clamp(16px,1.5vw,21px);font-weight:700;margin:0 0 46px}
+  .mbtn{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:22px;min-height:170px;
+    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(28px,2.6vw,40px);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;
+    transition:background-color .15s,color .15s;margin:0 4px}
+  .mbtn:hover{background:var(--gr);color:#fff}
+
+  /* footer */
+  .rg2-footer{background:#fff;border-top:3px solid var(--gr);padding:74px 8vw 84px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
+  .rg2-footer .soc{display:flex;gap:26px;margin-bottom:44px}
+  .rg2-footer .soc a{color:var(--gr);display:flex}
+  .rg2-mail{color:var(--gr);font-weight:700;font-size:clamp(19px,2vw,24px);text-decoration:none}
+  .rg2-hours{text-align:center}
+  .rg2-hours h3{color:var(--gr);font-size:clamp(22px,2vw,26px);font-weight:700;margin:0 0 28px}
+  .rg2-hours p{color:var(--gr);font-size:18px;margin:0 0 24px;letter-spacing:.02em}
+
+  @media(max-width:900px){
+    .mcols{grid-template-columns:1fr;gap:40px;margin:56px 0 70px}
+    .mcols .lbl{margin-bottom:22px}
+    .mbtn{min-height:120px}
+    .gbox-top{padding:40px 22px 36px}
+    .gbox-bot{padding:48px 22px 52px}
+    .bar{padding:20px 18px}
+    .bar .brand{font-size:24px}
+    .rg2-footer{grid-template-columns:1fr;text-align:center;padding:54px 24px 60px}
+    .rg2-footer .soc{justify-content:center}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="heim" href="index.html">HEIM</a>
+    <a class="brand" href="index.html">RÁÐAGERÐI</a>
+    <div class="soc">
+      <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="2"/><circle cx="17.6" cy="6.4" r="1.5" fill="currentColor"/></svg></a>
+      <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="gbox">
+      <div class="gbox-top">
+        <h1>Hópamatseðlar miðast við hópa sem telja fleiri en<br><span class="line2">10 manns</span></h1>
+      </div>
+      <div class="gbox-bot">
+        <p>Hringið eða sendið okkur tölvupóst varðandi <b>fjölda gesta, dagsetningu, tíma og hvaða hópaseðill</b> hentar ykkar hóp. Við bókum ykkur þá inn að því gefnu að það sé laust borð</p>
+      </div>
+    </div>
+
+    <div class="mcols">
+      <div>
+        <p class="lbl">Virka daga frá 11:30-16:00</p>
+        <a class="mbtn" href="matsedill.html?tab=tab-hopar-is">Hádegi</a>
+      </div>
+      <div>
+        <p class="lbl">Helgar frá 11:00-15:30</p>
+        <a class="mbtn" href="matsedill.html?tab=tab-hopar-is">Bröns</a>
+      </div>
+      <div>
+        <p class="lbl">Alla daga frá kl 16:00</p>
+        <a class="mbtn" href="matsedill.html?tab=tab-hopar-is">Kvöld</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="rg2-footer">
+    <div>
+      <div class="soc">
+        <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.4" fill="currentColor"/></svg></a>
+        <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a>
+      </div>
+      <a class="rg2-mail" href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a>
+    </div>
+    <div class="rg2-hours">
+      <h3>Opnunartímar</h3>
+      <p>MÁN–FIM 11:30–22</p>
+      <p>FÖS 11:30–23</p>
+      <p>LAU 11–23</p>
+      <p>SUN 11–22</p>
+    </div>
+  </footer>
+<script src="cms/cms-inject.js" defer></script>
+</body>
+</html>
