@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Take Away · Ráðagerði</title>
+<link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
+<link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:swap}
+  :root{--gr:#1B7C38;--red:#F0392F;--redline:#DE2C2C;--bg:#f7f7f4}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:'Montserrat',sans-serif;color:var(--gr)}
+  .serif{font-family:'Windsord',serif}
+
+  /* red top bar */
+  .bar{background:var(--red);color:#fff;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:26px 34px}
+  .bar .heim{justify-self:start;color:#fff;text-decoration:none;font-size:15px;font-weight:500;letter-spacing:.08em;border-bottom:1.5px solid rgba(255,255,255,.85);padding-bottom:3px}
+  .bar .brand{font-family:'Windsord',serif;font-size:30px;letter-spacing:.1em;color:#fff;text-decoration:none}
+  .bar .soc{justify-self:end;display:flex;gap:20px}
+  .bar .soc a{color:#fff;display:flex}
+
+  .wrap{max-width:1240px;margin:0 auto;padding:0 20px 30px}
+
+  /* green rounded hero block */
+  .ta-hero{background:var(--gr);color:#fff;text-align:center;border-radius:190px 190px 0 0;margin-top:56px;padding:74px 30px 54px}
+  .ta-hero h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(40px,5.4vw,64px);letter-spacing:.04em;margin:0 0 26px;text-transform:uppercase}
+  .ta-hero .tel{font-size:22px;font-weight:700;margin:0 0 20px}
+  .ta-hero .off{font-size:19px;font-weight:700;margin:0}
+
+  /* dashed lunch offer */
+  .lunch{border:5px dashed var(--gr);border-radius:26px;text-align:center;padding:40px 26px 34px;margin-top:26px}
+  .lunch h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,4.6vw,56px);letter-spacing:.05em;margin:0 0 24px;text-transform:uppercase}
+  .lunch p{font-size:19px;margin:0 0 22px}
+  .lunch .combo{font-family:'Montserrat',sans-serif;font-weight:700;font-size:20px;letter-spacing:.02em;text-transform:uppercase}
+  .lunch .fine{font-weight:700;font-size:16px;margin-bottom:0}
+
+  /* category cards */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:26px;align-items:start}
+  .col{display:flex;flex-direction:column;gap:26px}
+  .card{border:4px solid var(--gr);border-radius:26px;padding:34px 34px 30px}
+  .card h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(36px,3.4vw,50px);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin:0 0 30px}
+  .card h2 span{border-bottom:2.5px solid var(--gr);padding-bottom:4px}
+  .card .vnote{text-align:center;font-weight:700;font-size:19px;margin:-12px 0 26px}
+  .ti{margin-bottom:34px}
+  .ti:last-child{margin-bottom:6px}
+  .ti-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+  .ti-name{font-family:'Windsord',serif;font-size:clamp(24px,2.1vw,30px);letter-spacing:.03em;text-transform:uppercase}
+  .ti-old{font-family:'Windsord',serif;font-size:clamp(22px,2vw,28px);color:var(--redline);text-decoration:line-through;text-decoration-thickness:2px;white-space:nowrap}
+  .ti-new{font-family:'Windsord',serif;font-weight:700;font-size:clamp(23px,2vw,29px);margin-top:2px}
+  .ti-desc{font-size:17px;line-height:1.75;margin:14px 0 0}
+  .ti-note{font-size:17px;font-weight:700;margin:14px 0 0}
+
+  /* footer */
+  .rg2-footer{background:#fff;margin-top:44px;padding:74px 8vw 84px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
+  .rg2-footer .soc{display:flex;gap:26px;margin-bottom:44px}
+  .rg2-footer .soc a{color:var(--gr);display:flex}
+  .rg2-mail{color:var(--gr);font-weight:700;font-size:clamp(19px,2vw,24px);text-decoration:none}
+  .rg2-hours{text-align:center}
+  .rg2-hours h3{color:var(--gr);font-size:clamp(22px,2vw,26px);font-weight:700;margin:0 0 28px}
+  .rg2-hours p{color:var(--gr);font-size:18px;margin:0 0 24px;letter-spacing:.02em}
+
+  @media(max-width:900px){
+    .cols{grid-template-columns:1fr}
+    .ta-hero{border-radius:110px 110px 0 0;margin-top:30px;padding:54px 20px 40px}
+    .card{padding:26px 20px 22px}
+    .bar{padding:20px 18px}
+    .bar .brand{font-size:24px}
+    .rg2-footer{grid-template-columns:1fr;text-align:center;padding:54px 24px 60px}
+    .rg2-footer .soc{justify-content:center}
+    .ti-top{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <a class="heim" href="index.html">HEIM</a>
+    <a class="brand serif" href="index.html">RÁÐAGERÐI</a>
+    <div class="soc">
+      <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="2"/><circle cx="17.6" cy="6.4" r="1.5" fill="currentColor"/></svg></a>
+      <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="ta-hero">
+      <h1>Take Away Seðill</h1>
+      <p class="tel">S: 546-1700</p>
+      <p class="off">10% afsláttur af öllum sóttum mat</p>
+    </div>
+
+    <div class="lunch">
+      <h2>Hádegistilboð 2890 kr</h2>
+      <p>(Alla virka daga frá 11:30-15:30)</p>
+      <p class="combo">Rjómalöguð Tómat-Basil súpa &amp; Focaccia samloka</p>
+      <p>Veldu álegg: parmaskinka, mortadella, reyktur lax eða grillaður kúrbítur.</p>
+      <p class="fine">(ath afsláttur gildir ekki með tilboði)</p>
+    </div>
+
+    <div class="cols">
+      <div class="col">
+        <div class="card">
+          <h2><span>Smáréttir</span></h2>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Rjómalöguð Tómat-Basil Súpa</span><s class="ti-old">2190 kr</s></div><div class="ti-new">1971 kr</div>
+            <p class="ti-desc">Heimalöguð heit súpa úr hágæða ítölskum tómötum borin fram með stökku eldbökuðu hvítlauksbrauði.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Burrata</span><s class="ti-old">3590 kr</s></div><div class="ti-new">3231 kr</div>
+            <p class="ti-desc">Ítalskur burrata ostur, tómatar, pistasíu pestó dressing og muldar pistasíur. Borið fram með stökku eldbökuðu brauði.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Arancini</span><s class="ti-old">2690 kr</s></div><div class="ti-new">2421 kr</div>
+            <p class="ti-desc">Stökkar sveppa risotto kúlur fylltar með mozzarella osti bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Heitar Ólífur (V)</span><s class="ti-old">1390 kr</s></div><div class="ti-new">1251 kr</div>
+            <p class="ti-desc">Eldbakaðar ólífur í olíu, kryddaðar með oregano, rósmarín og chili flögum, bornar fram með brauði</p></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Salat</span></h2>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Sesar Hússins</span><s class="ti-old">3890 kr</s></div><div class="ti-new">3501 kr</div>
+            <p class="ti-desc">Romain salat, parmesan, ferskir og hálfþurrkaðir tómatar, stökk parmaskinka, stökkt brauð og kryddjurtadressing. Bættu við feta osti fyrir 500 kr.</p>
+            <p class="ti-note">Veldu: kjúkling, rækjur eða grillaðan kúrbít.</p>
+            <p class="ti-note">Hægt að fá vegan</p></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Aðalréttir</span></h2>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Andalæris Confit</span><s class="ti-old">5990 kr</s></div><div class="ti-new">5391 kr</div>
+            <p class="ti-desc">Sætkartöflu purée, ofnbakað rótargrænmeti, rauðrófuflögur og brún sósa að hætti hússins.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Trufflu Penne Pasta (V)</span><s class="ti-old">3990 kr</s></div><div class="ti-new">3591 kr</div>
+            <p class="ti-desc">Penne pasta með hvítlauks og trufflu vegan rjómaosti, steiktum kastaníusveppum, spínati og karmelluseruðum valhnetum, toppað með vegan parmesan.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Mascarpone Kjötbollur</span><s class="ti-old">4590 kr</s></div><div class="ti-new">4131 kr</div>
+            <p class="ti-desc">Eldbakaðar kjötbollur með mascarpone sveppasósu, steiktum sveppum, kartöflum, rauðlauk, gremolata, parmesan og spínati. Borið fram með eldbökuðu brauði.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Ráðagerðis Bacalao</span><s class="ti-old">4390 kr</s></div><div class="ti-new">3951 kr</div>
+            <p class="ti-desc">Saltfiskur í heimagerðri marinarasósu með blönduðum ólífum, hálfþurrkuðum tómötum, gremolata og nípu-flögum. Borið fram með eldbökuðu brauði.</p></div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card">
+          <h2><span>Focaccia</span></h2>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Focaccia Samloka</span><s class="ti-old">3290 kr</s></div><div class="ti-new">2961 kr</div>
+            <p class="ti-desc">Eldbökuð focaccia samloka með klettasalati, burrata stracciatella, pistasíu pestói, tómötum, rauðlauk og blönduðum ólífum. Veldu álegg: parmaskinka, mortadella, reyktur lax eða grillaður kúrbítur.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Hvítlauks-Focaccia</span><s class="ti-old">2490 kr</s></div><div class="ti-new">2241 kr</div>
+            <p class="ti-desc">Focaccia brauð með mozzarella osti, hvítlauk og gremolata.</p></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Pizza</span></h2>
+          <p class="vnote">Skiptu út osti fyrir vegan ost</p>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Margherita</span><s class="ti-old">2790 kr</s></div><div class="ti-new">2511 kr</div>
+            <p class="ti-desc">Tómatar, ferskur mozzarella og fersk basilika</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Pepperóní &amp; Ólífur</span><s class="ti-old">3390 kr</s></div><div class="ti-new">3051 kr</div>
+            <p class="ti-desc">Tómatar, ostur, pepperóni, blandaðar ólífur og gremolata</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Pepperóní &amp; Nduja</span><s class="ti-old">3790 kr</s></div><div class="ti-new">3411 kr</div>
+            <p class="ti-desc">Tómatar, ostur, pepperoni, nduja og gráðaostur.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Pepperóní &amp; Chili</span><s class="ti-old">3790 kr</s></div><div class="ti-new">3411 kr</div>
+            <p class="ti-desc">Tómatar, ostur, pepperóni, ferskur chili, döðlur, mascarpone, toppað með chili hunangi</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Parma &amp; Klettasalat</span><s class="ti-old">3690 kr</s></div><div class="ti-new">3321 kr</div>
+            <p class="ti-desc">Tómatar, mozzarella, parmaskinka, klettasalat og parmesan</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Rækjur &amp; Gremolata</span><s class="ti-old">3890 kr</s></div><div class="ti-new">3501 kr</div>
+            <p class="ti-desc">Ólívu og ansjósu mascarpone, ostur, chili marineraðar tígrisrækjur, þistilhjörtu, gremolata og parmesan.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Hálfmáni</span><s class="ti-old">3590 kr</s></div><div class="ti-new">3231 kr</div>
+            <p class="ti-desc">Tómatar, mozzarella, sveppir, silkiskorin skinka <b><u>eða</u></b> pepperóní</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Mortadella &amp; Pistasíur</span><s class="ti-old">3690 kr</s></div><div class="ti-new">3231 kr</div>
+            <p class="ti-desc">Tómatar, ferskur mozzarella, mortadella, burrata stracciatella, pistasíu pestó og muldar pistasíur.</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Burrata Stracciatella</span><s class="ti-old">3590 kr</s></div><div class="ti-new">3231 kr</div>
+            <p class="ti-desc">Tómatar, hálfþurrkaðir tómatar, burrata stracciatella og jurtaolía</p></div>
+          <div class="ti"><div class="ti-top"><span class="ti-name">Truffla &amp; Kartöflur</span><s class="ti-old">3690 kr</s></div><div class="ti-new">3321 kr</div>
+            <p class="ti-desc">Mascarpone, ofnbakaðar kartöflur, trufflu aioli, klettasalat og parmesan</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="rg2-footer">
+    <div>
+      <div class="soc">
+        <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.4" fill="currentColor"/></svg></a>
+        <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a>
+      </div>
+      <a class="rg2-mail" href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a>
+    </div>
+    <div class="rg2-hours">
+      <h3>Opnunartímar</h3>
+      <p>MÁN–FIM 11:30–22</p>
+      <p>FÖS 11:30–23</p>
+      <p>LAU 11–23</p>
+      <p>SUN 11–22</p>
+    </div>
+  </footer>
+<script src="cms/cms-inject.js" defer></script>
+</body>
+</html>
