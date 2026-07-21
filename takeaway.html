@@ -47,10 +47,9 @@
   .card .vnote{text-align:center;font-weight:700;font-size:19px;margin:-12px 0 26px}
   .ti{margin-bottom:34px}
   .ti:last-child{margin-bottom:6px}
-  .ti-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
-  .ti-name{font-family:'Windsord',serif;font-size:clamp(24px,2.1vw,30px);letter-spacing:.03em;text-transform:uppercase}
-  .ti-old{font-family:'Windsord',serif;font-size:clamp(22px,2vw,28px);color:var(--redline);text-decoration:line-through;text-decoration-thickness:2px;white-space:nowrap}
-  .ti-new{font-family:'Windsord',serif;font-weight:700;font-size:clamp(23px,2vw,29px);margin-top:2px}
+  .ti-head{font-family:'Windsord',serif;font-size:clamp(23px,2vw,29px);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
+  .ti-old{color:var(--redline);text-decoration:line-through;text-decoration-thickness:2px;white-space:nowrap;margin:0 .35em 0 .55em;font-weight:400}
+  .ti-new{font-weight:700;white-space:nowrap}
   .ti-desc{font-size:17px;line-height:1.75;margin:14px 0 0}
   .ti-note{font-size:17px;font-weight:700;margin:14px 0 0}
 
@@ -104,19 +103,19 @@
       <div class="col">
         <div class="card">
           <h2><span>Smáréttir</span></h2>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Rjómalöguð Tómat-Basil Súpa</span><s class="ti-old">2190 kr</s></div><div class="ti-new">1971 kr</div>
+          <div class="ti"><div class="ti-head">Rjómalöguð Tómat-Basil Súpa <s class="ti-old">2190 kr</s> <b class="ti-new">1971 kr</b></div>
             <p class="ti-desc">Heimalöguð heit súpa úr hágæða ítölskum tómötum borin fram með stökku eldbökuðu hvítlauksbrauði.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Burrata</span><s class="ti-old">3590 kr</s></div><div class="ti-new">3231 kr</div>
+          <div class="ti"><div class="ti-head">Burrata <s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></div>
             <p class="ti-desc">Ítalskur burrata ostur, tómatar, pistasíu pestó dressing og muldar pistasíur. Borið fram með stökku eldbökuðu brauði.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Arancini</span><s class="ti-old">2690 kr</s></div><div class="ti-new">2421 kr</div>
+          <div class="ti"><div class="ti-head">Arancini <s class="ti-old">2690 kr</s> <b class="ti-new">2421 kr</b></div>
             <p class="ti-desc">Stökkar sveppa risotto kúlur fylltar með mozzarella osti bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Heitar Ólífur (V)</span><s class="ti-old">1390 kr</s></div><div class="ti-new">1251 kr</div>
+          <div class="ti"><div class="ti-head">Heitar Ólífur (V) <s class="ti-old">1390 kr</s> <b class="ti-new">1251 kr</b></div>
             <p class="ti-desc">Eldbakaðar ólífur í olíu, kryddaðar með oregano, rósmarín og chili flögum, bornar fram með brauði</p></div>
         </div>
 
         <div class="card">
           <h2><span>Salat</span></h2>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Sesar Hússins</span><s class="ti-old">3890 kr</s></div><div class="ti-new">3501 kr</div>
+          <div class="ti"><div class="ti-head">Sesar Hússins <s class="ti-old">3690 kr</s> <b class="ti-new">3321 kr</b></div>
             <p class="ti-desc">Romain salat, parmesan, ferskir og hálfþurrkaðir tómatar, stökk parmaskinka, stökkt brauð og kryddjurtadressing. Bættu við feta osti fyrir 500 kr.</p>
             <p class="ti-note">Veldu: kjúkling, rækjur eða grillaðan kúrbít.</p>
             <p class="ti-note">Hægt að fá vegan</p></div>
@@ -124,13 +123,15 @@
 
         <div class="card">
           <h2><span>Aðalréttir</span></h2>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Andalæris Confit</span><s class="ti-old">5990 kr</s></div><div class="ti-new">5391 kr</div>
+          <div class="ti"><div class="ti-head">Andalæris Confit <s class="ti-old">5990 kr</s> <b class="ti-new">5391 kr</b></div>
             <p class="ti-desc">Sætkartöflu purée, ofnbakað rótargrænmeti, rauðrófuflögur og brún sósa að hætti hússins.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Trufflu Penne Pasta (V)</span><s class="ti-old">3990 kr</s></div><div class="ti-new">3591 kr</div>
-            <p class="ti-desc">Penne pasta með hvítlauks og trufflu vegan rjómaosti, steiktum kastaníusveppum, spínati og karmelluseruðum valhnetum, toppað með vegan parmesan.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Mascarpone Kjötbollur</span><s class="ti-old">4590 kr</s></div><div class="ti-new">4131 kr</div>
+          <div class="ti"><div class="ti-head">Trufflu Penne Pasta (V) <s class="ti-old">3990 kr</s> <b class="ti-new">3591 kr</b></div>
+            <p class="ti-desc">Penne pasta með hvítlauks og trufflu vegan rjómaosti, hálfþurrkaðir tómatar, spínat, drekkt í heimagerðu marinara-sósunni okkar og bakað í eldofninum, toppað með gremolata og muldum pistasíum. Borið fram með mjúku eldbökuðu focaccia brauði.</p></div>
+          <div class="ti"><div class="ti-head">Ráðagerðis Lasagna <s class="ti-old">3990 kr</s> <b class="ti-new">3591 kr</b></div>
+            <p class="ti-desc">Þrjú lög af bolognese kjötsósu, bechamel sósu, mozzarella og pasta toppað með parmesan og bakað í eldofninum okkar. Borið fram með eldbökuðu og stökku hvítlauksbrauði.</p></div>
+          <div class="ti"><div class="ti-head">Mascarpone Kjötbollur <s class="ti-old">4390 kr</s> <b class="ti-new">3951 kr</b></div>
             <p class="ti-desc">Eldbakaðar kjötbollur með mascarpone sveppasósu, steiktum sveppum, kartöflum, rauðlauk, gremolata, parmesan og spínati. Borið fram með eldbökuðu brauði.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Ráðagerðis Bacalao</span><s class="ti-old">4390 kr</s></div><div class="ti-new">3951 kr</div>
+          <div class="ti"><div class="ti-head">Ráðagerðis Bacalao <s class="ti-old">4390 kr</s> <b class="ti-new">3951 kr</b></div>
             <p class="ti-desc">Saltfiskur í heimagerðri marinarasósu með blönduðum ólífum, hálfþurrkuðum tómötum, gremolata og nípu-flögum. Borið fram með eldbökuðu brauði.</p></div>
         </div>
       </div>
@@ -138,35 +139,37 @@
       <div class="col">
         <div class="card">
           <h2><span>Focaccia</span></h2>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Focaccia Samloka</span><s class="ti-old">3290 kr</s></div><div class="ti-new">2961 kr</div>
+          <div class="ti"><div class="ti-head">Focaccia Samloka <s class="ti-old">3290 kr</s> <b class="ti-new">2961 kr</b></div>
             <p class="ti-desc">Eldbökuð focaccia samloka með klettasalati, burrata stracciatella, pistasíu pestói, tómötum, rauðlauk og blönduðum ólífum. Veldu álegg: parmaskinka, mortadella, reyktur lax eða grillaður kúrbítur.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Hvítlauks-Focaccia</span><s class="ti-old">2490 kr</s></div><div class="ti-new">2241 kr</div>
+          <div class="ti"><div class="ti-head">Hvítlauks-Focaccia <s class="ti-old">2490 kr</s> <b class="ti-new">2241 kr</b></div>
             <p class="ti-desc">Focaccia brauð með mozzarella osti, hvítlauk og gremolata.</p></div>
         </div>
 
         <div class="card">
           <h2><span>Pizza</span></h2>
           <p class="vnote">Skiptu út osti fyrir vegan ost</p>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Margherita</span><s class="ti-old">2790 kr</s></div><div class="ti-new">2511 kr</div>
+          <div class="ti"><div class="ti-head">Margherita <s class="ti-old">2790 kr</s> <b class="ti-new">2511 kr</b></div>
             <p class="ti-desc">Tómatar, ferskur mozzarella og fersk basilika</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Pepperóní &amp; Ólífur</span><s class="ti-old">3390 kr</s></div><div class="ti-new">3051 kr</div>
+          <div class="ti"><div class="ti-head">Pepperóní &amp; Ólífur <s class="ti-old">3390 kr</s> <b class="ti-new">3051 kr</b></div>
             <p class="ti-desc">Tómatar, ostur, pepperóni, blandaðar ólífur og gremolata</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Pepperóní &amp; Nduja</span><s class="ti-old">3790 kr</s></div><div class="ti-new">3411 kr</div>
-            <p class="ti-desc">Tómatar, ostur, pepperoni, nduja og gráðaostur.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Pepperóní &amp; Chili</span><s class="ti-old">3790 kr</s></div><div class="ti-new">3411 kr</div>
+          <div class="ti"><div class="ti-head">Pepperóní &amp; Chili <s class="ti-old">3690 kr</s> <b class="ti-new">3321 kr</b></div>
             <p class="ti-desc">Tómatar, ostur, pepperóni, ferskur chili, döðlur, mascarpone, toppað með chili hunangi</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Parma &amp; Klettasalat</span><s class="ti-old">3690 kr</s></div><div class="ti-new">3321 kr</div>
+          <div class="ti"><div class="ti-head">Pepperóní &amp; Nduja <s class="ti-old">3790 kr</s> <b class="ti-new">3411 kr</b></div>
+            <p class="ti-desc">Tómatar, ostur, pepperoni, nduja og gráðaostur.</p></div>
+          <div class="ti"><div class="ti-head">Parma &amp; Klettasalat <s class="ti-old">3690 kr</s> <b class="ti-new">3321 kr</b></div>
             <p class="ti-desc">Tómatar, mozzarella, parmaskinka, klettasalat og parmesan</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Rækjur &amp; Gremolata</span><s class="ti-old">3890 kr</s></div><div class="ti-new">3501 kr</div>
+          <div class="ti"><div class="ti-head">Rækjur &amp; Gremolata <s class="ti-old">3890 kr</s> <b class="ti-new">3501 kr</b></div>
             <p class="ti-desc">Ólívu og ansjósu mascarpone, ostur, chili marineraðar tígrisrækjur, þistilhjörtu, gremolata og parmesan.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Hálfmáni</span><s class="ti-old">3590 kr</s></div><div class="ti-new">3231 kr</div>
-            <p class="ti-desc">Tómatar, mozzarella, sveppir, silkiskorin skinka <b><u>eða</u></b> pepperóní</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Mortadella &amp; Pistasíur</span><s class="ti-old">3690 kr</s></div><div class="ti-new">3231 kr</div>
-            <p class="ti-desc">Tómatar, ferskur mozzarella, mortadella, burrata stracciatella, pistasíu pestó og muldar pistasíur.</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Burrata Stracciatella</span><s class="ti-old">3590 kr</s></div><div class="ti-new">3231 kr</div>
+          <div class="ti"><div class="ti-head">Burrata Stracciatella <s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></div>
             <p class="ti-desc">Tómatar, hálfþurrkaðir tómatar, burrata stracciatella og jurtaolía</p></div>
-          <div class="ti"><div class="ti-top"><span class="ti-name">Truffla &amp; Kartöflur</span><s class="ti-old">3690 kr</s></div><div class="ti-new">3321 kr</div>
+          <div class="ti"><div class="ti-head">Truffla &amp; Kartöflur <s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></div>
             <p class="ti-desc">Mascarpone, ofnbakaðar kartöflur, trufflu aioli, klettasalat og parmesan</p></div>
+          <div class="ti"><div class="ti-head">Perur <s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></div>
+            <p class="ti-desc">Mascarpone, perur, ferskur mozzarella, gráðaostur, karamellaðar valhnetur og klettasalat</p></div>
+          <div class="ti"><div class="ti-head">Hálfmáni <s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></div>
+            <p class="ti-desc">Tómatar, mozzarella, sveppir, silkiskorin skinka <b><u>eða</u></b> pepperóní</p></div>
+          <div class="ti"><div class="ti-head">Mortadella &amp; Pistasíur <s class="ti-old">3690 kr</s> <b class="ti-new">3231 kr</b></div>
+            <p class="ti-desc">Tómatar, ferskur mozzarella, mortadella, burrata stracciatella, pistasíu pestó og muldar pistasíur.</p></div>
         </div>
       </div>
     </div>
