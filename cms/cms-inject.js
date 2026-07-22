@@ -10,7 +10,7 @@
 (function () {
   'use strict';
   const PAGE = (location.pathname.split('/').pop() || 'index.html') || 'index.html';
-  const INLINE = new Set(['A', 'SPAN', 'STRONG', 'B', 'EM', 'I', 'BR', 'U', 'SMALL', 'SUP', 'SUB', 'MARK', 'WBR', 'LABEL', 'FONT']);
+  const INLINE = new Set(['A', 'SPAN', 'STRONG', 'B', 'EM', 'I', 'BR', 'U', 'S', 'DEL', 'STRIKE', 'SMALL', 'SUP', 'SUB', 'MARK', 'WBR', 'LABEL', 'FONT']);
   const SKIP = new Set(['SCRIPT', 'STYLE', 'IMG', 'VIDEO', 'SOURCE', 'NOSCRIPT', 'IFRAME', 'svg', 'SVG']);
 
   // ---- stable element keys (path from body) ----
