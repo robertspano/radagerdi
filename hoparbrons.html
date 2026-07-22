@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hópar · Ráðagerði</title>
+<title>Hópar - Bröns · Ráðagerði</title>
 <link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
 <link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -61,6 +61,21 @@
     .rg2-footer{grid-template-columns:1fr;text-align:center;padding:54px 24px 60px}
     .rg2-footer .soc{justify-content:center}
   }
+
+  .subnav{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:44px 0 10px}
+  .subnav a{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:76px;
+    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(20px,1.8vw,30px);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;transition:.15s}
+  .subnav a:hover,.subnav a.on{background:var(--gr);color:#fff}
+  .hg-hero{background:var(--gr);color:#fff;text-align:center;border-radius:26px 26px 0 0;margin-top:30px;padding:46px 30px 42px}
+  .hg-hero h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,4.4vw,68px);letter-spacing:.04em;margin:0 0 20px;text-transform:uppercase}
+  .hg-hero p{font-family:'Windsord',serif;font-size:clamp(17px,1.6vw,26px);letter-spacing:.08em;text-transform:uppercase;margin:0}
+  .redcols{display:grid;grid-template-columns:1fr 1.3fr;gap:26px;margin:26px 0 60px;align-items:stretch}
+  .redbox{border:3px solid var(--red);color:var(--red);text-align:center;padding:50px 34px}
+  .redbox.info{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(17px,1.5vw,25px);line-height:1.75;display:flex;flex-direction:column;justify-content:center;gap:34px}
+  .redbox .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(20px,1.8vw,29px);letter-spacing:.03em;margin:34px 0 16px}
+  .redbox .rn:first-child{margin-top:0}
+  .redbox .rd{font-family:'Montserrat',sans-serif;font-size:16.5px;line-height:1.8;margin:0}
+  @media(max-width:900px){.redcols{grid-template-columns:1fr}.subnav{grid-template-columns:1fr;gap:14px}.subnav a{min-height:58px}}
 </style>
 </head>
 <body>
@@ -73,28 +88,28 @@
     </div>
   </div>
 
+  
   <div class="wrap">
-    <div class="gbox">
-      <div class="gbox-top">
-        <h1>Hópamatseðlar miðast við hópa sem telja fleiri en<br><span class="line2">10 manns</span></h1>
-      </div>
-      <div class="gbox-bot">
-        <p>Hringið eða sendið okkur tölvupóst varðandi <b>fjölda gesta, dagsetningu, tíma og hvaða hópaseðill</b> hentar ykkar hóp. Við bókum ykkur þá inn að því gefnu að það sé laust borð</p>
-      </div>
+    <div class="subnav">
+      <a href="hoparhadegi.html">HÁDEGI</a>
+      <a href="hoparbrons.html" class="on">BRÖNS</a>
+      <a href="hoparkvold.html">KVÖLD</a>
     </div>
-
-    <div class="mcols">
-      <div>
-        <p class="lbl">Virka daga frá 11:30-16:00</p>
-        <a class="mbtn" href="hoparhadegi.html">Hádegi</a>
+    <div class="hg-hero">
+      <h1>Hópar - Bröns</h1>
+      <p>Allar helgar frá 11:00-15:30</p>
+    </div>
+    <div class="redcols">
+      <div class="redbox info">
+        <p style="margin:0">Fyrir hópa sem telja fleiri en 10 gesti bjóðum við upp á smækkaðann matseðil.</p>
+        <p style="margin:0">Þetta er gert til þess eldhúsið ráði við álagið og forðast langa bið eftir matnum. Allir gestir í hópnum geta þá valið sér einn af réttunum á Hópa matseðlinum hér.</p>
+        <p style="margin:0">Athugið að börn eldri en 6 ára teljast til fjölda gesta.</p>
       </div>
-      <div>
-        <p class="lbl">Helgar frá 11:00-15:30</p>
-        <a class="mbtn" href="hoparbrons.html">Bröns</a>
-      </div>
-      <div>
-        <p class="lbl">Alla daga frá kl 16:00</p>
-        <a class="mbtn" href="hoparkvold.html">Kvöld</a>
+      <div class="redbox">
+        <div><p class="rn">Shakshuka 3390 kr.</p><p class="rd">Tvö spæld egg í þykkri sósu úr papriku, tómötum, lauk og hvítlauk, toppað með feta osti og steinselju borið fram með eldbökuðu brauði</p></div>
+        <div><p class="rn">Bröns Platti 3590 kr.</p><p class="rd">Tvö spæld egg, beikon, avocado, ferskt tómatsalsa, gullauga smælki m/ jógúrtsósu og salat. Borið fram með eldbökuðu brauði</p></div>
+        <div><p class="rn">Bröns Pizza 3590 kr.</p><p class="rd">Mascarpone, ostur, beikon, kartöflur, gremolata, parmesan, eggjarauður og spælt egg</p></div>
+        <div><p class="rn">Barna Pizza 1990 kr.</p><p class="rd">9” pizza m/ einni áleggstegund</p></div>
       </div>
     </div>
   </div>
