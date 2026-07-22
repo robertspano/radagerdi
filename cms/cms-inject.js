@@ -45,8 +45,10 @@
   function textLeaves() {
     return [...document.body.querySelectorAll('*')].filter(isTextLeaf);
   }
+  const REGION_SEL = '.w-tab-pane, .card, .redbox';
   function panes() { return [...document.querySelectorAll('.w-tab-pane')]; }
-  function inRegion(el) { return !!el.closest('.w-tab-pane'); }
+  function regions() { return [...document.querySelectorAll(REGION_SEL)]; }
+  function inRegion(el) { return !!el.closest(REGION_SEL); }
 
   function reorderTabs(order) {
     const menu = document.querySelector('.w-tab-menu'), content = document.querySelector('.w-tab-content');
@@ -62,8 +64,8 @@
   function apply(content) {
     const g = (o) => (o && o[PAGE]) || {};
     const H = g(content.html), T = g(content.texts), I = g(content.images), BG = g(content.bg), HID = g(content.hidden), O = g(content.order);
-    // 1. structural regions first
-    panes().forEach(el => { const k = key(el); if (H[k] != null) el.innerHTML = H[k]; });
+    // 1. structural regions first (menu panes + themed cards)
+    regions().forEach(el => { const k = key(el); if (H[k] != null) el.innerHTML = H[k]; });
     // 2. text leaves outside regions
     textLeaves().forEach(el => { if (inRegion(el)) return; const k = key(el); if (T[k] != null) el.innerHTML = T[k]; });
     // 3. images outside regions
@@ -80,7 +82,7 @@
   }
 
   // expose helpers for the editor
-  window.__CMS__ = { PAGE, key, elByKey, textLeaves, panes, inRegion, isTextLeaf };
+  window.__CMS__ = { PAGE, key, elByKey, textLeaves, panes, regions, inRegion, isTextLeaf, REGION_SEL };
 
   async function boot() {
     let content = {};

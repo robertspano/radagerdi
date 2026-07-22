@@ -31,7 +31,8 @@
     const c = pane.cloneNode(true);
     c.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove());
     c.querySelectorAll('[contenteditable]').forEach(e => e.removeAttribute('contenteditable'));
-    c.querySelectorAll('.cms-hover,.cms-active').forEach(e => { e.classList.remove('cms-hover'); e.classList.remove('cms-active'); });
+    c.querySelectorAll('.cms-hover,.cms-active,.cms-dragging').forEach(e => { e.classList.remove('cms-hover'); e.classList.remove('cms-active'); e.classList.remove('cms-dragging'); });
+    c.querySelectorAll('[data-cms-item]').forEach(e => e.removeAttribute('data-cms-item'));
     return c.innerHTML;
   }
   function savePane(pane) {
@@ -44,8 +45,8 @@
     markDirty();
   }
   function saveContext(node) {
-    const pane = node.closest && node.closest('.w-tab-pane');
-    if (pane) { savePane(pane); return true; }
+    const region = node.closest && node.closest(CMS.REGION_SEL || '.w-tab-pane');
+    if (region) { savePane(region); return true; }
     return false;
   }
 
@@ -319,51 +320,59 @@
     inp.click();
   }
 
-  // ---------- menu item / category controls ----------
-  const PLACEHOLDER_ITEM = 'div-meal';
+  // ---------- menu item controls (old tab panes + new themed cards) ----------
+  function menuLists() {
+    const out = [];
+    document.querySelectorAll('.w-dyn-items').forEach(l => out.push({ list: l, itemSel: ':scope > .w-dyn-item', type: 'dyn' }));
+    document.querySelectorAll('.card').forEach(c => { if (c.querySelector(':scope > .ti')) out.push({ list: c, itemSel: ':scope > .ti', type: 'ti' }); });
+    document.querySelectorAll('.redbox').forEach(b => { if (b.querySelector('.rn')) out.push({ list: b, itemSel: ':scope > div', type: 'rn' }); });
+    return out;
+  }
+  function regionOf(el) { return el.closest(CMS.REGION_SEL || '.w-tab-pane') || el; }
   function decorateMenus() {
-    CMS.panes().forEach(pane => {
-      if (pane._cmsBase === undefined) pane._cmsBase = paneClean(pane); // baseline for undo
-      pane.querySelectorAll('.w-dyn-items').forEach(list => {
-        list.querySelectorAll(':scope > .w-dyn-item').forEach(item => addItemCtls(item, list, pane));
-        // "add item" button (sibling right after the list; guard against duplicates on re-decorate)
-        if (!(list.nextElementSibling && list.nextElementSibling.hasAttribute && list.nextElementSibling.hasAttribute('data-cms-add'))) {
-          const add = el('button', 'cms-add', '＋ Bæta við rétti'); add.type = 'button'; add.setAttribute('data-cms-ctl', '1'); add.setAttribute('data-cms-add', '1');
-          add.onclick = () => addItem(list, pane);
-          list.after(add);
-        }
+    menuLists().forEach(({ list, itemSel, type }) => {
+      const region = regionOf(list);
+      if (region._cmsBase === undefined) region._cmsBase = paneClean(region);
+      list.querySelectorAll(itemSel).forEach(item => {
+        if (type === 'rn' && !item.querySelector('.rn')) return;
+        item.setAttribute('data-cms-item', '1');
+        addItemCtls(item, list, region, type);
       });
+      if (!(list.lastElementChild && list.lastElementChild.hasAttribute && list.lastElementChild.hasAttribute('data-cms-add')) &&
+          !(list.nextElementSibling && list.nextElementSibling.hasAttribute && list.nextElementSibling.hasAttribute('data-cms-add'))) {
+        const add = el('button', 'cms-add', '＋ Bæta við rétti'); add.type = 'button'; add.setAttribute('data-cms-ctl', '1'); add.setAttribute('data-cms-add', '1');
+        add.onclick = () => addItem(list, region, type, itemSel);
+        if (type === 'dyn') list.after(add); else list.appendChild(add);
+      }
     });
   }
-  function addItemCtls(item, list, pane) {
+  function mini(txt, title, fn) { const b = el('button', 'cms-mini', txt); b.type = 'button'; b.title = title; b.setAttribute('data-cms-ctl', '1'); b.onclick = (e) => { e.stopPropagation(); fn(); }; return b; }
+  function addItemCtls(item, list, region, type) {
     if (item.querySelector(':scope > [data-cms-item-ctl]')) return;
     item.style.position = item.style.position || 'relative';
     const bar = el('div', 'cms-itemctl'); bar.setAttribute('data-cms-ctl', '1'); bar.setAttribute('data-cms-item-ctl', '1');
-    // clear, obvious green drag handle — smooth pointer-based dragging (no fiddly HTML5 drag)
     const grip = el('button', 'cms-grip', '⠿ Draga'); grip.type = 'button'; grip.title = 'Haltu inni og dragðu til að færa réttinn'; grip.setAttribute('data-cms-ctl', '1');
-    grip.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); startItemDrag(item, list, pane); });
+    grip.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); startItemDrag(item, list, region); });
     bar.appendChild(grip);
-    bar.appendChild(mini('⎘', 'Afrita', () => { const c = item.cloneNode(true); c.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove()); item.after(c); addItemCtls(c, list, pane); savePane(pane); }));
-    bar.appendChild(mini('%', 'Afsláttur', () => discount(item, pane)));
-    bar.appendChild(mini('🗑', 'Eyða', () => { if (confirm('Eyða þessum rétti?')) { item.remove(); savePane(pane); } }));
+    bar.appendChild(mini('⎘', 'Afrita', () => { const c = item.cloneNode(true); c.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove()); item.after(c); addItemCtls(c, list, region, type); savePane(region); }));
+    bar.appendChild(mini('%', 'Afsláttur', () => discount(item, region, type)));
+    bar.appendChild(mini('🗑', 'Eyða', () => { if (confirm('Eyða þessum rétti?')) { item.remove(); savePane(region); } }));
     item.appendChild(bar);
-    // keep the bar reachable, but only ONE bar visible at a time
     let hideT;
-    const show = () => {
-      clearTimeout(hideT);
-      document.querySelectorAll('.cms-itemctl.cms-show').forEach(b => { if (b !== bar) b.classList.remove('cms-show'); });
-      bar.classList.add('cms-show');
-    };
-    const hideSoon = () => { clearTimeout(hideT); hideT = setTimeout(() => bar.classList.remove('cms-show'), 300); };
+    const show = () => { clearTimeout(hideT); bar.classList.add('cms-show'); };
+    const hideSoon = () => { clearTimeout(hideT); hideT = setTimeout(() => bar.classList.remove('cms-show'), 400); };
     item.addEventListener('mouseenter', show); item.addEventListener('mouseleave', hideSoon);
     bar.addEventListener('mouseenter', show); bar.addEventListener('mouseleave', hideSoon);
   }
-  function startItemDrag(item, list, pane) {
+  function startItemDrag(item, list, region) {
     document.body.classList.add('cms-dragging-active');
     item.classList.add('cms-dragging');
     const onMove = (ev) => {
       const after = dragAfter(list, ev.clientY);
-      if (after == null) { if (list.lastElementChild !== item) list.appendChild(item); }
+      if (after == null) {
+        const addBtn = list.querySelector(':scope > [data-cms-add]');
+        if (addBtn) list.insertBefore(item, addBtn); else if (list.lastElementChild !== item) list.appendChild(item);
+      }
       else if (after !== item) list.insertBefore(item, after);
     };
     const onUp = () => {
@@ -371,13 +380,13 @@
       document.removeEventListener('mouseup', onUp);
       document.body.classList.remove('cms-dragging-active');
       item.classList.remove('cms-dragging');
-      savePane(pane);
+      savePane(region);
     };
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseup', onUp);
   }
   function dragAfter(list, y) {
-    const items = [...list.querySelectorAll(':scope > .w-dyn-item:not(.cms-dragging)')];
+    const items = [...list.querySelectorAll(':scope > [data-cms-item]:not(.cms-dragging)')];
     let closest = null, closestOffset = -Infinity;
     for (const it of items) {
       const box = it.getBoundingClientRect();
@@ -386,38 +395,58 @@
     }
     return closest;
   }
-  function mini(txt, title, fn) { const b = el('button', 'cms-mini', txt); b.type = 'button'; b.title = title; b.setAttribute('data-cms-ctl', '1'); b.onclick = (e) => { e.stopPropagation(); fn(); }; return b; }
-  function addItem(list, pane) {
-    const last = list.querySelector(':scope > .w-dyn-item:last-of-type');
+  function addItem(list, region, type, itemSel) {
     let item;
-    if (last) { item = last.cloneNode(true); item.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove()); }
-    else { item = el('div', 'w-dyn-item', '<div class="div-meal"><div class="h3">Nýr réttur</div><div class="h4">Lýsing á réttinum</div></div>'); item.setAttribute('role', 'listitem'); }
-    // clear texts to placeholders
-    const h3 = item.querySelector('.h3'); if (h3) h3.textContent = 'Nýr réttur';
-    const h4 = item.querySelector('.h4'); if (h4) h4.textContent = 'Lýsing á réttinum';
-    list.appendChild(item);
-    addItemCtls(item, list, pane);
-    savePane(pane);
-    const h = item.querySelector('.h3'); if (h) startEdit(h);
+    const last = [...list.querySelectorAll(itemSel)].filter(e => e.hasAttribute('data-cms-item')).pop();
+    if (type === 'ti') {
+      item = el('div', 'ti', '<div class="ti-head">Nýr réttur <b class="ti-new">0 kr</b></div>\n            <p class="ti-desc">Lýsing á réttinum</p>');
+    } else if (type === 'rn') {
+      item = el('div', '', '<p class="rn">Nýr réttur 0 kr.</p><p class="rd">Lýsing á réttinum</p>');
+    } else {
+      if (last) { item = last.cloneNode(true); item.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove()); const h3 = item.querySelector('.h3'); if (h3) h3.textContent = 'Nýr réttur'; const h4 = item.querySelector('.h4'); if (h4) h4.textContent = 'Lýsing á réttinum'; }
+      else { item = el('div', 'w-dyn-item', '<div class="div-meal"><div class="h3">Nýr réttur</div><div class="h4">Lýsing á réttinum</div></div>'); item.setAttribute('role', 'listitem'); }
+    }
+    item.setAttribute('data-cms-item', '1');
+    const addBtn = list.querySelector(':scope > [data-cms-add]');
+    if (addBtn) list.insertBefore(item, addBtn); else list.appendChild(item);
+    addItemCtls(item, list, region, type);
+    savePane(region);
+    const h = item.querySelector('.ti-head, .rn, .h3'); if (h) startEdit(h);
   }
-  function discount(item, pane) {
-    const priceEl = item.querySelector('[class*=price]:not(.strike)') || item.querySelector('[class*=price]');
+  function discount(item, region, type) {
+    if (type === 'ti') {
+      const head = item.querySelector('.ti-head');
+      const newEl = head.querySelector('.ti-new'), oldEl = head.querySelector('.ti-old');
+      const panel = makePanel('Afsláttur', 'Fulla verðið birtist yfirstrikað í rauðu og tilboðsverðið við hliðina.');
+      const o = field('Fullt verð (yfirstrikað)'); o.input.value = oldEl ? oldEl.textContent.trim() : (newEl ? newEl.textContent.trim() : '');
+      const n = field('Tilboðsverð'); n.input.value = oldEl && newEl ? newEl.textContent.trim() : ''; n.input.placeholder = 't.d. 2990 kr';
+      panel.body.append(o.wrap, n.wrap);
+      panel.foot.appendChild(btn('Fjarlægja afslátt', '', () => {
+        if (oldEl) oldEl.remove();
+        if (newEl && o.input.value.trim()) newEl.textContent = o.input.value.trim();
+        savePane(region); closePanel(panel); toast('Afsláttur fjarlægður');
+      }));
+      panel.foot.appendChild(btn('Setja afslátt', 'cms-primary', () => {
+        const oldp = o.input.value.trim(), nw = n.input.value.trim();
+        if (!nw) { toast('Sláðu inn tilboðsverð'); return; }
+        head.querySelectorAll('.ti-old,.ti-new').forEach(e => e.remove());
+        head.insertAdjacentHTML('beforeend', ' <s class="ti-old">' + esc(oldp) + '</s> <b class="ti-new">' + esc(nw) + '</b>');
+        savePane(region); closePanel(panel); toast('Afsláttur settur');
+      }));
+      return;
+    }
+    const priceEl = item.querySelector('[class*=price]:not(.strike)') || item.querySelector('[class*=price]') || item.querySelector('.rn');
     const cur = priceEl ? priceEl.textContent.trim() : '';
     const panel = makePanel('Afsláttur', 'Fulla verðið birtist yfirstrikað og tilboðsverðið við hliðina — eins og á vefnum.');
     const o = field('Fullt verð (yfirstrikað)'); o.input.value = cur;
     const n = field('Tilboðsverð'); n.input.placeholder = 't.d. 2990 kr.';
     panel.body.append(o.wrap, n.wrap);
-    panel.foot.appendChild(btn('Fjarlægja afslátt', '', () => {
-      if (priceEl) priceEl.textContent = o.input.value.trim() || cur;
-      savePane(pane); closePanel(panel); toast('Afsláttur fjarlægður');
-    }));
     panel.foot.appendChild(btn('Setja afslátt', 'cms-primary', () => {
       const oldp = o.input.value.trim(), nw = n.input.value.trim();
       if (!nw) { toast('Sláðu inn tilboðsverð'); return; }
-      const html = `<span style="text-decoration:line-through;opacity:.5;margin-right:.45em">${esc(oldp)}</span><span>${esc(nw)}</span>`;
+      const html = '<span style="text-decoration:line-through;opacity:.6;margin-right:.45em">' + esc(oldp) + '</span><span>' + esc(nw) + '</span>';
       if (priceEl) priceEl.innerHTML = html;
-      else { const meal = item.querySelector('.div-meal, .div-meal-price-2, .div-block-31') || item; meal.appendChild(el('div', 'menu-price-single', html)); }
-      savePane(pane); closePanel(panel); toast('Afsláttur settur');
+      savePane(region); closePanel(panel); toast('Afsláttur settur');
     }));
   }
   function esc(s) { return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
