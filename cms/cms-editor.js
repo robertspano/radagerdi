@@ -151,7 +151,7 @@
   }
   function withCms(href) {
     const hi = href.indexOf('#'); const hash = hi >= 0 ? href.slice(hi) : ''; let path = hi >= 0 ? href.slice(0, hi) : href;
-    path += (path.indexOf('?') >= 0 ? '&' : '?') + 'cms=1';
+    if (!/[?&]cms=1/.test(path)) path += (path.indexOf('?') >= 0 ? '&' : '?') + 'cms=1';
     return path + hash;
   }
   function navigate(a) {
@@ -170,7 +170,9 @@
     });
     document.body.addEventListener('click', (e) => {
       if (e.target.closest('.cms-bar') || e.target.closest('.cms-panel') || e.target.closest('[data-cms-ctl]') || e.target.closest('.cms-imgbtn') || e.target.closest('.cms-kebab-menu')) return;
-      if (e.target.closest('img')) return; // images: handled by their own capture handler / native
+      const imgEl = e.target.closest('img');
+      if (imgEl && isEditableImg(imgEl)) return; // editable photos: handled by the image capture handler
+      // small icons/logos inside links fall through to the link logic below
       const a = e.target.closest('a');
       if (a) {
         const kind = linkKind(a);

@@ -10,6 +10,22 @@
 (function () {
   'use strict';
   const PAGE = (location.pathname.split('/').pop() || 'index.html') || 'index.html';
+
+  // While editing (?cms=1): make every internal link carry cms=1 from the very first moment,
+  // so a click can NEVER drop you out of the editor — even before the editor script loads.
+  if (/[?&]cms=1/.test(location.search)) {
+    const fixHref = (a) => {
+      const h = a.getAttribute('href') || '';
+      if (!h || h.charAt(0) === '#' || /^(https?:|mailto:|tel:)/i.test(h)) return;
+      if (a.classList.contains('w-tab-link')) return;
+      if (/[?&]cms=1/.test(h)) return;
+      const hi = h.indexOf('#'); const hash = hi >= 0 ? h.slice(hi) : ''; let path = hi >= 0 ? h.slice(0, hi) : h;
+      a.setAttribute('href', path + (path.indexOf('?') >= 0 ? '&' : '?') + 'cms=1' + hash);
+    };
+    const fixAll = () => document.querySelectorAll('a[href]').forEach(fixHref);
+    document.addEventListener('mousedown', (e) => { const a = e.target && e.target.closest && e.target.closest('a'); if (a) fixHref(a); }, true);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fixAll); else fixAll();
+  }
   const INLINE = new Set(['A', 'SPAN', 'STRONG', 'B', 'EM', 'I', 'BR', 'U', 'S', 'DEL', 'STRIKE', 'SMALL', 'SUP', 'SUB', 'MARK', 'WBR', 'LABEL', 'FONT']);
   const SKIP = new Set(['SCRIPT', 'STYLE', 'IMG', 'VIDEO', 'SOURCE', 'NOSCRIPT', 'IFRAME', 'svg', 'SVG']);
 
