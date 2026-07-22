@@ -164,6 +164,7 @@
     document.body.addEventListener('mouseover', (e) => {
       document.querySelectorAll('.cms-hover').forEach(x => x.classList.remove('cms-hover'));
       if (e.target.closest('.cms-bar') || e.target.closest('.cms-panel')) return;
+      if (e.target.closest('a')) return; // links/buttons: click just navigates — no edit outline (dblclick still edits)
       const leaf = closestLeaf(e.target);
       if (leaf && leaf !== activeEl) leaf.classList.add('cms-hover');
     });
