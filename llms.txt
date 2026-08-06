@@ -13,11 +13,12 @@
 
 ## Síður / Pages
 - [Matseðill / Menu](/matsedlar.html): Aðalmatseðill — eldbakaðar pizzur, pasta og aðalréttir
+- [Drykkjarseðill / Drinks](/drykkir.html): Vín, bjór og fleira (í vinnslu / being finalized)
 - [Take Away](/takeaway.html): Sóttur matur — 10% afsláttur af öllum sóttum mat
 - [Bröns / Brunch](/brons.html): Um helgar 11:00–15:30
 - [Hópar / Groups](/hopar.html): Hópamatseðlar fyrir fleiri en 10 manns (hádegi, bröns, kvöld — væntanlegt / coming soon)
 - [Veisluþjónusta / Catering](/veisluthjonusta.html): Veislur og viðburðir
 
 ## English pages
-- [Home](/en.html) · [Menu](/en-matsedlar.html) · [Take Away](/en-takeaway.html) · [Brunch](/en-brons.html) · [Groups](/en-hopar.html) · [Catering](/en-veisluthjonusta.html)
+- [Home](/en.html) · [Menu](/en-matsedlar.html) · [Drinks](/en-drykkir.html) · [Take Away](/en-takeaway.html) · [Brunch](/en-brons.html) · [Groups](/en-hopar.html) · [Catering](/en-veisluthjonusta.html)
 - [Guide to Seltjarnarnes](/en-seltjarnarnes-iceland-travel-guide.html): what to see and do around the Grótta lighthouse

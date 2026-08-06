@@ -8,10 +8,10 @@
   let dirty = false;
 
   const PAGES = [
-    ['index.html', 'Forsíða'], ['matsedlar.html', 'Matseðill'], ['takeaway.html', 'Take Away'], ['brons.html', 'Bröns'],
+    ['index.html', 'Forsíða'], ['matsedlar.html', 'Matseðill'], ['drykkir.html', 'Drykkir'], ['takeaway.html', 'Take Away'], ['brons.html', 'Bröns'],
     ['hopar.html', 'Hópar'], ['hoparhadegi.html', 'Hópar · Hádegi'], ['hoparbrons.html', 'Hópar · Bröns'], ['hoparkvold.html', 'Hópar · Kvöld'],
     ['veisluthjonusta.html', 'Veisluþjónusta'],
-    ['en.html', 'EN · Home'], ['en-matsedlar.html', 'EN · Menu'], ['en-takeaway.html', 'EN · Take Away'], ['en-brons.html', 'EN · Brunch'],
+    ['en.html', 'EN · Home'], ['en-matsedlar.html', 'EN · Menu'], ['en-drykkir.html', 'EN · Drinks'], ['en-takeaway.html', 'EN · Take Away'], ['en-brons.html', 'EN · Brunch'],
     ['en-hopar.html', 'EN · Groups'], ['en-veisluthjonusta.html', 'EN · Catering'],
     ['en-seltjarnarnes-iceland-travel-guide.html', 'EN · Travel guide'],
     ['matsedill.html', 'Gamli matseðillinn'], ['um-okkur.html', 'Um okkur'], ['hafa-samband.html', 'Hafa samband'],
