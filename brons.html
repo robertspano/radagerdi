@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bröns · Ráðagerði</title>
+<meta name="description" content="Bröns um helgar frá 11:00–15:30 hjá Ráðagerði á Seltjarnarnesi — shakshuka, brönsplatti, bröns pizza og fleira gott í fallegu umhverfi við Gróttu.">
+<meta property="og:title" content="Bröns · Ráðagerði">
+<meta property="og:description" content="Bröns um helgar frá 11:00–15:30 hjá Ráðagerði á Seltjarnarnesi — shakshuka, brönsplatti, bröns pizza og fleira gott í fallegu umhverfi við Gróttu.">
 <link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
 <link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -48,7 +51,9 @@
   .card .vnote{text-align:center;font-weight:700;font-size:19px;margin:-12px 0 26px}
   .ti{margin-bottom:34px}
   .ti:last-child{margin-bottom:6px}
-  .ti-head{font-family:'Windsord',serif;font-size:clamp(23px,2vw,29px);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
+  .ti-head{font-family:'Windsord',serif;font-size:clamp(23px,2vw,29px);letter-spacing:.03em;text-transform:uppercase;line-height:1.4;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+  .ti-head .ti-nm{flex:1;min-width:0}
+  .ti-head .ti-pr{white-space:nowrap;flex-shrink:0}
   .ti-old{color:var(--redline);text-decoration:line-through;text-decoration-thickness:2px;white-space:nowrap;margin:0 .35em 0 .55em;font-weight:400}
   .ti-new{font-weight:700;white-space:nowrap}
   .ti-desc{font-size:17px;line-height:1.75;margin:14px 0 0}
@@ -95,39 +100,39 @@
     <div class="cols">
       <div class="col">
         <div class="card">
-          <div class="ti"><div class="ti-head">Ráðagerði's Brunch Platter <b class="ti-new">3790 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's Brunch Platter</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
             <p class="ti-desc">Tvö spæld egg, beikon, avocado, ferskt tómatsalsa, gullauga smælki m/ jógúrtsósu og salat. Borið fram með eldbökuðu brauði</p></div>
-          <div class="ti"><div class="ti-head">Shakshuka <b class="ti-new">3590 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Shakshuka</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Tvö spæld egg í þykkri sósu úr papriku, tómötum, lauk og hvítlauk, toppað með feta osti og steinselju borið fram með eldbökuðu brauði</p></div>
-          <div class="ti"><div class="ti-head">Vegan Brunchplatti (V) <b class="ti-new">3790 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Vegan Brunchplatti (V)</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
             <p class="ti-desc">Kórónubaunir, Grillaðir tómatar, grillaður kúrbítur, avocado, salat m/ fersku tómat salsa og balsamik gljáa, Steiktar smælki kartöflur. Borið fram með eldbökuðu brauði</p></div>
-          <div class="ti"><div class="ti-head">Djúpsteiktur Burrata <b class="ti-new">3790 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Djúpsteiktur Burrata</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
             <p class="ti-desc">Borið fram m/ rjómalagaðri marinara sósu, pestó dressingu og eldbökuðu brauði</p></div>
-          <div class="ti"><div class="ti-head">Beikon Bruschetta <b class="ti-new">3590 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Beikon Bruschetta</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Dill jógúrtsósa, salat, bacon, spælt egg, toppað m/ Nduja smjöri</p></div>
-          <div class="ti"><div class="ti-head">Hindberja Vaffla <b class="ti-new">2490 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Hindberja Vaffla</span><span class="ti-pr"><b class="ti-new">2490 kr</b></span></div>
             <p class="ti-desc">Vaffla, heimalöguð hindberja– og mangó sulta, þeyttur rjómi</p></div>
-          <div class="ti"><div class="ti-head">Laxa Pizza <b class="ti-new">3890 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Laxa Pizza</span><span class="ti-pr"><b class="ti-new">3890 kr</b></span></div>
             <p class="ti-desc">Mascarpone, ostur, spínat, reyktur lax, burrata stracciatella, kirsuberjatómatar og vorlaukur</p></div>
-          <div class="ti"><div class="ti-head">Avókadó Pizza (V) <b class="ti-new">3790 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Avókadó Pizza (V)</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
             <p class="ti-desc">Tómatar, hálfþurrkaðir tómatar, vegan ostur, avókadó, klettasalat, ferskt tómatsalsa og stökkar grænmetisflögur</p></div>
         </div>
       </div>
       <div class="col">
         <div class="card">
-          <div class="ti"><div class="ti-head">Ráðagerðis “French Toast” <b class="ti-new">3390 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerðis “French Toast”</span><span class="ti-pr"><b class="ti-new">3390 kr</b></span></div>
             <p class="ti-desc">Eldbakað brauð toppað með blönduðum berjum, hindberja-mangósultu, þeyttum mascarpone rjóma og flórsykri</p></div>
-          <div class="ti"><div class="ti-head">Laxa Bruschetta <b class="ti-new">3590 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Laxa Bruschetta</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Pistasíupestó, salat, reyktur lax, hleypt egg með dill jógúrt sósu</p></div>
-          <div class="ti"><div class="ti-head">Beikon Vaffla <b class="ti-new">2790 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Beikon Vaffla</span><span class="ti-pr"><b class="ti-new">2790 kr</b></span></div>
             <p class="ti-desc">Vaffla, beikon, spæld egg og síróp</p></div>
-          <div class="ti"><div class="ti-head">Brunch Pizza <b class="ti-new">3790 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Brunch Pizza</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
             <p class="ti-desc">Mascarpone, ostur, beikon, kartöflur, gremolata, parmesan, eggjarauður og spælt egg</p></div>
-          <div class="ti"><div class="ti-head">Brönsplatti Ráðagerðis <b class="ti-new">3590 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Brönsplatti Ráðagerðis</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Tvö spæld egg, beikon, avocado, ferskt tómat salsa, salat og steiktar smælki kartöflur m/ jógúrtsósu. Borið fram með eldbökuðu brauði</p></div>
-          <div class="ti"><div class="ti-head">Tyrknesk Egg <b class="ti-new">3590 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tyrknesk Egg</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Tvö hleypt egg borin fram á krydduðu grísku jógúrti m/ dilli, sítrónu, hvítlauki og myntu. Toppað með Nduja-smjöri og borið fram með eldbökuðu brauði</p></div>
-          <div class="ti"><div class="ti-head">Avókadó Bruschetta <b class="ti-new">3590 kr</b></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Avókadó Bruschetta</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Avókadó, Tómat salsa og hleypt egg, toppað með pistasíupestói</p></div>
         </div>
       </div>

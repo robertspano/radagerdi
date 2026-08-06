@@ -179,7 +179,7 @@
         if (kind === 'tab' || kind === 'inpage') return; // let the tab switch / hamburger happen
         e.preventDefault();
         clearTimeout(navTimer);
-        navTimer = setTimeout(() => navigate(a), 200); // brief delay so a double-click edits instead of navigating
+        navTimer = setTimeout(() => navigate(a), 340); // delay so a double-click reliably edits instead of navigating
         return;
       }
       const leaf = closestLeaf(e.target);
@@ -402,7 +402,7 @@
     let item;
     const last = [...list.querySelectorAll(itemSel)].filter(e => e.hasAttribute('data-cms-item')).pop();
     if (type === 'ti') {
-      item = el('div', 'ti', '<div class="ti-head">Nýr réttur <b class="ti-new">0 kr</b></div>\n            <p class="ti-desc">Lýsing á réttinum</p>');
+      item = el('div', 'ti', '<div class="ti-head"><span class="ti-nm">Nýr réttur</span><span class="ti-pr"><b class="ti-new">0 kr</b></span></div>\n            <p class="ti-desc">Lýsing á réttinum</p>');
     } else if (type === 'rn') {
       item = el('div', '', '<p class="rn">Nýr réttur 0 kr.</p><p class="rd">Lýsing á réttinum</p>');
     } else {
@@ -424,16 +424,16 @@
       const o = field('Fullt verð (yfirstrikað)'); o.input.value = oldEl ? oldEl.textContent.trim() : (newEl ? newEl.textContent.trim() : '');
       const n = field('Tilboðsverð'); n.input.value = oldEl && newEl ? newEl.textContent.trim() : ''; n.input.placeholder = 't.d. 2990 kr';
       panel.body.append(o.wrap, n.wrap);
+      const priceWrap = () => { let pr = head.querySelector('.ti-pr'); if (!pr) { pr = document.createElement('span'); pr.className = 'ti-pr'; head.appendChild(pr); } return pr; };
       panel.foot.appendChild(btn('Fjarlægja afslátt', '', () => {
-        if (oldEl) oldEl.remove();
-        if (newEl && o.input.value.trim()) newEl.textContent = o.input.value.trim();
+        const pr = priceWrap();
+        pr.innerHTML = '<b class="ti-new">' + esc((o.input.value.trim() || (newEl ? newEl.textContent.trim() : ''))) + '</b>';
         savePane(region); closePanel(panel); toast('Afsláttur fjarlægður');
       }));
       panel.foot.appendChild(btn('Setja afslátt', 'cms-primary', () => {
         const oldp = o.input.value.trim(), nw = n.input.value.trim();
         if (!nw) { toast('Sláðu inn tilboðsverð'); return; }
-        head.querySelectorAll('.ti-old,.ti-new').forEach(e => e.remove());
-        head.insertAdjacentHTML('beforeend', ' <s class="ti-old">' + esc(oldp) + '</s> <b class="ti-new">' + esc(nw) + '</b>');
+        priceWrap().innerHTML = '<s class="ti-old">' + esc(oldp) + '</s> <b class="ti-new">' + esc(nw) + '</b>';
         savePane(region); closePanel(panel); toast('Afsláttur settur');
       }));
       return;
