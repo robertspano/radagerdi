@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="alternate" hreflang="is-IS" href="en-takeaway.html">
+<link rel="alternate" hreflang="en" href="en-takeaway.html">
+<title>Take Away · Ráðagerði Restaurant Seltjarnarnes</title>
+<meta name="description" content="Take away from Ráðagerði in Seltjarnarnes, Iceland — wood-fired pizzas, fresh pasta and Italian dishes to bring home. 10% discount on all pickup orders. Tel +354 546 1700.">
+<meta property="og:title" content="Take Away · Ráðagerði Restaurant Seltjarnarnes">
+<meta property="og:description" content="Take away from Ráðagerði in Seltjarnarnes, Iceland — wood-fired pizzas, fresh pasta and Italian dishes to bring home. 10% discount on all pickup orders. Tel +354 546 1700.">
+<link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
+<link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:swap}
+  :root{--gr:#1B7C38;--red:#F0392F;--redline:#DE2C2C;--bg:#f7f7f4}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:'Montserrat',sans-serif;color:var(--gr)}
+  .serif{font-family:'Windsord',serif}
+
+  /* red top bar */
+  .bar{background:var(--red);color:#fff;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:26px 34px}
+  .bar .nvl{justify-self:start;display:flex;gap:20px}
+  .bar .heim{color:#fff;text-decoration:none;font-size:15px;font-weight:500;letter-spacing:.08em;border-bottom:1.5px solid rgba(255,255,255,.85);padding-bottom:3px}
+  .bar .brand{display:flex;align-items:center;text-decoration:none}
+  .bar .brand img{height:26px;width:auto;display:block}
+  .bar .soc{justify-self:end;display:flex;gap:20px}
+  .bar .soc a{color:#fff;display:flex}
+
+  .wrap{max-width:1920px;margin:0 auto;padding:0 clamp(20px,3.2vw,62px) 30px}
+
+  /* green rounded hero block */
+  .ta-hero{background:var(--gr);color:#fff;text-align:center;border-radius:190px 190px 0 0;margin-top:56px;padding:74px 30px 54px}
+  .ta-hero h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(40px,5.4vw,64px);letter-spacing:.04em;margin:0 0 26px;text-transform:uppercase}
+  .ta-hero .tel{font-size:22px;font-weight:700;margin:0 0 20px}
+  .ta-hero .off{font-size:19px;font-weight:700;margin:0}
+
+  /* dashed lunch offer */
+  .lunch{border:5px dashed var(--gr);border-radius:26px;text-align:center;padding:40px 26px 34px;margin-top:26px}
+  .lunch h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,4.6vw,56px);letter-spacing:.05em;margin:0 0 24px;text-transform:uppercase}
+  .lunch p{font-size:19px;margin:0 0 22px}
+  .lunch .combo{font-family:'Montserrat',sans-serif;font-weight:700;font-size:20px;letter-spacing:.02em;text-transform:uppercase}
+  .lunch .fine{font-weight:700;font-size:16px;margin-bottom:0}
+
+  /* category cards */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:26px;align-items:start}
+  .col{display:flex;flex-direction:column;gap:26px}
+  .card{border:4px solid var(--gr);border-radius:26px;padding:34px 34px 30px}
+  .card h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(36px,3.4vw,50px);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin:0 0 30px}
+  .card h2 span{border-bottom:2.5px solid var(--gr);padding-bottom:4px}
+  .card .vnote{text-align:center;font-weight:700;font-size:19px;margin:-12px 0 26px}
+  .ti{margin-bottom:34px}
+  .ti:last-child{margin-bottom:6px}
+  .ti-head{font-family:'Windsord',serif;font-size:clamp(23px,2vw,29px);letter-spacing:.03em;text-transform:uppercase;line-height:1.4;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+  .ti-head .ti-nm{flex:1;min-width:0}
+  .ti-head .ti-pr{white-space:nowrap;flex-shrink:0}
+  .ti-old{color:var(--redline);text-decoration:line-through;text-decoration-thickness:2px;white-space:nowrap;margin:0 .35em 0 .55em;font-weight:400}
+  .ti-new{font-weight:700;white-space:nowrap}
+  .ti-desc{font-size:17px;line-height:1.75;margin:14px 0 0}
+  .ti-note{font-size:17px;font-weight:700;margin:14px 0 0}
+
+  /* footer */
+  .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
+  .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
+  .rg2-footer .soc a{color:var(--gr);display:flex}
+  .rg2-mail{color:var(--gr);font-weight:700;font-size:clamp(18px,1.6vw,21px);text-decoration:none}
+  .rg2-hours{text-align:center}
+  .rg2-hours h3{color:var(--gr);font-size:clamp(19px,1.6vw,23px);font-weight:700;margin:0 0 22px}
+  .rg2-hours p{color:var(--gr);font-size:15.5px;font-weight:400;margin:0 0 18px;letter-spacing:.02em}
+
+  @media(max-width:900px){
+    .cols{grid-template-columns:1fr}
+    .ta-hero{border-radius:110px 110px 0 0;margin-top:30px;padding:54px 20px 40px}
+    .card{padding:26px 20px 22px}
+    .bar{padding:20px 18px}
+    .bar .brand img{height:21px}
+    .rg2-footer{grid-template-columns:1fr;text-align:center;padding:54px 24px 60px}
+    .rg2-footer .soc{justify-content:center}
+    .ti-top{flex-wrap:wrap}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <div class="nvl"><a class="heim" href="en.html">HOME</a><a class="heim" href="en-takeaway.html">IS</a></div>
+    <a class="brand" href="en.html"><img src="assets/6353fbae1bb1a20968cdcc9f_logo-white.svg" alt="Ráðagerði"/></a>
+    <div class="soc">
+      <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="2"/><circle cx="17.6" cy="6.4" r="1.5" fill="currentColor"/></svg></a>
+      <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="ta-hero">
+      <h1>Take Away Menu</h1>
+      <p class="tel">Tel: (+354) 546-1700</p>
+      <p class="off">10% discount on all pickup orders</p>
+    </div>
+
+    <div class="lunch">
+      <h2>Lunch Offer 2890 kr</h2>
+      <p>(Weekdays 11:30–15:30)</p>
+      <p class="combo">Creamy Tomato &amp; Basil Soup &amp; Focaccia Sandwich</p>
+      <p>Choose a filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p>
+      <p class="fine">(discount does not apply to the lunch offer)</p>
+    </div>
+
+    <div class="cols">
+      <div class="col">
+        <div class="card">
+          <h2><span>Small Plates</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Creamy Tomato &amp; Basil Soup</span><span class="ti-pr"><s class="ti-old">2190 kr</s> <b class="ti-new">1971 kr</b></span></div>
+            <p class="ti-desc">Homemade hot soup made from premium Italian tomatoes, served with crispy wood-fired garlic bread.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Burrata</span><span class="ti-pr"><s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></span></div>
+            <p class="ti-desc">Italian burrata cheese, tomatoes, pistachio pesto dressing and crushed pistachios. Served with crispy wood-fired bread.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Arancini</span><span class="ti-pr"><s class="ti-old">2690 kr</s> <b class="ti-new">2421 kr</b></span></div>
+            <p class="ti-desc">Crispy mushroom risotto balls filled with mozzarella cheese, served with homemade marinara sauce and sautéed chestnut mushrooms, topped with gremolata and parmesan cheese</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Warm Olives (V)</span><span class="ti-pr"><s class="ti-old">1390 kr</s> <b class="ti-new">1251 kr</b></span></div>
+            <p class="ti-desc">Wood-fired olives in oil, seasoned with oregano, rosemary and chili flakes, served with bread</p></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Salads</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">House Caesar Salad</span><span class="ti-pr"><s class="ti-old">3690 kr</s> <b class="ti-new">3321 kr</b></span></div>
+            <p class="ti-desc">Romaine lettuce, parmesan, fresh and semi-dried tomatoes, crispy prosciutto, crispy bread and herb dressing. Add feta cheese for an extra charge.</p>
+            <p class="ti-note">Choose: chicken, shrimp or grilled zucchini.</p>
+            <p class="ti-note">Vegan option available</p></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Main Courses</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Duck Leg Confit</span><span class="ti-pr"><s class="ti-old">5990 kr</s> <b class="ti-new">5391 kr</b></span></div>
+            <p class="ti-desc">Sweet potato purée, oven-roasted root vegetables, beetroot crisps and our house brown sauce.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Truffle Penne Pasta (V)</span><span class="ti-pr"><s class="ti-old">3990 kr</s> <b class="ti-new">3591 kr</b></span></div>
+            <p class="ti-desc">Penne pasta with garlic and truffle vegan cream cheese, semi-dried tomatoes and spinach, drenched in our homemade marinara sauce and baked in the wood-fired oven, topped with gremolata and crushed pistachios. Served with soft wood-fired focaccia bread.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði Lasagna</span><span class="ti-pr"><s class="ti-old">3990 kr</s> <b class="ti-new">3591 kr</b></span></div>
+            <p class="ti-desc">Three layers of bolognese meat sauce, béchamel sauce, mozzarella and pasta, topped with parmesan and baked in our wood-fired oven. Served with crispy wood-fired garlic bread.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Mascarpone Meatballs</span><span class="ti-pr"><s class="ti-old">4390 kr</s> <b class="ti-new">3951 kr</b></span></div>
+            <p class="ti-desc">Wood-fired meatballs with mascarpone mushroom sauce, sautéed mushrooms, potatoes, red onion, gremolata, parmesan and spinach. Served with wood-fired bread.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði Bacalao</span><span class="ti-pr"><s class="ti-old">4390 kr</s> <b class="ti-new">3951 kr</b></span></div>
+            <p class="ti-desc">Salted cod in homemade marinara sauce with mixed olives, semi-dried tomatoes, gremolata and parsnip crisps. Served with wood-fired bread.</p></div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card">
+          <h2><span>Focaccia</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Focaccia Sandwich</span><span class="ti-pr"><s class="ti-old">3290 kr</s> <b class="ti-new">2961 kr</b></span></div>
+            <p class="ti-desc">Wood-fired focaccia sandwich with arugula, burrata stracciatella, pistachio pesto, tomatoes, red onion and mixed olives. Choose a filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Garlic Focaccia</span><span class="ti-pr"><s class="ti-old">2490 kr</s> <b class="ti-new">2241 kr</b></span></div>
+            <p class="ti-desc">Focaccia bread with mozzarella cheese, garlic and gremolata.</p></div>
+        </div>
+
+        <div class="card">
+          <h2><span>Pizza</span></h2>
+          <p class="vnote">Swap the cheese for vegan cheese</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Margherita</span><span class="ti-pr"><s class="ti-old">2790 kr</s> <b class="ti-new">2511 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, fresh mozzarella and fresh basil</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pepperoni &amp; Olives</span><span class="ti-pr"><s class="ti-old">3390 kr</s> <b class="ti-new">3051 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, cheese, pepperoni, mixed olives and gremolata</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pepperoni &amp; Chili</span><span class="ti-pr"><s class="ti-old">3690 kr</s> <b class="ti-new">3321 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, cheese, pepperoni, fresh chili, dates and mascarpone, topped with chili honey</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pepperoni &amp; Nduja</span><span class="ti-pr"><s class="ti-old">3790 kr</s> <b class="ti-new">3411 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, cheese, pepperoni, nduja and blue cheese.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Parma &amp; Arugula</span><span class="ti-pr"><s class="ti-old">3690 kr</s> <b class="ti-new">3321 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, mozzarella, prosciutto, arugula and parmesan</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Prawns &amp; Gremolata</span><span class="ti-pr"><s class="ti-old">3890 kr</s> <b class="ti-new">3501 kr</b></span></div>
+            <p class="ti-desc">Olive and anchovy mascarpone, cheese, chili-marinated tiger prawns, artichoke hearts, gremolata and parmesan.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Burrata Stracciatella</span><span class="ti-pr"><s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, semi-dried tomatoes, burrata stracciatella and herb oil</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Truffle &amp; Potatoes</span><span class="ti-pr"><s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></span></div>
+            <p class="ti-desc">Mascarpone, oven-baked potatoes, truffle aioli, arugula and parmesan</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pears</span><span class="ti-pr"><s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></span></div>
+            <p class="ti-desc">Mascarpone, pears, fresh mozzarella, blue cheese, caramelized walnuts and arugula</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Half Moon</span><span class="ti-pr"><s class="ti-old">3590 kr</s> <b class="ti-new">3231 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, mozzarella, mushrooms, thinly sliced ham or pepperoni</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Mortadella &amp; Pistachios</span><span class="ti-pr"><s class="ti-old">3690 kr</s> <b class="ti-new">3231 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, fresh mozzarella, mortadella, burrata stracciatella, pistachio pesto and crushed pistachios.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="rg2-footer">
+    <div>
+      <div class="soc">
+        <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.4" fill="currentColor"/></svg></a>
+        <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a>
+      </div>
+      <a class="rg2-mail" href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a>
+    </div>
+    <div class="rg2-hours">
+      <h3>Opening hours</h3>
+      <p>MON–THU 11:30–22</p>
+      <p>FRI 11:30–23</p>
+      <p>SAT 11–23</p>
+      <p>SUN 11–22</p>
+    </div>
+  </footer>
+<script src="cms/cms-inject.js" defer></script>
+</body>
+</html>
