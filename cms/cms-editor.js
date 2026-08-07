@@ -36,7 +36,7 @@
     const c = pane.cloneNode(true);
     c.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove());
     c.querySelectorAll('[contenteditable]').forEach(e => e.removeAttribute('contenteditable'));
-    c.querySelectorAll('.cms-hover,.cms-active,.cms-dragging').forEach(e => { e.classList.remove('cms-hover'); e.classList.remove('cms-active'); e.classList.remove('cms-dragging'); });
+    c.querySelectorAll('.cms-hover,.cms-active,.cms-dragging,.cms-flash').forEach(e => { e.classList.remove('cms-hover'); e.classList.remove('cms-active'); e.classList.remove('cms-dragging'); e.classList.remove('cms-flash'); });
     c.querySelectorAll('[data-cms-item]').forEach(e => e.removeAttribute('data-cms-item'));
     return c.innerHTML;
   }
@@ -359,13 +359,22 @@
     if (item.querySelector(':scope > [data-cms-item-ctl]')) return;
     item.style.position = item.style.position || 'relative';
     const bar = el('div', 'cms-itemctl'); bar.setAttribute('data-cms-ctl', '1'); bar.setAttribute('data-cms-item-ctl', '1');
-    const grip = el('button', 'cms-grip', '⠿ Draga'); grip.type = 'button'; grip.title = 'Haltu inni og dragðu til að færa réttinn'; grip.setAttribute('data-cms-ctl', '1');
-    grip.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); startItemDrag(item, list, region); });
-    bar.appendChild(grip);
     bar.appendChild(mini('⎘', 'Afrita', () => { const c = item.cloneNode(true); c.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove()); item.after(c); addItemCtls(c, list, region, type); savePane(region); }));
     bar.appendChild(mini('%', 'Afsláttur', () => discount(item, region, type)));
     bar.appendChild(mini('🗑', 'Eyða', () => { if (confirm('Eyða þessum rétti?')) { item.remove(); savePane(region); } }));
     item.appendChild(bar);
+    const nb = (s) => { let n = s; while (n && !(n.hasAttribute && n.hasAttribute('data-cms-item'))) n = n.previousElementSibling; return n; };
+    const na = (s) => { let n = s; while (n && !(n.hasAttribute && n.hasAttribute('data-cms-item'))) n = n.nextElementSibling; return n; };
+    const flash = () => { item.classList.add('cms-flash'); setTimeout(() => item.classList.remove('cms-flash'), 650); item.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); };
+    const mv = el('div', 'cms-mv'); mv.setAttribute('data-cms-ctl', '1');
+    const up = el('button', 'cms-mvbtn', '▲'); up.type = 'button'; up.title = 'Færa upp'; up.setAttribute('data-cms-ctl', '1');
+    up.onclick = (e) => { e.stopPropagation(); const p = nb(item.previousElementSibling); if (p) { list.insertBefore(item, p); savePane(region); flash(); } };
+    const dg = el('button', 'cms-mvbtn cms-mvgrip', '⠿'); dg.type = 'button'; dg.title = 'Dragðu til að færa réttinn'; dg.setAttribute('data-cms-ctl', '1');
+    dg.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); startItemDrag(item, list, region); });
+    const dn = el('button', 'cms-mvbtn', '▼'); dn.type = 'button'; dn.title = 'Færa niður'; dn.setAttribute('data-cms-ctl', '1');
+    dn.onclick = (e) => { e.stopPropagation(); const nx = na(item.nextElementSibling); if (nx) { list.insertBefore(nx, item); savePane(region); flash(); } };
+    mv.append(up, dg, dn);
+    item.appendChild(mv);
     let hideT;
     const show = () => { clearTimeout(hideT); bar.classList.add('cms-show'); };
     const hideSoon = () => { clearTimeout(hideT); hideT = setTimeout(() => bar.classList.remove('cms-show'), 400); };
