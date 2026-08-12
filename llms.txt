@@ -13,7 +13,7 @@
 
 ## Síður / Pages
 - [Matseðill / Menu](/matsedlar.html): Aðalmatseðill — eldbakaðar pizzur, pasta og aðalréttir
-- [Drykkjarseðill / Drinks](/drykkir.html): Vín, bjór og fleira (í vinnslu / being finalized)
+- [Drykkjarseðill / Drinks](/drykkir.html): Vínseðill (Cà dei Frati o.fl.), bjór, kokteilar, spritzar, óáfengt, kaffi og eftirréttir — happy hour alla daga 15–18
 - [Take Away](/takeaway.html): Sóttur matur — 10% afsláttur af öllum sóttum mat
 - [Bröns / Brunch](/brons.html): Um helgar 11:00–15:30
 - [Hópar / Groups](/hopar.html): Hópamatseðlar fyrir fleiri en 10 manns (hádegi, bröns, kvöld — væntanlegt / coming soon)

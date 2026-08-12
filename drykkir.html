@@ -63,6 +63,11 @@
   .drlink{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:64px;margin:28px auto 0;max-width:460px;
     color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
   .drlink:hover{background:var(--gr);color:#fff}
+  .sub{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(18px,1.5vw,23px);letter-spacing:.06em;margin:36px 0 2px;color:var(--gr)}
+  .card .vnote{margin:-6px 0 30px;font-weight:600;font-size:16px;line-height:1.7}
+  .hh{border:3px dashed var(--gr);border-radius:22px;text-align:center;padding:34px 24px;margin:8px 0 74px}
+  .hh h2{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;font-size:clamp(26px,2.6vw,44px);letter-spacing:.14em;text-indent:.14em;margin:0 0 10px}
+  .hh p{font-size:clamp(15px,1.4vw,19px);margin:4px 0}
   /* footer */
   .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -114,36 +119,219 @@
     <div class="cols">
       <div class="col">
         <div class="card">
-          <h2><span>X</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
+          <h2><span>Húsvín</span></h2>
+          <p class="vnote">Glas / flaska</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Rauðvín / Hvítvín / Rósavín / Freyðivín</span><span class="ti-pr"><b class="ti-new">1.700 / 7.500 kr</b></span></div></div>
         </div>
         <div class="card">
-          <h2><span>X</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
+          <h2><span>Rauðvín</span></h2>
+          <p class="vnote">Vínflöskur — glas / flaska þar sem við á</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ramon Bilbao Crianza</span><span class="ti-pr"><b class="ti-new">8.900 kr</b></span></div>
+            <p class="ti-desc">Rioja · Spánn</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Grotta Rossa</span><span class="ti-pr"><b class="ti-new">9.900 kr</b></span></div>
+            <p class="ti-desc">Sardinia · Ítalía</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Laurent Miquel Solas</span><span class="ti-pr"><b class="ti-new">9.900 kr</b></span></div>
+            <p class="ti-desc">Languedoc Pinot Noir · Frakkland</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Puszta Libre</span><span class="ti-pr"><b class="ti-new">2.200 / 10.400 kr</b></span></div>
+            <p class="ti-desc">Claus Preisinger · Austurríki</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Nizza DOCG</span><span class="ti-pr"><b class="ti-new">12.900 kr</b></span></div>
+            <p class="ti-desc">Piedmonte · Ítalía</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Glen Carlou Grand Cassique</span><span class="ti-pr"><b class="ti-new">13.900 kr</b></span></div>
+            <p class="ti-desc">Bordeaux Blend · Suður-Afríka</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Nespoli Borgo dei Guidi</span><span class="ti-pr"><b class="ti-new">14.900 kr</b></span></div>
+            <p class="ti-desc">Emilia Romagna · Ítalía</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Enzo Bartoli Barolo DOCG</span><span class="ti-pr"><b class="ti-new">18.900 kr</b></span></div>
+            <p class="ti-desc">Piedmonte · Ítalía</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Cruz de Alba Crianza</span><span class="ti-pr"><b class="ti-new">19.900 kr</b></span></div>
+            <p class="ti-desc">Ribera del Duero · Spánn</p></div>
+        </div>
+        <div class="card">
+          <h2><span>Hvítvín</span></h2>
+          <p class="vnote">Flaska</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Von Winning</span><span class="ti-pr"><b class="ti-new">10.900 kr</b></span></div>
+            <p class="ti-desc">Riesling · Þýskaland</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Domain Laroche St. Martin</span><span class="ti-pr"><b class="ti-new">13.900 kr</b></span></div>
+            <p class="ti-desc">Chablis · Frakkland</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tenuta Meraviglia Vermentino</span><span class="ti-pr"><b class="ti-new">13.900 kr</b></span></div>
+            <p class="ti-desc">Bolgheri · Toscana</p></div>
+        </div>
+        <div class="card">
+          <h2><span>Freyðivín &amp; Rósavín</span></h2>
+          <p class="vnote">Glas / flaska</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Moillard Prestige Brut</span><span class="ti-pr"><b class="ti-new">2.400 / 11.900 kr</b></span></div>
+            <p class="ti-desc">Cremant · Frakkland</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Veuve Clicquot</span><span class="ti-pr"><b class="ti-new">26.900 kr</b></span></div>
+            <p class="ti-desc">Champagne · Frakkland</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Rosza Libre</span><span class="ti-pr"><b class="ti-new">2.200 / 10.400 kr</b></span></div>
+            <p class="ti-desc">Rósavín · Claus Preisinger · Austurríki</p></div>
+        </div>
+        <div class="card">
+          <h2><span>Cà dei Frati</span></h2>
+          <p class="vnote">Ítalskur vínframleiðandi við sunnanvert Garda-vatn með sögu allt aftur til ársins 1939 — vínin eru þekkt fyrir ferskleika, fágun og einstakan ítalskan karakter. Glas / flaska.</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ronchedone</span><span class="ti-pr"><b class="ti-new">2.400 / 11.900 kr</b></span></div>
+            <p class="ti-desc">Rauðvín · Vino Rosso</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pietro Dal Cero</span><span class="ti-pr"><b class="ti-new">27.900 kr</b></span></div>
+            <p class="ti-desc">Rauðvín · Amarone della Valpolicella DOCG</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">I Frati</span><span class="ti-pr"><b class="ti-new">2.100 / 9.900 kr</b></span></div>
+            <p class="ti-desc">Hvítvín · Lugana DOC</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Brolettino</span><span class="ti-pr"><b class="ti-new">2.300 / 10.900 kr</b></span></div>
+            <p class="ti-desc">Hvítvín · Lugana DOC</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Cuvée dei Frati</span><span class="ti-pr"><b class="ti-new">2.500 / 12.400 kr</b></span></div>
+            <p class="ti-desc">Freyðivín · Dosaggio Zero</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Rosé Cuvée</span><span class="ti-pr"><b class="ti-new">2.400 / 11.900 kr</b></span></div>
+            <p class="ti-desc">Freyðivín · Extra brut</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Rosa dei Frati</span><span class="ti-pr"><b class="ti-new">2.100 / 9.900 kr</b></span></div>
+            <p class="ti-desc">Rósavín · Vino Rosato</p></div>
+        </div>
+        <div class="card">
+          <h2><span>Bjór</span></h2>
+          <p class="sub">Á krana · 0,4 l</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Gull Lite</span><span class="ti-pr"><b class="ti-new">1.650 kr</b></span></div>
+            <p class="ti-desc">Lager</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Boli</span><span class="ti-pr"><b class="ti-new">1.750 kr</b></span></div>
+            <p class="ti-desc">Lager</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tuborg Classic</span><span class="ti-pr"><b class="ti-new">1.750 kr</b></span></div>
+            <p class="ti-desc">Amber lager</p></div>
+          <p class="sub">Flöskubjór</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Gull</span><span class="ti-pr"><b class="ti-new">1.650 kr</b></span></div>
+            <p class="ti-desc">Lager</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Peroni</span><span class="ti-pr"><b class="ti-new">1.650 kr</b></span></div>
+            <p class="ti-desc">Lager</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Úlfur</span><span class="ti-pr"><b class="ti-new">1.800 kr</b></span></div>
+            <p class="ti-desc">IPA</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Sommersby</span><span class="ti-pr"><b class="ti-new">1.500 kr</b></span></div>
+            <p class="ti-desc">Cider</p></div>
         </div>
       </div>
       <div class="col">
         <div class="card">
-          <h2><span>X</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
+          <h2><span>Kokteilar</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Whiskey Sour</span><span class="ti-pr"><b class="ti-new">3.100 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Amaretto Sour</span><span class="ti-pr"><b class="ti-new">3.100 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Old Fashioned</span><span class="ti-pr"><b class="ti-new">3.100 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Negroni</span><span class="ti-pr"><b class="ti-new">3.100 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Basil Gimlet</span><span class="ti-pr"><b class="ti-new">3.100 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Espresso Martini</span><span class="ti-pr"><b class="ti-new">3.100 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Irish Coffee</span><span class="ti-pr"><b class="ti-new">2.500 kr</b></span></div></div>
         </div>
         <div class="card">
-          <h2><span>X</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">x</span><span class="ti-pr"><b class="ti-new">x kr</b></span></div></div>
+          <h2><span>Spritzar</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Aperol Spritz</span><span class="ti-pr"><b class="ti-new">2.600 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Limoncello Spritz</span><span class="ti-pr"><b class="ti-new">2.600 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Sarti Spritz</span><span class="ti-pr"><b class="ti-new">2.600 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Hugo Spritz</span><span class="ti-pr"><b class="ti-new">2.800 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Passion Spritz</span><span class="ti-pr"><b class="ti-new">2.800 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ferskju Spritz</span><span class="ti-pr"><b class="ti-new">2.800 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Campari Spritz</span><span class="ti-pr"><b class="ti-new">2.800 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pina Colada Spritz</span><span class="ti-pr"><b class="ti-new">2.800 kr</b></span></div></div>
+        </div>
+        <div class="card">
+          <h2><span>Óáfengt</span></h2>
+          <p class="sub">Óáfengir kokteilar</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerðis Mocktail</span><span class="ti-pr"><b class="ti-new">1.850 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Basil Gimlet</span><span class="ti-pr"><b class="ti-new">1.850 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Aperitivo Bitter („Aperol“) Spritz</span><span class="ti-pr"><b class="ti-new">1.650 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Limoncello Spritz</span><span class="ti-pr"><b class="ti-new">1.650 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Grapefruit Spritz</span><span class="ti-pr"><b class="ti-new">1.650 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Hugo Spritz</span><span class="ti-pr"><b class="ti-new">1.650 kr</b></span></div></div>
+          <p class="sub">Óáfengt vín · glas / flaska</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Sparkling Rosé</span><span class="ti-pr"><b class="ti-new">1.500 / 6.700 kr</b></span></div>
+            <p class="ti-desc">Oddbird</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Blanc de Blancs</span><span class="ti-pr"><b class="ti-new">1.500 / 6.700 kr</b></span></div>
+            <p class="ti-desc">Oddbird</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Sparkling Tea</span><span class="ti-pr"><b class="ti-new">1.600 / 6.700 kr</b></span></div>
+            <p class="ti-desc">CPH sparkling tea co.</p></div>
+          <p class="sub">Óáfengur bjór</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Bríó 0,5%</span><span class="ti-pr"><b class="ti-new">1.000 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Peroni 0,0%</span><span class="ti-pr"><b class="ti-new">1.050 kr</b></span></div></div>
+        </div>
+        <div class="card">
+          <h2><span>Digestivo / Bar</span></h2>
+          <p class="vnote">Spyrjið þjóninn um frekara úrval af sterku víni</p>
+          <p class="sub">Gin</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Himbrimi</span><span class="ti-pr"><b class="ti-new">1.700 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tanqueray</span><span class="ti-pr"><b class="ti-new">1.600 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Bombay Sapphire</span><span class="ti-pr"><b class="ti-new">1.500 kr</b></span></div></div>
+          <p class="sub">Viskí</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Jameson</span><span class="ti-pr"><b class="ti-new">1.500 kr</b></span></div>
+            <p class="ti-desc">Írskt</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Aberfeldy</span><span class="ti-pr"><b class="ti-new">1.500 kr</b></span></div>
+            <p class="ti-desc">12 ára · Skoskt</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Four Roses</span><span class="ti-pr"><b class="ti-new">1.600 kr</b></span></div>
+            <p class="ti-desc">Bourbon</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Bulleit</span><span class="ti-pr"><b class="ti-new">1.600 kr</b></span></div>
+            <p class="ti-desc">Bourbon</p></div>
+          <p class="sub">Grappa</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Berta Nizza</span><span class="ti-pr"><b class="ti-new">2.000 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Berta L’Angelo</span><span class="ti-pr"><b class="ti-new">1.500 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Berta Nibbio</span><span class="ti-pr"><b class="ti-new">1.200 kr</b></span></div></div>
+          <p class="sub">Digestivo</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Limoncello</span><span class="ti-pr"><b class="ti-new">1.300 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Bailey’s</span><span class="ti-pr"><b class="ti-new">1.200 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Grand Marnier</span><span class="ti-pr"><b class="ti-new">1.500 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Koníak VSOP</span><span class="ti-pr"><b class="ti-new">1.500 kr</b></span></div></div>
+        </div>
+        <div class="card">
+          <h2><span>Kaffi</span></h2>
+          <p class="vnote">Bættu við sýrópi í kaffið fyrir 100 kr.</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Kaffi</span><span class="ti-pr"><b class="ti-new">590 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Espresso</span><span class="ti-pr"><b class="ti-new">610 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Americano</span><span class="ti-pr"><b class="ti-new">690 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Macchiato</span><span class="ti-pr"><b class="ti-new">690 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Cappuccino</span><span class="ti-pr"><b class="ti-new">790 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Cortado</span><span class="ti-pr"><b class="ti-new">790 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Latte</span><span class="ti-pr"><b class="ti-new">820 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ís latte</span><span class="ti-pr"><b class="ti-new">890 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Heitt súkkulaði</span><span class="ti-pr"><b class="ti-new">910 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Swiss Mokka</span><span class="ti-pr"><b class="ti-new">910 kr</b></span></div></div>
+        </div>
+        <div class="card">
+          <h2><span>Gos &amp; djús</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Gos 33 cl</span><span class="ti-pr"><b class="ti-new">590 kr</b></span></div>
+            <p class="ti-desc">Pepsi / Pepsi Max / Appelsín / 7Up / Kristall</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Appelsínusafi / Eplasafi</span><span class="ti-pr"><b class="ti-new">550 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Trönuberjasafi</span><span class="ti-pr"><b class="ti-new">650 kr</b></span></div>
+            <p class="ti-desc">Britvic</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ananassafi</span><span class="ti-pr"><b class="ti-new">650 kr</b></span></div>
+            <p class="ti-desc">Britvic</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pink Tonic</span><span class="ti-pr"><b class="ti-new">650 kr</b></span></div>
+            <p class="ti-desc">Britvic</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tonic</span><span class="ti-pr"><b class="ti-new">650 kr</b></span></div>
+            <p class="ti-desc">Britvic</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ginger Beer</span><span class="ti-pr"><b class="ti-new">650 kr</b></span></div>
+            <p class="ti-desc">Britvic</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ginger Ale</span><span class="ti-pr"><b class="ti-new">650 kr</b></span></div>
+            <p class="ti-desc">Britvic</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Pink Grapefruit Lemonade</span><span class="ti-pr"><b class="ti-new">650 kr</b></span></div>
+            <p class="ti-desc">Thomas Henry</p></div>
+        </div>
+        <div class="card">
+          <h2><span>Eftirréttir</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span><span class="ti-pr"><b class="ti-new">2.190 kr</b></span></div>
+            <p class="ti-desc">Klassískur ítalskur eftirréttur</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Affogato</span><span class="ti-pr"><b class="ti-new">1.690 kr</b></span></div>
+            <p class="ti-desc">Vanilluískúla og skot af espresso. Limoncello í stað espresso fyrir 600 kr. aukalega</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Vanilluís</span><span class="ti-pr"><b class="ti-new">1.190 kr</b></span></div>
+            <p class="ti-desc">Vanilluís með súkkulaði- eða karamellusósu</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Súkkulaði kaka</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div>
+            <p class="ti-desc">Borin fram með vanilluís</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Limoncello kaka</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div>
+            <p class="ti-desc">Sítrónukaka með möndluflögum, borin fram með rjóma</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Brennd basknesk ostakaka</span><span class="ti-pr"><b class="ti-new">2.290 kr</b></span></div>
+            <p class="ti-desc">Borin fram með vanilluís</p></div>
+        </div>
+        <div class="card">
+          <h2><span>Vaffla</span></h2>
+          <p class="vnote">Alla virka daga til kl. 17 · veldu súkkulaði- eða karamellusósu</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Með rjóma og sultu</span><span class="ti-pr"><b class="ti-new">1.590 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Með vanilluís og flórsykri</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div></div>
         </div>
       </div>
+    </div>
+    <div class="hh">
+      <h2>Happy Hour</h2>
+      <p>Bjór á krana, húsvín &amp; Aperol Spritz</p>
+      <p><b>Alla daga frá kl. 15–18</b></p>
     </div>
   </div>
 
