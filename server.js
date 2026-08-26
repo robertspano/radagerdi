@@ -133,6 +133,14 @@ function serveStatic(req, res, urlPath) {
   if (!full.startsWith(ROOT)) return send(res, 403, 'Forbidden');
   serveFile(req, res, full);
 }
+
+// long cache for assets that never change under the same name; short for code; none for HTML
+function cacheFor(ext) {
+  if (['.otf', '.ttf', '.woff', '.woff2'].includes(ext)) return 'public, max-age=2592000, immutable';
+  if (['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.ico', '.mp4', '.webm'].includes(ext)) return 'public, max-age=604800';
+  if (['.css', '.js', '.mjs'].includes(ext)) return 'public, max-age=600';
+  return 'no-cache';
+}
 function serveFile(req, res, full) {
   fs.stat(full, (err, st) => {
     if (err || !st.isFile()) return send(res, 404, 'Not found');
@@ -149,7 +157,7 @@ function serveFile(req, res, full) {
       });
       return fs.createReadStream(full, { start, end }).pipe(res);
     }
-    res.writeHead(200, { 'Content-Type': type, 'Content-Length': st.size, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-cache' });
+    res.writeHead(200, { 'Content-Type': type, 'Content-Length': st.size, 'Accept-Ranges': 'bytes', 'Cache-Control': cacheFor(ext) });
     fs.createReadStream(full).pipe(res);
   });
 }
