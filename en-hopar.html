@@ -6,9 +6,9 @@
 <link rel="alternate" hreflang="is-IS" href="hopar.html">
 <link rel="alternate" hreflang="en" href="en-hopar.html">
 <title>Groups · Ráðagerði Restaurant Seltjarnarnes</title>
-<meta name="description" content="Group menus at Ráðagerði in Seltjarnarnes, Iceland for parties of more than 10 people — lunch, brunch and dinner. Perfect for work gatherings, birthdays and other occasions.">
+<meta name="description" content="Group menus at Ráðagerði in Seltjarnarnes for parties of more than 10 — two set menus (6.900/9.900 kr.), group brunch and a kids menu.">
 <meta property="og:title" content="Groups · Ráðagerði Restaurant Seltjarnarnes">
-<meta property="og:description" content="Group menus at Ráðagerði in Seltjarnarnes, Iceland for parties of more than 10 people — lunch, brunch and dinner. Perfect for work gatherings, birthdays and other occasions.">
+<meta property="og:description" content="Group menus at Ráðagerði — two set menus, group brunch and a kids menu.">
 <link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
 <link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
 <link rel="preload" href="fonts/6353a2db71b74a4eaef13f21_WindsorD.otf" as="font" type="font/otf" crossorigin>
@@ -55,6 +55,13 @@
   .guidebox .glbl{font-size:clamp(16px,1.5vw,21px);font-weight:700;margin:0 0 30px}
   .guidebox .mbtn{display:inline-flex;min-height:0;padding:26px 52px;font-size:clamp(22px,2.1vw,32px);letter-spacing:.18em;text-indent:.18em}
 
+  .introp{text-align:center;max-width:1000px;margin:64px auto -4px;font-size:clamp(15px,1.4vw,19px);line-height:1.9;color:var(--gr);padding:0 6px}
+  .redcols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:30px 0 0;align-items:stretch}
+  .redbox{border:3px solid var(--red);color:var(--red);text-align:center;padding:44px 30px}
+  .rbt{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(22px,2vw,32px);letter-spacing:.06em;margin:0 0 6px;border-bottom:2px solid var(--red);display:inline-block;padding-bottom:6px}
+  .redbox .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(19px,1.7vw,27px);letter-spacing:.03em;margin:30px 0 12px}
+  .redbox .rd{font-family:'Montserrat',sans-serif;font-size:16px;line-height:1.8;margin:0}
+  @media(max-width:900px){.redcols{grid-template-columns:1fr;gap:16px;margin-top:20px}.redbox{padding:34px 20px}}
   /* footer */
   .rg2-footer{background:#fff;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -107,22 +114,41 @@
       </div>
     </div>
 
-    <div class="mcols">
-      <div>
-        <p class="lbl">Weekdays from 11:30–16:00</p>
-        <a class="mbtn soon" href="#"><span class="soon-tag">COMING SOON</span>Lunch</a>
+        <p class="introp">For groups we offer two set menus. The dishes are a cross-section of our most popular dishes and we call the menu <b>Brot af því besta</b> — “a taste of the best”. Everyone gets plenty to eat, the food is shared, and the atmosphere is always great. If you have allergies or special dietary needs, please get in touch and we will accommodate them as best we can.</p>
+    <div class="redcols">
+      <div class="redbox">
+        <p class="rbt">Option 1 · 6.900 kr.</p>
+        <div><p class="rn">Burrata</p><p class="rd">Italian burrata cheese, fresh and semi-dried cherry tomatoes, kale crisps and black-garlic dressing, served with crispy bread</p></div>
+        <div><p class="rn">Arancini</p><p class="rd">Crispy mushroom risotto balls filled with mozzarella cheese, served with homemade marinara sauce and sautéed chestnut mushrooms, topped with gremolata and parmesan</p></div>
+        <div><p class="rn">Pizzas</p><p class="rd">Pizzas from the menu, to share</p></div>
+        <div><p class="rn">Tiramisu</p><p class="rd">House-style tiramisu</p></div>
       </div>
-      <div>
-        <p class="lbl">Weekends from 11:00–15:30</p>
-        <a class="mbtn soon" href="#"><span class="soon-tag">COMING SOON</span>Brunch</a>
+      <div class="redbox">
+        <p class="rbt">Option 2 · 9.900 kr.</p>
+        <div><p class="rn">Burrata</p><p class="rd">Italian burrata cheese, fresh and semi-dried cherry tomatoes, kale crisps and black-garlic dressing, served with crispy bread</p></div>
+        <div><p class="rn">Arancini</p><p class="rd">Crispy mushroom risotto balls filled with mozzarella cheese, served with homemade marinara sauce and sautéed chestnut mushrooms, topped with gremolata and parmesan</p></div>
+        <div><p class="rn">Garlic Shrimp</p><p class="rd">Tiger shrimp in butter with garlic and chili, served with wood-fired bread</p></div>
+        <div><p class="rn">Mascarpone Meatballs</p><p class="rd">Wood-fired meatballs with mascarpone mushroom sauce, sautéed mushrooms, potatoes, red onion, gremolata, parmesan and spinach. Served with wood-fired bread</p></div>
+        <div><p class="rn">Pizzas</p><p class="rd">Pizzas from the menu, to share</p></div>
+        <div><p class="rn">Tiramisu</p><p class="rd">House-style tiramisu</p></div>
       </div>
-      <div>
-        <p class="lbl">Every day from 16:00</p>
-        <a class="mbtn soon" href="#"><span class="soon-tag">COMING SOON</span>Dinner</a>
+    </div>
+    <div class="redcols">
+      <div class="redbox">
+        <p class="rbt">Groups – Brunch</p>
+        <div><p class="rn">Shakshuka · 3390 kr.</p><p class="rd">Two fried eggs in a thick sauce of bell peppers, tomatoes, onion and garlic, topped with feta cheese and parsley, served with wood-fired bread</p></div>
+        <div><p class="rn">Ráðagerði’s Brunch Platter · 3590 kr.</p><p class="rd">Two fried eggs, bacon, avocado, fresh tomato salsa, Gullauga baby potatoes with yogurt sauce and salad. Served with wood-fired bread</p></div>
+        <div><p class="rn">Brunch Pizza · 3590 kr.</p><p class="rd">Mascarpone, cheese, bacon, potatoes, gremolata, parmesan, egg yolks and a fried egg</p></div>
+        <div><p class="rn">Kids’ Pizza · 1990 kr.</p><p class="rd">9” pizza with one topping</p></div>
+      </div>
+      <div class="redbox">
+        <p class="rbt">Kids Menu · 1.990 kr.</p>
+        <div><p class="rn">9” Pizza</p><p class="rd">With one topping of your choice</p></div>
+        <div><p class="rn">Lasagna</p><p class="rd">With garlic bread</p></div>
       </div>
     </div>
     <div class="guidebox">
-      <p class="glbl">In the meantime, we recommend</p>
+      <p class="glbl">Also check out</p>
       <a class="mbtn" href="en-seltjarnarnes-iceland-travel-guide.html">Guide to Seltjarnarnes</a>
     </div>
   </div>
