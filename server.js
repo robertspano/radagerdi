@@ -25,6 +25,37 @@ const IS_HTTPS = !!process.env.RENDER; // behind Render's TLS proxy → mark ses
 const PORT = process.env.PORT || 8787;
 const DEFAULT_PASSWORD = 'radagerdi';
 
+// ---------- email-code login (Resend) ----------
+// Enabled when BOTH env vars are set (on Render: Environment tab):
+//   RESEND_API_KEY = re_...          CMS_EMAILS = netfang1,netfang2,...
+const RESEND_KEY = process.env.RESEND_API_KEY || '';
+const CMS_EMAILS = (process.env.CMS_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+const EMAIL_LOGIN = !!(RESEND_KEY && CMS_EMAILS.length);
+const MAIL_FROM = process.env.MAIL_FROM || 'Ráðagerði CMS <cms@fyrirspurn.radagerdi.is>';
+const loginCodes = new Map();   // email -> { hash, exp, tries }
+const codeRequests = new Map(); // email -> [timestamps]
+function hashCode(email, code) {
+  return crypto.createHmac('sha256', sessionToken()).update(email + ':' + code).digest('hex');
+}
+async function sendLoginCode(email) {
+  const code = ('' + (crypto.randomInt(100000, 1000000)));
+  loginCodes.set(email, { hash: hashCode(email, code), exp: Date.now() + 10 * 60 * 1000, tries: 0 });
+  if (process.env.DEBUG_CODES) console.log('  ⚙ DEBUG innskráningarkóði fyrir ' + email + ': ' + code);
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + RESEND_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: MAIL_FROM, to: [email],
+      subject: code + ' er innskráningarkóðinn þinn — Ráðagerði CMS',
+      html: '<div style="font-family:-apple-system,sans-serif;max-width:420px;margin:0 auto;padding:28px 8px;text-align:center">' +
+            '<p style="font-size:15px;color:#444;margin:0 0 18px">Innskráningarkóðinn þinn á Ráðagerði CMS er:</p>' +
+            '<p style="font-size:38px;font-weight:800;letter-spacing:.18em;color:#1B7C38;margin:0 0 18px">' + code + '</p>' +
+            '<p style="font-size:13px;color:#888;margin:0">Kóðinn gildir í 10 mínútur. Ef þú baðst ekki um hann máttu hunsa þennan póst.</p></div>',
+    }),
+  });
+  return r.ok;
+}
+
 // ---------- storage helpers ----------
 function ensure() {
   fs.mkdirSync(CONTENT_DIR, { recursive: true });
@@ -134,7 +165,42 @@ async function handleAPI(req, res, url) {
   if (p === '/api/session' && req.method === 'GET') {
     return sendJSON(res, 200, { authed: isAuthed(req) });
   }
+  if (p === '/api/login-mode' && req.method === 'GET') {
+    return sendJSON(res, 200, { mode: EMAIL_LOGIN ? 'email' : 'password' });
+  }
+  if (p === '/api/login-code' && req.method === 'POST') {
+    if (!EMAIL_LOGIN) return sendJSON(res, 400, { ok: false, error: 'Kóða-innskráning er ekki virk' });
+    const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
+    const email = String(body.email || '').trim().toLowerCase();
+    const now = Date.now();
+    const times = (codeRequests.get(email) || []).filter(ts => now - ts < 15 * 60 * 1000);
+    if (times.length >= 5) return sendJSON(res, 429, { ok: false, error: 'Of margar beiðnir — reyndu aftur eftir smá stund' });
+    times.push(now); codeRequests.set(email, times);
+    if (CMS_EMAILS.includes(email)) {
+      try { await sendLoginCode(email); } catch (e) { console.error('login-code send failed:', e.message); }
+    }
+    // always the same answer — don't reveal which emails have access
+    return sendJSON(res, 200, { ok: true });
+  }
+  if (p === '/api/login-verify' && req.method === 'POST') {
+    if (!EMAIL_LOGIN) return sendJSON(res, 400, { ok: false });
+    const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
+    const email = String(body.email || '').trim().toLowerCase();
+    const code = String(body.code || '').trim();
+    const rec = loginCodes.get(email);
+    if (!rec || rec.exp < Date.now() || rec.tries >= 5) { loginCodes.delete(email); return sendJSON(res, 401, { ok: false, error: 'Kóðinn er útrunninn — biddu um nýjan' }); }
+    rec.tries++;
+    const want = Buffer.from(rec.hash), got = Buffer.from(hashCode(email, code));
+    if (want.length === got.length && crypto.timingSafeEqual(want, got)) {
+      loginCodes.delete(email);
+      return sendJSON(res, 200, { ok: true }, {
+        'Set-Cookie': `cms_session=${sessionToken()}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000${IS_HTTPS ? '; Secure' : ''}`
+      });
+    }
+    return sendJSON(res, 401, { ok: false, error: 'Rangur kóði' });
+  }
   if (p === '/api/login' && req.method === 'POST') {
+    if (EMAIL_LOGIN) return sendJSON(res, 403, { ok: false, error: 'Innskráning fer fram með tölvupóstkóða' });
     const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
     if (verifyPassword(body.password || '')) {
       return sendJSON(res, 200, { ok: true }, {
