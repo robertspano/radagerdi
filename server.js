@@ -32,6 +32,31 @@ const RESEND_KEY = process.env.RESEND_API_KEY || '';
 const CMS_EMAILS = (process.env.CMS_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 const EMAIL_LOGIN = !!(RESEND_KEY && CMS_EMAILS.length);
 const MAIL_FROM = process.env.MAIL_FROM || 'Ráðagerði CMS <cms@fyrirspurn.radagerdi.is>';
+// ---------- Instagram gallery feed ----------
+// Configured with ONE of (on Render: Environment tab):
+//   IG_TOKEN    = long-lived Instagram API token for @radagerdi170  (graph.instagram.com)
+//   IG_FEED_URL = ready-made JSON feed URL (e.g. Behold.so) for the account
+const IG_TOKEN = process.env.IG_TOKEN || '';
+const IG_FEED_URL = process.env.IG_FEED_URL || '';
+let igCache = { t: 0, data: null };
+async function fetchInstagram() {
+  let raw;
+  if (IG_TOKEN) {
+    const r = await fetch('https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink&limit=24&access_token=' + encodeURIComponent(IG_TOKEN));
+    raw = await r.json();
+  } else {
+    const r = await fetch(IG_FEED_URL);
+    raw = await r.json();
+  }
+  const list = raw.data || raw.posts || raw.media || (Array.isArray(raw) ? raw : []);
+  const media = list.map(m => ({
+    url: m.media_type === 'VIDEO' ? (m.thumbnail_url || m.thumbnailUrl) : (m.media_url || m.mediaUrl || m.url),
+    link: m.permalink || m.link || 'https://www.instagram.com/radagerdi170/',
+    alt: ((m.caption && (m.caption.text || m.caption)) || 'Ráðagerði á Instagram').toString().slice(0, 140),
+  })).filter(m => m.url).slice(0, 18);
+  return { ok: media.length > 0, media };
+}
+
 const loginCodes = new Map();   // email -> { hash, exp, tries }
 const codeRequests = new Map(); // email -> [timestamps]
 function hashCode(email, code) {
@@ -172,6 +197,18 @@ async function handleAPI(req, res, url) {
   }
   if (p === '/api/session' && req.method === 'GET') {
     return sendJSON(res, 200, { authed: isAuthed(req) });
+  }
+  if (p === '/api/instagram' && req.method === 'GET') {
+    if (!IG_TOKEN && !IG_FEED_URL) return sendJSON(res, 200, { ok: false, media: [] });
+    if (igCache.data && Date.now() - igCache.t < 10 * 60 * 1000) return sendJSON(res, 200, igCache.data);
+    try {
+      const data = await fetchInstagram();
+      if (data.ok) igCache = { t: Date.now(), data };
+      return sendJSON(res, 200, data.ok ? data : (igCache.data || data));
+    } catch (e) {
+      console.error('instagram fetch failed:', e.message);
+      return sendJSON(res, 200, igCache.data || { ok: false, media: [] });
+    }
   }
   if (p === '/api/login-mode' && req.method === 'GET') {
     return sendJSON(res, 200, { mode: EMAIL_LOGIN ? 'email' : 'password' });

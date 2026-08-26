@@ -74,6 +74,11 @@
   .gal-grid figure{margin:0}
   .gal-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block}
   @media(max-width:700px){.gal-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+  .igbox{border:3px solid var(--gr);border-radius:26px;margin:26px 0 0;padding:44px clamp(20px,2.5vw,44px);text-align:center}
+  .igbox h2{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;font-size:clamp(26px,2.4vw,40px);letter-spacing:.06em;margin:0 0 6px}
+  .igbox h2 span{display:inline-block;border-bottom:2px solid var(--gr);padding-bottom:6px}
+  .igbox .vnote a{color:var(--gr)}
+  .igbox .gal-grid a{display:block}
   /* footer */
   .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -131,6 +136,22 @@
         <figure class="g"><img src="assets/65fdb434cb54c413f5e905a9_pizza_skinka_03.jpg" alt="Eldbökuð pizza" loading="lazy"></figure>
       </div>
     </div>
+
+    <div class="igbox" id="igbox" hidden>
+      <h2><span>%s</span></h2>
+      <p class="vnote">%s</p>
+      <div class="gal-grid" id="ig-grid"></div>
+    </div>
+    <script>
+      fetch('/api/instagram').then(function(r){return r.json()}).then(function(j){
+        if (!j.ok || !j.media.length) return;
+        var g = document.getElementById('ig-grid');
+        g.innerHTML = j.media.map(function(m){
+          return '<figure class="g"><a href="' + m.link + '" target="_blank" rel="noopener"><img src="' + m.url + '" alt="' + (m.alt||'').replace(/"/g,'&quot;') + '" loading="lazy"></a></figure>';
+        }).join('');
+        document.getElementById('igbox').hidden = false;
+      }).catch(function(){});
+    </script>
   </div>
 
   <footer class="rg2-footer">
