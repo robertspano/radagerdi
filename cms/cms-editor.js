@@ -300,7 +300,6 @@
   }
   async function uploadImageFile(f) {
     if (!f || !/^image\//.test(f.type)) { toast('Þetta er ekki mynd'); return null; }
-    if (f.size > 8 * 1024 * 1024) { toast('Myndin er of stór (hámark 8MB)'); return null; }
     const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); });
     toast('Hleð upp mynd…');
     const res = await api('/api/upload', { method: 'POST', body: JSON.stringify({ name: f.name, data }) });

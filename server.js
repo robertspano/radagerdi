@@ -326,7 +326,7 @@ async function handleAPI(req, res, url) {
     return sendJSON(res, 200, { ok: true });
   }
   if (p === '/api/upload' && req.method === 'POST') {
-    const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
+    const body = JSON.parse((await readBody(req, 1024)).toString('utf8') || '{}');
     const m = /^data:([\w/+.-]+);base64,(.*)$/s.exec(body.data || '');
     if (!m) return sendJSON(res, 400, { error: 'Ógilt myndsnið' });
     const extByType = { 'image/png': '.png', 'image/jpeg': '.jpg', 'image/webp': '.webp', 'image/gif': '.gif', 'image/svg+xml': '.svg' };
