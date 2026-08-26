@@ -10,9 +10,9 @@
   const PAGES = [
     ['index.html', 'Forsíða'], ['matsedlar.html', 'Matseðill'], ['drykkir.html', 'Drykkir'], ['takeaway.html', 'Take Away'], ['brons.html', 'Bröns'],
     ['hopar.html', 'Hópar'], ['hoparhadegi.html', 'Hópar · Hádegi'], ['hoparbrons.html', 'Hópar · Bröns'], ['hoparkvold.html', 'Hópar · Kvöld'],
-    ['veisluthjonusta.html', 'Veisluþjónusta'],
+    ['veisluthjonusta.html', 'Veisluþjónusta'], ['myndir.html', 'Myndir'],
     ['en.html', 'EN · Home'], ['en-matsedlar.html', 'EN · Menu'], ['en-drykkir.html', 'EN · Drinks'], ['en-takeaway.html', 'EN · Take Away'], ['en-brons.html', 'EN · Brunch'],
-    ['en-hopar.html', 'EN · Groups'], ['en-veisluthjonusta.html', 'EN · Catering'],
+    ['en-hopar.html', 'EN · Groups'], ['en-veisluthjonusta.html', 'EN · Catering'], ['en-myndir.html', 'EN · Gallery'],
     ['en-seltjarnarnes-iceland-travel-guide.html', 'EN · Travel guide'],
     ['matsedill.html', 'Gamli matseðillinn'], ['um-okkur.html', 'Um okkur'], ['hafa-samband.html', 'Hafa samband'],
   ];
@@ -81,7 +81,7 @@
   }
   function applyState(type, key, value) {
     const el = CMS.elByKey(key);
-    if (type === 'html') { if (value == null) delete content.html[PAGE][key]; else content.html[PAGE][key] = value; if (el && value != null) el.innerHTML = value; decorateMenus(); }
+    if (type === 'html') { if (value == null) delete content.html[PAGE][key]; else content.html[PAGE][key] = value; if (el && value != null) el.innerHTML = value; decorateMenus(); decorateGalleries(); }
     else if (type === 'texts') { if (value == null) delete content.texts[PAGE][key]; else content.texts[PAGE][key] = value; if (el && value != null) el.innerHTML = value; }
     else if (type === 'images') { content.images[PAGE][key] = value; if (el) { el.src = value; el.removeAttribute('srcset'); el.removeAttribute('sizes'); } }
     else if (type === 'bg') { content.bg[PAGE][key] = value; if (el) el.style.backgroundImage = 'url("' + value + '")'; }
@@ -298,34 +298,94 @@
       if (img && isEditableImg(img)) { e.preventDefault(); e.stopPropagation(); pickImage(img, false); }
     }, true);
   }
+  async function uploadImageFile(f) {
+    if (!f || !/^image\//.test(f.type)) { toast('Þetta er ekki mynd'); return null; }
+    if (f.size > 8 * 1024 * 1024) { toast('Myndin er of stór (hámark 8MB)'); return null; }
+    const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); });
+    toast('Hleð upp mynd…');
+    const res = await api('/api/upload', { method: 'POST', body: JSON.stringify({ name: f.name, data }) });
+    if (!res.ok) { toast('Villa: ' + (res.error || '')); return null; }
+    return res.url;
+  }
+  function applyImage(target, isBg, url) {
+    if (isBg) {
+      const before = (getComputedStyle(target).backgroundImage.match(/url\(["']?([^"')]+)/) || [])[1] || '';
+      target.style.backgroundImage = 'url("' + url + '")';
+      if (!saveContext(target)) {
+        const key = CMS.key(target), b = content.bg[PAGE][key] !== undefined ? content.bg[PAGE][key] : before;
+        content.bg[PAGE][key] = url; pushRecord('bg', key, b, url); markDirty();
+      }
+    } else {
+      const before = target.getAttribute('src') || target.src || '';
+      target.src = url; target.removeAttribute('srcset'); target.removeAttribute('sizes');
+      if (!saveContext(target)) {
+        const key = CMS.key(target), b = content.images[PAGE][key] !== undefined ? content.images[PAGE][key] : before;
+        content.images[PAGE][key] = url; pushRecord('images', key, b, url); markDirty();
+      }
+    }
+    toast('Mynd uppfærð');
+  }
   function pickImage(target, isBg) {
     const inp = el('input'); inp.type = 'file'; inp.accept = 'image/*';
     inp.onchange = async () => {
-      const f = inp.files[0]; if (!f) return;
-      if (f.size > 8 * 1024 * 1024) { toast('Myndin er of stór (hámark 8MB)'); return; }
-      const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); });
-      toast('Hleð upp mynd…');
-      const res = await api('/api/upload', { method: 'POST', body: JSON.stringify({ name: f.name, data }) });
-      if (res.ok) {
-        if (isBg) {
-          const before = (getComputedStyle(target).backgroundImage.match(/url\(["']?([^"')]+)/) || [])[1] || '';
-          target.style.backgroundImage = 'url("' + res.url + '")';
-          if (!saveContext(target)) {
-            const key = CMS.key(target), b = content.bg[PAGE][key] !== undefined ? content.bg[PAGE][key] : before;
-            content.bg[PAGE][key] = res.url; pushRecord('bg', key, b, res.url); markDirty();
-          }
-        } else {
-          const before = target.getAttribute('src') || target.src || '';
-          target.src = res.url; target.removeAttribute('srcset'); target.removeAttribute('sizes');
-          if (!saveContext(target)) {
-            const key = CMS.key(target), b = content.images[PAGE][key] !== undefined ? content.images[PAGE][key] : before;
-            content.images[PAGE][key] = res.url; pushRecord('images', key, b, res.url); markDirty();
-          }
-        }
-        toast('Mynd uppfærð');
-      } else toast('Villa: ' + (res.error || ''));
+      const url = await uploadImageFile(inp.files[0]);
+      if (url) applyImage(target, isBg, url);
     };
     inp.click();
+  }
+
+  // ---------- drag & drop: drop a photo on any image to replace it, or on a gallery to add it ----------
+  document.addEventListener('dragover', (e) => {
+    const img = e.target.closest && e.target.closest('img');
+    const gal = e.target.closest && e.target.closest('.card.gal');
+    if ((img && isEditableImg(img)) || gal) { e.preventDefault(); (gal || img).classList.add('cms-dropover'); }
+  }, true);
+  document.addEventListener('dragleave', (e) => { if (e.target && e.target.classList) e.target.classList.remove('cms-dropover'); }, true);
+  document.addEventListener('drop', async (e) => {
+    const img = e.target.closest && e.target.closest('img');
+    const gal = e.target.closest && e.target.closest('.card.gal');
+    if (!(img && isEditableImg(img)) && !gal) return;
+    e.preventDefault(); e.stopPropagation();
+    document.querySelectorAll('.cms-dropover').forEach(x => x.classList.remove('cms-dropover'));
+    const files = [...((e.dataTransfer && e.dataTransfer.files) || [])].filter(f => /^image\//.test(f.type));
+    if (!files.length) return;
+    if (img && isEditableImg(img)) {
+      const url = await uploadImageFile(files[0]); if (url) applyImage(img, false, url);
+    } else if (gal) {
+      for (const f of files) { const url = await uploadImageFile(f); if (url) addGalImage(gal, url); }
+    }
+  }, true);
+
+  // ---------- photo galleries (.card.gal): drop zone + delete per image ----------
+  function decorateGalleries() {
+    document.querySelectorAll('.card.gal').forEach(gal => {
+      const region = regionOf(gal);
+      if (region._cmsBase === undefined) region._cmsBase = paneClean(region);
+      let grid = gal.querySelector('.gal-grid');
+      if (!grid) { grid = el('div', 'gal-grid'); gal.appendChild(grid); }
+      grid.querySelectorAll('figure').forEach(fig => addGalDel(fig, region));
+      if (!gal.querySelector(':scope > .cms-galdrop')) {
+        const dz = el('div', 'cms-galdrop', '＋ Dragðu myndir hingað — eða smelltu til að velja');
+        dz.setAttribute('data-cms-ctl', '1');
+        dz.onclick = () => {
+          const inp = el('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+          inp.onchange = async () => { for (const f of [...inp.files]) { const url = await uploadImageFile(f); if (url) addGalImage(gal, url); } };
+          inp.click();
+        };
+        gal.appendChild(dz);
+      }
+    });
+  }
+  function addGalImage(gal, url) {
+    const grid = gal.querySelector('.gal-grid'), region = regionOf(gal);
+    const fig = el('figure', 'g', '<img src="' + url + '" alt="Ráðagerði" loading="lazy">');
+    grid.appendChild(fig); addGalDel(fig, region); savePane(region); toast('Mynd bætt við');
+  }
+  function addGalDel(fig, region) {
+    if (fig.querySelector('[data-cms-ctl]')) return;
+    const d = el('button', 'cms-galdel', '🗑'); d.type = 'button'; d.title = 'Eyða mynd'; d.setAttribute('data-cms-ctl', '1');
+    d.onclick = (e) => { e.stopPropagation(); if (confirm('Eyða þessari mynd?')) { fig.remove(); savePane(region); } };
+    fig.appendChild(d);
   }
 
   // ---------- menu item controls (old tab panes + new themed cards) ----------
@@ -610,7 +670,7 @@
     buildToolbar();
     enableText();
     enableImages();
-    decorateMenus();
+    decorateMenus(); decorateGalleries();
     // re-decorate menus if tab content changes
     document.querySelectorAll('.w-tab-link').forEach(l => l.addEventListener('click', () => setTimeout(decorateMenus, 60)));
   }

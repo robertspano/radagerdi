@@ -131,3 +131,15 @@ body.cms-on [data-cms-item] { padding-left: 34px; }
 .cms-mvgrip { cursor: grab; font-size: 13px; }
 .cms-mvgrip:active { cursor: grabbing; }
 .cms-flash { outline: 2px solid #1B7C38; outline-offset: 3px; border-radius: 6px; }
+
+/* photo gallery editing */
+.cms-galdrop { margin: 20px 0 4px; border: 2px dashed rgba(27,124,56,.5); border-radius: 14px; padding: 28px 18px; text-align: center;
+  color: #1B7C38; font-weight: 600; font-size: 15px; cursor: pointer; transition: background .15s; font-family: -apple-system, sans-serif; }
+.cms-galdrop:hover, .card.gal.cms-dropover .cms-galdrop { background: rgba(27,124,56,.08); }
+img.cms-dropover { outline: 3px dashed #1B7C38; outline-offset: 3px; }
+.card.gal.cms-dropover { outline: 3px dashed #1B7C38; outline-offset: 4px; }
+body.cms-on .gal-grid figure { position: relative; }
+.cms-galdel { position: absolute; top: 8px; right: 8px; background: #fff; border: 1.5px solid rgba(200,40,30,.5); color: #c0281e;
+  border-radius: 8px; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .15s; font-size: 15px; padding: 0; }
+.gal-grid figure:hover .cms-galdel { opacity: 1; }
