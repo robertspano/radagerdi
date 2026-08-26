@@ -44,7 +44,7 @@
   .lunch .fine{font-weight:700;font-size:16px;margin-bottom:0}
 
   /* category cards */
-  .cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:26px;align-items:start}
+  .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;margin-top:26px;align-items:start}
   .col{display:flex;flex-direction:column;gap:26px}
   .card{border:4px solid var(--gr);border-radius:26px;padding:34px 34px 30px}
   .card h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(36px,3.4vw,50px);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin:0 0 30px}
@@ -70,7 +70,12 @@
   .rg2-hours p{color:var(--gr);font-size:15.5px;font-weight:400;margin:0 0 18px;letter-spacing:.02em}
 
   @media(max-width:900px){
-    .cols{grid-template-columns:1fr}
+    .ta-hero h1{font-size:clamp(26px,8.6vw,40px);letter-spacing:.02em}
+    .cols{grid-template-columns:minmax(0,1fr)}
+    .col,.card{min-width:0;max-width:100%}
+    .ti-head{flex-wrap:wrap;row-gap:2px}
+    .ti-head .ti-nm{min-width:min-content}
+    .ti-head .ti-pr{font-size:.82em}
     .ta-hero{border-radius:110px 110px 0 0;margin-top:30px;padding:54px 20px 40px}
     .card{padding:26px 20px 22px}
     .bar{padding:20px 18px}

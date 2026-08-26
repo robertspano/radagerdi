@@ -38,6 +38,7 @@
   .gbox-bot p{font-size:clamp(16px,1.5vw,21px);line-height:2;margin:0 auto;max-width:1400px}
 
   /* three menu columns */
+  .mcols.m2{grid-template-columns:repeat(2,1fr)}
   .mcols{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin:84px 0 120px;text-align:center}
   .mcols .lbl{font-size:clamp(16px,1.5vw,21px);font-weight:700;margin:0 0 46px}
   .mbtn{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:22px;min-height:170px;
@@ -55,7 +56,7 @@
   .rg2-hours p{color:var(--gr);font-size:15.5px;font-weight:400;margin:0 0 18px;letter-spacing:.02em}
 
   @media(max-width:900px){
-    .mcols{grid-template-columns:1fr;gap:40px;margin:56px 0 70px}
+    .mcols,.mcols.m2{grid-template-columns:1fr;gap:40px;margin:56px 0 70px}
     .mcols .lbl{margin-bottom:22px}
     .mbtn{min-height:120px}
     .gbox-top{padding:40px 22px 36px}
@@ -96,7 +97,7 @@
       </div>
     </div>
 
-    <div class="mcols" style="grid-template-columns:repeat(2,1fr)">
+    <div class="mcols m2">
       <div>
         <p class="lbl">Síminn okkar</p>
         <a class="mbtn" style="letter-spacing:.12em;text-indent:.12em" href="tel:+3545461700">546-1700</a>
