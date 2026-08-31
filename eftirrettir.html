@@ -1,14 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="is">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="alternate" hreflang="is-IS" href="en-brons.html">
-<link rel="alternate" hreflang="en" href="en-brons.html">
-<title>Brunch · Ráðagerði Restaurant Seltjarnarnes</title>
-<meta name="description" content="Weekend brunch 11:00–15:30 at Ráðagerði by the Grótta lighthouse in Seltjarnarnes, Iceland — shakshuka, brunch platter, brunch pizza and more.">
-<meta property="og:title" content="Brunch · Ráðagerði Restaurant Seltjarnarnes">
-<meta property="og:description" content="Weekend brunch 11:00–15:30 at Ráðagerði by the Grótta lighthouse in Seltjarnarnes, Iceland — shakshuka, brunch platter, brunch pizza and more.">
+<title>Eftirréttir · Ráðagerði</title>
+<meta name="description" content="Eftirréttir Ráðagerðis á Seltjarnarnesi — tiramisu, affogato, brennd basknesk ostakaka, vöfflur og fleira.">
+<meta property="og:title" content="Eftirréttir · Ráðagerði">
+<meta property="og:description" content="Eftirréttir Ráðagerðis á Seltjarnarnesi.">
 <link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
 <link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
 <link rel="preload" href="fonts/6353a2db71b74a4eaef13f21_WindsorD.otf" as="font" type="font/otf" crossorigin>
@@ -63,6 +61,14 @@
   .ti-desc{font-size:17px;line-height:1.75;margin:14px 0 0}
   .ti-note{font-size:17px;font-weight:700;margin:14px 0 0}
 
+  .drlink{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:64px;margin:28px auto 0;max-width:460px;
+    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
+  .drlink:hover{background:var(--gr);color:#fff}
+  .sub{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(18px,1.5vw,23px);letter-spacing:.06em;margin:36px 0 2px;color:var(--gr)}
+  .card .vnote{margin:-6px 0 30px;font-weight:600;font-size:16px;line-height:1.7}
+  .hh{border:3px dashed var(--gr);border-radius:22px;text-align:center;padding:34px 24px;margin:8px 0 74px}
+  .hh h2{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;font-size:clamp(26px,2.6vw,44px);letter-spacing:.14em;text-indent:.14em;margin:0 0 10px}
+  .hh p{font-size:clamp(15px,1.4vw,19px);margin:4px 0}
   .col > .card + .card{margin-top:26px}
   /* footer */
   .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
@@ -101,58 +107,46 @@
 </head>
 <body>
   <div class="bar">
-    <div class="nvl"><a class="heim" href="en.html">HOME</a><a class="heim" href="brons.html">IS</a></div>
-    <a class="brand" href="en.html"><img src="assets/6353fbae1bb1a20968cdcc9f_logo-white.svg" alt="Ráðagerði"/></a>
+    <div class="nvl"><a class="heim" href="index.html">HEIM</a><a class="heim" href="en-eftirrettir.html">EN</a></div>
+    <a class="brand" href="index.html"><img src="assets/6353fbae1bb1a20968cdcc9f_logo-white.svg" alt="Ráðagerði"/></a>
     <div class="soc">
       <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="2"/><circle cx="17.6" cy="6.4" r="1.5" fill="currentColor"/></svg></a>
-      <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a><button class="rg-burger" aria-label="Menu" onclick="document.getElementById('rg-menu').classList.add('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3.5 6h17M3.5 12h17M3.5 18h17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a><button class="rg-burger" aria-label="Valmynd" onclick="document.getElementById('rg-menu').classList.add('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3.5 6h17M3.5 12h17M3.5 18h17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     </div>
   </div>
 
   <div class="wrap">
     <div class="ta-hero">
-      <h1>Brunch</h1>
-      <p class="tel">Every weekend 11:00–15:30</p>
-      <p class="off">Tel: (+354) 546-1700</p>
+      <h1>Eftirréttir</h1>
+      <p class="tel">S: 546-1700</p>
+      <p class="off">Sætur endir á góðri máltíð</p>
     </div>
+    <a class="drlink" href="matsedlar.html">Matseðill</a>
 
     <div class="cols">
       <div class="col">
         <div class="card">
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's Brunch Platter</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
-            <p class="ti-desc">Two fried eggs, bacon, avocado, fresh tomato salsa, Gullauga baby potatoes with yogurt sauce and salad. Served with wood-fired bread</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Shakshuka</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Two fried eggs in a thick sauce of bell peppers, tomatoes, onion and garlic, topped with feta cheese and parsley, served with wood-fired bread</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Vegan Brunch Platter (V)</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
-            <p class="ti-desc">Corona beans, grilled tomatoes, grilled zucchini, avocado, salad with fresh tomato salsa and balsamic glaze, fried baby potatoes. Served with wood-fired bread</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Deep-Fried Burrata</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
-            <p class="ti-desc">Served with creamy marinara sauce, pesto dressing and wood-fired bread</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Bacon Bruschetta</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Dill yogurt sauce, salad, bacon, fried egg, topped with nduja butter</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Raspberry Waffle</span><span class="ti-pr"><b class="ti-new">2490 kr</b></span></div>
-            <p class="ti-desc">Waffle, homemade raspberry and mango jam, whipped cream</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Salmon Pizza</span><span class="ti-pr"><b class="ti-new">3890 kr</b></span></div>
-            <p class="ti-desc">Mascarpone, cheese, spinach, smoked salmon, burrata stracciatella, cherry tomatoes and spring onion</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Avocado Pizza (V)</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
-            <p class="ti-desc">Tomatoes, semi-dried tomatoes, vegan cheese, avocado, arugula, fresh tomato salsa and crispy vegetable chips</p></div>
+          <h2><span>Eftirréttir</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span><span class="ti-pr"><b class="ti-new">2.190 kr</b></span></div>
+            <p class="ti-desc">Klassískur ítalskur eftirréttur</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Affogato</span><span class="ti-pr"><b class="ti-new">1.690 kr</b></span></div>
+            <p class="ti-desc">Vanilluískúla og skot af espresso. Limoncello í stað espresso fyrir 600 kr. aukalega</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Vanilluís</span><span class="ti-pr"><b class="ti-new">1.190 kr</b></span></div>
+            <p class="ti-desc">Vanilluís með súkkulaði- eða karamellusósu</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Súkkulaði kaka</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div>
+            <p class="ti-desc">Borin fram með vanilluís</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Limoncello kaka</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div>
+            <p class="ti-desc">Sítrónukaka með möndluflögum, borin fram með rjóma</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Brennd basknesk ostakaka</span><span class="ti-pr"><b class="ti-new">2.290 kr</b></span></div>
+            <p class="ti-desc">Borin fram með vanilluís</p></div>
         </div>
       </div>
       <div class="col">
         <div class="card">
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's “French Toast”</span><span class="ti-pr"><b class="ti-new">3390 kr</b></span></div>
-            <p class="ti-desc">Wood-fired bread topped with mixed berries, raspberry-mango jam, whipped mascarpone cream and powdered sugar</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Salmon Bruschetta</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Pistachio pesto, salad, smoked salmon, poached egg with dill yogurt sauce</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Bacon Waffle</span><span class="ti-pr"><b class="ti-new">2790 kr</b></span></div>
-            <p class="ti-desc">Waffle, bacon, fried eggs and syrup</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Brunch Pizza</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
-            <p class="ti-desc">Mascarpone, cheese, bacon, potatoes, gremolata, parmesan, egg yolks and a fried egg</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's Brunch Platter</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Two fried eggs, bacon, avocado, fresh tomato salsa, salad and fried baby potatoes with yogurt sauce. Served with wood-fired bread</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Turkish Eggs</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Two poached eggs served on spiced Greek yogurt with dill, lemon, garlic and mint. Topped with nduja butter and served with wood-fired bread</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Avocado Bruschetta</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Avocado, tomato salsa and a poached egg, topped with pistachio pesto</p></div>
+          <h2><span>Vaffla</span></h2>
+          <p class="vnote">Alla virka daga til kl. 17 · veldu súkkulaði- eða karamellusósu</p>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Með rjóma og sultu</span><span class="ti-pr"><b class="ti-new">1.590 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Með vanilluís og flórsykri</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div></div>
         </div>
       </div>
     </div>
@@ -167,32 +161,32 @@
       <a class="rg2-mail" href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a>
     </div>
     <div class="rg2-hours">
-      <h3>Opening hours</h3>
-      <p>MON–THU 11:30–22</p>
-      <p>FRI 11:30–23</p>
-      <p>SAT 11–23</p>
+      <h3>Opnunartímar</h3>
+      <p>MÁN–FIM 11:30–22</p>
+      <p>FÖS 11:30–23</p>
+      <p>LAU 11–23</p>
       <p>SUN 11–22</p>
     </div>
   </footer>
 <div class="rg-menu" id="rg-menu">
-  <button class="rg-close" aria-label="Close" onclick="document.getElementById('rg-menu').classList.remove('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
-    <a href="en.html">Home</a>
-    <a href="en-matsedlar.html">Menu</a>
-    <a href="en-drykkir.html">Drinks</a>
-    <a href="en-eftirrettir.html">Desserts</a>
-    <a href="en-takeaway.html">Take Away</a>
-    <a href="en-brons.html">Brunch</a>
-    <a href="en-hopar.html">Groups</a>
-    <a href="en-veisluthjonusta.html">Catering</a>
+  <button class="rg-close" aria-label="Loka" onclick="document.getElementById('rg-menu').classList.remove('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    <a href="index.html">Heim</a>
+    <a href="matsedlar.html">Matseðill</a>
+    <a href="drykkir.html">Drykkjarseðill</a>
+    <a href="eftirrettir.html">Eftirréttir</a>
+    <a href="takeaway.html">Take Away</a>
+    <a href="brons.html">Bröns</a>
+    <a href="hopar.html">Hópar</a>
+    <a href="veisluthjonusta.html">Veisluþjónusta</a>
     <div class="sep"></div>
-    <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Book a table</a>
-    <a href="https://bookings.dineout.is/radagerdi/order?lng=en" target="_blank">Gift cards</a>
+    <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Bóka borð</a>
+    <a href="https://bookings.dineout.is/radagerdi/order?lng=is" target="_blank">Gjafakort</a>
     <div class="sep"></div>
-    <a href="en-myndir.html">Gallery</a>
+    <a href="myndir.html">Myndir</a>
     <a href="en-seltjarnarnes-iceland-travel-guide.html">Guide to Seltjarnarnes</a>
-    <a href="en-about-us.html">About us</a>
-    <a href="en-contact-us.html">Contact</a>
-    <a href="index.html">Íslenska</a>
+    <a href="um-okkur.html">Um okkur</a>
+    <a href="hafa-samband.html">Hafa samband</a>
+    <a href="en.html">English</a>
 </div>
 <script src="cms/cms-inject.js" defer></script>
 </body>

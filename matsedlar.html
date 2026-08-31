@@ -64,6 +64,18 @@
   .drlink{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:64px;margin:28px auto 0;max-width:460px;
     color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
   .drlink:hover{background:var(--gr);color:#fff}
+  .shortcuts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:28px auto 0}
+  .shortcuts .drlink{display:inline-flex;min-height:0;margin:0;padding:14px 26px;max-width:none;font-size:clamp(16px,1.4vw,22px);letter-spacing:.18em;text-indent:.18em;border-radius:14px}
+  .card.wide{margin:30px 0 0}
+  .w3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 30px;margin-top:8px}
+  .wi{font-family:'Montserrat',sans-serif;font-size:clamp(15px,1.3vw,18px);line-height:1.7;margin:7px 0;font-weight:500}
+  .col > .card + .card{margin-top:26px}
+  @media(max-width:900px){.w3{grid-template-columns:1fr;gap:0 0}}
+  /* fellanlegir flokkar */
+  .card.acc h2{cursor:pointer;-webkit-user-select:none;user-select:none}
+  .card.acc h2::after{content:"▾";display:block;font-size:.44em;margin:10px auto 0;transition:transform .18s;line-height:1}
+  .card.acc.closed h2::after{transform:rotate(-90deg)}
+  .card.acc.closed > *:not(h2){display:none}
   /* footer */
   .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -115,8 +127,38 @@
       <p class="tel">S: 546-1700</p>
       <p class="off">Eldbakað af ástríðu — ítalskur innblástur</p>
     </div>
-    <a class="drlink" href="drykkir.html">Drykkjarseðill</a>
+    <div class="shortcuts">
+      <a class="drlink" href="drykkir.html">Drykkjarseðill</a>
+      <a class="drlink" href="eftirrettir.html">Eftirréttir</a>
+      <a class="drlink" href="brons.html">Bröns</a>
+      <a class="drlink" href="takeaway.html">Take Away</a>
+      <a class="drlink" href="#krakkasedill">Krakkaseðill</a>
+    </div>
 
+        <div class="card wide" id="thriggja">
+      <h2><span>Þriggja rétta</span></h2>
+      <p class="vnote">7290 kr. — Veldu forrétt, aðalrétt og eftirrétt og settu saman þinn þriggja rétta seðil. Hægt að fá vegan og/eða glútenlaust.</p>
+      <div class="w3">
+        <div>
+          <p class="sub">Forréttir</p>
+          <p class="wi">Bruschetta að eigin vali</p>
+          <p class="wi">Tvær Arancini kúlur</p>
+          <p class="wi">Grillað Romain Salat</p>
+        </div>
+        <div>
+          <p class="sub">Aðalréttir</p>
+          <p class="wi">Mascarpone Kjötbollur</p>
+          <p class="wi">Ráðagerðis Bacalao</p>
+          <p class="wi">Trufflu Penne Pasta (V)</p>
+        </div>
+        <div>
+          <p class="sub">Eftirréttir</p>
+          <p class="wi">Tiramisu</p>
+          <p class="wi">Affogato</p>
+          <p class="wi">Limoncello Kaka</p>
+        </div>
+      </div>
+    </div>
     <div class="cols">
       <div class="col">
         <div class="card">
@@ -163,22 +205,7 @@
             <p class="ti-desc">Saltfiskur í heimagerðri marinarasósu með blönduðum ólífum, hálfþurrkuðum tómötum, gremolata og nípu-flögum. Borið fram með eldbökuðu brauði.</p></div>
         </div>
 
-        <div class="card">
-          <h2><span>Eftirréttir</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Brennd basnesk ostakaka</span><span class="ti-pr"><b class="ti-new">2290 kr</b></span></div>
-            <p class="ti-desc">Borin fram með vanilluís</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Vanilluís</span><span class="ti-pr"><b class="ti-new">1190 kr</b></span></div>
-            <p class="ti-desc">Vanilluís með súkkulaði– eða karamellusósu</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Affogato</span><span class="ti-pr"><b class="ti-new">1690 kr</b></span></div>
-            <p class="ti-desc">Vanilluískúla og skot af espresso.Limonchello í stað espresso fyrir 600 kr. aukalega.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span><span class="ti-pr"><b class="ti-new">2190 kr</b></span></div>
-            <p class="ti-desc">Tiramisu að hætti hússins</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Limoncello kaka</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
-            <p class="ti-desc">Sítrónukaka með möndluflögum borin fram með rjóma</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Súkkulaðikaka</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
-            <p class="ti-desc">Borin fram með vanilluís</p></div>
-        </div>
-      </div>
+              </div>
       <div class="col">
         <div class="card">
           <h2><span>Smáréttir</span></h2>
@@ -240,7 +267,7 @@
         </div>
       </div>
     </div>
-        <div class="card">
+        <div class="card" id="krakkasedill">
           <h2><span>Krakkaseðill</span></h2>
           <p class="vnote">Fyrir 12 ára og yngri</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">9” pizza með einu áleggi</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
@@ -286,6 +313,23 @@
     <a href="hafa-samband.html">Hafa samband</a>
     <a href="en.html">English</a>
 </div>
+<script>
+(function(){
+  if (/[?&]cms=1/.test(location.search)) return; /* í ritham eru allir flokkar opnir */
+  document.querySelectorAll('.cols .card, .card.wide').forEach(function(c){
+    c.classList.add('acc','closed');
+    var h=c.querySelector('h2'); if(!h) return;
+    h.addEventListener('click',function(){ c.classList.toggle('closed'); });
+  });
+  function openHash(){
+    var id=decodeURIComponent(location.hash.slice(1)); if(!id) return;
+    var el=document.getElementById(id);
+    if(el&&el.classList.contains('acc')){ el.classList.remove('closed'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }
+  window.addEventListener('hashchange',openHash);
+  if(location.hash) setTimeout(openHash, 150);
+})();
+</script>
 <script src="cms/cms-inject.js" defer></script>
 </body>
 </html>

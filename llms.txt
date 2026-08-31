@@ -12,8 +12,9 @@
 - Gjafakort / Gift cards: https://bookings.dineout.is/radagerdi/order
 
 ## Síður / Pages
-- [Matseðill / Menu](/matsedlar.html): Aðalmatseðill — eldbakaðar pizzur, pasta og aðalréttir
+- [Matseðill / Menu](/matsedlar.html): Aðalmatseðill — Þriggja rétta (7290 kr.), eldbakaðar pizzur, pasta, aðalréttir og krakkaseðill
 - [Drykkjarseðill / Drinks](/drykkir.html): Vínseðill (Cà dei Frati o.fl.), bjór, kokteilar, spritzar, óáfengt, kaffi og eftirréttir — happy hour alla daga 15–18
+- [Eftirréttir / Desserts](/eftirrettir.html): Tiramisu, affogato, ostakaka, vöfflur o.fl.
 - [Take Away](/takeaway.html): Sóttur matur — 10% afsláttur af öllum sóttum mat
 - [Bröns / Brunch](/brons.html): Um helgar 11:00–15:30
 - [Hópar / Groups](/hopar.html): Hópamatseðlar fyrir fleiri en 10 manns — „Brot af því besta“: Valkostur 1 (6.900 kr.) og Valkostur 2 (9.900 kr.), hópabröns og barnamatseðill
@@ -21,5 +22,5 @@
 - [Myndir / Gallery](/myndir.html): Myndir af matnum, húsinu og umhverfinu
 
 ## English pages
-- [Home](/en.html) · [Menu](/en-matsedlar.html) · [Drinks](/en-drykkir.html) · [Take Away](/en-takeaway.html) · [Brunch](/en-brons.html) · [Groups](/en-hopar.html) · [Catering](/en-veisluthjonusta.html) · [Gallery](/en-myndir.html)
+- [Home](/en.html) · [Menu](/en-matsedlar.html) · [Drinks](/en-drykkir.html) · [Desserts](/en-eftirrettir.html) · [Take Away](/en-takeaway.html) · [Brunch](/en-brons.html) · [Groups](/en-hopar.html) · [Catering](/en-veisluthjonusta.html) · [Gallery](/en-myndir.html)
 - [Guide to Seltjarnarnes](/en-seltjarnarnes-iceland-travel-guide.html): what to see and do around the Grótta lighthouse
