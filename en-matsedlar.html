@@ -326,6 +326,18 @@
   }
   decorate();
   document.addEventListener('click', function(e){
+    /* flýtitakki á flokk: opna fyrst, skrolla svo — ekkert stökk neðst */
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el && el.classList.contains('acc')) {
+        e.preventDefault();
+        el.classList.remove('closed');
+        setTimeout(function(){ el.scrollIntoView({behavior:'smooth', block:'start'}); }, 30);
+        history.replaceState(null, '', a.getAttribute('href'));
+        return;
+      }
+    }
     var h = e.target.closest && e.target.closest('.card.acc > h2');
     if (!h) return;
     e.preventDefault();
