@@ -349,7 +349,9 @@
     var h = e.target.closest && e.target.closest('.card.acc > h2');
     if (!h) return;
     e.preventDefault();
-    h.parentElement.classList.toggle('closed');
+    var card = h.parentElement, wasClosed = card.classList.contains('closed');
+    card.classList.toggle('closed');
+    if (wasClosed) requestAnimationFrame(function(){ card.scrollIntoView({behavior:'smooth', block:'nearest'}); });
   });
   function openHash(){
     var id=decodeURIComponent(location.hash.slice(1)); if(!id) return;

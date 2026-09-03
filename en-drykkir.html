@@ -72,6 +72,12 @@
   .col > .card + .card{margin-top:26px}
   .ti-old{text-decoration:none;position:relative;white-space:nowrap}
   .ti-old::after{content:"";position:absolute;left:-3px;right:-3px;top:52%;border-top:2.5px solid var(--redline);transform:translateY(-50%)}
+  .shortcuts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:28px auto 0}
+  .shortcuts .drlink{display:inline-flex;min-height:0;margin:0;padding:14px 26px;max-width:none;font-size:clamp(16px,1.4vw,22px);letter-spacing:.18em;text-indent:.18em;border-radius:14px}
+  @media(max-width:700px){
+    .shortcuts{flex-direction:column;align-items:stretch;gap:10px}
+    .shortcuts .drlink{width:100%;max-width:none;padding:15px 10px}
+  }
   /* footer */
   .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -123,7 +129,12 @@
       <p class="tel">Tel: (+354) 546-1700</p>
       <p class="off">Welcome to the bar</p>
     </div>
-    <a class="drlink" href="en-matsedlar.html">Food Menu</a>
+    <div class="shortcuts">
+      <a class="drlink" href="en-matsedlar.html">Menu</a>
+      <a class="drlink" href="en-eftirrettir.html">Desserts</a>
+      <a class="drlink" href="en-brons.html">Brunch</a>
+      <a class="drlink" href="en-takeaway.html">Take Away</a>
+    </div>
 
     <div class="cols">
       <div class="col">

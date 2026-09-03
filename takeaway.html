@@ -64,6 +64,15 @@
   .col > .card + .card{margin-top:26px}
   .ti-old{text-decoration:none;position:relative;white-space:nowrap}
   .ti-old::after{content:"";position:absolute;left:-3px;right:-3px;top:52%;border-top:2.5px solid var(--redline);transform:translateY(-50%)}
+  .drlink{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:64px;margin:28px auto 0;max-width:460px;
+    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
+  .drlink:hover{background:var(--gr);color:#fff}
+  .shortcuts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:28px auto 0}
+  .shortcuts .drlink{display:inline-flex;min-height:0;margin:0;padding:14px 26px;max-width:none;font-size:clamp(16px,1.4vw,22px);letter-spacing:.18em;text-indent:.18em;border-radius:14px}
+  @media(max-width:700px){
+    .shortcuts{flex-direction:column;align-items:stretch;gap:10px}
+    .shortcuts .drlink{width:100%;max-width:none;padding:15px 10px}
+  }
   /* footer */
   .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -114,6 +123,12 @@
       <h1>Take Away Seðill</h1>
       <p class="tel">S: 546-1700</p>
       <p class="off">10% afsláttur af öllum sóttum mat</p>
+    </div>
+    <div class="shortcuts">
+      <a class="drlink" href="matsedlar.html">Matseðill</a>
+      <a class="drlink" href="drykkir.html">Drykkjarseðill</a>
+      <a class="drlink" href="eftirrettir.html">Eftirréttir</a>
+      <a class="drlink" href="brons.html">Bröns</a>
     </div>
 
     <div class="lunch">
