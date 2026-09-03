@@ -78,6 +78,12 @@
   .card.acc h2::after{content:"▾";display:block;font-size:.44em;margin:10px auto 0;transition:transform .18s;line-height:1}
   .card.acc.closed h2::after{transform:rotate(-90deg)}
   .card.acc.closed > *:not(h2){display:none}
+  .cols{align-items:start}
+  .cols > .card{margin:0}
+  .card.acc.closed{display:flex;flex-direction:column;justify-content:center;min-height:170px}
+  .card.acc.closed h2{margin:0}
+  .ti-old{text-decoration:none;position:relative;white-space:nowrap}
+  .ti-old::after{content:"";position:absolute;left:-3px;right:-3px;top:52%;border-top:2.5px solid var(--redline);transform:translateY(-50%)}
   /* footer */
   .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -137,7 +143,13 @@
       <a class="drlink" href="#krakkasedill">Kids Menu</a>
     </div>
 
-        <div class="card wide" id="thriggja">
+        <div class="lunch">
+      <h2>Lunch Offer 2890 kr</h2>
+      <p>(Weekdays 11:30–15:30)</p>
+      <p class="combo">Creamy Tomato &amp; Basil Soup &amp; Focaccia Sandwich</p>
+      <p>Choose a filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p>
+    </div>
+    <div class="card wide" id="thriggja">
       <h2><span>Three Courses</span></h2>
       <p class="vnote">7290 kr. — Choose a starter, a main and a dessert and build your own three-course menu. Vegan and/or gluten-free options available.</p>
       <div class="w3">
@@ -162,8 +174,7 @@
       </div>
     </div>
     <div class="cols">
-      <div class="col">
-        <div class="card">
+      <div class="card">
           <h2><span>Bruschetta</span></h2>
           <p class="vnote">2 pcs 2890 kr. / 3 pcs 3790 kr.</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Parma</span></div>
@@ -173,27 +184,23 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Smoked Salmon</span></div>
             <p class="ti-desc">Wood-fired bread with smoked land-farmed Icelandic salmon, stracciatella, capers and herbs.</p></div>
         </div>
-
-        <div class="card">
+      <div class="card">
           <h2><span>Focaccia</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Wood-Fired Garlic Focaccia</span><span class="ti-pr"><b class="ti-new">2790 kr</b></span></div></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Focaccia Sandwich (whole)</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Wood-fired focaccia sandwich with arugula, burrata stracciatella, pistachio pesto, tomatoes, red onion and mixed olives. Choose your filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p></div>
         </div>
-
-        <div class="card">
+      <div class="card">
           <h2><span>Salads</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">House Caesar</span><span class="ti-pr"><b class="ti-new">3890 kr</b></span></div>
             <p class="ti-desc">Romaine salad, parmesan, fresh and semi-dried tomatoes, crispy prosciutto, crispy bread and herb dressing. Choose: chicken, shrimp or grilled zucchini. Add feta cheese for an extra charge. Vegan option available.</p></div>
         </div>
-
-        <div class="card">
+      <div class="card">
           <h2><span>Soup</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Creamy Tomato &amp; Basil Soup</span><span class="ti-pr"><b class="ti-new">2490 kr</b></span></div>
             <p class="ti-desc">Homemade hot soup of premium Italian tomatoes, served with crispy wood-fired garlic bread.</p></div>
         </div>
-
-        <div class="card">
+      <div class="card">
           <h2><span>Main Courses</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Chicken Milanese</span><span class="ti-pr"><b class="ti-new">5990 kr</b></span></div>
             <p class="ti-desc">Deep-fried chicken breast in breadcrumbs, served with baby potatoes, gremolata, arugula and parmesan.</p></div>
@@ -206,10 +213,7 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's Bacalao</span><span class="ti-pr"><b class="ti-new">4590 kr</b></span></div>
             <p class="ti-desc">Salted cod in homemade marinara sauce with mixed olives, semi-dried tomatoes, gremolata and parsnip crisps. Served with wood-fired bread.</p></div>
         </div>
-
-              </div>
-      <div class="col">
-        <div class="card">
+      <div class="card">
           <h2><span>Small Plates</span></h2>
           <p class="vnote">Perfect for sharing</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Wood-Fired Gullostur</span><span class="ti-pr"><b class="ti-new">2990 kr</b></span></div>
@@ -241,8 +245,7 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Grilled Romaine Salad</span><span class="ti-pr"><b class="ti-new">2690 kr</b></span></div>
             <p class="ti-desc">With blue cheese, caramelized walnuts, dried cranberries and lemon dressing.</p></div>
         </div>
-
-        <div class="card">
+      <div class="card">
           <h2><span>Pizza</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Margherita</span><span class="ti-pr"><b class="ti-new">2890 kr</b></span></div>
             <p class="ti-desc">Tomatoes, fresh mozzarella and fresh basil</p></div>
@@ -267,9 +270,7 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Half Moon</span><span class="ti-pr"><b class="ti-new">3690 kr</b></span></div>
             <p class="ti-desc">Tomatoes, mozzarella, mushrooms, silky thin-sliced ham or pepperoni</p></div>
         </div>
-      </div>
-    </div>
-        <div class="card" id="krakkasedill">
+      <div class="card" id="krakkasedill">
           <h2><span>Kids Menu</span></h2>
           <p class="vnote">12 years old and younger</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">9” pizza with one topping</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
@@ -278,8 +279,8 @@
             <p class="ti-desc">In our marinara sauce with fresh salad and wood-fired bread</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Kids Lasagna</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div></div>
         </div>
+    </div>
   </div>
-
   <footer class="rg2-footer">
     <div>
       <div class="soc">
@@ -318,10 +319,17 @@
 <script>
 (function(){
   if (/[?&]cms=1/.test(location.search)) return; /* í ritham eru allir flokkar opnir */
-  document.querySelectorAll('.cols .card, .card.wide').forEach(function(c){
-    c.classList.add('acc','closed');
-    var h=c.querySelector('h2'); if(!h) return;
-    h.addEventListener('click',function(){ c.classList.toggle('closed'); });
+  function decorate(){
+    document.querySelectorAll('.cols > .card, .card.wide').forEach(function(c){
+      if (!c.classList.contains('acc')) c.classList.add('acc','closed');
+    });
+  }
+  decorate();
+  document.addEventListener('click', function(e){
+    var h = e.target.closest && e.target.closest('.card.acc > h2');
+    if (!h) return;
+    e.preventDefault();
+    h.parentElement.classList.toggle('closed');
   });
   function openHash(){
     var id=decodeURIComponent(location.hash.slice(1)); if(!id) return;
@@ -329,7 +337,8 @@
     if(el&&el.classList.contains('acc')){ el.classList.remove('closed'); el.scrollIntoView({behavior:'smooth',block:'start'}); }
   }
   window.addEventListener('hashchange',openHash);
-  if(location.hash) setTimeout(openHash, 150);
+  if(location.hash) setTimeout(openHash, 200);
+  new MutationObserver(decorate).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
 <script src="cms/cms-inject.js" defer></script>
