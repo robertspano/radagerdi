@@ -46,6 +46,16 @@
     transition:background-color .15s,color .15s;margin:0 4px}
   .mbtn:hover{background:var(--gr);color:#fff}
 
+  .ginfo{border:3px solid var(--red);color:var(--red);text-align:center;padding:34px clamp(20px,3vw,48px);margin:26px 0 0}
+  .ginfo p{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(16px,1.4vw,23px);line-height:1.75;letter-spacing:.02em;margin:0 0 14px}
+  .ginfo p:last-child{margin-bottom:0}
+  .redcols{grid-template-columns:1fr !important;margin-top:20px !important}
+  .gbox2{border:3px solid var(--red);color:var(--red);text-align:center;padding:38px clamp(20px,3vw,52px) 46px;margin:26px 0 60px}
+  .gbox2 .gi{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(16px,1.4vw,23px);line-height:1.75;margin:0 0 14px}
+  .gbox2 .gi:last-of-type{margin-bottom:0}
+  .gbox2 .divider{border-top:2px solid var(--red);opacity:.5;margin:36px auto 4px;max-width:340px}
+  .gbox2 .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(20px,1.8vw,29px);letter-spacing:.03em;margin:34px 0 12px}
+  .gbox2 .rd{font-family:'Montserrat',sans-serif;font-size:16.5px;line-height:1.8;margin:0}
   /* footer */
   .rg2-footer{background:#fff;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
@@ -114,27 +124,23 @@
       <h1>Hópar - Kvöld</h1>
       <p>Alla daga frá kl 16:00</p>
     </div>
-    <div class="redcols">
-      <div class="redbox info">
-        <p style="margin:0">Réttirnir eru þverskurður af okkar vinsælustu réttum og nefnum við seðilinn <b>Brot af því besta</b>. Allir fá nóg að borða og deila saman.</p>
-        <p style="margin:0">Fyrir hópa sem telja fleiri en 10 gesti. Allir gestir í hópnum velja sama valkost.</p>
-        <p style="margin:0">Athugið að börn eldri en 6 ára teljast til fjölda gesta.</p>
-        <p style="margin:0"><b>Barnamatseðill · 1.990 kr.</b><br>9” pizza með einu áleggi eða lasagna með hvítlauksbrauði</p>
-      </div>
-      <div class="redbox">
-        <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:0;border-bottom:2px solid var(--red);display:inline-block;padding-bottom:6px">Valkostur 1 · 6.900 kr.</p>
-        <div><p class="rn">Burrata</p><p class="rd">Ítalskur burrata ostur, ferskir og hálfþurrkaðir kirsuberjatómatar, grænkálsflögur og svart-hvítlauksdressing, borið fram með stökku brauði</p></div>
-        <div><p class="rn">Arancini</p><p class="rd">Stökkar sveppa risotto kúlur fylltar með mozzarella osti, bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti</p></div>
-        <div><p class="rn">Pizzur</p><p class="rd">Pizzur af matseðli til að deila</p></div>
-        <div><p class="rn">Tiramisu</p><p class="rd">Tiramisu að hætti hússins</p></div>
-        <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:44px;border-bottom:2px solid var(--red);display:inline-block;padding-bottom:6px">Valkostur 2 · 9.900 kr.</p>
-        <div><p class="rn">Burrata</p><p class="rd">Ítalskur burrata ostur, ferskir og hálfþurrkaðir kirsuberjatómatar, grænkálsflögur og svart-hvítlauksdressing, borið fram með stökku brauði</p></div>
-        <div><p class="rn">Arancini</p><p class="rd">Stökkar sveppa risotto kúlur fylltar með mozzarella osti, bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti</p></div>
-        <div><p class="rn">Hvítlauksrækjur</p><p class="rd">Tígrisrækjur í smjöri með hvítlauk og chili, borið fram með eldbökuðu brauði</p></div>
-        <div><p class="rn">Mascarpone kjötbollur</p><p class="rd">Eldbakaðar kjötbollur með mascarpone sveppasósu, steiktum sveppum, kartöflum, rauðlauk, gremolata, parmesan og spínati. Borið fram með eldbökuðu brauði</p></div>
-        <div><p class="rn">Pizzur</p><p class="rd">Pizzur af matseðli til að deila</p></div>
-        <div><p class="rn">Tiramisu</p><p class="rd">Tiramisu að hætti hússins</p></div>
-      </div>
+    <div class="gbox2">
+      <p class="gi">Fyrir hópa sem telja fleiri en 10 gesti bjóðum við upp á smækkaðan matseðil.</p>
+      <p class="gi">Þetta er gert til þess að eldhúsið ráði við álagið og forðast langa bið eftir matnum. Allir gestir í hópnum velja sér þá einn af réttunum á hópaseðlinum hér að neðan.</p>
+      <p class="gi">Athugið að börn eldri en 6 ára teljast til fjölda gesta.</p>
+      <div class="divider"></div>
+      <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:0;border-bottom:2px solid var(--red);display:inline-block;padding-bottom:6px">Valkostur 1 · 6.900 kr.</p>
+      <div><p class="rn">Burrata</p><p class="rd">Ítalskur burrata ostur, ferskir og hálfþurrkaðir kirsuberjatómatar, grænkálsflögur og svart-hvítlauksdressing, borið fram með stökku brauði</p></div>
+      <div><p class="rn">Arancini</p><p class="rd">Stökkar sveppa risotto kúlur fylltar með mozzarella osti, bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti</p></div>
+      <div><p class="rn">Pizzur</p><p class="rd">Pizzur af matseðli til að deila</p></div>
+      <div><p class="rn">Tiramisu</p><p class="rd">Tiramisu að hætti hússins</p></div>
+      <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:44px;border-bottom:2px solid var(--red);display:inline-block;padding-bottom:6px">Valkostur 2 · 9.900 kr.</p>
+      <div><p class="rn">Burrata</p><p class="rd">Ítalskur burrata ostur, ferskir og hálfþurrkaðir kirsuberjatómatar, grænkálsflögur og svart-hvítlauksdressing, borið fram með stökku brauði</p></div>
+      <div><p class="rn">Arancini</p><p class="rd">Stökkar sveppa risotto kúlur fylltar með mozzarella osti, bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti</p></div>
+      <div><p class="rn">Hvítlauksrækjur</p><p class="rd">Tígrisrækjur í smjöri með hvítlauk og chili, borið fram með eldbökuðu brauði</p></div>
+      <div><p class="rn">Mascarpone kjötbollur</p><p class="rd">Eldbakaðar kjötbollur með mascarpone sveppasósu, steiktum sveppum, kartöflum, rauðlauk, gremolata, parmesan og spínati. Borið fram með eldbökuðu brauði</p></div>
+      <div><p class="rn">Pizzur</p><p class="rd">Pizzur af matseðli til að deila</p></div>
+      <div><p class="rn">Tiramisu</p><p class="rd">Tiramisu að hætti hússins</p></div>
     </div>
   </div>
 
