@@ -66,6 +66,10 @@
   .drlink:hover{background:var(--gr);color:#fff}
   .shortcuts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:28px auto 0}
   .shortcuts .drlink{display:inline-flex;min-height:0;margin:0;padding:14px 26px;max-width:none;font-size:clamp(16px,1.4vw,22px);letter-spacing:.18em;text-indent:.18em;border-radius:14px}
+  @media(max-width:700px){
+    .shortcuts{flex-direction:column;align-items:stretch;gap:10px}
+    .shortcuts .drlink{width:100%;max-width:none;padding:15px 10px}
+  }
   .card.wide{margin:30px 0 0}
   .w3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 30px;margin-top:8px}
   .wi{font-family:'Montserrat',sans-serif;font-size:clamp(15px,1.3vw,18px);line-height:1.7;margin:7px 0;font-weight:500}
@@ -172,7 +176,8 @@
       </div>
     </div>
     <div class="cols">
-      <div class="card">
+      <div class="col">
+        <div class="card">
           <h2><span>Bruschetta</span></h2>
           <p class="vnote">2stk 2890 kr. / 3stk 3790 kr.</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Parma</span></div>
@@ -182,23 +187,25 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Reyktur lax</span></div>
             <p class="ti-desc">Eldbakað brauð með reyktum landeldislaxi, stracciatella, kapers og kryddjurtum.</p></div>
         </div>
-      <div class="card">
+        <div class="card">
           <h2><span>Focaccia</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Eldbakað hvítlauks-Focaccia</span><span class="ti-pr"><b class="ti-new">2790 kr</b></span></div></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Focaccia samloka (heil/whole)</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Eldbökuð focaccia samloka með klettasalati, burrata stracciatella, pistasíu pestói, tómötum, rauðlauk og blönduðum ólífum. Veldu álegg: parmaskinka, mortadella, reyktur lax eða grillaður kúrbítur. Heil: 2490 / Whole: 3590</p></div>
         </div>
-      <div class="card">
+        <div class="card">
           <h2><span>Salat</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Sesar hússins</span><span class="ti-pr"><b class="ti-new">3890 kr</b></span></div>
             <p class="ti-desc">Romain salat, parmesan, ferskir og hálfþurrkaðir tómatar, stökk parmaskinka, stökkt brauð og kryddjurtadressing. Veldu: kjúkling, rækjur eða grillaðan kúrbít. Bættu við feta osti fyrir 500 kr. Hægt að fá vegan</p></div>
         </div>
-      <div class="card">
+        <div class="card">
           <h2><span>Súpa</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Rjómalöguð Tómat-Basil Súpa</span><span class="ti-pr"><b class="ti-new">2490 kr</b></span></div>
             <p class="ti-desc">Heimalöguð heit súpa úr hágæða ítölskum tómötum borin fram með stökku eldbökuðu hvítlauksbrauði.</p></div>
         </div>
-      <div class="card">
+      </div>
+      <div class="col">
+        <div class="card">
           <h2><span>Aðalréttir</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Kjúklinga Milanese</span><span class="ti-pr"><b class="ti-new">5990 kr</b></span></div>
             <p class="ti-desc">Djúpsteikt kjúklingabringa í raspi borin fram með smælki kartöflum, gremolata, klettasalati og parmesan.</p></div>
@@ -211,7 +218,7 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerðis Bacalao</span><span class="ti-pr"><b class="ti-new">4590 kr</b></span></div>
             <p class="ti-desc">Saltfiskur í heimagerðri marinarasósu með blönduðum ólífum, hálfþurrkuðum tómötum, gremolata og nípu-flögum. Borið fram með eldbökuðu brauði.</p></div>
         </div>
-      <div class="card">
+        <div class="card">
           <h2><span>Smáréttir</span></h2>
           <p class="vnote">Tilvalið til að deila</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Eldakaður Gullostur</span><span class="ti-pr"><b class="ti-new">2990 kr</b></span></div>
@@ -243,7 +250,7 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Grillað Romain Salat</span><span class="ti-pr"><b class="ti-new">2690 kr</b></span></div>
             <p class="ti-desc">Með gráðosti, karmelíseruðum valhnetum, þurrkuðum trönuberjum og sítrónudressingu.</p></div>
         </div>
-      <div class="card">
+        <div class="card">
           <h2><span>Pizza</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Margherita</span><span class="ti-pr"><b class="ti-new">2890 kr</b></span></div>
             <p class="ti-desc">Tómatar, ferskur mozzarella og fersk basilika</p></div>
@@ -268,7 +275,7 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Hálfmáni</span><span class="ti-pr"><b class="ti-new">3690 kr</b></span></div>
             <p class="ti-desc">Tómatar, mozzarella, sveppir, silkiskorin skinka eða pepperóní</p></div>
         </div>
-      <div class="card" id="krakkasedill">
+        <div class="card" id="krakkasedill">
           <h2><span>Krakkaseðill</span></h2>
           <p class="vnote">Fyrir 12 ára og yngri</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">9” pizza með einu áleggi</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
@@ -277,6 +284,7 @@
             <p class="ti-desc">Í marinara sósunni okkar með fersku salati og eldbökuðu brauði</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Barnalasagna</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div></div>
         </div>
+      </div>
     </div>
   </div>
   <footer class="rg2-footer">
@@ -318,7 +326,7 @@
 (function(){
   if (/[?&]cms=1/.test(location.search)) return; /* í ritham eru allir flokkar opnir */
   function decorate(){
-    document.querySelectorAll('.cols > .card, .card.wide').forEach(function(c){
+    document.querySelectorAll('.cols .card, .card.wide').forEach(function(c){
       if (!c.classList.contains('acc')) c.classList.add('acc','closed');
     });
   }
