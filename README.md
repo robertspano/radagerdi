@@ -1,17 +1,52 @@
 # Ráðagerði — vefur, CMS og gjafabréf
 
-## Hýsing á Render (allt virkt á netinu)
+**Vefurinn í loftinu:** <https://radagerdi.onrender.com> · **Efnisstjórnun:** <https://radagerdi.onrender.com/admin>
 
-Repo-ið er tilbúið fyrir [Render](https://render.com) — `render.yaml` lýsir öllu:
+---
 
-1. Stofnaðu aðgang á render.com (innskráning með GitHub er einfaldast).
-2. **New + → Blueprint** → veldu repo-ið `robertspano/radagerdi` → **Apply**.
-3. Render setur upp þjóninn + 1GB gagnadisk (`/data`) sjálfkrafa (Starter, ~7$/mán).
-4. Vefurinn birtist á `https://radagerdi.onrender.com` (eða álíka) — þar virkar **allt**: vefur, `/admin`, gjafabréf og `/skann` (HTTPS → myndavélin virkar á síma/iPad).
-5. **Fyrsta verk: breyttu lykilorðinu** (⋯ → Breyta lykilorði) — sjálfgefið er `radagerdi`.
+## Fyrir samstarfsfólk — svona breytirðu vefnum
 
-Gögn (efni, gjafabréf, myndir) geymast á disknum og lifa af allar enduruppfærslur.
-Eigið lén (t.d. undirlén af radagerdi.is) er hægt að tengja í Render → Settings → Custom Domains.
+```bash
+git clone https://github.com/robertspano/radagerdi.git
+cd radagerdi
+npm install
+node server.js          # vefurinn á http://localhost:8787
+```
+
+Breyttu skránum, prófaðu staðbundið, og pushaðu:
+
+```bash
+git add -A
+git commit -m "lýsing á breytingunni"
+git push
+```
+
+> **Push á `main` fer sjálfkrafa í loftið.** Render tekur við breytingunni um leið
+> og hún er komin á GitHub og uppfærir <https://radagerdi.onrender.com> á ~40 sekúndum.
+> Ekkert handvirkt skref, enginn Render-aðgangur nauðsynlegur.
+> Stöðuna má sjá á [Render dashboard](https://dashboard.render.com) eða í `Actions`-flipanum á GitHub.
+
+### Gott að vita áður en þú byrjar
+
+- **Engir pakkar, enginn build.** `server.js` er allur bakendinn (hreint Node, engar
+  útgáfuháðar). Hver síða er sjálfstæð `.html` skrá með sínu CSS inni í `<style>`.
+- **`content/` er í `.gitignore`** — breytingar sem gerðar eru í CMS-inu á netinu
+  vistast þar og **núllstillast við endurræsingu** á fríu hýsingunni. Varanlegar
+  breytingar þurfa að fara í HTML-skrárnar sjálfar og vera pushaðar.
+- **Leyndarmál fara aldrei í repo-ið** — API-lyklar og netfangalistar eru
+  umhverfisbreytur á Render (`Environment`-flipinn).
+- Prófaðu alltaf **í síma-breidd líka** (375px) áður en þú pushar — allar síður eiga
+  að vera lausar við lárétt skrun.
+
+### Uppbygging
+
+| Slóð | Hlutverk |
+|------|----------|
+| `server.js` | Þjónninn: kyrrar skrár, innskráning, efnis-API, myndir, gjafabréf |
+| `cms/` | Ritillinn (`cms-inject.js` birtir efni, `cms-editor.js` er ritstjórnarlagið) |
+| `content/` | Vistað efni, gjafabréf, upphlaðnar myndir *(ekki í git)* |
+| `assets/`, `fonts/`, `css/`, `js/` | Myndir, letur og stílar |
+| `render.yaml` | Hýsingarstillingar |
 
 ---
 
@@ -73,34 +108,20 @@ innskráð(ur); venjulegir gestir sjá bara vefinn.
 > Athugið: keyrðu alltaf **í gegnum `node server.js`**, ekki með því að tvísmella á
 > `index.html` — annars hleðst hvorki letrið, myndbandið né CMS-ið.
 
-## Síður (allar staðbundnar, allir hlekkir virka)
+## Síður
 
-**Íslenska:**
-| Skrá | Innihald |
-|------|----------|
-| `index.html`        | Forsíða (hero-myndband, þriggja-rétta borði, matseðilshnappar, footer) |
-| `matsedill.html`    | Matseðill með flipum — `?tab=` virkar (Matseðill / Bröns / Take Away / Hópar) |
-| `um-okkur.html`     | Um okkur |
-| `hafa-samband.html` | Hafa samband (form) |
+**Íslenska:** `index.html` (forsíða) · `matsedlar.html` (matseðill) · `drykkir.html` ·
+`eftirrettir.html` · `takeaway.html` · `brons.html` · `hopar.html` (+ `hoparhadegi`,
+`hoparkvold`, `hoparbrons`) · `veisluthjonusta.html` · `myndir.html` ·
+`um-okkur.html` · `hafa-samband.html`
 
-**English (EN-hnappurinn):**
-| Skrá | Innihald |
-|------|----------|
-| `en-radagerdi.html` | English home |
-| `en-menu.html`      | Menu (tabs: Menu / Brunch / Take Away / Groups) |
-| `en-about-us.html`  | About us |
-| `en-contact-us.html`| Contact us |
-| `en-seltjarnarnes-iceland-travel-guide.html` | Seltjarnarnes travel guide |
+**English:** `en.html` · `en-matsedlar.html` · `en-drykkir.html` · `en-eftirrettir.html` ·
+`en-takeaway.html` · `en-brons.html` · `en-hopar.html` · `en-veisluthjonusta.html` ·
+`en-myndir.html` · `en-about-us.html` · `en-contact-us.html` ·
+`en-seltjarnarnes-iceland-travel-guide.html`
 
-**Möppur:**
-| Mappa | Innihald |
-|-------|----------|
-| `css/`    | Webflow-stílblaðið (letur- og myndavísanir staðbundnar, `../fonts/` `../assets/`) |
-| `fonts/`  | Windsor + Knockout HTF + öll leturafbrigði (.otf/.ttf) |
-| `assets/` | Myndir, SVG-tákn, hero-myndband (mp4/webm) + poster |
-| `js/`     | Webflow-skriftur (valmynd, flipar, hreyfingar) |
-
-**Ytri hlekkir (haldast eins og á raunvefnum):** „Bóka borð" og „Gjafakort" → dineout.is bókunarkerfið; samfélagsmiðlar → Facebook/Instagram/TripAdvisor; kort-táknið → Google Maps. Óvirkar árstíðasíður (jólaseðill, holiday/new-years menu) vísa á raunvefinn eins og þær gera þar (þær eru faldar/404).
+Hver síða er sjálfri sér næg: haus, hamborgaravalmynd, efni og fótur í einni skrá.
+EN/IS-takkarnir efst tengja saman samsvarandi síður.
 
 ## Það sem gott er að vita
 
