@@ -47,7 +47,7 @@
   .lunch .fine{font-weight:700;font-size:16px;margin-bottom:0}
 
   /* category cards */
-  .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;margin-top:26px;align-items:start}
+  .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;margin-top:26px;align-items:start}
   .col{display:flex;flex-direction:column;gap:26px}
   .card{border:4px solid var(--gr);border-radius:26px;padding:34px 34px 30px}
   .card h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(36px,3.4vw,50px);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin:0 0 30px}
@@ -64,8 +64,8 @@
   .ti-note{font-size:17px;font-weight:700;margin:14px 0 0}
 
   .drlink{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:64px;margin:28px auto 0;max-width:460px;
-    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
-  .drlink:hover{background:var(--gr);color:#fff}
+    background:var(--gr);color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
+  .drlink:hover{background:#fff;color:var(--gr)}
   .shortcuts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:28px auto 0}
   .shortcuts .drlink{display:inline-flex;min-height:0;margin:0;padding:14px 26px;max-width:none;font-size:clamp(16px,1.4vw,22px);letter-spacing:.18em;text-indent:.18em;border-radius:14px}
   @media(max-width:700px){
@@ -144,7 +144,7 @@
       <a class="drlink" href="en-eftirrettir.html">Desserts</a>
       <a class="drlink" href="en-brons.html">Brunch</a>
       <a class="drlink" href="en-takeaway.html">Take Away</a>
-      <a class="drlink" href="#krakkasedill">Kids Menu</a>
+      <a class="drlink" href="en-barnamatsedill.html">Kids Menu</a>
     </div>
 
         <div class="lunch">
@@ -153,32 +153,23 @@
       <p class="combo">Creamy Tomato &amp; Basil Soup &amp; Focaccia Sandwich</p>
       <p>Choose a filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p>
     </div>
-    <div class="card wide" id="thriggja">
-      <h2><span>Three Courses</span></h2>
-      <p class="vnote">7290 kr. — Choose a starter, a main and a dessert and build your own three-course menu. Vegan and/or gluten-free options available.</p>
-      <div class="w3">
-        <div>
+    <div class="cols">
+        <div class="card">
+          <h2><span>Three Courses</span></h2>
+          <p class="vnote">7290 kr. — Choose a starter, a main and a dessert and build your own three-course menu. Vegan and/or gluten-free options available.</p>
           <p class="sub">Starters</p>
           <p class="wi">Bruschetta of your choice</p>
           <p class="wi">Two Arancini balls</p>
           <p class="wi">Grilled Romaine Salad</p>
-        </div>
-        <div>
           <p class="sub">Main Courses</p>
           <p class="wi">Mascarpone Meatballs</p>
           <p class="wi">Ráðagerði’s Bacalao</p>
           <p class="wi">Truffle Penne Pasta (V)</p>
-        </div>
-        <div>
           <p class="sub">Desserts</p>
           <p class="wi">Tiramisu</p>
           <p class="wi">Affogato</p>
           <p class="wi">Limoncello Cake</p>
         </div>
-      </div>
-    </div>
-    <div class="cols">
-      <div class="col">
         <div class="card">
           <h2><span>Bruschetta</span></h2>
           <p class="vnote">2 pcs 2890 kr. / 3 pcs 3790 kr.</p>
@@ -205,8 +196,6 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Creamy Tomato &amp; Basil Soup</span><span class="ti-pr"><b class="ti-new">2490 kr</b></span></div>
             <p class="ti-desc">Homemade hot soup of premium Italian tomatoes, served with crispy wood-fired garlic bread.</p></div>
         </div>
-      </div>
-      <div class="col">
         <div class="card">
           <h2><span>Main Courses</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Chicken Milanese</span><span class="ti-pr"><b class="ti-new">5990 kr</b></span></div>
@@ -277,16 +266,23 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Half Moon</span><span class="ti-pr"><b class="ti-new">3690 kr</b></span></div>
             <p class="ti-desc">Tomatoes, mozzarella, mushrooms, silky thin-sliced ham or pepperoni</p></div>
         </div>
-        <div class="card" id="krakkasedill">
-          <h2><span>Kids Menu</span></h2>
-          <p class="vnote">12 years old and younger</p>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">9” pizza with one topping</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
-            <p class="ti-desc">Tomato sauce, cheese and one topping</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Meatballs</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
-            <p class="ti-desc">In our marinara sauce with fresh salad and wood-fired bread</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Kids Lasagna</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div></div>
+        <div class="card">
+          <h2><span>Desserts</span></h2>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span><span class="ti-pr"><b class="ti-new">2.190 kr</b></span></div>
+            <p class="ti-desc">Classic Italian dessert</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Affogato</span><span class="ti-pr"><b class="ti-new">1.690 kr</b></span></div>
+            <p class="ti-desc">Vanilla ice cream and a shot of espresso. Limoncello instead of espresso for an extra 600 kr.</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Vanilla Ice Cream</span><span class="ti-pr"><b class="ti-new">1.190 kr</b></span></div>
+            <p class="ti-desc">Vanilla ice cream with chocolate or caramel sauce</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Chocolate Cake</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div>
+            <p class="ti-desc">Served with vanilla ice cream</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Limoncello Cake</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div>
+            <p class="ti-desc">Lemon cake with almond flakes, served with cream</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Burnt Basque Cheesecake</span><span class="ti-pr"><b class="ti-new">2.290 kr</b></span></div>
+            <p class="ti-desc">Served with vanilla ice cream</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Waffle w/ cream and jam</span><span class="ti-pr"><b class="ti-new">1.590 kr</b></span></div></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Waffle w/ ice cream and sugar</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div></div>
         </div>
-      </div>
     </div>
   </div>
   <footer class="rg2-footer">
@@ -310,6 +306,8 @@
     <a href="en.html">Home</a>
     <a href="en-matsedlar.html">Menu</a>
     <a href="en-drykkir.html">Drinks</a>
+    <a href="en-eftirrettir.html">Desserts</a>
+    <a href="en-barnamatsedill.html">Kids Menu</a>
     <a href="en-takeaway.html">Take Away</a>
     <a href="en-brons.html">Brunch</a>
     <a href="en-hopar.html">Groups</a>
