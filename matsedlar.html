@@ -45,7 +45,7 @@
   .lunch .fine{font-weight:700;font-size:16px;margin-bottom:0}
 
   /* category cards */
-  .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;margin-top:26px;align-items:start}
+  .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;margin-top:26px;align-items:start}
   .col{display:flex;flex-direction:column;gap:26px}
   .card{border:4px solid var(--gr);border-radius:26px;padding:34px 34px 30px}
   .card h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(36px,3.4vw,50px);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin:0 0 30px}
@@ -62,8 +62,8 @@
   .ti-note{font-size:17px;font-weight:700;margin:14px 0 0}
 
   .drlink{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:64px;margin:28px auto 0;max-width:460px;
-    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
-  .drlink:hover{background:var(--gr);color:#fff}
+    background:var(--gr);color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,1.7vw,27px);letter-spacing:.28em;text-indent:.28em;text-transform:uppercase;transition:.15s}
+  .drlink:hover{background:#fff;color:var(--gr)}
   .shortcuts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:28px auto 0}
   .shortcuts .drlink{display:inline-flex;min-height:0;margin:0;padding:14px 26px;max-width:none;font-size:clamp(16px,1.4vw,22px);letter-spacing:.18em;text-indent:.18em;border-radius:14px}
   @media(max-width:700px){
@@ -142,7 +142,7 @@
       <a class="drlink" href="eftirrettir.html">Eftirréttir</a>
       <a class="drlink" href="brons.html">Bröns</a>
       <a class="drlink" href="takeaway.html">Take Away</a>
-      <a class="drlink" href="#krakkasedill">Krakkaseðill</a>
+      <a class="drlink" href="#krakkasedill">Barnamatseðill</a>
     </div>
 
         <div class="lunch">
@@ -176,7 +176,6 @@
       </div>
     </div>
     <div class="cols">
-      <div class="col">
         <div class="card">
           <h2><span>Bruschetta</span></h2>
           <p class="vnote">2stk 2890 kr. / 3stk 3790 kr.</p>
@@ -203,8 +202,6 @@
           <div class="ti"><div class="ti-head"><span class="ti-nm">Rjómalöguð Tómat-Basil Súpa</span><span class="ti-pr"><b class="ti-new">2490 kr</b></span></div>
             <p class="ti-desc">Heimalöguð heit súpa úr hágæða ítölskum tómötum borin fram með stökku eldbökuðu hvítlauksbrauði.</p></div>
         </div>
-      </div>
-      <div class="col">
         <div class="card">
           <h2><span>Aðalréttir</span></h2>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Kjúklinga Milanese</span><span class="ti-pr"><b class="ti-new">5990 kr</b></span></div>
@@ -276,7 +273,7 @@
             <p class="ti-desc">Tómatar, mozzarella, sveppir, silkiskorin skinka eða pepperóní</p></div>
         </div>
         <div class="card" id="krakkasedill">
-          <h2><span>Krakkaseðill</span></h2>
+          <h2><span>Barnamatseðill</span></h2>
           <p class="vnote">Fyrir 12 ára og yngri</p>
           <div class="ti"><div class="ti-head"><span class="ti-nm">9” pizza með einu áleggi</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div>
             <p class="ti-desc">Tómatar, ostur og eitt álegg að eigin vali</p></div>
@@ -284,7 +281,6 @@
             <p class="ti-desc">Í marinara sósunni okkar með fersku salati og eldbökuðu brauði</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Barnalasagna</span><span class="ti-pr"><b class="ti-new">1990 kr</b></span></div></div>
         </div>
-      </div>
     </div>
   </div>
   <footer class="rg2-footer">
