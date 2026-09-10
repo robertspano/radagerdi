@@ -108,6 +108,12 @@
   .rg-menu a:hover{text-decoration:underline}
   .rg-menu .sep{width:44px;border-top:2px solid rgba(255,255,255,.7);margin:6px 0}
   .rg-close{position:absolute;top:20px;right:24px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
+  .menu-group-toggle{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;width:100%}
+  .menu-group-toggle::after{content:"\25BE";font-size:.55em;transition:transform .18s}
+  .menu-group-toggle.open::after{transform:rotate(180deg)}
+  .menu-group{display:none;flex-direction:column;gap:clamp(7px,1.9vh,17px);padding-left:20px;margin:-2px 0 0}
+  .menu-group.open{display:flex}
+  .menu-group a{font-size:.78em}
 </style>
 </head>
 <body>
@@ -236,12 +242,16 @@
 <div class="rg-menu" id="rg-menu">
   <button class="rg-close" aria-label="Close" onclick="document.getElementById('rg-menu').classList.remove('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     <a href="en.html">Home</a>
-    <a href="en-matsedlar.html">Menu</a>
-    <a href="en-drykkir.html">Drinks</a>
-    <a href="en-eftirrettir.html">Desserts</a>
-    <a href="en-takeaway.html">Take Away</a>
-    <a href="en-brons.html">Brunch</a>
-    <a href="en-hopar.html">Groups</a>
+    <a href="#" class="menu-group-toggle" onclick="this.classList.toggle('open');document.getElementById('mg-menus-en').classList.toggle('open');return false;">Menus</a>
+    <div class="menu-group" id="mg-menus-en">
+      <a href="en-matsedlar.html">Menu</a>
+      <a href="en-drykkir.html">Drinks</a>
+      <a href="en-eftirrettir.html">Desserts</a>
+      <a href="en-barnamatsedill.html">Kids Menu</a>
+      <a href="en-takeaway.html">Take Away</a>
+      <a href="en-brons.html">Brunch</a>
+      <a href="en-hopar.html">Groups</a>
+    </div>
     <a href="en-veisluthjonusta.html">Catering</a>
     <div class="sep"></div>
     <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Book a table</a>
