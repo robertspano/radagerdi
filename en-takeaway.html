@@ -49,9 +49,10 @@
   /* category cards */
   .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;margin-top:26px;align-items:start}
   .col{display:flex;flex-direction:column;gap:26px}
-  .card{border:4px solid var(--gr);border-radius:26px;padding:34px 34px 30px}
+  .card{border:4px solid var(--gr);background:var(--gr);color:#fff;border-radius:26px;padding:34px 34px 30px}
   .card h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(36px,3.4vw,50px);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin:0 0 30px}
-  .card h2 span{border-bottom:2.5px solid var(--gr);padding-bottom:4px}
+  .card h2 span{display:inline-block;border-bottom:2.5px solid transparent;padding-bottom:6px;transition:border-color .15s}
+  .card:hover h2 span{border-bottom-color:#fff}
   .card .vnote{text-align:center;font-weight:700;font-size:19px;margin:-12px 0 26px}
   .ti{margin-bottom:34px}
   .ti:last-child{margin-bottom:6px}
