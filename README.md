@@ -30,9 +30,13 @@ git push
 
 - **Engir pakkar, enginn build.** `server.js` er allur bakendinn (hreint Node, engar
   útgáfuháðar). Hver síða er sjálfstæð `.html` skrá með sínu CSS inni í `<style>`.
-- **`content/` er í `.gitignore`** — breytingar sem gerðar eru í CMS-inu á netinu
-  vistast þar og **núllstillast við endurræsingu** á fríu hýsingunni. Varanlegar
-  breytingar þurfa að fara í HTML-skrárnar sjálfar og vera pushaðar.
+- **CMS-breytingar vistast varanlega.** Það sem breytt er í CMS-inu á netinu
+  fer í `content/content.json` og þjónninn speglar skrána (og myndir sem hlaðið
+  er upp) beint í þetta repo — þú sérð þær sem commit með skilaboðunum
+  „CMS: efni uppfært af vefnum“. Ekki breyta `content/content.json` handvirkt og
+  pusha; þá skrifarðu yfir það sem eigandinn hefur gert í CMS-inu.
+- **Gjafabréf og lykilorð fara aldrei í repo-ið** (`content/giftcards.json`,
+  `content/auth.json` eru áfram í `.gitignore` — repo-ið er opinbert).
 - **Leyndarmál fara aldrei í repo-ið** — API-lyklar og netfangalistar eru
   umhverfisbreytur á Render (`Environment`-flipinn).
 - Prófaðu alltaf **í síma-breidd líka** (375px) áður en þú pushar — allar síður eiga
