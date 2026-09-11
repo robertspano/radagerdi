@@ -1,1 +1,16 @@
-{"texts":{},"images":{},"bg":{},"html":{},"hidden":{},"order":{},"settings":{}}
+{
+  "texts": {},
+  "images": {},
+  "bg": {},
+  "html": {},
+  "hidden": {},
+  "order": {},
+  "settings": {},
+  "style": {
+    "__profun__": {
+      "PROFUN": {
+        "font-size": "99px"
+      }
+    }
+  }
+}
