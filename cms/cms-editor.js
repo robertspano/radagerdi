@@ -530,8 +530,133 @@
     if (e.target.closest && (e.target.closest('.cms-stylebar') || e.target === styleTarget || styleTarget.contains(e.target))) return;
     hideStyleBar();
   }, true);
+  // smellur á auða svæðið í kassa velur kassann sjálfan (texti hefur forgang)
+  document.addEventListener('click', (e) => {
+    const t = e.target;
+    if (!t || !t.closest) return;
+    if (t.closest('.cms-bar') || t.closest('.cms-panel') || t.closest('.cms-stylebar') || t.closest('.cms-boxhandle') || t.closest('[data-cms-ctl]')) return;
+    if (t.closest('a') || t.tagName === 'IMG') return;
+    if (closestLeaf(t)) { deselectBox(); return; }        // texti valinn — ekki kassi
+    const box = t.closest(BOX_SEL);
+    if (box) { e.preventDefault(); e.stopPropagation(); hideStyleBar(); selectBox(box); }
+    else deselectBox();
+  }, true);
   window.addEventListener('scroll', () => { if (styleTarget) positionStyleBar(); }, true);
   window.addEventListener('resize', () => { if (styleTarget) positionStyleBar(); });
+
+
+  // ================= KASSASTJÓRN (draga kassa saman / út) =================
+  // Smellur á auða svæðið í kassa velur hann: rammi + handfang neðst sem má draga
+  // til að gera hann þynnri eða þykkari. Vistast sem padding í 'style'.
+  const BOX_SEL = '.ta-hero, .hg-hero, .gbox-top, .gbox-bot, .card, .hh, .lunch, .ginfo, .gbox2, .redbox, .rg-gallery, .shortcuts, .introp, .mcols';
+  let boxSel = null, boxBar = null, boxHandle = null;
+
+  function padOf(el, side) {
+    const saved = (content.style[PAGE][CMS.key(el)] || {})['padding-' + side];
+    return Math.round(parseFloat(saved || getComputedStyle(el)['padding' + side[0].toUpperCase() + side.slice(1)]) || 0);
+  }
+  function setPad(el, top, bottom) {
+    top = Math.max(0, Math.round(top)); bottom = Math.max(0, Math.round(bottom));
+    const key = CMS.key(el), s = styleOf(key);
+    const before = JSON.stringify(s);
+    s['padding-top'] = top + 'px'; s['padding-bottom'] = bottom + 'px';
+    el.style.setProperty('padding-top', top + 'px', 'important');
+    el.style.setProperty('padding-bottom', bottom + 'px', 'important');
+    pushRecord('style', key, before, JSON.stringify(s));
+    markDirty(); positionBoxUI();
+  }
+  function thinner(el, step) {
+    const t = padOf(el, 'top'), b = padOf(el, 'bottom');
+    const half = step / 2;
+    setPad(el, t + half, b + half);
+  }
+
+  function buildBoxBar() {
+    const bar = el('div', 'cms-stylebar cms-boxbar');
+    bar.setAttribute('data-cms-ctl', '1');
+    bar.addEventListener('mousedown', (e) => e.stopPropagation());
+    bar.appendChild(el('span', 'cms-sblabel', 'Kassi'));
+    bar.appendChild(el('span', 'cms-sbsep'));
+    bar.appendChild(sBtn('↕−', 'Þynnri kassi', () => { if (boxSel) thinner(boxSel, -16); }));
+    const h = el('span', 'cms-sbsize', ''); bar.appendChild(h);
+    bar.appendChild(sBtn('↕+', 'Þykkari kassi', () => { if (boxSel) thinner(boxSel, 16); }));
+    bar.appendChild(el('span', 'cms-sbsep'));
+    bar.appendChild(sBtn('↺', 'Núllstilla kassa', () => {
+      if (!boxSel) return;
+      const key = CMS.key(boxSel), before = JSON.stringify(content.style[PAGE][key] || {});
+      ['padding-top', 'padding-bottom'].forEach(p => { boxSel.style.removeProperty(p); if (content.style[PAGE][key]) delete content.style[PAGE][key][p]; });
+      if (content.style[PAGE][key] && !Object.keys(content.style[PAGE][key]).length) delete content.style[PAGE][key];
+      pushRecord('style', key, before, JSON.stringify(content.style[PAGE][key] || {}));
+      markDirty(); positionBoxUI();
+    }, 'cms-sbreset'));
+    bar._h = h;
+    document.body.appendChild(bar);
+    return bar;
+  }
+
+  function buildBoxHandle() {
+    const hd = el('div', 'cms-boxhandle', '<span></span>');
+    hd.setAttribute('data-cms-ctl', '1');
+    hd.title = 'Dragðu til að gera kassann þynnri eða þykkari';
+    hd.addEventListener('mousedown', (e) => {
+      if (!boxSel) return;
+      e.preventDefault(); e.stopPropagation();
+      const startY = e.clientY, t0 = padOf(boxSel, 'top'), b0 = padOf(boxSel, 'bottom');
+      document.body.classList.add('cms-resizing');
+      const move = (ev) => {
+        const dy = (ev.clientY - startY) / 2;
+        boxSel.style.setProperty('padding-top', Math.max(0, Math.round(t0 + dy)) + 'px', 'important');
+        boxSel.style.setProperty('padding-bottom', Math.max(0, Math.round(b0 + dy)) + 'px', 'important');
+        positionBoxUI();
+      };
+      const up = (ev) => {
+        document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up);
+        document.body.classList.remove('cms-resizing');
+        const dy = (ev.clientY - startY) / 2;
+        setPad(boxSel, t0 + dy, b0 + dy);          // vistar og skráir í afturkallasögu
+      };
+      document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+    });
+    document.body.appendChild(hd);
+    return hd;
+  }
+
+  function positionBoxUI() {
+    if (!boxSel) return;
+    const r = boxSel.getBoundingClientRect();
+    if (boxBar) {
+      boxBar._h.textContent = Math.round(r.height) + 'px';
+      const bw = boxBar.offsetWidth || 260;
+      let left = Math.max(10, Math.min(window.innerWidth - bw - 10, r.left + r.width / 2 - bw / 2));
+      let top = r.top - boxBar.offsetHeight - 12;
+      if (top < 64) top = Math.min(window.innerHeight - 60, r.top + 12);
+      boxBar.style.left = Math.round(left) + 'px';
+      boxBar.style.top = Math.round(top) + 'px';
+    }
+    if (boxHandle) {
+      boxHandle.style.left = Math.round(r.left + r.width / 2 - 26) + 'px';
+      boxHandle.style.top = Math.round(r.bottom - 9) + 'px';
+    }
+  }
+
+  function selectBox(target) {
+    if (boxSel === target) return;
+    deselectBox();
+    boxSel = target;
+    target.classList.add('cms-boxsel');
+    if (!boxBar) boxBar = buildBoxBar();
+    if (!boxHandle) boxHandle = buildBoxHandle();
+    boxBar.classList.add('show'); boxHandle.classList.add('show');
+    positionBoxUI();
+  }
+  function deselectBox() {
+    if (boxSel) boxSel.classList.remove('cms-boxsel');
+    boxSel = null;
+    if (boxBar) boxBar.classList.remove('show');
+    if (boxHandle) boxHandle.classList.remove('show');
+  }
+  window.addEventListener('scroll', () => { if (boxSel) positionBoxUI(); }, true);
+  window.addEventListener('resize', () => { if (boxSel) positionBoxUI(); });
 
   // ================= MYNDASÝNING (færiband) =================
   // Smellur á færibandið opnar spjald: bæta við, eyða, raða.

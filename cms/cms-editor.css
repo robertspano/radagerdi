@@ -189,3 +189,20 @@ body.cms-on .gal-grid figure { position: relative; }
 .cms-gcell:hover .cms-gdel { opacity: 1; }
 .cms-gdel:hover { background: #c0281e; }
 .cms-gempty { grid-column: 1/-1; color: #8a8f96; font-size: 13.5px; text-align: center; padding: 18px 0; margin: 0; }
+
+/* ===== kassastjórn (draga saman / út) ===== */
+.cms-boxsel { outline: 2px dashed rgba(27,124,56,.85) !important; outline-offset: 3px; }
+.cms-boxbar .cms-sblabel {
+  color: #9aa0a6; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 0 4px;
+}
+.cms-boxhandle {
+  position: fixed; z-index: 100000; display: none; width: 52px; height: 18px;
+  cursor: ns-resize; align-items: center; justify-content: center;
+}
+.cms-boxhandle.show { display: flex; }
+.cms-boxhandle span {
+  width: 46px; height: 7px; border-radius: 4px; background: #1B7C38;
+  border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.32); transition: transform .12s;
+}
+.cms-boxhandle:hover span { transform: scaleY(1.35); }
+body.cms-resizing, body.cms-resizing * { cursor: ns-resize !important; user-select: none !important; }
