@@ -75,13 +75,15 @@
     .shortcuts .drlink{width:100%;max-width:none;padding:15px 10px}
   }
   /* footer */
-  .rg2-footer{background:#fff;margin-top:44px;border-top:2px solid var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
+  .rg2-footer{background:var(--gr);margin-top:44px;padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:start}
+  .rg2-logo{justify-self:center;display:flex;align-items:center}
+  .rg2-logo img{height:34px;width:auto;display:block}
   .rg2-footer .soc{display:flex;gap:22px;margin-bottom:34px}
-  .rg2-footer .soc a{color:var(--gr);display:flex}
-  .rg2-mail{color:var(--gr);font-weight:700;font-size:clamp(18px,1.6vw,21px);text-decoration:none}
+  .rg2-footer .soc a{color:#fff;display:flex}
+  .rg2-mail{color:#fff;font-weight:700;font-size:clamp(18px,1.6vw,21px);text-decoration:none}
   .rg2-hours{text-align:center}
-  .rg2-hours h3{color:var(--gr);font-size:clamp(19px,1.6vw,23px);font-weight:700;margin:0 0 22px}
-  .rg2-hours p{color:var(--gr);font-size:15.5px;font-weight:400;margin:0 0 18px;letter-spacing:.02em}
+  .rg2-hours h3{color:#fff;font-size:clamp(19px,1.6vw,23px);font-weight:700;margin:0 0 22px}
+  .rg2-hours p{color:#fff;font-size:15.5px;font-weight:400;margin:0 0 18px;letter-spacing:.02em}
 
   @media(max-width:900px){
     .ta-hero h1{font-size:clamp(26px,8.6vw,40px);letter-spacing:.02em}
@@ -107,7 +109,7 @@
   .rg-menu a:hover{text-decoration:underline}
   .rg-menu .sep{width:44px;border-top:2px solid rgba(255,255,255,.7);margin:6px 0}
   .rg-close{position:absolute;top:20px;right:24px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
-  .rg-gallery{overflow:hidden;margin:70px 0 0}
+  .rg-gallery{overflow:hidden;margin:70px 0 44px}
   .rg-gallery-track{display:flex;gap:16px;width:max-content;animation:rg-scroll 44s linear infinite}
   .rg-gallery:hover .rg-gallery-track{animation-play-state:paused}
   .rg-gallery-track img{height:230px;width:auto;border-radius:20px;object-fit:cover;flex-shrink:0;display:block}
@@ -137,7 +139,7 @@
     </div>
     <div class="shortcuts">
       <a class="drlink" href="matsedlar.html">Matseðill</a>
-      <a class="drlink" href="drykkir.html">Drykkjarseðill</a>
+      <a class="drlink" href="drykkir.html">Drykkir</a>
       <a class="drlink" href="eftirrettir.html">Eftirréttir</a>
       <a class="drlink" href="brons.html">Bröns</a>
       <a class="drlink" href="barnamatsedill.html">Barnamatseðill</a>
@@ -238,12 +240,13 @@
       </div>
       <a class="rg2-mail" href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a>
     </div>
+    <div class="rg2-logo"><img src="assets/6353fbae1bb1a20968cdcc9f_logo-white.svg" alt="Ráðagerði"/></div>
     <div class="rg2-hours">
       <h3>Opnunartímar</h3>
       <p>MÁN–FIM 11:30–22</p>
       <p>FÖS 11:30–23</p>
       <p>LAU 11–23</p>
-      <p>SUN 11–22</p>
+      <p>SUN 11–22</p><p class="fine">Eldhús lokar klukkutíma fyrir lokun</p>
     </div>
   </footer>
 <div class="rg-menu" id="rg-menu">
@@ -252,7 +255,7 @@
     <a href="#" class="menu-group-toggle" onclick="this.classList.toggle('open');document.getElementById('mg-matsedlar').classList.toggle('open');return false;">Matseðlar</a>
     <div class="menu-group" id="mg-matsedlar">
       <a href="matsedlar.html">Matseðill</a>
-      <a href="drykkir.html">Drykkjarseðill</a>
+      <a href="drykkir.html">Drykkir</a>
       <a href="eftirrettir.html">Eftirréttir</a>
       <a href="barnamatsedill.html">Barnamatseðill</a>
       <a href="takeaway.html">Take Away</a>
