@@ -35,8 +35,18 @@ git push
   er upp) beint í þetta repo — þú sérð þær sem commit með skilaboðunum
   „CMS: efni uppfært af vefnum“. Ekki breyta `content/content.json` handvirkt og
   pusha; þá skrifarðu yfir það sem eigandinn hefur gert í CMS-inu.
-- **Gjafabréf og lykilorð fara aldrei í repo-ið** (`content/giftcards.json`,
-  `content/auth.json` eru áfram í `.gitignore` — repo-ið er opinbert).
+- **Gjafabréf og lykilorð eru dulkóðuð.** Þau eru líka geymd varanlega (annars
+  hyrfu gjafabréf viðskiptavina við hverja endurræsingu) en fara í repo-ið sem
+  dulkóðaðar skrár undir `content/private/`. Lykillinn er umhverfisbreytan
+  `GH_TOKEN` (eða `DATA_KEY` ef hún er sett). Skiptirðu um `GH_TOKEN` þarftu að
+  setja gamla lykilinn í `DATA_KEY`, annars er ekki hægt að afkóða þau.
+- **Ekki commit-a `content/content.json`.** Skráin er í repo-inu af því að þjónninn
+  skrifar hana þangað sjálfur, en `git add -A` héðan myndi ýta gamalli útgáfu yfir
+  það sem eigandinn er búinn að gera í CMS-inu. Lokaðu á hana einu sinni eftir clone:
+
+  ```bash
+  git update-index --skip-worktree content/content.json
+  ```
 - **Leyndarmál fara aldrei í repo-ið** — API-lyklar og netfangalistar eru
   umhverfisbreytur á Render (`Environment`-flipinn).
 - Prófaðu alltaf **í síma-breidd líka** (375px) áður en þú pushar — allar síður eiga

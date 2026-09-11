@@ -81,75 +81,140 @@ async function sendLoginCode(email) {
   return r.ok;
 }
 
-// ---------- varanleg geymsla efnis í GitHub ----------
-// Fría hýsingin þurrkar skráakerfið við hverja endurræsingu/útgáfu. Til að CMS-breytingar
-// lifi það af geymum við content.json í repo-inu sjálfu (og fáum útgáfusögu í kaupbæti).
-// Virkjast með umhverfisbreytunni GH_TOKEN (fínkornótt token með Contents: write).
-// ATH: gjafabréf (nöfn/símanúmer) fara ALDREI hingað — repo-ið er opinbert.
+// ---------- varanleg geymsla í GitHub ----------
+// Fría hýsingin þurrkar skráakerfið við hverja endurræsingu/útgáfu og svæfir þjóninn
+// eftir 15 mínútna aðgerðaleysi. Til að ekkert tapist speglum við gögnin í repo-ið sjálft.
+// Virkjast með umhverfisbreytunni GH_TOKEN (fínkornótt token, Contents: read and write).
+//
+// Repo-ið er OPINBERT, þannig að gjafabréf (nöfn, símanúmer, inneign) og lykilorðs-hashið
+// fara aldrei þangað í læsilegu formi — þau eru dulkóðuð (AES-256-GCM) áður en þau eru send.
+// Allar speglaðar slóðir eru undir content/ svo Render-síunni sé óhætt að hunsa þær
+// (annars kveikti hver vistun í CMS-inu á nýrri útgáfu — endalaus hringur).
 const GH_TOKEN = process.env.GH_TOKEN || '';
 const GH_REPO = process.env.GH_REPO || 'robertspano/radagerdi';
 const GH_BRANCH = process.env.GH_BRANCH || 'main';
-const GH_PATH = 'content/content.json';
 const GH_ON = !!GH_TOKEN;
-let ghSha = null, ghTimer = null, ghBusy = false;
+const DATA_KEY = process.env.DATA_KEY || GH_TOKEN;   // dulkóðunarlykill einkagagna
+
+const MIRROR = [
+  { file: CONTENT_FILE, repo: 'content/content.json', enc: false, name: 'efni' },
+  { file: GIFT_FILE, repo: 'content/private/giftcards.enc', enc: true, name: 'gjafabréf' },
+  { file: AUTH_FILE, repo: 'content/private/auth.enc', enc: true, name: 'lykilorð' },
+];
+
+const ghSha = new Map();        // repo-slóð -> sha síðustu útgáfu
+const ghDirty = new Set();      // skrár sem bíða speglunar
+let ghTimer = null, ghBusy = false, ghAgain = false;
+let ghBlocked = false;          // satt ef lestur mistókst — þá ýtum við EKKI (annars eyðileggjum við góð gögn)
+let ghBaseHash = null;          // hash af efninu sem við ræstum á; notað til að meta hvort óhætt sé að ýta eftir bilun
+
+const sha256 = (b) => crypto.createHash('sha256').update(b).digest('hex');
+const fileHash = (f) => { try { return sha256(fs.readFileSync(f)); } catch { return null; } };
 
 function ghHeaders() {
   return { Authorization: 'Bearer ' + GH_TOKEN, Accept: 'application/vnd.github+json', 'User-Agent': 'radagerdi-cms' };
 }
-async function ghPull() {
-  if (!GH_ON) return false;
-  try {
-    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
-    if (r.status === 404) { console.log('  ⓘ  Ekkert vistað efni í GitHub enn — byrja með það sem fylgdi útgáfunni'); return false; }
-    if (!r.ok) { console.error('  ⚠  GitHub-lestur mistókst:', r.status); return false; }
-    const j = await r.json();
-    ghSha = j.sha;
-    const text = Buffer.from(j.content || '', 'base64').toString('utf8');
-    JSON.parse(text);                       // staðfesta að þetta sé gilt JSON áður en við skrifum yfir
-    fs.writeFileSync(CONTENT_FILE, text);
-    console.log('  ✓  Efni sótt úr GitHub (' + text.length + ' stafir)');
-    return true;
-  } catch (e) { console.error('  ⚠  GitHub-lestur mistókst:', e.message); return false; }
+
+// --- dulkóðun einkagagna: 'RG1' | salt(16) | iv(12) | tag(16) | dulmál ---
+function encBuf(plain) {
+  const salt = crypto.randomBytes(16), iv = crypto.randomBytes(12);
+  const c = crypto.createCipheriv('aes-256-gcm', crypto.scryptSync(DATA_KEY, salt, 32), iv);
+  const ct = Buffer.concat([c.update(plain, 'utf8'), c.final()]);
+  return Buffer.concat([Buffer.from('RG1'), salt, iv, c.getAuthTag(), ct]);
 }
-async function ghPush() {
-  if (!GH_ON || ghBusy) return;
-  ghBusy = true;
-  try {
-    const text = fs.readFileSync(CONTENT_FILE, 'utf8');
-    if (!ghSha) {                           // sækja núverandi sha ef við höfum hann ekki
-      const r0 = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
-      if (r0.ok) ghSha = (await r0.json()).sha;
+function decBuf(buf) {
+  if (buf.slice(0, 3).toString('utf8') !== 'RG1') throw new Error('óþekkt snið');
+  const salt = buf.slice(3, 19), iv = buf.slice(19, 31), tag = buf.slice(31, 47), ct = buf.slice(47);
+  const d = crypto.createDecipheriv('aes-256-gcm', crypto.scryptSync(DATA_KEY, salt, 32), iv);
+  d.setAuthTag(tag);
+  return Buffer.concat([d.update(ct), d.final()]).toString('utf8');
+}
+
+async function ghGet(repo) {
+  const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${encodeURI(repo)}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+  if (r.status === 404) return { missing: true };
+  if (!r.ok) throw new Error('GitHub ' + r.status + ' við lestur á ' + repo);
+  const j = await r.json();
+  let buf = Buffer.from(j.content || '', 'base64');
+  if (!j.content && j.download_url) {          // skrár yfir 1 MB koma ekki innbyggðar
+    const b = await fetch(j.download_url, { headers: ghHeaders() });
+    if (!b.ok) throw new Error('GitHub ' + b.status + ' við niðurhal á ' + repo);
+    buf = Buffer.from(await b.arrayBuffer());
+  }
+  return { sha: j.sha, buf };
+}
+
+async function ghPut(repo, buf, message) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let sha = ghSha.get(repo);
+    if (!sha) {
+      try { const cur = await ghGet(repo); if (cur && !cur.missing) sha = cur.sha; }
+      catch (e) { console.error('  ⚠  Næ ekki í útgáfu ' + repo + ':', e.message); return false; }
     }
-    const body = {
-      message: 'CMS: efni uppfært af vefnum',
-      content: Buffer.from(text, 'utf8').toString('base64'),
-      branch: GH_BRANCH,
-    };
-    if (ghSha) body.sha = ghSha;
-    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}`, {
-      method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()), body: JSON.stringify(body),
-    });
-    if (r.ok) { ghSha = (await r.json()).content.sha; console.log('  ✓  Efni vistað varanlega í GitHub'); }
-    else if (r.status === 409) { ghSha = null; console.warn('  ⚠  GitHub-árekstur — reyni aftur við næstu vistun'); }
-    else console.error('  ⚠  GitHub-vistun mistókst:', r.status, (await r.text()).slice(0, 160));
-  } catch (e) { console.error('  ⚠  GitHub-vistun mistókst:', e.message); }
-  ghBusy = false;
-}
-// Myndir sem hlaðið er upp í CMS lenda líka á skráakerfi sem þurrkast — spegla þær eins.
-async function ghPutFile(repoPath, buf, message) {
-  if (!GH_ON) return;
-  try {
-    let sha = null;
-    const r0 = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${repoPath}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
-    if (r0.ok) sha = (await r0.json()).sha;
     const body = { message, content: buf.toString('base64'), branch: GH_BRANCH };
     if (sha) body.sha = sha;
-    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${repoPath}`, {
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${encodeURI(repo)}`, {
       method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()), body: JSON.stringify(body),
     });
-    if (!r.ok) console.error('  ⚠  GitHub-vistun myndar mistókst:', r.status);
-  } catch (e) { console.error('  ⚠  GitHub-vistun myndar mistókst:', e.message); }
+    if (r.ok) { ghSha.set(repo, (await r.json()).content.sha); return true; }
+    if (r.status === 409 || r.status === 422) {   // einhver annar skrifaði á milli — sækja nýtt sha og reyna aftur
+      ghSha.delete(repo);
+      console.warn('  ⚠  Árekstur á ' + repo + ' — reyni strax aftur');
+      continue;
+    }
+    console.error('  ⚠  GitHub-vistun á ' + repo + ' mistókst:', r.status, (await r.text()).slice(0, 200));
+    return false;
+  }
+  console.error('  ⚠  GitHub-vistun á ' + repo + ' mistókst eftir tvær tilraunir');
+  return false;
 }
+
+// Sækir öll speglaðu gögnin. Skilar false ef eitthvað mistókst — þá er ýting læst
+// svo gömul gögn úr útgáfumyndinni skrifist ekki yfir réttu gögnin í GitHub.
+async function ghPullAll() {
+  if (!GH_ON) return false;
+  let allOk = true;
+  for (const m of MIRROR) {
+    try {
+      const got = await ghGet(m.repo);
+      if (got.missing) {
+        // Ekkert til í GitHub enn — sáum því sem er á disknum (t.d. nýbúna lykilorðsskrá)
+        // svo innskráningar og gjafabréf haldist stöðug frá og með næstu ræsingu.
+        console.log('  ⓘ  Ekkert vistað ' + m.name + ' í GitHub enn — sái því sem er til staðar');
+        if (fs.existsSync(m.file)) { ghDirty.add(m.repo); clearTimeout(ghTimer); ghTimer = setTimeout(() => { ghFlush().catch(() => {}); }, 4000); }
+        continue;
+      }
+      ghSha.set(m.repo, got.sha);
+      let text;
+      if (m.enc) {
+        try { text = decBuf(got.buf); }
+        catch (e) {
+          // Rangur lykill (t.d. nýtt GH_TOKEN án DATA_KEY) — ekki skrifa yfir og ekki ýta.
+          console.error('  ⚠  Næ ekki að afkóða ' + m.name + ' (' + e.message + '). Var skipt um GH_TOKEN? Settu þá DATA_KEY á gamla lykilinn.');
+          allOk = false; continue;
+        }
+      } else {
+        text = got.buf.toString('utf8');
+      }
+      JSON.parse(text);                       // staðfesta gilt JSON áður en skrifað er yfir
+      fs.writeFileSync(m.file, text);
+      console.log('  ✓  ' + m.name + ' sótt úr GitHub (' + text.length + ' stafir)');
+    } catch (e) {
+      console.error('  ⚠  Lestur á ' + m.name + ' mistókst:', e.message);
+      allOk = false;
+    }
+  }
+  ghBlocked = !allOk;
+  if (ghBlocked) {
+    ghBaseHash = fileHash(CONTENT_FILE);   // munum á hverju við ræstum
+    console.error('  ⛔  Vistun í GitHub LÆST þar til lestur tekst — reyni aftur á 30 sek. fresti');
+  } else {
+    ghBaseHash = null;
+  }
+  return allOk;
+}
+
+// Myndir sem hlaðið er upp í CMS lenda líka á skráakerfi sem þurrkast — sækjum þær í bakgrunni.
 async function ghPullUploads() {
   if (!GH_ON) return;
   try {
@@ -170,10 +235,92 @@ async function ghPullUploads() {
     if (n) console.log('  ✓  ' + n + ' mynd(ir) sóttar úr GitHub');
   } catch (e) { console.error('  ⚠  Myndalestur úr GitHub mistókst:', e.message); }
 }
-function ghSchedulePush() {          // safna saman breytingum svo hvert lyklaslag valdi ekki commit
+
+// Reynir að aflæsa vistun eftir að lestur mistókst við ræsingu.
+// Óhætt er að ýta EF efnið í GitHub er nákvæmlega það sama og við ræstum á
+// (þ.e. útgáfumyndin var í takt) — annars myndum við skrifa yfir nýrri breytingar.
+async function ghUnblock() {
+  if (!ghBlocked) return true;
+  try {
+    const got = await ghGet('content/content.json');
+    if (got.missing) { ghBlocked = false; console.log('  ✓  Samband við GitHub komið aftur — vistun opnuð'); return true; }
+    const same = ghBaseHash && sha256(got.buf) === ghBaseHash;
+    if (!same && ghDirty.size) {
+      console.error('  ⛔  GitHub svarar aftur EN geymir nýrra efni en þjónninn ræsti á. Ýti ekki (það myndi þurrka nýrri breytingar). Endurræstu þjónustuna á Render til að sækja rétta efnið.');
+      return false;
+    }
+    if (!same) {                            // engar óvistaðar breytingar — óhætt að sækja rétta efnið
+      const ok = await ghPullAll();
+      if (!ok) return false;
+    } else {
+      ghSha.set('content/content.json', got.sha);
+      ghBlocked = false;
+    }
+    console.log('  ✓  Samband við GitHub komið aftur — vistun opnuð');
+    return true;
+  } catch (e) { return false; }
+}
+
+async function ghFlush() {
+  if (!GH_ON || !ghDirty.size) return;
+  if (ghBlocked) {
+    const ok = await ghUnblock();
+    if (!ok) return;                        // enn læst — skrárnar bíða áfram í ghDirty
+  }
+  if (ghBusy) { ghAgain = true; return; }   // bíður — ghDirty geymir það sem eftir er
+  ghBusy = true;
+  try {
+    while (ghDirty.size) {
+      const repo = ghDirty.values().next().value;
+      ghDirty.delete(repo);
+      const m = MIRROR.find(x => x.repo === repo);
+      if (!m || !fs.existsSync(m.file)) continue;
+      const raw = fs.readFileSync(m.file, 'utf8');
+      const buf = m.enc ? encBuf(raw) : Buffer.from(raw, 'utf8');
+      const ok = await ghPut(m.repo, buf, 'CMS: ' + m.name + ' uppfært af vefnum');
+      if (ok) console.log('  ✓  ' + m.name + ' vistað varanlega í GitHub');
+      else ghDirty.add(m.repo);             // skila í biðröðina svo næsta vistun reyni aftur
+    }
+  } catch (e) { console.error('  ⚠  Speglun mistókst:', e.message); }
+  ghBusy = false;
+  if (ghAgain) { ghAgain = false; return ghFlush(); }
+}
+
+// Safnar saman breytingum í 4 sek. svo hvert lyklaslag valdi ekki sínu commit-i.
+function ghSchedule(file) {
   if (!GH_ON) return;
+  const m = MIRROR.find(x => x.file === file);
+  if (!m) return;
+  ghDirty.add(m.repo);
   clearTimeout(ghTimer);
-  ghTimer = setTimeout(ghPush, 5000);
+  ghTimer = setTimeout(() => { ghFlush().catch(e => console.error('  ⚠  Speglun mistókst:', e.message)); }, 4000);
+}
+
+// Bíður þar til ekkert er í gangi OG ekkert bíður — eða þar til tíminn rennur út.
+async function ghDrain(maxMs) {
+  const t0 = Date.now();
+  while ((ghBusy || ghDirty.size) && Date.now() - t0 < maxMs) {
+    if (ghBusy) await new Promise(r => setTimeout(r, 150));   // ýting í gangi: bíða eftir henni
+    else { try { await ghFlush(); } catch {} }
+  }
+  return !ghDirty.size;
+}
+
+// Render sendir SIGTERM þegar þjónninn er svæfður (og gefur um 30 sek.) — tæmum
+// biðröðina áður en hann deyr, annars deyja síðustu breytingarnar með skráakerfinu.
+let ghExiting = false;
+for (const sig of ['SIGTERM', 'SIGINT']) {
+  process.on(sig, async () => {
+    if (ghExiting) return;
+    ghExiting = true;
+    clearTimeout(ghTimer);
+    if (GH_ON && (ghDirty.size || ghBusy)) {
+      console.log('  …  Klára að vista í GitHub áður en þjónninn stöðvast');
+      const done = await ghDrain(20000);
+      console.log(done ? '  ✓  Allt komið til skila' : '  ⚠  Náði ekki að vista allt áður en þjónninn stöðvaðist');
+    }
+    process.exit(0);
+  });
 }
 
 // ---------- storage helpers ----------
@@ -182,10 +329,12 @@ function ensure() {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
   if (!fs.existsSync(CONTENT_FILE)) {
     fs.writeFileSync(CONTENT_FILE, JSON.stringify({
-      texts: {}, images: {}, bg: {}, html: {}, hidden: {}, order: {}, settings: {}
+      texts: {}, images: {}, bg: {}, html: {}, hidden: {}, order: {}, style: {}, settings: {}
     }, null, 2));
   }
-  if (!fs.existsSync(GIFT_FILE)) writeJSON(GIFT_FILE, { cards: {} });
+  // Sjálfgefnu skrárnar eru skrifaðar hrátt (ekki writeJSON) — tóm byrjunargögn eiga
+  // ekki að kveikja á speglun og skrifa yfir raunverulegu gögnin í GitHub.
+  if (!fs.existsSync(GIFT_FILE)) fs.writeFileSync(GIFT_FILE, JSON.stringify({ cards: {} }, null, 2));
   if (!fs.existsSync(AUTH_FILE)) {
     const salt = crypto.randomBytes(16).toString('hex');
     const hash = crypto.scryptSync(DEFAULT_PASSWORD, salt, 32).toString('hex');
@@ -194,7 +343,8 @@ function ensure() {
   }
 }
 const readJSON = (f, fb) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fb; } };
-const writeJSON = (f, o) => fs.writeFileSync(f, JSON.stringify(o, null, 2));
+// Hver skrift á gagnaskrá kveikir á speglun í GitHub — þá gleymist hvergi að vista.
+const writeJSON = (f, o) => { fs.writeFileSync(f, JSON.stringify(o, null, 2)); ghSchedule(f); };
 
 // ---------- auth (stateless signed cookie) ----------
 function verifyPassword(pw) {
@@ -419,9 +569,9 @@ async function handleAPI(req, res, url) {
     for (const k of ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style', 'settings']) {
       if (body[k] && typeof body[k] === 'object') cur[k] = body[k];
     }
-    writeJSON(CONTENT_FILE, cur);
-    ghSchedulePush();                     // spegla í GitHub svo breytingin lifi endurræsingu af
-    return sendJSON(res, 200, { ok: true });
+    writeJSON(CONTENT_FILE, cur);         // writeJSON speglar sjálfkrafa í GitHub
+    // durable segir ritlinum hvort breytingin lifi endurræsingu af — annars lýgur hann „Allt vistað ✓“
+    return sendJSON(res, 200, { ok: true, durable: GH_ON && !ghBlocked });
   }
   if (p === '/api/upload' && req.method === 'POST') {
     const body = JSON.parse((await readBody(req, 1024)).toString('utf8') || '{}');
@@ -433,8 +583,13 @@ async function handleAPI(req, res, url) {
     const fname = `${Date.now()}-${safe}${ext}`;
     const buf = Buffer.from(m[2], 'base64');
     fs.writeFileSync(path.join(UPLOAD_DIR, fname), buf);
-    ghPutFile('content/uploads/' + fname, buf, 'CMS: mynd bætt við af vefnum');   // svo myndin lifi endurræsingu af
-    return sendJSON(res, 200, { ok: true, url: `assets/uploads/${fname}` });
+    // Bíðum eftir speglun myndarinnar svo við svörum ekki „í lagi“ fyrir mynd sem hverfur við endurræsingu.
+    let durable = true;
+    if (GH_ON && !ghBlocked) durable = await ghPut('content/uploads/' + fname, buf, 'CMS: mynd bætt við af vefnum');
+    else if (GH_ON) durable = false;
+    else durable = false;
+    if (!durable) console.error('  ⚠  Myndin ' + fname + ' er aðeins til staðbundið — hverfur við endurræsingu');
+    return sendJSON(res, 200, { ok: true, url: `assets/uploads/${fname}`, durable });
   }
   if (p === '/api/password' && req.method === 'POST') {
     const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
@@ -448,7 +603,7 @@ async function handleAPI(req, res, url) {
 
 // ---------- request router ----------
 ensure();
-http.createServer(async (req, res) => {
+const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     if (url.pathname.startsWith('/api/')) return await handleAPI(req, res, url);
@@ -491,8 +646,33 @@ http.createServer(async (req, res) => {
   } catch (e) {
     console.error(e); sendJSON(res, 500, { error: String(e.message || e) });
   }
-}).listen(PORT, () => {
-  if (GH_ON) ghPull().then(ghPullUploads).then(() => console.log('  ⓘ  Varanleg geymsla: GitHub (' + GH_REPO + ')'));
-  else console.log('  ⚠  GH_TOKEN vantar — CMS-breytingar lifa EKKI af endurræsingu');
-  console.log(`\n  Ráðagerði CMS keyrir á  http://localhost:${PORT}\n  Vefur:  http://localhost:${PORT}/\n  Admin:  http://localhost:${PORT}/admin\n`);
 });
+
+function start() {
+  server.listen(PORT, () => {
+    console.log(`\n  Ráðagerði CMS keyrir á  http://localhost:${PORT}\n  Vefur:  http://localhost:${PORT}/\n  Admin:  http://localhost:${PORT}/admin\n`);
+  });
+  // Myndirnar mega koma í bakgrunni — þær eru margar og mega ekki tefja ræsingu.
+  if (GH_ON) ghPullUploads();
+  if (GH_ON) {
+    const t = setInterval(() => {
+      if (!ghBlocked) return;
+      ghUnblock().then(ok => { if (ok && ghDirty.size) ghFlush().catch(() => {}); }).catch(() => {});
+    }, 30000);
+    if (t.unref) t.unref();
+  }
+}
+
+if (GH_ON) {
+  console.log('  …  Sæki vistuð gögn úr GitHub (' + GH_REPO + ')');
+  // Ræsum EKKI fyrr en lesturinn er búinn: annars gæti vistun sem berst í ræsiglugganum
+  // verið skrifuð yfir þegar lesturinn skilar sér — og sú vistun væri þar með týnd.
+  // Tímamörk svo vefurinn fari samt í loftið þótt GitHub svari ekki.
+  let started = false;
+  const go = () => { if (!started) { started = true; start(); } };
+  const guard = setTimeout(() => { console.error('  ⚠  GitHub svaraði ekki í tæka tíð — ræsi samt (vistun læst þar til samband næst)'); ghBlocked = true; go(); }, 8000);
+  ghPullAll().then(() => { clearTimeout(guard); go(); }).catch(() => { clearTimeout(guard); ghBlocked = true; go(); });
+} else {
+  console.log('  ⚠  GH_TOKEN vantar — CMS-breytingar lifa EKKI af endurræsingu');
+  start();
+}

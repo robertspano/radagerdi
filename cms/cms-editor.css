@@ -206,3 +206,5 @@ body.cms-on .gal-grid figure { position: relative; }
 }
 .cms-boxhandle:hover span { transform: scaleY(1.35); }
 body.cms-resizing, body.cms-resizing * { cursor: ns-resize !important; user-select: none !important; }
+.cms-status.error{background:rgba(255,48,49,.18);color:#ff8f90}
+.cms-status.error::before{background:#ff3031}

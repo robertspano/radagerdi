@@ -35,6 +35,11 @@
     let n = el;
     while (n && n !== document.body && n.parentElement) {
       const p = n.parentElement, tag = n.tagName;
+      // Flipar (og flipatakkar) eru færanlegir — ef þeir væru auðkenndir eftir stöðu
+      // myndi öll vistuð breyting undir þeim lenda á röngum flipa eftir endurröðun.
+      // Þess vegna fá þeir fast auðkenni: "@Matseðill".
+      const tab = n.getAttribute && n.getAttribute('data-w-tab');
+      if (tab) { parts.unshift('@' + tab); n = p; continue; }
       let idx = 0, i = 0;
       for (const c of p.children) { if (c.tagName === tag) { if (c === n) { idx = i; break; } i++; } }
       parts.unshift(tag + idx);
@@ -45,6 +50,11 @@
   function elByKey(k) {
     let node = document.body;
     for (const part of k.split('>')) {
+      if (part.charAt(0) === '@') {         // fast flipa-auðkenni, óháð röð
+        let found = null;
+        for (const c of node.children) { if (c.getAttribute && c.getAttribute('data-w-tab') === part.slice(1)) { found = c; break; } }
+        if (!found) return null; node = found; continue;
+      }
       // H1–H6 enda á tölustaf sem tilheyrir tag-inu sjálfu: "H10" = fyrsta <h1>, ekki <h> nr. 10
       const hm = part.match(/^(H[1-6])(\d+)$/);
       const tag = hm ? hm[1] : part.replace(/\d+$/, '');
@@ -83,6 +93,9 @@
   function apply(content) {
     const g = (o) => (o && o[PAGE]) || {};
     const H = g(content.html), T = g(content.texts), I = g(content.images), BG = g(content.bg), HID = g(content.hidden), O = g(content.order);
+    // 0. flipa-röðin fyrst, svo öll lyklauppfletting hér á eftir sjái endanlega röð
+    //    (flipalyklar sjálfir eru fastir, en systkina-vísitölur í kring mega ekki hliðrast eftir á)
+    if (Array.isArray(O.__tabs__)) reorderTabs(O.__tabs__);
     // 1. structural regions first (menu panes + themed cards)
     regions().forEach(el => { const k = key(el); if (H[k] != null) el.innerHTML = H[k]; });
     // 2. text leaves outside regions
@@ -94,8 +107,6 @@
     });
     // 3b. background-image overrides (elements not in a region)
     Object.keys(BG).forEach(k => { const el = elByKey(k); if (el && !inRegion(el)) el.style.backgroundImage = 'url("' + BG[k] + '")'; });
-    // 4. tab order (before hidden, so index-based hidden keys still resolve)
-    if (Array.isArray(O.__tabs__)) reorderTabs(O.__tabs__);
     // 5. hidden
     Object.keys(HID).forEach(k => { if (HID[k]) { const el = elByKey(k); if (el) el.style.display = 'none'; } });
     // 6. útlitsstillingar úr ritlinum (leturstærð, jöfnun, litur, bil)

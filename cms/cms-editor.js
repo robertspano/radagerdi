@@ -22,10 +22,11 @@
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
   // ---------- auto-save ----------
   let saveT = null, saving = false;
-  function setStatus(s) {
+  function setStatus(s, msg) {
     const b = $('#cms-status'); if (!b) return;
     b.className = 'cms-status ' + s;
-    b.textContent = s === 'saving' ? 'Vistar…' : s === 'pending' ? 'Vista sjálfkrafa…' : 'Allt vistað ✓';
+    b.textContent = msg || (s === 'saving' ? 'Vistar…' : s === 'pending' ? 'Vista sjálfkrafa…' : s === 'error' ? 'Vistun mistókst' : 'Allt vistað ✓');
+    b.title = msg || '';
   }
   function scheduleSave() { clearTimeout(saveT); saveT = setTimeout(save, 600); }
   function markDirty() { dirty = true; setStatus('pending'); scheduleSave(); }
@@ -57,16 +58,43 @@
 
   async function api(path, opts) {
     const r = await fetch(path, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts));
-    return r.json().catch(() => ({}));
+    const j = await r.json().catch(() => ({}));
+    j.status = r.status;                     // svo köllunarstaðurinn geti greint 401 frá netbilun
+    return j;
   }
+  let warnedNotDurable = false;
   async function save() {
     if (saving) { scheduleSave(); return; }
     if (!dirty) { setStatus('ok'); return; }
     saving = true; setStatus('saving');
-    const res = await api('/api/content', { method: 'PUT', body: payload() });
-    saving = false;
-    if (res.ok) { dirty = false; setStatus('ok'); }
-    else { setStatus('pending'); scheduleSave(); }
+    let res;
+    try {
+      res = await api('/api/content', { method: 'PUT', body: payload() });
+    } catch (e) {
+      res = { status: 0 };                   // netbilun — reynum aftur
+    } finally {
+      saving = false;                        // annars festist vistun í „Vistar…“ að eilífu
+    }
+    if (res.status === 401) {                // útrunnin innskráning: endalausar tilraunir laga ekkert
+      setStatus('error', 'Innskráning útrunnin — skráðu þig inn aftur');
+      toast('Innskráningin er útrunnin. Opnaðu /admin og skráðu þig inn aftur — breytingarnar þínar bíða í þessum flipa.');
+      return;
+    }
+    if (res.ok) {
+      dirty = false;
+      if (res.durable === false) {           // vistað staðbundið en lifir ekki endurræsingu af
+        setStatus('error', 'Vistað — EN ekki varanlega (GitHub-tenging vantar)');
+        if (!warnedNotDurable) {
+          warnedNotDurable = true;
+          toast('Breytingin er komin á vefinn en ekki varanlega geymd. Hafðu samband við Róbert — GH_TOKEN vantar á Render.');
+        }
+      } else {
+        warnedNotDurable = false;
+        setStatus('ok');
+      }
+      return;
+    }
+    setStatus('pending'); scheduleSave();
   }
   async function flush() { clearTimeout(saveT); if (dirty && !saving) await save(); }
 
@@ -404,7 +432,33 @@
 
   function styleOf(key) { return content.style[PAGE][key] || (content.style[PAGE][key] = {}); }
 
+  // Hvar á stíllinn heima?
+  //   • Element INNI í svæði (réttur í matseðli, lína í korti): stíllinn er geymdur beint
+  //     í html-i svæðisins. Þá fylgir hann réttinum þegar hann er færður — og hverfur með
+  //     honum þegar honum er eytt. Annars sætu stílarnir eftir á stöðunúmeri og lentu á
+  //     næsta rétti fyrir neðan.
+  //   • Svæðið sjálft, eða element utan allra svæða: html-ið geymir bara innihaldið, ekki
+  //     eigindi svæðisins sjálfs, þannig að stíllinn fer í style-geymsluna.
+  function styleInHtml(el) {
+    const r = el && el.closest && el.closest(CMS.REGION_SEL || '.w-tab-pane');
+    return !!r && r !== el;
+  }
+  // Gildi sem ritillinn hefur þegar sett — hvort sem það liggur beint á elementinu eða í geymslunni.
+  function savedProp(el, prop) {
+    const inline = el.style.getPropertyValue(prop);
+    if (inline) return inline;
+    return (content.style[PAGE][CMS.key(el)] || {})[prop] || '';
+  }
+
   function setStyleProp(target, prop, value) {
+    if (styleInHtml(target)) {
+      if (value === null || value === '') target.style.removeProperty(prop);
+      else target.style.setProperty(prop, value, 'important');
+      saveContext(target);                  // endurvistar svæðið svo stíllinn fylgi með
+      markDirty();
+      positionStyleBar();
+      return;
+    }
     const key = CMS.key(target);
     const s = styleOf(key);
     const before = JSON.stringify(s);
@@ -418,7 +472,7 @@
 
   // Leturstærð er vistuð sem clamp() svo hún haldist í hlutfalli á síma
   function currentFontPx(el) {
-    const saved = (content.style[PAGE][CMS.key(el)] || {})['font-size'];
+    const saved = savedProp(el, 'font-size');
     if (saved) { const m = saved.match(/([\d.]+)px\)?$/); if (m) return Math.round(parseFloat(m[1])); }
     return Math.round(parseFloat(getComputedStyle(el).fontSize));
   }
@@ -426,7 +480,7 @@
     px = Math.max(10, Math.min(200, px));
     // upprunalega stærðin (áður en ritillinn snerti hana) — svo stækkun minnki aldrei textann
     if (el._cmsBaseFont === undefined) {
-      const saved = (content.style[PAGE][CMS.key(el)] || {})['font-size'];
+      const saved = savedProp(el, 'font-size');
       el._cmsBaseFont = saved ? null : Math.round(parseFloat(getComputedStyle(el).fontSize));
     }
     const base = el._cmsBaseFont;
@@ -460,7 +514,7 @@
 
     bar.appendChild(sBtn('B', 'Feitletra', () => {
       if (!styleTarget) return;
-      const on = (content.style[PAGE][CMS.key(styleTarget)] || {})['font-weight'] === '700'
+      const on = savedProp(styleTarget, 'font-weight') === '700'
               || parseInt(getComputedStyle(styleTarget).fontWeight, 10) >= 700;
       setStyleProp(styleTarget, 'font-weight', on ? '400' : '700');
     }, 'cms-sbbold'));
@@ -485,9 +539,18 @@
     bar.appendChild(el('span', 'cms-sbsep'));
     bar.appendChild(sBtn('↺', 'Núllstilla útlit', () => {
       if (!styleTarget) return;
+      if (styleInHtml(styleTarget)) {
+        styleTarget.removeAttribute('style');   // stíllinn liggur í html-i svæðisins
+        delete styleTarget._cmsBaseFont;
+        saveContext(styleTarget);               // endurvistað án stílanna, annars kæmu þeir aftur
+        markDirty(); positionStyleBar();
+        toast('Útlit núllstillt');
+        return;
+      }
       const key = CMS.key(styleTarget), before = JSON.stringify(content.style[PAGE][key] || {});
       Object.keys(content.style[PAGE][key] || {}).forEach(p => styleTarget.style.removeProperty(p));
       delete content.style[PAGE][key];
+      delete styleTarget._cmsBaseFont;
       pushRecord('style', key, before, '{}'); markDirty(); positionStyleBar();
     }, 'cms-sbreset'));
 
@@ -497,8 +560,7 @@
   }
 
   function nudge(target, dy) {
-    const key = CMS.key(target);
-    const cur = parseFloat((content.style[PAGE][key] || {})['margin-top'] || getComputedStyle(target).marginTop) || 0;
+    const cur = parseFloat(savedProp(target, 'margin-top') || getComputedStyle(target).marginTop) || 0;
     setStyleProp(target, 'margin-top', Math.round(cur + dy) + 'px');
   }
 
@@ -552,16 +614,17 @@
   let boxSel = null, boxBar = null, boxHandle = null;
 
   function padOf(el, side) {
-    const saved = (content.style[PAGE][CMS.key(el)] || {})['padding-' + side];
+    const saved = savedProp(el, 'padding-' + side);
     return Math.round(parseFloat(saved || getComputedStyle(el)['padding' + side[0].toUpperCase() + side.slice(1)]) || 0);
   }
   function setPad(el, top, bottom) {
     top = Math.max(0, Math.round(top)); bottom = Math.max(0, Math.round(bottom));
+    el.style.setProperty('padding-top', top + 'px', 'important');
+    el.style.setProperty('padding-bottom', bottom + 'px', 'important');
+    if (styleInHtml(el)) { saveContext(el); markDirty(); positionBoxUI(); return; }
     const key = CMS.key(el), s = styleOf(key);
     const before = JSON.stringify(s);
     s['padding-top'] = top + 'px'; s['padding-bottom'] = bottom + 'px';
-    el.style.setProperty('padding-top', top + 'px', 'important');
-    el.style.setProperty('padding-bottom', bottom + 'px', 'important');
     pushRecord('style', key, before, JSON.stringify(s));
     markDirty(); positionBoxUI();
   }
@@ -595,8 +658,16 @@
     bar.appendChild(el('span', 'cms-sbsep'));
     bar.appendChild(sBtn('↺', 'Núllstilla kassa', () => {
       if (!boxSel) return;
+      const props = ['padding-top', 'padding-bottom', 'text-align', 'margin-left', 'margin-right'];
+      if (styleInHtml(boxSel)) {
+        props.forEach(p => boxSel.style.removeProperty(p));
+        saveContext(boxSel);                // svæðið endurvistað án stílanna — annars kæmu þeir aftur
+        markDirty(); positionBoxUI();
+        toast('Kassinn núllstilltur');
+        return;
+      }
       const key = CMS.key(boxSel), before = JSON.stringify(content.style[PAGE][key] || {});
-      ['padding-top', 'padding-bottom', 'text-align', 'margin-left', 'margin-right'].forEach(p => { boxSel.style.removeProperty(p); if (content.style[PAGE][key]) delete content.style[PAGE][key][p]; });
+      props.forEach(p => { boxSel.style.removeProperty(p); if (content.style[PAGE][key]) delete content.style[PAGE][key][p]; });
       if (content.style[PAGE][key] && !Object.keys(content.style[PAGE][key]).length) delete content.style[PAGE][key];
       pushRecord('style', key, before, JSON.stringify(content.style[PAGE][key] || {}));
       markDirty(); positionBoxUI();
