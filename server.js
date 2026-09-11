@@ -81,6 +81,101 @@ async function sendLoginCode(email) {
   return r.ok;
 }
 
+// ---------- varanleg geymsla efnis í GitHub ----------
+// Fría hýsingin þurrkar skráakerfið við hverja endurræsingu/útgáfu. Til að CMS-breytingar
+// lifi það af geymum við content.json í repo-inu sjálfu (og fáum útgáfusögu í kaupbæti).
+// Virkjast með umhverfisbreytunni GH_TOKEN (fínkornótt token með Contents: write).
+// ATH: gjafabréf (nöfn/símanúmer) fara ALDREI hingað — repo-ið er opinbert.
+const GH_TOKEN = process.env.GH_TOKEN || '';
+const GH_REPO = process.env.GH_REPO || 'robertspano/radagerdi';
+const GH_BRANCH = process.env.GH_BRANCH || 'main';
+const GH_PATH = 'content/content.json';
+const GH_ON = !!GH_TOKEN;
+let ghSha = null, ghTimer = null, ghBusy = false;
+
+function ghHeaders() {
+  return { Authorization: 'Bearer ' + GH_TOKEN, Accept: 'application/vnd.github+json', 'User-Agent': 'radagerdi-cms' };
+}
+async function ghPull() {
+  if (!GH_ON) return false;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+    if (r.status === 404) { console.log('  ⓘ  Ekkert vistað efni í GitHub enn — byrja með það sem fylgdi útgáfunni'); return false; }
+    if (!r.ok) { console.error('  ⚠  GitHub-lestur mistókst:', r.status); return false; }
+    const j = await r.json();
+    ghSha = j.sha;
+    const text = Buffer.from(j.content || '', 'base64').toString('utf8');
+    JSON.parse(text);                       // staðfesta að þetta sé gilt JSON áður en við skrifum yfir
+    fs.writeFileSync(CONTENT_FILE, text);
+    console.log('  ✓  Efni sótt úr GitHub (' + text.length + ' stafir)');
+    return true;
+  } catch (e) { console.error('  ⚠  GitHub-lestur mistókst:', e.message); return false; }
+}
+async function ghPush() {
+  if (!GH_ON || ghBusy) return;
+  ghBusy = true;
+  try {
+    const text = fs.readFileSync(CONTENT_FILE, 'utf8');
+    if (!ghSha) {                           // sækja núverandi sha ef við höfum hann ekki
+      const r0 = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+      if (r0.ok) ghSha = (await r0.json()).sha;
+    }
+    const body = {
+      message: 'CMS: efni uppfært af vefnum',
+      content: Buffer.from(text, 'utf8').toString('base64'),
+      branch: GH_BRANCH,
+    };
+    if (ghSha) body.sha = ghSha;
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_PATH}`, {
+      method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()), body: JSON.stringify(body),
+    });
+    if (r.ok) { ghSha = (await r.json()).content.sha; console.log('  ✓  Efni vistað varanlega í GitHub'); }
+    else if (r.status === 409) { ghSha = null; console.warn('  ⚠  GitHub-árekstur — reyni aftur við næstu vistun'); }
+    else console.error('  ⚠  GitHub-vistun mistókst:', r.status, (await r.text()).slice(0, 160));
+  } catch (e) { console.error('  ⚠  GitHub-vistun mistókst:', e.message); }
+  ghBusy = false;
+}
+// Myndir sem hlaðið er upp í CMS lenda líka á skráakerfi sem þurrkast — spegla þær eins.
+async function ghPutFile(repoPath, buf, message) {
+  if (!GH_ON) return;
+  try {
+    let sha = null;
+    const r0 = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${repoPath}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+    if (r0.ok) sha = (await r0.json()).sha;
+    const body = { message, content: buf.toString('base64'), branch: GH_BRANCH };
+    if (sha) body.sha = sha;
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${repoPath}`, {
+      method: 'PUT', headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()), body: JSON.stringify(body),
+    });
+    if (!r.ok) console.error('  ⚠  GitHub-vistun myndar mistókst:', r.status);
+  } catch (e) { console.error('  ⚠  GitHub-vistun myndar mistókst:', e.message); }
+}
+async function ghPullUploads() {
+  if (!GH_ON) return;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/content/uploads?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+    if (!r.ok) return;                      // engin mappa enn = engar upphlaðnar myndir
+    const list = await r.json();
+    if (!Array.isArray(list)) return;
+    let n = 0;
+    for (const f of list) {
+      if (f.type !== 'file' || !f.download_url) continue;
+      const dest = path.join(UPLOAD_DIR, f.name);
+      if (fs.existsSync(dest)) continue;
+      const b = await fetch(f.download_url, { headers: ghHeaders() });
+      if (!b.ok) continue;
+      fs.writeFileSync(dest, Buffer.from(await b.arrayBuffer()));
+      n++;
+    }
+    if (n) console.log('  ✓  ' + n + ' mynd(ir) sóttar úr GitHub');
+  } catch (e) { console.error('  ⚠  Myndalestur úr GitHub mistókst:', e.message); }
+}
+function ghSchedulePush() {          // safna saman breytingum svo hvert lyklaslag valdi ekki commit
+  if (!GH_ON) return;
+  clearTimeout(ghTimer);
+  ghTimer = setTimeout(ghPush, 5000);
+}
+
 // ---------- storage helpers ----------
 function ensure() {
   fs.mkdirSync(CONTENT_DIR, { recursive: true });
@@ -325,6 +420,7 @@ async function handleAPI(req, res, url) {
       if (body[k] && typeof body[k] === 'object') cur[k] = body[k];
     }
     writeJSON(CONTENT_FILE, cur);
+    ghSchedulePush();                     // spegla í GitHub svo breytingin lifi endurræsingu af
     return sendJSON(res, 200, { ok: true });
   }
   if (p === '/api/upload' && req.method === 'POST') {
@@ -335,7 +431,9 @@ async function handleAPI(req, res, url) {
     const ext = extByType[m[1]] || '.png';
     const safe = String(body.name || 'mynd').replace(/[^\w.-]+/g, '-').replace(/\.[^.]+$/, '').slice(0, 40) || 'mynd';
     const fname = `${Date.now()}-${safe}${ext}`;
-    fs.writeFileSync(path.join(UPLOAD_DIR, fname), Buffer.from(m[2], 'base64'));
+    const buf = Buffer.from(m[2], 'base64');
+    fs.writeFileSync(path.join(UPLOAD_DIR, fname), buf);
+    ghPutFile('content/uploads/' + fname, buf, 'CMS: mynd bætt við af vefnum');   // svo myndin lifi endurræsingu af
     return sendJSON(res, 200, { ok: true, url: `assets/uploads/${fname}` });
   }
   if (p === '/api/password' && req.method === 'POST') {
@@ -394,5 +492,7 @@ http.createServer(async (req, res) => {
     console.error(e); sendJSON(res, 500, { error: String(e.message || e) });
   }
 }).listen(PORT, () => {
+  if (GH_ON) ghPull().then(ghPullUploads).then(() => console.log('  ⓘ  Varanleg geymsla: GitHub (' + GH_REPO + ')'));
+  else console.log('  ⚠  GH_TOKEN vantar — CMS-breytingar lifa EKKI af endurræsingu');
   console.log(`\n  Ráðagerði CMS keyrir á  http://localhost:${PORT}\n  Vefur:  http://localhost:${PORT}/\n  Admin:  http://localhost:${PORT}/admin\n`);
 });

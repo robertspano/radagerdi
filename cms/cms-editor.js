@@ -581,10 +581,22 @@
     const h = el('span', 'cms-sbsize', ''); bar.appendChild(h);
     bar.appendChild(sBtn('↕+', 'Þykkari kassi', () => { if (boxSel) thinner(boxSel, 16); }));
     bar.appendChild(el('span', 'cms-sbsep'));
+    bar.appendChild(sBtn('⌶', 'Miðja efnið lóðrétt', () => {
+      if (!boxSel) return;
+      const t = padOf(boxSel, 'top'), b = padOf(boxSel, 'bottom'), mid = Math.round((t + b) / 2);
+      setPad(boxSel, mid, mid);                       // jafnt bil fyrir ofan og neðan = lóðrétt miðjað
+    }));
+    bar.appendChild(sBtn('⬌', 'Miðja efnið lárétt', () => {
+      if (!boxSel) return;
+      setStyleProp(boxSel, 'text-align', 'center');
+      setStyleProp(boxSel, 'margin-left', 'auto');
+      setStyleProp(boxSel, 'margin-right', 'auto');
+    }));
+    bar.appendChild(el('span', 'cms-sbsep'));
     bar.appendChild(sBtn('↺', 'Núllstilla kassa', () => {
       if (!boxSel) return;
       const key = CMS.key(boxSel), before = JSON.stringify(content.style[PAGE][key] || {});
-      ['padding-top', 'padding-bottom'].forEach(p => { boxSel.style.removeProperty(p); if (content.style[PAGE][key]) delete content.style[PAGE][key][p]; });
+      ['padding-top', 'padding-bottom', 'text-align', 'margin-left', 'margin-right'].forEach(p => { boxSel.style.removeProperty(p); if (content.style[PAGE][key]) delete content.style[PAGE][key][p]; });
       if (content.style[PAGE][key] && !Object.keys(content.style[PAGE][key]).length) delete content.style[PAGE][key];
       pushRecord('style', key, before, JSON.stringify(content.style[PAGE][key] || {}));
       markDirty(); positionBoxUI();
