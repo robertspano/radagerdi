@@ -182,7 +182,9 @@ function serveFile(req, res, full) {
       });
       return fs.createReadStream(full, { start, end }).pipe(res);
     }
-    res.writeHead(200, { 'Content-Type': type, 'Content-Length': st.size, 'Accept-Ranges': 'bytes', 'Cache-Control': cacheFor(ext) });
+    // ritilsskrárnar mega aldrei sitja fastar í skyndiminni — annars keyra notendur úrelta útgáfu
+    const isCMS = full.includes(path.sep + 'cms' + path.sep);
+    res.writeHead(200, { 'Content-Type': type, 'Content-Length': st.size, 'Accept-Ranges': 'bytes', 'Cache-Control': isCMS ? 'no-cache' : cacheFor(ext) });
     fs.createReadStream(full).pipe(res);
   });
 }
@@ -319,7 +321,7 @@ async function handleAPI(req, res, url) {
   if (p === '/api/content' && req.method === 'PUT') {
     const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
     const cur = readJSON(CONTENT_FILE, { texts: {}, images: {}, bg: {}, html: {}, hidden: {}, order: {}, settings: {} });
-    for (const k of ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'settings']) {
+    for (const k of ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style', 'settings']) {
       if (body[k] && typeof body[k] === 'object') cur[k] = body[k];
     }
     writeJSON(CONTENT_FILE, cur);

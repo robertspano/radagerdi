@@ -4,7 +4,7 @@
   const CMS = window.__CMS__;
   const PAGE = CMS.PAGE;
   const content = CMS.content || {};
-  ['texts', 'images', 'bg', 'html', 'hidden', 'order'].forEach(k => { content[k] = content[k] || {}; content[k][PAGE] = content[k][PAGE] || {}; });
+  ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style'].forEach(k => { content[k] = content[k] || {}; content[k][PAGE] = content[k][PAGE] || {}; });
   let dirty = false;
 
   const PAGES = [
@@ -30,7 +30,7 @@
   function scheduleSave() { clearTimeout(saveT); saveT = setTimeout(save, 600); }
   function markDirty() { dirty = true; setStatus('pending'); scheduleSave(); }
   function setOverride(type, k, v) { content[type][PAGE][k] = v; markDirty(); }
-  const payload = () => JSON.stringify({ texts: content.texts, images: content.images, bg: content.bg, html: content.html, hidden: content.hidden, order: content.order });
+  const payload = () => JSON.stringify({ texts: content.texts, images: content.images, bg: content.bg, html: content.html, hidden: content.hidden, order: content.order, style: content.style });
 
   function paneClean(pane) {
     const c = pane.cloneNode(true);
@@ -81,11 +81,19 @@
   }
   function applyState(type, key, value) {
     const el = CMS.elByKey(key);
-    if (type === 'html') { if (value == null) delete content.html[PAGE][key]; else content.html[PAGE][key] = value; if (el && value != null) el.innerHTML = value; decorateMenus(); decorateGalleries(); }
+    if (type === 'html') { if (value == null) delete content.html[PAGE][key]; else content.html[PAGE][key] = value; if (el && value != null) el.innerHTML = value; decorateMenus(); decorateGalleries(); decorateGalleryStrips(); }
     else if (type === 'texts') { if (value == null) delete content.texts[PAGE][key]; else content.texts[PAGE][key] = value; if (el && value != null) el.innerHTML = value; }
     else if (type === 'images') { content.images[PAGE][key] = value; if (el) { el.src = value; el.removeAttribute('srcset'); el.removeAttribute('sizes'); } }
     else if (type === 'bg') { content.bg[PAGE][key] = value; if (el) el.style.backgroundImage = 'url("' + value + '")'; }
     else if (type === 'order') { content.order[PAGE].__tabs__ = value; liveReorderTabs(value); }
+    else if (type === 'style') {
+      const obj = JSON.parse(value || '{}');
+      const old = content.style[PAGE][key] || {};
+      if (el) Object.keys(old).forEach(p => el.style.removeProperty(p));
+      if (Object.keys(obj).length) { content.style[PAGE][key] = obj; if (el) Object.keys(obj).forEach(p => el.style.setProperty(p, obj[p], 'important')); }
+      else delete content.style[PAGE][key];
+      if (styleTarget) positionStyleBar();
+    }
   }
   function undo() { const r = undoStack.pop(); if (!r) return; applyState(r.type, r.key, r.before); redoStack.push(r); markDirty(); updateHistUI(); toast('Afturkallað'); }
   function redo() { const r = redoStack.pop(); if (!r) return; applyState(r.type, r.key, r.after); undoStack.push(r); markDirty(); updateHistUI(); toast('Endurtekið'); }
@@ -217,6 +225,7 @@
     leaf.addEventListener('blur', onBlur);
     leaf.addEventListener('keydown', onKey);
     document.getSelection().selectAllChildren(leaf);
+    showStyleBar(leaf);
   }
   function onKey(e) {
     if (e.key === 'Enter' && !e.shiftKey && activeEl && activeEl.tagName !== 'DIV') { e.preventDefault(); activeEl.blur(); }
@@ -385,6 +394,231 @@
     const d = el('button', 'cms-galdel', '🗑'); d.type = 'button'; d.title = 'Eyða mynd'; d.setAttribute('data-cms-ctl', '1');
     d.onclick = (e) => { e.stopPropagation(); if (confirm('Eyða þessari mynd?')) { fig.remove(); savePane(region); } };
     fig.appendChild(d);
+  }
+
+
+  // ================= ÚTLITSSTJÓRN (fljótandi stika við valið element) =================
+  // Notandinn smellir á texta → lítil stika birtist: stærð, feitletrun, jöfnun, litur, bil.
+  // Vistast í content.style[PAGE][key] sem CSS-eigindi og beitt aftur af cms-inject.js.
+  let styleBar = null, styleTarget = null;
+
+  function styleOf(key) { return content.style[PAGE][key] || (content.style[PAGE][key] = {}); }
+
+  function setStyleProp(target, prop, value) {
+    const key = CMS.key(target);
+    const s = styleOf(key);
+    const before = JSON.stringify(s);
+    if (value === null || value === '') { delete s[prop]; target.style.removeProperty(prop); }
+    else { s[prop] = value; target.style.setProperty(prop, value, 'important'); }
+    if (!Object.keys(s).length) delete content.style[PAGE][key];
+    pushRecord('style', key, before, JSON.stringify(content.style[PAGE][key] || {}));
+    markDirty();
+    positionStyleBar();
+  }
+
+  // Leturstærð er vistuð sem clamp() svo hún haldist í hlutfalli á síma
+  function currentFontPx(el) {
+    const saved = (content.style[PAGE][CMS.key(el)] || {})['font-size'];
+    if (saved) { const m = saved.match(/([\d.]+)px\)?$/); if (m) return Math.round(parseFloat(m[1])); }
+    return Math.round(parseFloat(getComputedStyle(el).fontSize));
+  }
+  function setFontPx(el, px) {
+    px = Math.max(10, Math.min(200, px));
+    // upprunalega stærðin (áður en ritillinn snerti hana) — svo stækkun minnki aldrei textann
+    if (el._cmsBaseFont === undefined) {
+      const saved = (content.style[PAGE][CMS.key(el)] || {})['font-size'];
+      el._cmsBaseFont = saved ? null : Math.round(parseFloat(getComputedStyle(el).fontSize));
+    }
+    const base = el._cmsBaseFont;
+    if (px <= (base || px)) {
+      setStyleProp(el, 'font-size', px + 'px');             // minnkun: föst stærð, fyrirsjáanleg
+    } else {
+      const min = Math.max(10, Math.min(px, base));         // aldrei minni en upphafleg stærð
+      const vw = (px / 12).toFixed(2);        // nær valinni stærð á skjám ≥1200px
+      setStyleProp(el, 'font-size', 'clamp(' + min + 'px, ' + vw + 'vw, ' + px + 'px)');
+    }
+  }
+
+  function sBtn(label, title, fn, cls) {
+    const b = el('button', 'cms-sb' + (cls ? ' ' + cls : ''), label);
+    b.type = 'button'; b.title = title; b.setAttribute('data-cms-ctl', '1');
+    b.addEventListener('mousedown', (e) => e.preventDefault());   // ekki tapa fókus úr textanum
+    b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fn(); });
+    return b;
+  }
+
+  function buildStyleBar() {
+    const bar = el('div', 'cms-stylebar');
+    bar.setAttribute('data-cms-ctl', '1');
+    bar.addEventListener('mousedown', (e) => e.stopPropagation());
+
+    bar.appendChild(sBtn('A−', 'Minnka letur', () => { if (styleTarget) setFontPx(styleTarget, currentFontPx(styleTarget) - 2); }));
+    const size = el('span', 'cms-sbsize', '');
+    bar.appendChild(size);
+    bar.appendChild(sBtn('A+', 'Stækka letur', () => { if (styleTarget) setFontPx(styleTarget, currentFontPx(styleTarget) + 2); }));
+    bar.appendChild(el('span', 'cms-sbsep'));
+
+    bar.appendChild(sBtn('B', 'Feitletra', () => {
+      if (!styleTarget) return;
+      const on = (content.style[PAGE][CMS.key(styleTarget)] || {})['font-weight'] === '700'
+              || parseInt(getComputedStyle(styleTarget).fontWeight, 10) >= 700;
+      setStyleProp(styleTarget, 'font-weight', on ? '400' : '700');
+    }, 'cms-sbbold'));
+    bar.appendChild(el('span', 'cms-sbsep'));
+
+    [['⇤', 'left', 'Vinstri'], ['↔', 'center', 'Miðja'], ['⇥', 'right', 'Hægri']].forEach(([lab, val, t]) => {
+      bar.appendChild(sBtn(lab, t, () => { if (styleTarget) setStyleProp(styleTarget, 'text-align', val); }));
+    });
+    bar.appendChild(el('span', 'cms-sbsep'));
+
+    // Bil fyrir ofan/neðan — kemur í stað frjáls drags og heldur útlitinu heilu
+    bar.appendChild(sBtn('↑', 'Færa upp (minna bil fyrir ofan)', () => { if (styleTarget) nudge(styleTarget, -8); }));
+    bar.appendChild(sBtn('↓', 'Færa niður (meira bil fyrir ofan)', () => { if (styleTarget) nudge(styleTarget, 8); }));
+    bar.appendChild(el('span', 'cms-sbsep'));
+
+    const colors = [['#1B7C38', 'Grænn'], ['#F0392F', 'Rauður'], ['#1a1b1f', 'Svartur'], ['#ffffff', 'Hvítur']];
+    colors.forEach(([c, t]) => {
+      const b = sBtn('', 'Litur: ' + t, () => { if (styleTarget) setStyleProp(styleTarget, 'color', c); }, 'cms-sbcol');
+      b.style.background = c;
+      bar.appendChild(b);
+    });
+    bar.appendChild(el('span', 'cms-sbsep'));
+    bar.appendChild(sBtn('↺', 'Núllstilla útlit', () => {
+      if (!styleTarget) return;
+      const key = CMS.key(styleTarget), before = JSON.stringify(content.style[PAGE][key] || {});
+      Object.keys(content.style[PAGE][key] || {}).forEach(p => styleTarget.style.removeProperty(p));
+      delete content.style[PAGE][key];
+      pushRecord('style', key, before, '{}'); markDirty(); positionStyleBar();
+    }, 'cms-sbreset'));
+
+    bar._size = size;
+    document.body.appendChild(bar);
+    return bar;
+  }
+
+  function nudge(target, dy) {
+    const key = CMS.key(target);
+    const cur = parseFloat((content.style[PAGE][key] || {})['margin-top'] || getComputedStyle(target).marginTop) || 0;
+    setStyleProp(target, 'margin-top', Math.round(cur + dy) + 'px');
+  }
+
+  function positionStyleBar() {
+    if (!styleBar || !styleTarget) return;
+    const r = styleTarget.getBoundingClientRect();
+    styleBar._size.textContent = currentFontPx(styleTarget) + 'px';
+    const bw = styleBar.offsetWidth || 420;
+    let left = r.left + r.width / 2 - bw / 2;
+    left = Math.max(10, Math.min(window.innerWidth - bw - 10, left));
+    let top = r.top - styleBar.offsetHeight - 12;
+    if (top < 64) top = r.bottom + 12;              // undir ef ekki pláss fyrir ofan
+    styleBar.style.left = Math.round(left) + 'px';
+    styleBar.style.top = Math.round(top) + 'px';
+  }
+
+  function showStyleBar(target) {
+    if (!styleBar) styleBar = buildStyleBar();
+    styleTarget = target;
+    styleBar.classList.add('show');
+    positionStyleBar();
+  }
+  function hideStyleBar() {
+    if (styleBar) styleBar.classList.remove('show');
+    styleTarget = null;
+  }
+  document.addEventListener('mousedown', (e) => {
+    if (!styleTarget) return;
+    if (e.target.closest && (e.target.closest('.cms-stylebar') || e.target === styleTarget || styleTarget.contains(e.target))) return;
+    hideStyleBar();
+  }, true);
+  window.addEventListener('scroll', () => { if (styleTarget) positionStyleBar(); }, true);
+  window.addEventListener('resize', () => { if (styleTarget) positionStyleBar(); });
+
+  // ================= MYNDASÝNING (færiband) =================
+  // Smellur á færibandið opnar spjald: bæta við, eyða, raða.
+  function galleryTracks() { return [...document.querySelectorAll('.rg-gallery-track')]; }
+
+  function uniqueImgs(track) {
+    // færibandið tvítekur myndirnar fyrir óendanlega hringrás — sýnum bara einstöku
+    const seen = new Set(), out = [];
+    [...track.querySelectorAll('img')].forEach(im => {
+      const s = im.getAttribute('src');
+      if (s && !seen.has(s)) { seen.add(s); out.push(s); }
+    });
+    return out;
+  }
+  function writeTrack(track, srcs) {
+    const half = srcs.map(s => '<img src="' + s + '" alt="" loading="lazy">').join('');
+    track.innerHTML = half + half;                  // tvítaka fyrir samfellda hringrás
+    savePane(track);
+  }
+
+  function openGalleryPanel(track) {
+    const panel = makePanel('Myndasýning', 'Dragðu til að raða · ✕ eyðir mynd · „Bæta við" hleður inn nýjum.');
+    const grid = el('div', 'cms-gwrap');
+    let srcs = uniqueImgs(track);
+
+    function render() {
+      grid.innerHTML = '';
+      srcs.forEach((s, i) => {
+        const cell = el('div', 'cms-gcell');
+        cell.draggable = true;
+        cell.innerHTML = '<img src="' + s + '" alt="">';
+        const x = el('button', 'cms-gdel', '✕'); x.type = 'button'; x.title = 'Eyða mynd';
+        x.onclick = () => { srcs.splice(i, 1); render(); };
+        cell.appendChild(x);
+        cell.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', String(i)); cell.classList.add('cms-gdrag'); });
+        cell.addEventListener('dragend', () => cell.classList.remove('cms-gdrag'));
+        cell.addEventListener('dragover', (e) => e.preventDefault());
+        cell.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
+          if (isNaN(from) || from === i) return;
+          const [m] = srcs.splice(from, 1); srcs.splice(i, 0, m); render();
+        });
+        grid.appendChild(cell);
+      });
+      if (!srcs.length) grid.appendChild(el('p', 'cms-gempty', 'Engar myndir — bættu við hér að neðan.'));
+    }
+    render();
+    panel.body.appendChild(grid);
+
+    const drop = el('div', 'cms-galdrop', '＋ Dragðu myndir hingað — eða smelltu til að velja');
+    drop.setAttribute('data-cms-ctl', '1');
+    drop.onclick = () => {
+      const inp = el('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+      inp.onchange = async () => {
+        for (const f of [...inp.files]) { const url = await uploadImageFile(f); if (url) { srcs.push(url); render(); } }
+      };
+      inp.click();
+    };
+    drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('cms-dropover'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('cms-dropover'));
+    drop.addEventListener('drop', async (e) => {
+      e.preventDefault(); e.stopPropagation(); drop.classList.remove('cms-dropover');
+      for (const f of [...(e.dataTransfer.files || [])].filter(f => /^image\//.test(f.type))) {
+        const url = await uploadImageFile(f); if (url) { srcs.push(url); render(); }
+      }
+    });
+    panel.body.appendChild(drop);
+
+    panel.foot.appendChild(btn('Hætta við', '', () => closePanel(panel)));
+    panel.foot.appendChild(btn('Vista myndasýningu', 'cms-primary', () => {
+      writeTrack(track, srcs); closePanel(panel); toast('Myndasýning uppfærð');
+    }));
+  }
+
+  function decorateGalleryStrips() {
+    galleryTracks().forEach(track => {
+      const wrap = track.parentElement;
+      if (!wrap || wrap._cmsGal) return;
+      wrap._cmsGal = true;
+      if (track._cmsBase === undefined) track._cmsBase = paneClean(track);
+      wrap.style.position = wrap.style.position || 'relative';
+      const b = el('button', 'cms-galbtn', '🖼 Breyta myndasýningu');
+      b.type = 'button'; b.setAttribute('data-cms-ctl', '1');
+      b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); openGalleryPanel(track); };
+      wrap.appendChild(b);
+    });
   }
 
   // ---------- menu item controls (old tab panes + new themed cards) ----------
@@ -669,7 +903,7 @@
     buildToolbar();
     enableText();
     enableImages();
-    decorateMenus(); decorateGalleries();
+    decorateMenus(); decorateGalleries(); decorateGalleryStrips();
     // re-decorate menus if tab content changes
     document.querySelectorAll('.w-tab-link').forEach(l => l.addEventListener('click', () => setTimeout(decorateMenus, 60)));
   }

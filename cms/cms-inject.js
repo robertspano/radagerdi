@@ -45,7 +45,10 @@
   function elByKey(k) {
     let node = document.body;
     for (const part of k.split('>')) {
-      const tag = part.replace(/\d+$/, ''), idx = +part.slice(tag.length);
+      // H1–H6 enda á tölustaf sem tilheyrir tag-inu sjálfu: "H10" = fyrsta <h1>, ekki <h> nr. 10
+      const hm = part.match(/^(H[1-6])(\d+)$/);
+      const tag = hm ? hm[1] : part.replace(/\d+$/, '');
+      const idx = hm ? +hm[2] : +part.slice(tag.length);
       let i = 0, found = null;
       for (const c of node.children) { if (c.tagName === tag) { if (i === idx) { found = c; break; } i++; } }
       if (!found) return null; node = found;
@@ -61,7 +64,7 @@
   function textLeaves() {
     return [...document.body.querySelectorAll('*')].filter(isTextLeaf);
   }
-  const REGION_SEL = '.w-tab-pane, .card, .redbox';
+  const REGION_SEL = '.w-tab-pane, .card, .redbox, .rg-gallery-track';
   function panes() { return [...document.querySelectorAll('.w-tab-pane')]; }
   function regions() { return [...document.querySelectorAll(REGION_SEL)]; }
   function inRegion(el) { return !!el.closest(REGION_SEL); }
@@ -95,6 +98,13 @@
     if (Array.isArray(O.__tabs__)) reorderTabs(O.__tabs__);
     // 5. hidden
     Object.keys(HID).forEach(k => { if (HID[k]) { const el = elByKey(k); if (el) el.style.display = 'none'; } });
+    // 6. útlitsstillingar úr ritlinum (leturstærð, jöfnun, litur, bil)
+    const ST = g(content.style);
+    Object.keys(ST).forEach(k => {
+      const el = elByKey(k); if (!el) return;
+      const s = ST[k] || {};
+      Object.keys(s).forEach(prop => { if (s[prop]) el.style.setProperty(prop, s[prop], 'important'); });
+    });
   }
 
   // expose helpers for the editor
