@@ -33,9 +33,10 @@
     "hoparkvold.html": {},
     "hoparbrons.html": {},
     "hoparhadegi.html": {
-      "DIV1>DIV2>P1": "<br>",
+      "DIV1>DIV2>P1": "Þetta er gert til þess að eldhúsið ráði við álagið og forðast langa bið eftir matnum. Allir gestir í hópnum velja sér þá einn af réttunum á hópaseðlinum hér að neðan.",
       "DIV1>DIV2>P2": "Athugið að börn eldri en 6 ára teljast til fjölda gesta.",
-      "DIV1>DIV2>P0": "Fyrir hópa sem telja fleiri en 10 gesti bjóðum við upp á smækkaðan matseðil."
+      "DIV1>DIV2>P0": "Fyrir hópa sem telja fleiri en 10 gesti bjóðum við upp á smækkaðan matseðil.",
+      "DIV1>DIV2>P4": "Hádegis-valkostur 1: Focaccia samloka með hráskinku,&nbsp;"
     }
   },
   "images": {
