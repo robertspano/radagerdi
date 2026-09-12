@@ -32,7 +32,10 @@
     },
     "hoparkvold.html": {},
     "hoparbrons.html": {},
-    "hoparhadegi.html": {}
+    "hoparhadegi.html": {
+      "DIV1>DIV2>P1": "<br>",
+      "DIV1>DIV2>P2": "<br>"
+    }
   },
   "images": {
     "drykkir.html": {},
