@@ -1,10 +1,108 @@
 {
-  "texts": {},
-  "images": {},
-  "bg": {},
-  "html": {},
-  "hidden": {},
-  "order": {},
+  "texts": {
+    "drykkir.html": {},
+    "matsedlar.html": {},
+    "eftirrettir.html": {},
+    "brons.html": {},
+    "takeaway.html": {},
+    "barnamatsedill.html": {},
+    "hopar.html": {}
+  },
+  "images": {
+    "drykkir.html": {},
+    "matsedlar.html": {},
+    "eftirrettir.html": {},
+    "brons.html": {},
+    "takeaway.html": {},
+    "barnamatsedill.html": {},
+    "hopar.html": {}
+  },
+  "bg": {
+    "drykkir.html": {},
+    "matsedlar.html": {},
+    "eftirrettir.html": {},
+    "brons.html": {},
+    "takeaway.html": {},
+    "barnamatsedill.html": {},
+    "hopar.html": {}
+  },
+  "html": {
+    "drykkir.html": {},
+    "matsedlar.html": {},
+    "eftirrettir.html": {},
+    "brons.html": {},
+    "takeaway.html": {},
+    "barnamatsedill.html": {},
+    "hopar.html": {}
+  },
+  "hidden": {
+    "drykkir.html": {},
+    "matsedlar.html": {},
+    "eftirrettir.html": {},
+    "brons.html": {},
+    "takeaway.html": {},
+    "barnamatsedill.html": {},
+    "hopar.html": {}
+  },
+  "order": {
+    "drykkir.html": {},
+    "matsedlar.html": {},
+    "eftirrettir.html": {},
+    "brons.html": {},
+    "takeaway.html": {},
+    "barnamatsedill.html": {},
+    "hopar.html": {}
+  },
   "settings": {},
-  "style": {}
+  "style": {
+    "drykkir.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "matsedlar.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      },
+      "DIV1>DIV2": {
+        "padding-top": "3px",
+        "padding-bottom": "3px",
+        "text-align": "center",
+        "margin-left": "auto",
+        "margin-right": "auto"
+      }
+    },
+    "eftirrettir.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "brons.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "takeaway.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "barnamatsedill.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "hopar.html": {
+      "DIV1>DIV0>DIV0": {
+        "padding-top": "40px",
+        "padding-bottom": "36px"
+      }
+    }
+  }
 }
