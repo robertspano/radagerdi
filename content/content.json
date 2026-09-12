@@ -283,6 +283,10 @@
       "DIV1>DIV0": {
         "padding-top": "21px",
         "padding-bottom": "1px"
+      },
+      "DIV1>DIV2": {
+        "padding-top": "18px",
+        "padding-bottom": "12px"
       }
     },
     "en-barnamatsedill.html": {
