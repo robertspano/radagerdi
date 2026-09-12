@@ -295,7 +295,8 @@
         "padding-bottom": "0px"
       },
       "DIV1>DIV2>P4": {
-        "color": "#F0392F"
+        "color": "#F0392F",
+        "font-size": "clamp(17px, 1.92vw, 23px)"
       },
       "DIV1>DIV2>P4>SPAN0": {
         "color": "#F0392F"
