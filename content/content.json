@@ -92,6 +92,10 @@
       "DIV1>DIV0": {
         "padding-top": "21px",
         "padding-bottom": "1px"
+      },
+      "DIV1>DIV3": {
+        "padding-top": "23px",
+        "padding-bottom": "23px"
       }
     },
     "matsedlar.html": {
