@@ -30,7 +30,8 @@
     "en-hopar.html": {
       "DIV1>DIV0>DIV1>P0": "Call us or send us an email with your <b class=\"\">number of guests, date, time and which group menu</b> suits your party. We will then book you in, provided a table is available<br>R<b class=\"\">adagerdi@radagerdi170.is</b>"
     },
-    "hoparkvold.html": {}
+    "hoparkvold.html": {},
+    "hoparbrons.html": {}
   },
   "images": {
     "drykkir.html": {},
@@ -48,7 +49,8 @@
     "en-takeaway.html": {},
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
-    "hoparkvold.html": {}
+    "hoparkvold.html": {},
+    "hoparbrons.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -66,7 +68,8 @@
     "en-takeaway.html": {},
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
-    "hoparkvold.html": {}
+    "hoparkvold.html": {},
+    "hoparbrons.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -110,7 +113,8 @@
     "en-takeaway.html": {},
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
-    "hoparkvold.html": {}
+    "hoparkvold.html": {},
+    "hoparbrons.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -128,7 +132,8 @@
     "en-takeaway.html": {},
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
-    "hoparkvold.html": {}
+    "hoparkvold.html": {},
+    "hoparbrons.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -146,7 +151,8 @@
     "en-takeaway.html": {},
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
-    "hoparkvold.html": {}
+    "hoparkvold.html": {},
+    "hoparbrons.html": {}
   },
   "settings": {},
   "style": {
@@ -259,6 +265,12 @@
       }
     },
     "hoparkvold.html": {
+      "DIV1>DIV1": {
+        "padding-top": "0px",
+        "padding-bottom": "0px"
+      }
+    },
+    "hoparbrons.html": {
       "DIV1>DIV1": {
         "padding-top": "0px",
         "padding-bottom": "0px"
