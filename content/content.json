@@ -25,7 +25,9 @@
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
-    "en-takeaway.html": {},
+    "en-takeaway.html": {
+      "DIV1>DIV2>H20": "Lunch Offer 2000 kr"
+    },
     "en-barnamatsedill.html": {},
     "en-hopar.html": {
       "DIV1>DIV0>DIV1>P0": "Call us or send us an email with your <b class=\"\">number of guests, date, time and which group menu</b> suits your party. We will then book you in, provided a table is available<br><b class=\"\">R</b><b class=\"\">adagerdi@radagerdi170.is<br>ÞEGAR ÉG ÝTI Á LUNCH/DINNER/BRUNCH REDIRECTA ÉG Á ÍSL SÍÐUNA</b>"
