@@ -251,10 +251,6 @@
       "DIV1>DIV0": {
         "padding-top": "21px",
         "padding-bottom": "1px"
-      },
-      "DIV1>DIV2": {
-        "padding-top": "0px",
-        "padding-bottom": "0px"
       }
     },
     "en-drykkir.html": {
