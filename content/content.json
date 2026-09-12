@@ -34,7 +34,8 @@
     "hoparbrons.html": {},
     "hoparhadegi.html": {
       "DIV1>DIV2>P1": "<br>",
-      "DIV1>DIV2>P2": "<br>"
+      "DIV1>DIV2>P2": "<br>",
+      "DIV1>DIV2>P0": "<br>"
     }
   },
   "images": {
