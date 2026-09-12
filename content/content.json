@@ -40,7 +40,8 @@
       "DIV1>DIV2>P4>SPAN0": "Eldbökuð focaccia samloka með klettasalati, burrata stracciatella, pistasíu pestói, tómötum, rauðlauk og blönduðum ólífum <br>&amp; Rjómalöguð Tómat-basil súpa.<br><br><b class=\"cms-active\" style=\"font-size: 23px; text-align: center; outline: rgb(98, 159, 103) solid 2px !important;\">Hádegis-valkostur 1:<span class=\"cms-hover\" style=\"text-align: start;\"> 2990 kr á mann<br></span></b>Forréttur:<br>Rjómalöguð Tómat-basil súpa<br>Aðalréttur:<br>Veljið:<br>Mascarpone kjötbollur / Ráðagerðis Bacalao / Trufflu pasta<br><br>Uppáhellt kaffi eða te eftir matinn",
       "DIV1>DIV2>P4>SPAN1": "Eldbökuð focaccia samloka með klettasalati, burrata stracciatella, pistasíu pestói, tómötum, rauðlauk og blönduðum ólífum <br>&amp; Rjómalöguð Tómat-basil súpa.<br><br>Hádegis-valkostur 2: 4990 kr á mann<br>Forréttur",
       "DIV1>DIV2>P4>B0>SPAN0": "&nbsp;2990 kr á mann",
-      "DIV1>DIV2>P4>SPAN0>B0>SPAN0": "&nbsp;4990 kr á mann<br>"
+      "DIV1>DIV2>P4>SPAN0>B0>SPAN0": "&nbsp;4990 kr á mann<br>",
+      "DIV1>DIV2>P4>SPAN0>B0": "Hádegis-valkostur 2 :<span class=\"\" style=\"text-align: start;\">&nbsp;4990 kr á mann<br></span>"
     }
   },
   "images": {
