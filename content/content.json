@@ -24,7 +24,8 @@
     "en-brons.html": {},
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
-    "en-eftirrettir.html": {}
+    "en-eftirrettir.html": {},
+    "en-takeaway.html": {}
   },
   "images": {
     "drykkir.html": {},
@@ -38,7 +39,8 @@
     "en-brons.html": {},
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
-    "en-eftirrettir.html": {}
+    "en-eftirrettir.html": {},
+    "en-takeaway.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -52,7 +54,8 @@
     "en-brons.html": {},
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
-    "en-eftirrettir.html": {}
+    "en-eftirrettir.html": {},
+    "en-takeaway.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -92,7 +95,8 @@
     "en-brons.html": {},
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
-    "en-eftirrettir.html": {}
+    "en-eftirrettir.html": {},
+    "en-takeaway.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -106,7 +110,8 @@
     "en-brons.html": {},
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
-    "en-eftirrettir.html": {}
+    "en-eftirrettir.html": {},
+    "en-takeaway.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -120,7 +125,8 @@
     "en-brons.html": {},
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
-    "en-eftirrettir.html": {}
+    "en-eftirrettir.html": {},
+    "en-takeaway.html": {}
   },
   "settings": {},
   "style": {
@@ -209,6 +215,12 @@
       }
     },
     "en-eftirrettir.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "en-takeaway.html": {
       "DIV1>DIV0": {
         "padding-top": "21px",
         "padding-bottom": "1px"
