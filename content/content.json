@@ -294,6 +294,9 @@
       },
       "DIV1>DIV2>P4": {
         "color": "#F0392F"
+      },
+      "DIV1>DIV2>P4>SPAN0": {
+        "color": "#F0392F"
       }
     }
   }
