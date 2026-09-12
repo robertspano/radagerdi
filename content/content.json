@@ -28,7 +28,8 @@
     "en-takeaway.html": {
       "DIV1>DIV2>H20": "Lunch Offer 2000 kr",
       "DIV1>DIV2>P1": "ANY PIZZA ON THE MENU",
-      "DIV1>DIV2>P2": "Only applies for take away and not if eaten on the premises"
+      "DIV1>DIV2>P2": "Only applies for take away and not if eaten on the premises",
+      "DIV1>DIV2>P3": "(take away discount does not apply to the lunch offer)"
     },
     "en-barnamatsedill.html": {},
     "en-hopar.html": {
