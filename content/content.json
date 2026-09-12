@@ -23,7 +23,8 @@
     },
     "en-brons.html": {},
     "en-matsedlar.html": {},
-    "en-drykkir.html": {}
+    "en-drykkir.html": {},
+    "en-eftirrettir.html": {}
   },
   "images": {
     "drykkir.html": {},
@@ -36,7 +37,8 @@
     "hafa-samband.html": {},
     "en-brons.html": {},
     "en-matsedlar.html": {},
-    "en-drykkir.html": {}
+    "en-drykkir.html": {},
+    "en-eftirrettir.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -49,7 +51,8 @@
     "hafa-samband.html": {},
     "en-brons.html": {},
     "en-matsedlar.html": {},
-    "en-drykkir.html": {}
+    "en-drykkir.html": {},
+    "en-eftirrettir.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -88,7 +91,8 @@
     "hafa-samband.html": {},
     "en-brons.html": {},
     "en-matsedlar.html": {},
-    "en-drykkir.html": {}
+    "en-drykkir.html": {},
+    "en-eftirrettir.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -101,7 +105,8 @@
     "hafa-samband.html": {},
     "en-brons.html": {},
     "en-matsedlar.html": {},
-    "en-drykkir.html": {}
+    "en-drykkir.html": {},
+    "en-eftirrettir.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -114,7 +119,8 @@
     "hafa-samband.html": {},
     "en-brons.html": {},
     "en-matsedlar.html": {},
-    "en-drykkir.html": {}
+    "en-drykkir.html": {},
+    "en-eftirrettir.html": {}
   },
   "settings": {},
   "style": {
@@ -197,6 +203,12 @@
       }
     },
     "en-drykkir.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "en-eftirrettir.html": {
       "DIV1>DIV0": {
         "padding-top": "21px",
         "padding-bottom": "1px"
