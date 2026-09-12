@@ -291,6 +291,9 @@
       "DIV1>DIV1": {
         "padding-top": "0px",
         "padding-bottom": "0px"
+      },
+      "DIV1>DIV2>P4": {
+        "color": "#F0392F"
       }
     }
   }
