@@ -25,7 +25,8 @@
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
-    "en-takeaway.html": {}
+    "en-takeaway.html": {},
+    "en-barnamatsedill.html": {}
   },
   "images": {
     "drykkir.html": {},
@@ -40,7 +41,8 @@
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
-    "en-takeaway.html": {}
+    "en-takeaway.html": {},
+    "en-barnamatsedill.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -55,7 +57,8 @@
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
-    "en-takeaway.html": {}
+    "en-takeaway.html": {},
+    "en-barnamatsedill.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -96,7 +99,8 @@
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
-    "en-takeaway.html": {}
+    "en-takeaway.html": {},
+    "en-barnamatsedill.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -111,7 +115,8 @@
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
-    "en-takeaway.html": {}
+    "en-takeaway.html": {},
+    "en-barnamatsedill.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -126,7 +131,8 @@
     "en-matsedlar.html": {},
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
-    "en-takeaway.html": {}
+    "en-takeaway.html": {},
+    "en-barnamatsedill.html": {}
   },
   "settings": {},
   "style": {
@@ -221,6 +227,12 @@
       }
     },
     "en-takeaway.html": {
+      "DIV1>DIV0": {
+        "padding-top": "21px",
+        "padding-bottom": "1px"
+      }
+    },
+    "en-barnamatsedill.html": {
       "DIV1>DIV0": {
         "padding-top": "21px",
         "padding-bottom": "1px"
