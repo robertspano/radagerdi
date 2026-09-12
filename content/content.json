@@ -31,7 +31,8 @@
       "DIV1>DIV0>DIV1>P0": "Call us or send us an email with your <b class=\"\">number of guests, date, time and which group menu</b> suits your party. We will then book you in, provided a table is available<br>R<b class=\"\">adagerdi@radagerdi170.is</b>"
     },
     "hoparkvold.html": {},
-    "hoparbrons.html": {}
+    "hoparbrons.html": {},
+    "hoparhadegi.html": {}
   },
   "images": {
     "drykkir.html": {},
@@ -50,7 +51,8 @@
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
     "hoparkvold.html": {},
-    "hoparbrons.html": {}
+    "hoparbrons.html": {},
+    "hoparhadegi.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -69,7 +71,8 @@
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
     "hoparkvold.html": {},
-    "hoparbrons.html": {}
+    "hoparbrons.html": {},
+    "hoparhadegi.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -114,7 +117,8 @@
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
     "hoparkvold.html": {},
-    "hoparbrons.html": {}
+    "hoparbrons.html": {},
+    "hoparhadegi.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -133,7 +137,8 @@
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
     "hoparkvold.html": {},
-    "hoparbrons.html": {}
+    "hoparbrons.html": {},
+    "hoparhadegi.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -152,7 +157,8 @@
     "en-barnamatsedill.html": {},
     "en-hopar.html": {},
     "hoparkvold.html": {},
-    "hoparbrons.html": {}
+    "hoparbrons.html": {},
+    "hoparhadegi.html": {}
   },
   "settings": {},
   "style": {
@@ -271,6 +277,12 @@
       }
     },
     "hoparbrons.html": {
+      "DIV1>DIV1": {
+        "padding-top": "0px",
+        "padding-bottom": "0px"
+      }
+    },
+    "hoparhadegi.html": {
       "DIV1>DIV1": {
         "padding-top": "0px",
         "padding-bottom": "0px"
