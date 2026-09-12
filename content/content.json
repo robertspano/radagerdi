@@ -1,7 +1,9 @@
 {
   "texts": {
     "drykkir.html": {},
-    "matsedlar.html": {},
+    "matsedlar.html": {
+      "DIV1>DIV2>H20": "Hádegistilboð 2990 kr"
+    },
     "eftirrettir.html": {},
     "brons.html": {},
     "takeaway.html": {},
