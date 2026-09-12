@@ -8,6 +8,9 @@
     "barnamatsedill.html": {},
     "hopar.html": {
       "DIV1>DIV0>DIV1>P0": "Hringið eða sendið okkur tölvupóst varðandi <b class=\"\">fjölda gesta, dagsetningu, tíma og hvaða hópaseðill</b> hentar ykkar hóp. Við bókum ykkur þá inn að því gefnu að það sé laust borð.<br><b class=\"\">Radagerdi@radagerdi170.is</b>"
+    },
+    "hafa-samband.html": {
+      "DIV1>DIV0>DIV0>H10>SPAN0": ""
     }
   },
   "images": {
@@ -17,7 +20,8 @@
     "brons.html": {},
     "takeaway.html": {},
     "barnamatsedill.html": {},
-    "hopar.html": {}
+    "hopar.html": {},
+    "hafa-samband.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -26,7 +30,8 @@
     "brons.html": {},
     "takeaway.html": {},
     "barnamatsedill.html": {},
-    "hopar.html": {}
+    "hopar.html": {},
+    "hafa-samband.html": {}
   },
   "html": {
     "drykkir.html": {},
@@ -35,7 +40,8 @@
     "brons.html": {},
     "takeaway.html": {},
     "barnamatsedill.html": {},
-    "hopar.html": {}
+    "hopar.html": {},
+    "hafa-samband.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -44,7 +50,8 @@
     "brons.html": {},
     "takeaway.html": {},
     "barnamatsedill.html": {},
-    "hopar.html": {}
+    "hopar.html": {},
+    "hafa-samband.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -53,7 +60,8 @@
     "brons.html": {},
     "takeaway.html": {},
     "barnamatsedill.html": {},
-    "hopar.html": {}
+    "hopar.html": {},
+    "hafa-samband.html": {}
   },
   "settings": {},
   "style": {
@@ -107,6 +115,12 @@
       },
       "DIV1>DIV0>DIV1>P0": {
         "font-weight": "400"
+      }
+    },
+    "hafa-samband.html": {
+      "DIV1>DIV0>DIV0": {
+        "padding-top": "27px",
+        "padding-bottom": "23px"
       }
     }
   }
