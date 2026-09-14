@@ -330,6 +330,10 @@
       "DIV1>DIV0>DIV0": {
         "padding-top": "39px",
         "padding-bottom": "35px"
+      },
+      "DIV1>DIV0>DIV1": {
+        "padding-top": "16px",
+        "padding-bottom": "20px"
       }
     },
     "hoparkvold.html": {
