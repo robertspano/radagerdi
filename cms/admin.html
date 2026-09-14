@@ -50,7 +50,13 @@
 <style>.hint{color:#9aa0a4;font-size:12.5px;margin:2px 0 12px}.hint a{color:#629F67;font-weight:600;text-decoration:none}</style>
 <script>
   const params = new URLSearchParams(location.search);
-  const next = params.get('next') || '/index.html?cms=1';
+  // Aðeins slóðir á þessum vef: annars gæti smíðaður hlekkur (?next=https://… eða ?next=javascript:…)
+  // sent nýinnskráðan eiganda annað eða keyrt skriftu í nafni hans.
+  const safeNext = (v) => {
+    if (!v || v[0] !== '/' || v[1] === '/' || v[1] === '\\') return null;
+    try { return new URL(v, location.origin).origin === location.origin ? v : null; } catch (e) { return null; }
+  };
+  const next = safeNext(params.get('next')) || '/index.html?cms=1';
   fetch('/api/session').then(r=>r.json()).then(s=>{ if(s.authed) location.replace(next); });
   const $=id=>document.getElementById(id), err=$('err');
   const show=(id)=>{ ['step-email','step-code','step-pw'].forEach(x=>$(x).hidden=(x!==id)); err.textContent=''; };

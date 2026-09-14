@@ -74,7 +74,7 @@
   function textLeaves() {
     return [...document.body.querySelectorAll('*')].filter(isTextLeaf);
   }
-  const REGION_SEL = '.w-tab-pane, .card, .redbox, .rg-gallery-track';
+  const REGION_SEL = '.w-tab-pane, .card, .redbox, .rg-gallery-track, .bp-stack';
   function panes() { return [...document.querySelectorAll('.w-tab-pane')]; }
   function regions() { return [...document.querySelectorAll(REGION_SEL)]; }
   function inRegion(el) { return !!el.closest(REGION_SEL); }
@@ -99,7 +99,13 @@
     // 1. structural regions first (menu panes + themed cards)
     regions().forEach(el => { const k = key(el); if (H[k] != null) el.innerHTML = H[k]; });
     // 2. text leaves outside regions
-    textLeaves().forEach(el => { if (inRegion(el)) return; const k = key(el); if (T[k] != null) el.innerHTML = T[k]; });
+    textLeaves().forEach(el => {
+      if (inRegion(el)) return; const k = key(el);
+      if (T[k] == null) return;
+      el.innerHTML = T[k];
+      // tæmdur texti (t.d. Delete í ritlinum) á ekki að skilja eftir autt pláss á síðunni
+      if (!el.textContent.trim() && !el.querySelector('img,video,iframe')) el.style.setProperty('display', 'none', 'important');
+    });
     // 3. images outside regions
     document.querySelectorAll('img').forEach(img => {
       if (inRegion(img)) return; const k = key(img);
@@ -108,7 +114,7 @@
     // 3b. background-image overrides (elements not in a region)
     Object.keys(BG).forEach(k => { const el = elByKey(k); if (el && !inRegion(el)) el.style.backgroundImage = 'url("' + BG[k] + '")'; });
     // 5. hidden
-    Object.keys(HID).forEach(k => { if (HID[k]) { const el = elByKey(k); if (el) el.style.display = 'none'; } });
+    Object.keys(HID).forEach(k => { if (HID[k]) { const el = elByKey(k); if (el) el.style.setProperty('display', 'none', 'important'); } });
     // 6. útlitsstillingar úr ritlinum (leturstærð, jöfnun, litur, bil)
     const ST = g(content.style);
     Object.keys(ST).forEach(k => {

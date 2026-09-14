@@ -50,12 +50,15 @@
   .ginfo p{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(16px,1.4vw,23px);line-height:1.75;letter-spacing:.02em;margin:0 0 14px}
   .ginfo p:last-child{margin-bottom:0}
   .redcols{grid-template-columns:1fr !important;margin-top:20px !important}
-  .gbox2{border:3px solid var(--red);color:var(--red);text-align:center;padding:38px clamp(20px,3vw,52px) 46px;margin:26px 0 60px}
+  .gbox2{border:3px solid var(--red);color:var(--red);text-align:center;padding:38px clamp(20px,3vw,52px) 46px;margin:26px 0 26px}
   .gbox2 .gi{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(16px,1.4vw,23px);line-height:1.75;margin:0 0 14px}
   .gbox2 .gi:last-of-type{margin-bottom:0}
-  .gbox2 .divider{border-top:2px solid var(--red);opacity:.5;margin:36px auto 4px;max-width:340px}
-  .gbox2 .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(20px,1.8vw,29px);letter-spacing:.03em;margin:34px 0 12px}
-  .gbox2 .rd{font-family:'Montserrat',sans-serif;font-size:16.5px;line-height:1.8;margin:0}
+  .gmenu{border:3px solid var(--gr);color:var(--gr);text-align:center;padding:38px clamp(20px,3vw,52px) 46px;margin:0 0 60px}
+  .gmenu .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(20px,1.8vw,29px);letter-spacing:.03em;margin:34px 0 12px}
+  .gmenu .rn:first-child{margin-top:0}
+  .gmenu .rd{font-family:'Montserrat',sans-serif;font-size:16.5px;line-height:1.8;margin:0}
+  .valcols{display:grid;grid-template-columns:1fr 1fr;gap:0 50px;text-align:center}
+  @media(max-width:700px){.valcols{grid-template-columns:1fr;gap:0}}
   /* footer */
   .rg2-footer{background:var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:start}
   .rg2-logo{justify-self:center;display:flex;align-items:center}
@@ -134,12 +137,24 @@
       <p>Alla virka daga frá 11:30-16:00</p>
     </div>
     <div class="gbox2">
-      <p class="gi">Fyrir hópa sem telja fleiri en 10 gesti bjóðum við upp á smækkaðan matseðil.</p>
-      <p class="gi">Þetta er gert til þess að eldhúsið ráði við álagið og forðast langa bið eftir matnum. Allir gestir í hópnum velja sér þá einn af réttunum á hópaseðlinum hér að neðan.</p>
-      <p class="gi">Athugið að börn eldri en 6 ára teljast til fjölda gesta.</p>
-      <div class="divider"></div>
-      <p class="rn" style="margin-top:0">Hádegisseðillinn er væntanlegur</p>
-      <p class="rd">Við erum að leggja lokahönd á hópaseðil fyrir hádegið. Þangað til bendum við á Bröns- og Kvöldseðlana — eða hafið samband í síma 546 1700 og við finnum lausn fyrir ykkar hóp.</p>
+      <p class="gi">Fyrir hópa sem telja fleiri en 10 gesti bjóðum við upp á tvenna valkosti</p>
+      <p class="gi">Einnig er hægt að panta kvöld-valkostina í hádeginu</p>
+      <p class="gi">Athugið að börn eldri en 12 ára teljast til fjölda gesta.</p>
+    </div>
+    <div class="gmenu">
+      <div class="valcols">
+        <div class="valcol">
+          <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:0;border-bottom:2px solid var(--gr);display:inline-block;padding-bottom:6px">Valkostur 1 · 2.990 kr.</p>
+          <div><p class="rn">Focaccia samloka</p><p class="rd">Eldbökuð focaccia samloka með klettasalati, burrata stracciatella, pistasíu pestói, tómötum, rauðlauk og blönduðum ólífum</p></div>
+          <div><p class="rn">Tómat-basil súpa</p><p class="rd">Rjómalöguð tómat-basil súpa</p></div>
+        </div>
+        <div class="valcol">
+          <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:0;border-bottom:2px solid var(--gr);display:inline-block;padding-bottom:6px">Valkostur 2 · 4.990 kr.</p>
+          <div><p class="rn">Forréttur</p><p class="rd">Rjómalöguð tómat-basil súpa</p></div>
+          <div><p class="rn">Aðalréttur að eigin vali</p><p class="rd">Mascarpone kjötbollur / Ráðagerðis Bacalao / Trufflu pasta</p></div>
+          <div><p class="rn">Kaffi eða te</p><p class="rd">Uppáhellt kaffi eða te eftir matinn</p></div>
+        </div>
+      </div>
     </div>
   </div>
 

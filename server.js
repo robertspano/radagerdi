@@ -354,7 +354,11 @@ function verifyPassword(pw) {
 }
 function sessionToken() {
   const a = readJSON(AUTH_FILE, {});
-  return crypto.createHmac('sha256', a.hash || 'x').update('cms-authed-v1').digest('hex');
+  // Leyndarmál þjónsins (umhverfisbreyta, aldrei á disk) er hluti af lyklinum: þótt lykilorðs-hashið
+  // í auth.json kæmist út er ekki hægt að búa til gilda innskráningarköku úr því einu.
+  // v2 ógildir allar kökur sem kynnu að hafa verið falsaðar á meðan auth.json var aðgengileg.
+  const secret = process.env.SESSION_SECRET || DATA_KEY || '';
+  return crypto.createHmac('sha256', secret + ':' + (a.hash || 'x')).update('cms-authed-v2').digest('hex');
 }
 function isAuthed(req) {
   const cookie = (req.headers.cookie || '');
@@ -395,12 +399,23 @@ function readBody(req, limitMB = 25) {
 }
 
 // ---------- static file serving (with range for media) ----------
+// Aðeins opinberar skrár eru afhentar. Allt annað í möppunni — gögn (content/), lykilorðsskrá,
+// gjafabréf, bakendakóði, stillingar og faldar skrár — skilar 404, jafnvel þótt skráin sé til.
+const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'llms.txt', 'sitemap.xml', 'favicon.ico']);
+const PUBLIC_DIRS = ['assets/', 'fonts/', 'css/', 'js/', 'cms/vendor/', 'cms/pass-assets/'];
+const PUBLIC_CMS_FILES = new Set(['cms/admin.html', 'cms/skann.html', 'cms/wallet.html', 'cms/cms-inject.js', 'cms/cms-editor.js', 'cms/cms-editor.css']);
+function isPublicPath(rel) {
+  if (!rel || rel.split('/').some(seg => seg === '' || seg.startsWith('.'))) return false;
+  if (!rel.includes('/')) return rel.endsWith('.html') || PUBLIC_ROOT_FILES.has(rel);
+  return PUBLIC_DIRS.some(d => rel.startsWith(d)) || PUBLIC_CMS_FILES.has(rel);
+}
 function serveStatic(req, res, urlPath) {
-  let rel = decodeURIComponent(urlPath.split('?')[0]);
+  let rel;
+  try { rel = decodeURIComponent(urlPath.split('?')[0]); } catch { return send(res, 400, 'Bad request'); }
   if (rel === '/' || rel === '') rel = '/index.html';
-  // prevent path traversal
   const full = path.normalize(path.join(ROOT, rel));
-  if (!full.startsWith(ROOT)) return send(res, 403, 'Forbidden');
+  if (!full.startsWith(ROOT + path.sep)) return send(res, 404, 'Not found');   // engin leið út fyrir möppuna
+  if (!isPublicPath(path.relative(ROOT, full).split(path.sep).join('/'))) return send(res, 404, 'Not found');
   serveFile(req, res, full);
 }
 

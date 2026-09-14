@@ -109,12 +109,23 @@
   .rg-menu a:hover{text-decoration:underline}
   .rg-menu .sep{width:44px;border-top:2px solid rgba(255,255,255,.7);margin:6px 0}
   .rg-close{position:absolute;top:20px;right:24px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
-  .rg-gallery{overflow:hidden;margin:70px 0 44px}
-  .rg-gallery-track{display:flex;gap:16px;width:max-content;animation:rg-scroll 44s linear infinite}
-  .rg-gallery:hover .rg-gallery-track{animation-play-state:paused}
-  .rg-gallery-track img{height:230px;width:auto;border-radius:20px;object-fit:cover;flex-shrink:0;display:block}
-  @keyframes rg-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-  @media(max-width:700px){.rg-gallery-track img{height:150px}}
+  /* Bröns: myndir sitthvoru megin við seðilinn — breytanlegar í CMS (bæta við / eyða / raða) */
+  .bp-stack img{display:block;width:100%;object-fit:cover}
+  @media(min-width:1200px){
+    .cols{max-width:none;grid-template-columns:minmax(0,1fr) minmax(0,820px) minmax(0,1fr);column-gap:clamp(22px,2.2vw,42px)}
+    .cols > .col{grid-column:2;grid-row:1}
+    .bp-side{grid-row:1;align-self:stretch;min-width:0}
+    .bp-left{grid-column:1}
+    .bp-right{grid-column:3}
+    /* límist við skjáinn á meðan skrunað er niður langan seðil; myndirnar deila hæðinni jafnt, sama hve margar */
+    .bp-stack{position:sticky;top:24px;display:flex;flex-direction:column;gap:22px;height:min(calc(100vh - 48px),940px);max-width:420px}
+    .bp-left .bp-stack{margin-left:auto}
+    .bp-stack img{flex:1 1 0;min-height:0;height:0;border-radius:26px}
+  }
+  @media(max-width:1199px){
+    .bp-stack{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .bp-stack img{aspect-ratio:1;border-radius:18px}
+  }
   .menu-group-toggle{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;width:100%}
   .menu-group-toggle::after{content:"\25BE";font-size:.55em;transition:transform .18s}
   .menu-group-toggle.open::after{transform:rotate(180deg)}
@@ -182,10 +193,11 @@
             <p class="ti-desc">Avókadó, Tómat salsa og hleypt egg, toppað með pistasíupestói</p></div>
         </div>
       </div>
+      <div class="bp-side bp-left"><div class="bp-stack" data-cms-gallery="Myndir vinstra megin"><img src="assets/brons/brons-vafla-beikon.jpg" alt="Vaffla með beikoni og spældu eggi" loading="lazy"/><img src="assets/brons/brons-lax.jpg" alt="Reyktur lax og hleypt egg á ristuðu brauði" loading="lazy"/></div></div>
+      <div class="bp-side bp-right"><div class="bp-stack" data-cms-gallery="Myndir hægra megin"><img src="assets/brons/brons-shakshuka.jpg" alt="Shakshuka með spældum eggjum og eldbökuðu brauði" loading="lazy"/><img src="assets/brons/brons-berjavaffla.jpg" alt="Vaffla með ferskum berjum og vanilluís" loading="lazy"/></div></div>
     </div>
   </div>
 
-  <div class="rg-gallery"><div class="rg-gallery-track"><img src="assets/insta/insta-01.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-02.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-03.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-04.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-05.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-06.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-07.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-08.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-09.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-10.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-01.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-02.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-03.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-04.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-05.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-06.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-07.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-08.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-09.jpg" alt="" loading="lazy"/><img src="assets/insta/insta-10.jpg" alt="" loading="lazy"/></div></div>
 
   <footer class="rg2-footer">
     <div>

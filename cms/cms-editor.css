@@ -208,3 +208,12 @@ body.cms-on .gal-grid figure { position: relative; }
 body.cms-resizing, body.cms-resizing * { cursor: ns-resize !important; user-select: none !important; }
 .cms-status.error{background:rgba(255,48,49,.18);color:#ff8f90}
 .cms-status.error::before{background:#ff3031}
+
+/* ===== myndadálkar (bröns) + kassaval ===== */
+.cms-stylebar [hidden] { display: none !important; }
+.bp-stack .cms-galbtn { top: 10px; right: 10px; }
+.bp-stack:hover .cms-galbtn { opacity: 1; }
+body.cms-on .bp-stack:not(:has(img)) { min-height: 140px; outline: 2px dashed rgba(27,124,56,.5); outline-offset: -2px; border-radius: 18px; }
+@media (max-width: 1199px) { body.cms-on .bp-stack { position: relative; } }
+@media (min-width: 1200px) { body.cms-on .bp-stack { top: 76px; height: min(calc(100vh - 100px), 940px); } }
+.cms-sbdel:hover { background: #c0281e !important; color: #fff; }

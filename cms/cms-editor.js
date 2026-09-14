@@ -114,6 +114,10 @@
     else if (type === 'images') { content.images[PAGE][key] = value; if (el) { el.src = value; el.removeAttribute('srcset'); el.removeAttribute('sizes'); } }
     else if (type === 'bg') { content.bg[PAGE][key] = value; if (el) el.style.backgroundImage = 'url("' + value + '")'; }
     else if (type === 'order') { content.order[PAGE].__tabs__ = value; liveReorderTabs(value); }
+    else if (type === 'hidden') {
+      if (value) { content.hidden[PAGE][key] = true; if (el) el.style.setProperty('display', 'none', 'important'); }
+      else { delete content.hidden[PAGE][key]; if (el) el.style.removeProperty('display'); }
+    }
     else if (type === 'style') {
       const obj = JSON.parse(value || '{}');
       const old = content.style[PAGE][key] || {};
@@ -265,6 +269,13 @@
     const leaf = activeEl; activeEl = null;
     leaf.removeEventListener('blur', onBlur); leaf.removeEventListener('keydown', onKey);
     leaf.removeAttribute('contenteditable'); leaf.classList.remove('cms-active');
+    // Texti tæmdur með Delete/Backspace: eyða einingunni svo það sem er fyrir neðan færist upp.
+    // Upprunalegi textinn er settur aftur fyrst svo „Afturkalla" sýni hann en ekki tóma línu.
+    if (!leaf.textContent.trim() && !leaf.querySelector('img,video,iframe')) {
+      leaf.innerHTML = activeOrig;
+      deleteBlock(leaf);
+      return;
+    }
     const html = leaf.innerHTML;
     if (html !== activeOrig) {
       if (!saveContext(leaf)) { // non-menu text leaf → text override (pane text is recorded by savePane)
@@ -275,6 +286,37 @@
         markDirty();
       }
     }
+  }
+
+  // ---------- eyða einingu (texta eða kassa) ----------
+  // Inni í svæði (matseðlakort o.fl.) er einingin fjarlægð og svæðið vistað í heild — það sem er
+  // fyrir neðan færist upp. Utan svæða er hún falin í staðinn: ef hún væri fjarlægð hliðruðust
+  // staðsetningarlyklar allra eininga fyrir neðan og vistaðar breytingar lentu á röngum stað.
+  function hasOtherContent(parent, except) {
+    return [...parent.childNodes].some(n => {
+      if (n === except) return false;
+      if (n.nodeType === 3) return !!n.textContent.trim();
+      if (n.nodeType !== 1 || n.hasAttribute('data-cms-ctl')) return false;
+      return !!n.textContent.trim() || /^(IMG|VIDEO|IFRAME|HR)$/.test(n.tagName) || !!n.querySelector('img,video,iframe,hr');
+    });
+  }
+  function deleteBlock(node) {
+    if (!node || node === document.body) return;
+    hideStyleBar(); deselectBox();
+    const region = node.closest(CMS.REGION_SEL || '.w-tab-pane');
+    if (region && region !== node) {
+      let target = node;                    // tómur umbúðar-<div> utan um réttinn fer með
+      while (target.parentElement && target.parentElement !== region && !hasOtherContent(target.parentElement, target)) target = target.parentElement;
+      target.remove();
+      savePane(region);
+    } else {
+      const key = CMS.key(node);
+      node.style.setProperty('display', 'none', 'important');
+      content.hidden[PAGE][key] = true;
+      pushRecord('hidden', key, false, true);
+      markDirty();
+    }
+    toast('Eytt · „Afturkalla" setur það aftur');
   }
 
   // ---------- image editing ----------
@@ -537,6 +579,17 @@
       bar.appendChild(b);
     });
     bar.appendChild(el('span', 'cms-sbsep'));
+    // Þegar kassi er þéttur er ekkert autt svæði eftir til að smella á — þessi hnappur velur hann samt
+    const boxBtn = sBtn('⬚ Allur kassinn', 'Velja allan kassann utan um þennan texta (t.d. til að miðja allt í einu)', () => {
+      const box = styleTarget && styleTarget.closest(BOX_SEL);
+      if (!box) return;
+      hideStyleBar(); selectBox(box);
+    });
+    bar.appendChild(boxBtn); bar._boxBtn = boxBtn;
+    bar.appendChild(sBtn('🗑', 'Eyða þessum texta — það sem er fyrir neðan færist upp', () => {
+      const t = styleTarget; if (t) deleteBlock(t);
+    }, 'cms-sbdel'));
+    bar.appendChild(el('span', 'cms-sbsep'));
     bar.appendChild(sBtn('↺', 'Núllstilla útlit', () => {
       if (!styleTarget) return;
       if (styleInHtml(styleTarget)) {
@@ -580,6 +633,7 @@
   function showStyleBar(target) {
     if (!styleBar) styleBar = buildStyleBar();
     styleTarget = target;
+    if (styleBar._boxBtn) styleBar._boxBtn.hidden = !(target.closest && target.closest(BOX_SEL));
     styleBar.classList.add('show');
     positionStyleBar();
   }
@@ -639,6 +693,11 @@
     bar.setAttribute('data-cms-ctl', '1');
     bar.addEventListener('mousedown', (e) => e.stopPropagation());
     bar.appendChild(el('span', 'cms-sblabel', 'Kassi'));
+    const upBtn = sBtn('⬆ Ytri kassi', 'Velja kassann utan um þennan', () => {
+      const up = boxSel && boxSel.parentElement && boxSel.parentElement.closest(BOX_SEL);
+      if (up) selectBox(up);
+    });
+    bar.appendChild(upBtn); bar._upBtn = upBtn;
     bar.appendChild(el('span', 'cms-sbsep'));
     bar.appendChild(sBtn('↕−', 'Þynnri kassi', () => { if (boxSel) thinner(boxSel, -16); }));
     const h = el('span', 'cms-sbsize', ''); bar.appendChild(h);
@@ -649,8 +708,17 @@
       const t = padOf(boxSel, 'top'), b = padOf(boxSel, 'bottom'), mid = Math.round((t + b) / 2);
       setPad(boxSel, mid, mid);                       // jafnt bil fyrir ofan og neðan = lóðrétt miðjað
     }));
-    bar.appendChild(sBtn('⬌', 'Miðja efnið lárétt', () => {
+    bar.appendChild(sBtn('⬌', 'Miðja allt efnið í kassanum lárétt', () => {
       if (!boxSel) return;
+      // „Miðja allt“: línur sem voru jafnaðar sér (vinstri/hægri) í ritlinum fylgja nú kassanum.
+      // Aðeins !important-jöfnun er fjarlægð — það er sú sem ritillinn setur, ekki upprunalegt útlit síðunnar.
+      const inner = [...boxSel.querySelectorAll('*')].filter(n => n.style && n.style.getPropertyPriority('text-align') === 'important');
+      let regionTouched = null;
+      inner.forEach(n => {
+        if (styleInHtml(n)) { n.style.removeProperty('text-align'); regionTouched = regionTouched || n; }
+        else setStyleProp(n, 'text-align', null);
+      });
+      if (regionTouched) saveContext(regionTouched);
       setStyleProp(boxSel, 'text-align', 'center');
       setStyleProp(boxSel, 'margin-left', 'auto');
       setStyleProp(boxSel, 'margin-right', 'auto');
@@ -671,6 +739,10 @@
       if (content.style[PAGE][key] && !Object.keys(content.style[PAGE][key]).length) delete content.style[PAGE][key];
       pushRecord('style', key, before, JSON.stringify(content.style[PAGE][key] || {}));
       markDirty(); positionBoxUI();
+    }));
+    bar.appendChild(el('span', 'cms-sbsep'));
+    bar.appendChild(sBtn('🗑', 'Eyða öllum kassanum — það sem er fyrir neðan færist upp', () => {
+      if (boxSel && confirm('Eyða öllum þessum kassa?\n\nÞað sem er fyrir neðan færist upp. „Afturkalla" setur hann aftur.')) deleteBlock(boxSel);
     }, 'cms-sbreset'));
     bar._h = h;
     document.body.appendChild(bar);
@@ -728,6 +800,7 @@
     boxSel = target;
     target.classList.add('cms-boxsel');
     if (!boxBar) boxBar = buildBoxBar();
+    boxBar._upBtn.hidden = !(target.parentElement && target.parentElement.closest(BOX_SEL));
     if (!boxHandle) boxHandle = buildBoxHandle();
     boxBar.classList.add('show'); boxHandle.classList.add('show');
     positionBoxUI();
@@ -743,7 +816,10 @@
 
   // ================= MYNDASÝNING (færiband) =================
   // Smellur á færibandið opnar spjald: bæta við, eyða, raða.
-  function galleryTracks() { return [...document.querySelectorAll('.rg-gallery-track')]; }
+  // Færibandið neðst á síðum (tvítekið fyrir hringrás) og myndadálkar, t.d. sitthvoru megin við bröns-seðilinn.
+  const GALLERY_SEL = '.rg-gallery-track, .bp-stack';
+  const isLoopTrack = (t) => t.classList.contains('rg-gallery-track');
+  function galleryTracks() { return [...document.querySelectorAll(GALLERY_SEL)]; }
 
   function uniqueImgs(track) {
     // færibandið tvítekur myndirnar fyrir óendanlega hringrás — sýnum bara einstöku
@@ -755,13 +831,17 @@
     return out;
   }
   function writeTrack(track, srcs) {
-    const half = srcs.map(s => '<img src="' + s + '" alt="" loading="lazy">').join('');
-    track.innerHTML = half + half;                  // tvítaka fyrir samfellda hringrás
+    const alts = {};                                // halda lýsingartextum mynda sem eru áfram
+    track.querySelectorAll('img').forEach(im => { if (im.alt) alts[im.getAttribute('src')] = im.alt; });
+    const esc = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    const html = srcs.map(s => '<img src="' + esc(s) + '" alt="' + esc(alts[s] || '') + '" loading="lazy">').join('');
+    track.innerHTML = isLoopTrack(track) ? html + html : html;   // færibandið tvítekur fyrir samfellda hringrás
     savePane(track);
+    ensureGalBtn(track);                            // innerHTML þurrkaði hnappinn út úr dálkinum
   }
 
   function openGalleryPanel(track) {
-    const panel = makePanel('Myndasýning', 'Dragðu til að raða · ✕ eyðir mynd · „Bæta við" hleður inn nýjum.');
+    const panel = makePanel(track.getAttribute('data-cms-gallery') || 'Myndasýning', 'Dragðu til að raða · ✕ eyðir mynd · „Bæta við" hleður inn nýjum.');
     const grid = el('div', 'cms-gwrap');
     let srcs = uniqueImgs(track);
 
@@ -810,24 +890,28 @@
     panel.body.appendChild(drop);
 
     panel.foot.appendChild(btn('Hætta við', '', () => closePanel(panel)));
-    panel.foot.appendChild(btn('Vista myndasýningu', 'cms-primary', () => {
-      writeTrack(track, srcs); closePanel(panel); toast('Myndasýning uppfærð');
+    const loop = isLoopTrack(track);
+    panel.foot.appendChild(btn(loop ? 'Vista myndasýningu' : 'Vista myndir', 'cms-primary', () => {
+      writeTrack(track, srcs); closePanel(panel); toast(loop ? 'Myndasýning uppfærð' : 'Myndir uppfærðar');
     }));
   }
 
-  function decorateGalleryStrips() {
-    galleryTracks().forEach(track => {
-      const wrap = track.parentElement;
-      if (!wrap || wrap._cmsGal) return;
-      wrap._cmsGal = true;
-      if (track._cmsBase === undefined) track._cmsBase = paneClean(track);
-      wrap.style.position = wrap.style.position || 'relative';
-      const b = el('button', 'cms-galbtn', '🖼 Breyta myndasýningu');
-      b.type = 'button'; b.setAttribute('data-cms-ctl', '1');
-      b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); openGalleryPanel(track); };
-      wrap.appendChild(b);
-    });
+  function ensureGalBtn(track) {
+    const loop = isLoopTrack(track);
+    // Myndadálkarnir límast við skjáinn (sticky) — hnappurinn fer inn í dálkinn svo hann fylgi með.
+    // paneClean fjarlægir [data-cms-ctl] svo hnappurinn vistast aldrei með myndunum.
+    const host = loop ? track.parentElement : track;
+    if (!host) return;
+    if (track._cmsBase === undefined) track._cmsBase = paneClean(track);
+    if (track._cmsGalBtn && host.contains(track._cmsGalBtn)) return;
+    if (loop) host.style.position = host.style.position || 'relative';
+    const b = el('button', 'cms-galbtn', loop ? '🖼 Breyta myndasýningu' : '🖼 Breyta myndum');
+    b.type = 'button'; b.setAttribute('data-cms-ctl', '1');
+    b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); openGalleryPanel(track); };
+    host.appendChild(b);
+    track._cmsGalBtn = b;
   }
+  function decorateGalleryStrips() { galleryTracks().forEach(ensureGalBtn); }
 
   // ---------- menu item controls (old tab panes + new themed cards) ----------
   function menuLists() {
