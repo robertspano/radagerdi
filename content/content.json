@@ -246,6 +246,9 @@
       "DIV1>DIV2": {
         "padding-top": "0px",
         "padding-bottom": "0px"
+      },
+      "DIV1>DIV2>P2": {
+        "color": "#F0392F"
       }
     },
     "barnamatsedill.html": {
