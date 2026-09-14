@@ -274,6 +274,10 @@
       },
       "DIV1>DIV0>DIV1>P0": {
         "font-weight": "400"
+      },
+      "DIV1>DIV0>DIV1": {
+        "padding-top": "18px",
+        "padding-bottom": "22px"
       }
     },
     "hafa-samband.html": {
