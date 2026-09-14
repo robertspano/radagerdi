@@ -11,7 +11,7 @@
 <link rel="icon" href="/assets/63bddf55571e7c33b03fb181_radagerdi-32x32 v2.png">
 <script src="/cms/vendor/qrcode.js"></script>
 <style>
-  :root{--green:#629F67;--green-d:#4d7d52;--red:#FF3031;--ink:#1a1b1f;--cream:#f4f1ea}
+  :root{--green:#629F67;--green-d:#4d7d52;--red:#ff3132;--ink:#1a1b1f;--cream:#f4f1ea}
   *{box-sizing:border-box}
   body{margin:0;min-height:100vh;background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);
     display:flex;flex-direction:column;align-items:center;padding:22px 16px 40px}
@@ -80,9 +80,12 @@
   const kr = n => new Intl.NumberFormat('is-IS').format(n) + ' kr.';
   const dt = s => { const d = new Date(s); return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear(); };
 
-  function renderQR() {
+  async function renderQR() {
+    // QR-kóðinn vísar á aðallénið (radagerdi.is) þegar það er komið í loftið, óháð slóðinni sem opnaði síðuna
+    let origin = location.origin;
+    try { const s = await (await fetch('/api/session', { cache: 'no-store' })).json(); if (s && s.publicOrigin) origin = s.publicOrigin; } catch (e) { }
     const qr = qrcode(0, 'M');
-    qr.addData(location.origin + '/gjafabref/' + id);
+    qr.addData(origin + '/gjafabref/' + id);
     qr.make();
     document.getElementById('qr').innerHTML = qr.createImgTag(6, 4);
   }

@@ -322,6 +322,16 @@ for (const sig of ['SIGTERM', 'SIGINT']) {
     process.exit(0);
   });
 }
+// Óvænt villa: skrá hana, klára GitHub-speglunina (annars týnast óvistaðar CMS-breytingar) og hætta
+// svo — Render ræsir þjóninn aftur. Án þessa dó ferlið strax og biðröðin með.
+process.on('uncaughtException', async (err, origin) => {
+  console.error('  ✖  Óvænt villa (' + origin + '):', err);
+  if (ghExiting) return;
+  ghExiting = true;
+  clearTimeout(ghTimer);
+  if (GH_ON && (ghDirty.size || ghBusy)) { try { await ghDrain(20000); } catch {} }
+  process.exit(1);
+});
 
 // ---------- storage helpers ----------
 function ensure() {
@@ -352,12 +362,18 @@ function verifyPassword(pw) {
   const h = crypto.scryptSync(String(pw), a.salt, 32).toString('hex');
   return crypto.timingSafeEqual(Buffer.from(h), Buffer.from(a.hash));
 }
+// Án SESSION_SECRET/DATA_KEY/GH_TOKEN væri kakan reiknanleg út frá hashinu einu — þá er notaður
+// handahófskenndur lykill sem lifir aðeins þessa keyrslu (innskráning týnist við endurræsingu).
+const SESSION_KEY = process.env.SESSION_SECRET || DATA_KEY || (() => {
+  console.error('  ⚠  SESSION_SECRET (eða DATA_KEY/GH_TOKEN) vantar — innskráningar gilda aðeins þar til þjónninn endurræsist');
+  return crypto.randomBytes(32).toString('hex');
+})();
 function sessionToken() {
   const a = readJSON(AUTH_FILE, {});
   // Leyndarmál þjónsins (umhverfisbreyta, aldrei á disk) er hluti af lyklinum: þótt lykilorðs-hashið
   // í auth.json kæmist út er ekki hægt að búa til gilda innskráningarköku úr því einu.
   // v2 ógildir allar kökur sem kynnu að hafa verið falsaðar á meðan auth.json var aðgengileg.
-  const secret = process.env.SESSION_SECRET || DATA_KEY || '';
+  const secret = SESSION_KEY;
   return crypto.createHmac('sha256', secret + ':' + (a.hash || 'x')).update('cms-authed-v2').digest('hex');
 }
 function isAuthed(req) {
@@ -381,6 +397,7 @@ const MIME = {
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp',
   '.gif': 'image/gif', '.ico': 'image/x-icon', '.mp4': 'video/mp4', '.webm': 'video/webm',
   '.otf': 'font/otf', '.ttf': 'font/ttf', '.woff': 'font/woff', '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml; charset=utf-8',
 };
 function send(res, code, body, headers = {}) {
   res.writeHead(code, Object.assign({ 'Cache-Control': 'no-cache' }, headers));
@@ -396,6 +413,179 @@ function readBody(req, limitMB = 25) {
     req.on('end', () => resolve(Buffer.concat(chunks)));
     req.on('error', reject);
   });
+}
+
+// ---------- aðallén (canonical host) ----------
+// Vefurinn á að heita CANONICAL_ORIGIN (https://radagerdi.is). Önnur lén (www, radagerdi.onrender.com)
+// fá 301 þangað — en AÐEINS eftir að staðfest er að lénið vísi í raun á ÞENNAN þjón: við sækjum
+// CANONICAL_ORIGIN/api/ping og berum saman auðkenni sem verður til af handahófi við hverja ræsingu.
+// Á meðan radagerdi.is vísar enn á gamla Webflow-vefinn svarar pingið ekki með okkar auðkenni,
+// svo ekkert breytist fyrr en DNS og TLS-skírteinið eru komin í lag.
+const CANONICAL_ORIGIN = (process.env.CANONICAL_ORIGIN || 'https://radagerdi.is').trim().replace(/\/+$/, '');
+const CANONICAL = (() => { try { const u = new URL(CANONICAL_ORIGIN); return { host: u.host.toLowerCase(), protocol: u.protocol }; } catch { return null; } })();
+const INSTANCE_ID = crypto.randomBytes(16).toString('hex');
+const BOOT_TIME = Date.now();
+let canonicalLive = false;      // satt þegar CANONICAL_ORIGIN/api/ping svarar frá þessum þjóni
+let canonicalFails = 0;
+let canonicalChecked = false;
+
+async function checkCanonical() {
+  let live = false, why = '';
+  try {
+    const r = await fetch(CANONICAL_ORIGIN + '/api/ping', {
+      redirect: 'manual', signal: AbortSignal.timeout(6000),
+      headers: { 'Cache-Control': 'no-cache', 'User-Agent': 'radagerdi-canonical-check' },
+    });
+    if (r.status === 200) {
+      const j = await r.json().catch(() => null);
+      live = !!(j && j.id === INSTANCE_ID);
+      if (!live) why = 'annar þjónn svarar';
+    } else {
+      why = 'HTTP ' + r.status;
+      try { if (r.body) await r.body.cancel(); } catch { }
+    }
+  } catch (e) {
+    why = e && e.name === 'TimeoutError' ? 'ekkert svar innan 6 sek.' : String((e && (e.cause && e.cause.code || e.message)) || e);
+  }
+  if (live) {
+    canonicalFails = 0;
+    if (!canonicalLive) {
+      canonicalLive = true;
+      console.log('  ✓  AÐALLÉN VIRKT: ' + CANONICAL_ORIGIN + ' vísar á þennan þjón — önnur lén fá nú 301 þangað');
+    }
+  } else if (canonicalLive) {
+    // eitt stakt feilskot (t.d. netbilun) slekkur ekki á beiningunum — tvö í röð þarf
+    if (++canonicalFails >= 2) {
+      canonicalLive = false;
+      console.warn('  ⚠  AÐALLÉN ÓVIRKT: ' + CANONICAL_ORIGIN + ' svarar ekki lengur frá þessum þjóni (' + why + ') — lénabeiningum hætt');
+    }
+  } else if (!canonicalChecked) {
+    console.log('  ⓘ  ' + CANONICAL_ORIGIN + ' vísar ekki (enn) á þennan þjón (' + why + ') — engum lénum beint');
+  }
+  canonicalChecked = true;
+}
+
+function startCanonicalWatch() {
+  if (!CANONICAL) { console.warn('  ⚠  CANONICAL_ORIGIN er ógild slóð — lénabeiningar óvirkar'); return; }
+  const run = async () => {
+    try { await checkCanonical(); } catch { }
+    let next = 5 * 60 * 1000;
+    if (canonicalLive && canonicalFails) next = 30 * 1000;            // staðfesta feilskot fljótt
+    // Fyrst eftir útgáfu svarar gamli þjónninn pinginu í smá stund — athugum þá oftar.
+    else if (!canonicalLive && Date.now() - BOOT_TIME < 10 * 60 * 1000) next = 60 * 1000;
+    const t = setTimeout(run, next);
+    if (t.unref) t.unref();
+  };
+  run();
+}
+
+// Hýsilhaus → { host (með porti ef ekki sjálfgefið), hostname } — eða null ef hann er ekki gildur
+function parseHost(raw) {
+  const h = String(raw || '').trim();
+  if (!h || /[\s/\\@?#]/.test(h)) return null;
+  try {
+    const u = new URL((CANONICAL ? CANONICAL.protocol : 'https:') + '//' + h);
+    const hostname = u.hostname.toLowerCase().replace(/\.$/, '');
+    return { host: hostname + (u.port ? ':' + u.port : ''), hostname };
+  } catch { return null; }
+}
+// localhost, IP-tölur og nöfn án punkts eru innri köll (t.d. heilsuathugun Render) — aldrei beint
+function isInternalHostname(n) {
+  return !n || n === 'localhost' || n.endsWith('.localhost') || !n.includes('.') || n.startsWith('[') || /^\d{1,3}(\.\d{1,3}){3}$/.test(n);
+}
+function onWrongHost(req) {
+  if (!canonicalLive || !CANONICAL) return false;
+  const h = parseHost(req.headers.host);
+  return !!h && h.host !== CANONICAL.host && !isInternalHostname(h.hostname);
+}
+
+// ---------- gamlar Webflow-slóðir → nýju .html-síðurnar (301, eitt stökk) ----------
+// Aldrei þjóna gömlu slóðunum beint: síðu-auðkenni CMS-ins er síðasti hluti slóðarinnar,
+// svo breytingar eigandans fylgja aðeins .html-skránum.
+const IS_MENU_TABS = {
+  'tab-matsedill-is': '/matsedlar.html', 'tab-menu-is': '/matsedlar.html',
+  'tab-brons-is': '/brons.html', 'tab-brunch-is': '/brons.html',
+  'tab-takeaway-is': '/takeaway.html',
+  'tab-hopar-is': '/hopar.html', 'tab-groups-is': '/hopar.html',
+};
+const EN_MENU_TABS = {
+  'tab-menu-en': '/en-matsedlar.html', 'tab-brunch-en': '/en-brons.html',
+  'tab-takeaway-en': '/en-takeaway.html', 'tab-groups-en': '/en-hopar.html',
+};
+const LEGACY_REDIRECTS = new Map([
+  ['/matsedill', { to: '/matsedlar.html', tabs: IS_MENU_TABS }],
+  ['/is/matsedill', { to: '/matsedlar.html', tabs: IS_MENU_TABS }],
+  ['/matsedill.html', { to: '/matsedlar.html', tabs: IS_MENU_TABS }],
+  ['/en/menu', { to: '/en-matsedlar.html', tabs: EN_MENU_TABS }],
+  ['/en-menu.html', { to: '/en-matsedlar.html', tabs: EN_MENU_TABS }],
+  ['/en', { to: '/en.html' }],
+  ['/en/radagerdi', { to: '/en.html' }],
+  ['/en-radagerdi.html', { to: '/en.html' }],
+  ['/um-okkur', { to: '/um-okkur.html' }],
+  ['/hafa-samband', { to: '/hafa-samband.html' }],
+  ['/en/about-us', { to: '/en-about-us.html' }],
+  ['/en/contact-us', { to: '/en-contact-us.html' }],
+  ['/en/seltjarnarnes-iceland-travel-guide', { to: '/en-seltjarnarnes-iceland-travel-guide.html' }],
+  ['/jolasedill', { to: '/matsedlar.html' }],
+  ['/inactive/jolasedill', { to: '/matsedlar.html' }],
+]);
+// ?tab= er Webflow-leifar: fellt burt eftir vörpun, aðrir fyrirspurnarliðir (t.d. utm_*) haldast óbreyttir
+function queryWithoutTab(search) {
+  if (!search || search.length < 2) return '';
+  const kept = search.slice(1).split('&').filter(kv => {
+    if (!kv) return false;
+    let k = kv.split('=')[0];
+    try { k = decodeURIComponent(k.replace(/\+/g, ' ')); } catch { }
+    return k !== 'tab';
+  });
+  return kept.length ? '?' + kept.join('&') : '';
+}
+// → { gone: true } fyrir /post/* (410), { to: '/x.html?…' } fyrir 301, annars null
+function legacyTarget(url) {
+  const p = url.pathname.length > 1 ? (url.pathname.replace(/\/+$/, '') || '/') : url.pathname;
+  if (p.startsWith('/post/')) return { gone: true };
+  const r = LEGACY_REDIRECTS.get(p);
+  if (r) {
+    const tab = url.searchParams.get('tab');
+    const to = r.tabs && tab && Object.prototype.hasOwnProperty.call(r.tabs, tab) ? r.tabs[tab] : r.to;
+    return { to: to + queryWithoutTab(url.search) };
+  }
+  // /index.html er sama síða og / (sama síðu-auðkenni í CMS) — kanóníska slóðin er /, fyrirspurn (t.d. ?cms=1) helst
+  if (p === '/index.html') return { to: '/' + url.search };
+  // /brons.html/ → /brons.html — .html-síða er aldrei afhent með skástriki aftan við
+  if (p !== url.pathname && /^\/[^/]+\.html$/.test(p) && isPublicPath(p.slice(1)) && fs.existsSync(path.join(ROOT, p.slice(1)))) {
+    return { to: p + url.search };
+  }
+  return null;
+}
+function redirect(res, location) {
+  res.writeHead(301, { Location: location, 'Cache-Control': 'public, max-age=3600', 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('Moved Permanently: ' + location);
+}
+
+// ---------- villusíða (404 / 410) ----------
+// Lesin beint af diski — cms/404.html er ekki á lista yfir opinberar skrár.
+const ERROR_PAGE_FILE = path.join(ROOT, 'cms', '404.html');
+let errorPageBuf;
+function sendErrorPage(res, code) {
+  if (errorPageBuf === undefined) { try { errorPageBuf = fs.readFileSync(ERROR_PAGE_FILE); } catch { errorPageBuf = null; } }
+  if (!errorPageBuf) return send(res, code, code === 410 ? 'Gone' : 'Not found', { 'Content-Type': 'text/plain; charset=utf-8' });
+  return send(res, code, errorPageBuf, { 'Content-Type': 'text/html; charset=utf-8', 'Content-Length': errorPageBuf.length });
+}
+// Síðubeiðnir (GET/HEAD á slóð án endingar, .html, eða vafri sem biður um HTML) fá merktu síðuna;
+// týndar myndir, skriftur o.þ.h. fá stutt textasvar.
+function notFound(req, res, urlPath) {
+  const ext = path.extname(String(urlPath || '')).toLowerCase();
+  const isPage = (req.method === 'GET' || req.method === 'HEAD') &&
+    (!ext || ext === '.html' || ext === '.htm' || /\btext\/html\b/.test(req.headers.accept || ''));
+  if (isPage) return sendErrorPage(res, 404);
+  return send(res, 404, 'Not found', { 'Content-Type': 'text/plain; charset=utf-8' });
+}
+
+// Síður sem leitarvélar mega aldrei skrá, óháð léni
+function isPrivatePagePath(p) {
+  return p === '/admin' || p === '/admin/' || p === '/skann' || p === '/skann/' ||
+    p.startsWith('/gjafabref/') || (p.startsWith('/cms/') && p.endsWith('.html'));
 }
 
 // ---------- static file serving (with range for media) ----------
@@ -414,8 +604,8 @@ function serveStatic(req, res, urlPath) {
   try { rel = decodeURIComponent(urlPath.split('?')[0]); } catch { return send(res, 400, 'Bad request'); }
   if (rel === '/' || rel === '') rel = '/index.html';
   const full = path.normalize(path.join(ROOT, rel));
-  if (!full.startsWith(ROOT + path.sep)) return send(res, 404, 'Not found');   // engin leið út fyrir möppuna
-  if (!isPublicPath(path.relative(ROOT, full).split(path.sep).join('/'))) return send(res, 404, 'Not found');
+  if (!full.startsWith(ROOT + path.sep)) return notFound(req, res, rel);   // engin leið út fyrir möppuna
+  if (!isPublicPath(path.relative(ROOT, full).split(path.sep).join('/'))) return notFound(req, res, rel);
   serveFile(req, res, full);
 }
 
@@ -428,24 +618,32 @@ function cacheFor(ext) {
 }
 function serveFile(req, res, full) {
   fs.stat(full, (err, st) => {
-    if (err || !st.isFile()) return send(res, 404, 'Not found');
+    if (err || !st.isFile()) return notFound(req, res, full);
     const ext = path.extname(full).toLowerCase();
     const type = MIME[ext] || 'application/octet-stream';
-    const range = req.headers.range;
-    if (range && /^bytes=/.test(range)) {
-      const [s, e] = range.replace('bytes=', '').split('-');
-      const start = parseInt(s, 10) || 0;
-      const end = e ? parseInt(e, 10) : st.size - 1;
-      res.writeHead(206, {
-        'Content-Type': type, 'Accept-Ranges': 'bytes',
-        'Content-Range': `bytes ${start}-${end}/${st.size}`, 'Content-Length': end - start + 1,
-      });
-      return fs.createReadStream(full, { start, end }).pipe(res);
-    }
     // ritilsskrárnar mega aldrei sitja fastar í skyndiminni — annars keyra notendur úrelta útgáfu
     const isCMS = full.includes(path.sep + 'cms' + path.sep);
-    res.writeHead(200, { 'Content-Type': type, 'Content-Length': st.size, 'Accept-Ranges': 'bytes', 'Cache-Control': isCMS ? 'no-cache' : cacheFor(ext) });
-    fs.createReadStream(full).pipe(res);
+    const cache = isCMS ? 'no-cache' : cacheFor(ext);
+    const stream = opts => fs.createReadStream(full, opts).on('error', () => res.destroy()).pipe(res);
+    // Aðeins eitt bil er stutt (bytes=a-b, bytes=a-, bytes=-N); annað snið er hunsað og heil skrá send.
+    // Bil sem passar ekki við skrána fær 416 — óyfirfarin gildi létu createReadStream kasta og drápu þjóninn.
+    const m = /^bytes=(\d*)-(\d*)$/.exec(String(req.headers.range || '').trim());
+    if (m && (m[1] || m[2])) {
+      let start, end;
+      if (!m[1]) { start = Math.max(0, st.size - parseInt(m[2], 10)); end = st.size - 1; }
+      else { start = parseInt(m[1], 10); end = m[2] ? Math.min(parseInt(m[2], 10), st.size - 1) : st.size - 1; }
+      if (!(start <= end) || start >= st.size) {
+        res.writeHead(416, { 'Content-Range': `bytes */${st.size}`, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-cache' });
+        return res.end();
+      }
+      res.writeHead(206, {
+        'Content-Type': type, 'Accept-Ranges': 'bytes', 'Cache-Control': cache,
+        'Content-Range': `bytes ${start}-${end}/${st.size}`, 'Content-Length': end - start + 1,
+      });
+      return stream({ start, end });
+    }
+    res.writeHead(200, { 'Content-Type': type, 'Content-Length': st.size, 'Accept-Ranges': 'bytes', 'Cache-Control': cache });
+    stream();
   });
 }
 
@@ -458,7 +656,12 @@ async function handleAPI(req, res, url) {
     return sendJSON(res, 200, c);
   }
   if (p === '/api/session' && req.method === 'GET') {
-    return sendJSON(res, 200, { authed: isAuthed(req) });
+    // publicOrigin: lénið sem hlekkir/QR-kóðar til viðskiptavina eiga að nota (null þar til aðallénið vísar hingað)
+    return sendJSON(res, 200, { authed: isAuthed(req), publicOrigin: canonicalLive ? CANONICAL_ORIGIN : null });
+  }
+  // aðallénsathugun: þjónninn sækir CANONICAL_ORIGIN/api/ping og ber auðkennið saman við sitt eigið
+  if (p === '/api/ping' && req.method === 'GET') {
+    return sendJSON(res, 200, { ok: true, id: INSTANCE_ID }, { 'Cache-Control': 'no-store' });
   }
   if (p === '/api/instagram' && req.method === 'GET') {
     if (!IG_TOKEN && !IG_FEED_URL) return sendJSON(res, 200, { ok: false, media: [] });
@@ -530,6 +733,11 @@ async function handleAPI(req, res, url) {
     const card = g.cards[gcPub[1]];
     if (!card) return sendJSON(res, 404, { error: 'Gjafabréf fannst ekki' });
     return sendJSON(res, 200, { ok: true, card });
+  }
+
+  // óþekktar API-slóðir fá 404 (JSON) — líka án innskráningar; þekktu slóðirnar hér að neðan krefjast áfram innskráningar
+  if (!/^\/api\/(giftcards(\/[a-f0-9]{16,64}(\/redeem)?)?|content|upload|password)$/.test(p)) {
+    return sendJSON(res, 404, { error: 'Óþekkt slóð' });
   }
 
   // everything below requires auth
@@ -620,8 +828,24 @@ async function handleAPI(req, res, url) {
 ensure();
 const server = http.createServer(async (req, res) => {
   try {
-    const url = new URL(req.url, 'http://localhost');
+    // Slóð sem byrjar á // má ekki lesast sem lén (new URL('//x/y', grunnur) túlkar „x“ sem hýsil)
+    const url = new URL(req.url.startsWith('/') ? 'http://localhost' + req.url : req.url, 'http://localhost');
+    const isRead = req.method === 'GET' || req.method === 'HEAD';
+    const hostInfo = parseHost(req.headers.host);
+    let decodedPath = url.pathname;
+    try { decodedPath = decodeURIComponent(url.pathname); } catch { }
+    // onrender.com-afritið og innri síður (admin, skanni, gjafabréf, cms/*.html) mega aldrei lenda í leitarvélum
+    if ((hostInfo && hostInfo.hostname.endsWith('.onrender.com')) || isPrivatePagePath(url.pathname) || isPrivatePagePath(decodedPath)) {
+      res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    }
     if (url.pathname.startsWith('/api/')) return await handleAPI(req, res, url);
+    if (isRead) {
+      const legacy = legacyTarget(url);
+      if (legacy && legacy.gone) return sendErrorPage(res, 410);     // gömlu Webflow-sniðmátsfærslurnar
+      // Eitt stökk alla leið: rangt lén + gömul slóð fer beint á rétta .html-skrá á aðalléninu
+      if (onWrongHost(req)) return redirect(res, CANONICAL_ORIGIN + (legacy ? legacy.to : url.pathname + url.search));
+      if (legacy) return redirect(res, (canonicalLive ? CANONICAL_ORIGIN : '') + legacy.to);
+    }
     if (url.pathname === '/admin' || url.pathname === '/admin/') {
       return serveStatic(req, res, '/cms/admin.html');
     }
@@ -630,12 +854,13 @@ const server = http.createServer(async (req, res) => {
     }
     // uploaded images live on the data disk (mutable), served under the same URL as before
     if (url.pathname.startsWith('/assets/uploads/')) {
-      const name = path.basename(decodeURIComponent(url.pathname));
+      let name;
+      try { name = path.basename(decodeURIComponent(url.pathname)); } catch { return notFound(req, res, url.pathname); }
       const onDisk = path.join(UPLOAD_DIR, name);
       if (fs.existsSync(onDisk)) return serveFile(req, res, onDisk);
       const legacy = path.join(LEGACY_UPLOAD_DIR, name);
       if (fs.existsSync(legacy)) return serveFile(req, res, legacy);
-      return send(res, 404, 'Not found');
+      return notFound(req, res, url.pathname);
     }
     // Apple Wallet pass download: /gjafabref/<id>/pass  →  signed .pkpass
     const passMatch = url.pathname.match(/^\/gjafabref\/([a-f0-9]{16,64})\/pass$/);
@@ -644,7 +869,8 @@ const server = http.createServer(async (req, res) => {
       const card = g.cards[passMatch[1]];
       if (!card) return send(res, 404, 'Gjafabréf fannst ekki');
       const proto = (req.headers['x-forwarded-proto'] || (IS_HTTPS ? 'https' : 'http')).split(',')[0];
-      const baseUrl = proto + '://' + (req.headers['x-forwarded-host'] || req.headers.host || 'localhost');
+      // strikamerkið í passanum vísar á aðallénið þegar það er komið í loftið — annars á lénið sem var notað
+      const baseUrl = canonicalLive ? CANONICAL_ORIGIN : proto + '://' + (req.headers['x-forwarded-host'] || req.headers.host || 'localhost');
       let pk;
       try { pk = passkit.buildPass(card, baseUrl, CONTENT_DIR); }
       catch (e) { console.error('pass error', e); return send(res, 500, 'Villa við gerð passa'); }
@@ -659,13 +885,18 @@ const server = http.createServer(async (req, res) => {
     }
     return serveStatic(req, res, url.pathname);
   } catch (e) {
-    console.error(e); sendJSON(res, 500, { error: String(e.message || e) });
+    console.error(e);
+    // Ef svarið er þegar hafið má ekki skrifa haus aftur (það kastaði annars utan try og felldi þjóninn)
+    if (res.headersSent) return res.destroy();
+    // Hrá villuboð aðeins til ritilsins (API) — opinberar slóðir fá almennt svar
+    sendJSON(res, 500, { error: String(req.url || '').startsWith('/api/') ? String(e.message || e) : 'Server error' });
   }
 });
 
 function start() {
   server.listen(PORT, () => {
     console.log(`\n  Ráðagerði CMS keyrir á  http://localhost:${PORT}\n  Vefur:  http://localhost:${PORT}/\n  Admin:  http://localhost:${PORT}/admin\n`);
+    startCanonicalWatch();   // athugar hvort aðallénið vísi á þennan þjón (og svo á 5 mín. fresti)
   });
   // Myndirnar mega koma í bakgrunni — þær eru margar og mega ekki tefja ræsingu.
   if (GH_ON) ghPullUploads();

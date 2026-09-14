@@ -10,6 +10,10 @@
 (function () {
   'use strict';
   const PAGE = (location.pathname.split('/').pop() || 'index.html') || 'index.html';
+  // Rauði merkjaliturinn er #ff3132. Eldra efni sem vistað var í CMS-inu með fyrri rauðu
+  // tónunum (t.d. litahnappnum „Rauður") birtist í nýja litnum án þess að breyta gögnunum.
+  const OLD_RED = /#(?:f0392f|ff3031|fe3032|ff3030|de2c2c)\b|rgb\(\s*240\s*,\s*57\s*,\s*47\s*\)/gi;
+  function brandRed(v) { return typeof v === 'string' ? v.replace(OLD_RED, '#ff3132') : v; }
 
   // While editing (?cms=1): make every internal link carry cms=1 from the very first moment,
   // so a click can NEVER drop you out of the editor — even before the editor script loads.
@@ -97,12 +101,12 @@
     //    (flipalyklar sjálfir eru fastir, en systkina-vísitölur í kring mega ekki hliðrast eftir á)
     if (Array.isArray(O.__tabs__)) reorderTabs(O.__tabs__);
     // 1. structural regions first (menu panes + themed cards)
-    regions().forEach(el => { const k = key(el); if (H[k] != null) el.innerHTML = H[k]; });
+    regions().forEach(el => { const k = key(el); if (H[k] != null) el.innerHTML = brandRed(H[k]); });
     // 2. text leaves outside regions
     textLeaves().forEach(el => {
       if (inRegion(el)) return; const k = key(el);
       if (T[k] == null) return;
-      el.innerHTML = T[k];
+      el.innerHTML = brandRed(T[k]);
       // tæmdur texti (t.d. Delete í ritlinum) á ekki að skilja eftir autt pláss á síðunni
       if (!el.textContent.trim() && !el.querySelector('img,video,iframe')) el.style.setProperty('display', 'none', 'important');
     });
@@ -120,7 +124,7 @@
     Object.keys(ST).forEach(k => {
       const el = elByKey(k); if (!el) return;
       const s = ST[k] || {};
-      Object.keys(s).forEach(prop => { if (s[prop]) el.style.setProperty(prop, s[prop], 'important'); });
+      Object.keys(s).forEach(prop => { if (s[prop]) el.style.setProperty(prop, brandRed(s[prop]), 'important'); });
     });
   }
 

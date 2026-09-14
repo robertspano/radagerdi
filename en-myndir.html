@@ -7,6 +7,17 @@
 <meta name="description" content="Photos from Ráðagerði in Seltjarnarnes, Iceland — the food, the historic house and the surroundings by the Grótta lighthouse.">
 <meta property="og:title" content="Gallery · Ráðagerði Restaurant Seltjarnarnes">
 <meta property="og:description" content="Photos from Ráðagerði in Seltjarnarnes, Iceland.">
+<link rel="canonical" href="https://radagerdi.is/en-myndir.html">
+<link rel="alternate" hreflang="is" href="https://radagerdi.is/myndir.html">
+<link rel="alternate" hreflang="en" href="https://radagerdi.is/en-myndir.html">
+<link rel="alternate" hreflang="x-default" href="https://radagerdi.is/myndir.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ráðagerði">
+<meta property="og:url" content="https://radagerdi.is/en-myndir.html">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://radagerdi.is/assets/65f82c8cc27e243a45494f40_radagerdi_sumar23-04265_Original.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://radagerdi.is/assets/65f82c8cc27e243a45494f40_radagerdi_sumar23-04265_Original.jpg">
 <link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
 <link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
 <link rel="preload" href="fonts/6353a2db71b74a4eaef13f21_WindsorD.otf" as="font" type="font/otf" crossorigin>
@@ -15,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:swap}
-  :root{--gr:#629F67;--red:#F0392F;--redline:#DE2C2C;--bg:#f7f7f4}
+  :root{--gr:#629F67;--red:#ff3132;--redline:#ff3132;--bg:#f7f7f4}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);font-family:'Montserrat',sans-serif;color:var(--gr)}
   .serif{font-family:'Windsord',serif}
@@ -100,7 +111,7 @@
 
   /* hamburger menu */
   .rg-burger{background:none;border:0;cursor:pointer;color:#fff;display:flex;align-items:center;padding:0;margin-left:2px}
-  .rg-menu{position:fixed;top:0;right:0;bottom:0;width:min(380px,86vw);background:#F0392F;z-index:999;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:clamp(7px,1.9vh,17px);overflow:auto;padding:70px 42px 44px;transform:translateX(105%);transition:transform .26s ease;box-shadow:-14px 0 36px rgba(0,0,0,.28);visibility:hidden}
+  .rg-menu{position:fixed;top:0;right:0;bottom:0;width:min(380px,86vw);background:#ff3132;z-index:999;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:clamp(7px,1.9vh,17px);overflow:auto;padding:70px 42px 44px;transform:translateX(105%);transition:transform .26s ease;box-shadow:-14px 0 36px rgba(0,0,0,.28);visibility:hidden}
   .rg-menu.open{transform:translateX(0);visibility:visible}
   .rg-menu a{color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,2.6vh,29px);letter-spacing:.12em;text-indent:.12em;text-transform:uppercase;line-height:1.3;text-align:left}
   .rg-menu a:hover{text-decoration:underline}
@@ -112,6 +123,21 @@
   .menu-group{display:none;flex-direction:column;gap:clamp(7px,1.9vh,17px);padding-left:20px;margin:-2px 0 0}
   .menu-group.open{display:flex}
   .menu-group a{font-size:.78em}
+</style>
+<style id="rg-bar-mobile">
+  /* sími: haus sem passar — merkið í miðju með bili við tengla og tákn */
+  @media(max-width:520px){
+    .bar,.rg2-bar{grid-template-columns:auto minmax(0,1fr) auto !important;column-gap:10px !important;padding-left:14px !important;padding-right:14px !important}
+    .bar .nvl,.rg2-bar .nvl{gap:10px !important}
+    .bar .heim,.rg2-bar .heim{font-size:12.5px !important;letter-spacing:.05em !important}
+    .bar .brand,.rg2-bar .brand{justify-self:center;justify-content:center;min-width:0;font-size:clamp(15px,4.6vw,19px) !important;letter-spacing:.02em !important}
+    .bar .soc,.rg2-bar .soc{gap:11px !important}
+    .bar .soc svg,.rg2-bar .soc svg{width:21px;height:21px}
+  }
+  /* mjög mjóir símar: Instagram/Facebook eru líka í valmyndinni og footernum */
+  @media(max-width:350px){
+    .bar .soc a,.rg2-bar .soc a{display:none !important}
+  }
 </style>
 </head>
 <body>
@@ -169,7 +195,7 @@
 <div class="rg-menu" id="rg-menu">
   <button class="rg-close" aria-label="Close" onclick="document.getElementById('rg-menu').classList.remove('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     <a href="en.html">Home</a>
-    <a href="#" class="menu-group-toggle" onclick="this.classList.toggle('open');document.getElementById('mg-menus-en').classList.toggle('open');return false;">Menus</a>
+    <a href="en.html" class="menu-group-toggle" onclick="this.classList.toggle('open');document.getElementById('mg-menus-en').classList.toggle('open');return false;">Menus</a>
     <div class="menu-group" id="mg-menus-en">
       <a href="en-matsedlar.html">Menu</a>
       <a href="en-drykkir.html">Drinks</a>
@@ -188,7 +214,7 @@
     <a href="en-seltjarnarnes-iceland-travel-guide.html">Guide to Seltjarnarnes</a>
     <a href="en-about-us.html">About us</a>
     <a href="en-contact-us.html">Contact</a>
-    <a href="index.html">Íslenska</a>
+    <a href="myndir.html">Íslenska</a>
 </div>
 <script src="cms/cms-inject.js" defer></script>
 </body>

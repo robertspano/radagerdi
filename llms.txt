@@ -12,15 +12,19 @@
 - Gjafakort / Gift cards: https://bookings.dineout.is/radagerdi/order
 
 ## Síður / Pages
-- [Matseðill / Menu](/matsedlar.html): Aðalmatseðill — Þriggja rétta (7290 kr.), eldbakaðar pizzur, pasta, aðalréttir og krakkaseðill
-- [Drykkjarseðill / Drinks](/drykkir.html): Vínseðill (Cà dei Frati o.fl.), bjór, kokteilar, spritzar, óáfengt, kaffi og eftirréttir — happy hour alla daga 15–18
-- [Eftirréttir / Desserts](/eftirrettir.html): Tiramisu, affogato, ostakaka, vöfflur o.fl.
-- [Take Away](/takeaway.html): Sóttur matur — 10% afsláttur af öllum sóttum mat
-- [Bröns / Brunch](/brons.html): Um helgar 11:00–15:30
-- [Hópar / Groups](/hopar.html): Hópamatseðlar fyrir fleiri en 10 manns — „Brot af því besta“: Valkostur 1 (6.900 kr.) og Valkostur 2 (9.900 kr.), hópabröns og barnamatseðill
-- [Veisluþjónusta / Catering](/veisluthjonusta.html): Veislur og viðburðir
-- [Myndir / Gallery](/myndir.html): Myndir af matnum, húsinu og umhverfinu
+- [Forsíða / Home](https://radagerdi.is/): Ráðagerði Veitingahús við Gróttu á Seltjarnarnesi
+- [Matseðill / Menu](https://radagerdi.is/matsedlar.html): Aðalmatseðill — Þriggja rétta (7290 kr.), eldbakaðar pizzur, pasta, aðalréttir og krakkaseðill
+- [Drykkjarseðill / Drinks](https://radagerdi.is/drykkir.html): Vínseðill (Cà dei Frati o.fl.), bjór, kokteilar, spritzar, óáfengt, kaffi og eftirréttir — happy hour alla daga 15–18
+- [Eftirréttir / Desserts](https://radagerdi.is/eftirrettir.html): Tiramisu, affogato, ostakaka, vöfflur o.fl.
+- [Take Away](https://radagerdi.is/takeaway.html): Sóttur matur — 10% afsláttur af öllum sóttum mat
+- [Bröns / Brunch](https://radagerdi.is/brons.html): Um helgar 11:00–15:30
+- [Hópar / Groups](https://radagerdi.is/hopar.html): Hópamatseðlar fyrir fleiri en 10 manns — „Brot af því besta“: Valkostur 1 (6.900 kr.) og Valkostur 2 (9.900 kr.), hópabröns og barnamatseðill
+- [Veisluþjónusta / Catering](https://radagerdi.is/veisluthjonusta.html): Veislur og viðburðir
+- [Myndir / Gallery](https://radagerdi.is/myndir.html): Myndir af matnum, húsinu og umhverfinu
+- [Barnamatseðill / Kids menu](https://radagerdi.is/barnamatsedill.html): Pizza, kjötbollur og barnalasagna
+- [Um okkur / About us](https://radagerdi.is/um-okkur.html): Gamalt timburhús frá því fyrir 1900 í náttúruperlunni við Gróttu
+- [Hafa samband / Contact](https://radagerdi.is/hafa-samband.html): Sími 546 1700, radagerdi@radagerdi170.is
 
 ## English pages
-- [Home](/en.html) · [Menu](/en-matsedlar.html) · [Drinks](/en-drykkir.html) · [Desserts](/en-eftirrettir.html) · [Take Away](/en-takeaway.html) · [Brunch](/en-brons.html) · [Groups](/en-hopar.html) · [Catering](/en-veisluthjonusta.html) · [Gallery](/en-myndir.html)
-- [Guide to Seltjarnarnes](/en-seltjarnarnes-iceland-travel-guide.html): what to see and do around the Grótta lighthouse
+- [Home](https://radagerdi.is/en.html) · [Menu](https://radagerdi.is/en-matsedlar.html) · [Drinks](https://radagerdi.is/en-drykkir.html) · [Desserts](https://radagerdi.is/en-eftirrettir.html) · [Take Away](https://radagerdi.is/en-takeaway.html) · [Brunch](https://radagerdi.is/en-brons.html) · [Groups](https://radagerdi.is/en-hopar.html) · [Catering](https://radagerdi.is/en-veisluthjonusta.html) · [Gallery](https://radagerdi.is/en-myndir.html) · [Kids Menu](https://radagerdi.is/en-barnamatsedill.html) · [About us](https://radagerdi.is/en-about-us.html) · [Contact](https://radagerdi.is/en-contact-us.html)
+- [Guide to Seltjarnarnes](https://radagerdi.is/en-seltjarnarnes-iceland-travel-guide.html): what to see and do around the Grótta lighthouse

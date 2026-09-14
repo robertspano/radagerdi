@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ráðagerði · Admin</title>
 <style>
-  :root{--red:#FF3031;--green:#629F67;--ink:#1a1b1f}
+  :root{--red:#ff3132;--green:#629F67;--ink:#1a1b1f}
   *{box-sizing:border-box}
   html,body{height:100%}
   body{margin:0;display:flex;align-items:center;justify-content:center;padding:24px;
@@ -56,7 +56,7 @@
     if (!v || v[0] !== '/' || v[1] === '/' || v[1] === '\\') return null;
     try { return new URL(v, location.origin).origin === location.origin ? v : null; } catch (e) { return null; }
   };
-  const next = safeNext(params.get('next')) || '/index.html?cms=1';
+  const next = safeNext(params.get('next')) || '/?cms=1';
   fetch('/api/session').then(r=>r.json()).then(s=>{ if(s.authed) location.replace(next); });
   const $=id=>document.getElementById(id), err=$('err');
   const show=(id)=>{ ['step-email','step-code','step-pw'].forEach(x=>$(x).hidden=(x!==id)); err.textContent=''; };

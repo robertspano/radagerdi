@@ -1,6 +1,12 @@
 User-agent: *
 Allow: /
+Allow: /api/content
 Disallow: /admin
 Disallow: /skann
 Disallow: /api/
 Disallow: /gjafabref/
+Disallow: /cms/admin.html
+Disallow: /cms/skann.html
+Disallow: /cms/wallet.html
+
+Sitemap: https://radagerdi.is/sitemap.xml

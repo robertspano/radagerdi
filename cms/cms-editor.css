@@ -1,5 +1,5 @@
 /* Ráðagerði CMS — editor chrome. Namespaced under .cms-* so it never touches the real site styles. */
-:root { --cms-red:#FF3031; --cms-green:#629F67; --cms-ink:#1a1b1f; --cms-h:52px; }
+:root { --cms-red:#ff3132; --cms-green:#629F67; --cms-ink:#1a1b1f; --cms-h:52px; }
 body.cms-on { padding-top:var(--cms-h) !important; }
 /* push the site's own fixed header/overlays below the CMS bar so they don't glitch under it */
 body.cms-on .navbar, body.cms-on .navbar-red, body.cms-on .menu-red,
@@ -47,9 +47,9 @@ body.cms-on .w-nav { top:var(--cms-h) !important; }
 
 /* editable highlights */
 body.cms-on .cms-hover{outline:2px dashed rgba(98,159,103,.9) !important;outline-offset:2px;cursor:text;border-radius:2px}
-body.cms-on img.cms-img{outline:2px dashed rgba(255,48,49,.55);outline-offset:2px;cursor:pointer}
+body.cms-on img.cms-img{outline:2px dashed rgba(255,49,50,.55);outline-offset:2px;cursor:pointer}
 body.cms-on img.cms-img:hover{outline-color:var(--cms-red);outline-width:2.5px}
-body.cms-on .cms-bgimg{outline:2px dashed rgba(255,48,49,.55);outline-offset:-2px;cursor:pointer}
+body.cms-on .cms-bgimg{outline:2px dashed rgba(255,49,50,.55);outline-offset:-2px;cursor:pointer}
 body.cms-on .cms-bgimg:hover{outline-color:var(--cms-red);outline-width:2.5px}
 body.cms-on .cms-active{outline:2px solid var(--cms-green) !important;outline-offset:2px;background:rgba(98,159,103,.06)}
 .cms-imgbtn{position:absolute;z-index:2147482500;background:var(--cms-red);color:#fff;border:none;border-radius:8px;
@@ -206,8 +206,8 @@ body.cms-on .gal-grid figure { position: relative; }
 }
 .cms-boxhandle:hover span { transform: scaleY(1.35); }
 body.cms-resizing, body.cms-resizing * { cursor: ns-resize !important; user-select: none !important; }
-.cms-status.error{background:rgba(255,48,49,.18);color:#ff8f90}
-.cms-status.error::before{background:#ff3031}
+.cms-status.error{background:rgba(255,49,50,.18);color:#ff8f90}
+.cms-status.error::before{background:#ff3132}
 
 /* ===== myndadálkar (bröns) + kassaval ===== */
 .cms-stylebar [hidden] { display: none !important; }

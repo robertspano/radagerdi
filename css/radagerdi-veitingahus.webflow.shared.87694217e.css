@@ -658,7 +658,7 @@ textarea.w-input, textarea.w-select {
 }
 
 .w-file-upload-error-msg {
-  color: #ea384c;
+  color: #ff3132;
   padding: 2px 0;
   display: inline-block;
 }
@@ -2397,7 +2397,7 @@ textarea.w-input, textarea.w-select {
 :root {
   --black: black;
   --white: white;
-  --red: #ff3031;
+  --red: #ff3132;
   --medium-sea-green: #629f67;
 }
 
@@ -2784,7 +2784,7 @@ figcaption {
 
 .navigation-item {
   opacity: .6;
-  color: #ff3030;
+  color: #ff3132;
   letter-spacing: 1px;
   text-transform: uppercase;
   flex: 0 auto;
@@ -2944,7 +2944,7 @@ figcaption {
 }
 
 .detail-header-image {
-  background-image: url("https://d3e54v103j8qbb.cloudfront.net/img/background-image.svg");
+  background-image: none;
   background-position: 0 0;
   background-size: cover;
   width: 100%;
@@ -3448,7 +3448,7 @@ figcaption {
 }
 
 .menu-meal-description {
-  color: #ff3031;
+  color: #ff3132;
   margin-top: 9px;
   padding-left: 18px;
   font-family: Knockout htf31 juniormiddlewt, sans-serif;
@@ -3938,8 +3938,8 @@ figcaption {
 
 .btn-book-1-is {
   color: #fff;
-  background-color: #ff3031;
-  border: 2px solid #fe3032;
+  background-color: #ff3132;
+  border: 2px solid #ff3132;
   border-radius: 100px;
   width: 150px;
   height: 35px;
@@ -4171,7 +4171,7 @@ figcaption {
 }
 
 .div-meal-price-2.red {
-  border-bottom-color: #ff303133;
+  border-bottom-color: #ff313233;
 }
 
 .div-meal-price-2.hidden {
@@ -4924,7 +4924,7 @@ figcaption {
 
 .home-img-gallery-item._4 {
   aspect-ratio: 1;
-  background-image: url("https://cdn.prod.website-files.com/62bafb0f4236d9768f257810/65fdb49e9695db0a0ebb8108_radagerdi_02%20(1).jpg");
+  background-image: url("../assets/65fdb49e9695db0a0ebb8108_radagerdi_02-1.jpg");
   background-position: 50% 53%;
 }
 
@@ -4951,7 +4951,7 @@ figcaption {
 }
 
 .home-img-gallery-item._11 {
-  background-image: url("https://cdn.prod.website-files.com/62bafb0f4236d9768f257810/65f82ad414f1fe9eb93edcba_radagerdi_sumar23-03762%20(1).jpg");
+  background-image: url("../assets/65f82ad414f1fe9eb93edcba_radagerdi_sumar23-03762-1.jpg");
 }
 
 .btn-menu-1-is {
@@ -5420,7 +5420,7 @@ figcaption {
 }
 
 .slide-menu-1 {
-  background-image: url("https://cdn.prod.website-files.com/62bafb0f4236d9768f257810/6603fe8fb61d5c2864aa5009_arranchini_05%20(1).jpg");
+  background-image: url("../assets/6603fe8fb61d5c2864aa5009_arranchini_05-1.jpg");
   background-position: 50% 77%;
   background-repeat: no-repeat;
   background-size: 100%;
@@ -5846,7 +5846,7 @@ figcaption {
 }
 
 .div-block-75 {
-  border: 2px dotted #eb3b3a;
+  border: 2px dotted #ff3132;
   flex-flow: column;
   justify-content: center;
   margin-bottom: 40px;
@@ -5916,7 +5916,7 @@ figcaption {
 }
 
 .div-meal-price-2-copy.red {
-  border-bottom-color: #ff303133;
+  border-bottom-color: #ff313233;
 }
 
 .div-meal-price-2-copy.hidden {

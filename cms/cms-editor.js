@@ -14,7 +14,7 @@
     ['en.html', 'EN · Home'], ['en-matsedlar.html', 'EN · Menu'], ['en-drykkir.html', 'EN · Drinks'], ['en-eftirrettir.html', 'EN · Desserts'], ['en-takeaway.html', 'EN · Take Away'], ['en-brons.html', 'EN · Brunch'],
     ['en-hopar.html', 'EN · Groups'], ['en-veisluthjonusta.html', 'EN · Catering'], ['en-myndir.html', 'EN · Gallery'],
     ['en-seltjarnarnes-iceland-travel-guide.html', 'EN · Travel guide'],
-    ['matsedill.html', 'Gamli matseðillinn'], ['um-okkur.html', 'Um okkur'], ['hafa-samband.html', 'Hafa samband'],
+    ['um-okkur.html', 'Um okkur'], ['hafa-samband.html', 'Hafa samband'],
   ];
 
   // ---------- helpers ----------
@@ -572,7 +572,7 @@
     bar.appendChild(sBtn('↓', 'Færa niður (meira bil fyrir ofan)', () => { if (styleTarget) nudge(styleTarget, 8); }));
     bar.appendChild(el('span', 'cms-sbsep'));
 
-    const colors = [['#1B7C38', 'Grænn'], ['#F0392F', 'Rauður'], ['#1a1b1f', 'Svartur'], ['#ffffff', 'Hvítur']];
+    const colors = [['#1B7C38', 'Grænn'], ['#ff3132', 'Rauður'], ['#1a1b1f', 'Svartur'], ['#ffffff', 'Hvítur']];
     colors.forEach(([c, t]) => {
       const b = sBtn('', 'Litur: ' + t, () => { if (styleTarget) setStyleProp(styleTarget, 'color', c); }, 'cms-sbcol');
       b.style.background = c;
@@ -1117,11 +1117,17 @@
     const urlBox = el('div', 'cms-gcurl'); urlBox.hidden = true;
     const listWrap = el('div', 'cms-gclist');
     panel.body.append(n.wrap, ph.wrap, am.wrap, createBtn, urlBox, el('div', 'cms-gcsep', 'Útgefin gjafabréf'), listWrap);
+    // Hlekkir til viðskiptavina vísa alltaf á aðallénið (radagerdi.is) þegar það er komið í loftið,
+    // líka þegar gjafabréfið er búið til í gegnum aðra slóð (t.d. gamla onrender.com-bókamerkið).
+    let publicOrigin = null;
+    const originReady = api('/api/session').then(s => { publicOrigin = (s && s.publicOrigin) || null; }).catch(() => { });
+    const giftUrl = id => (publicOrigin || location.origin) + '/gjafabref/' + id;
 
     async function doCreate() {
       const res = await api('/api/giftcards', { method: 'POST', body: JSON.stringify({ name: n.input.value, phone: ph.input.value, amount: Number(am.input.value) }) });
       if (!res.ok) { toast('Villa: ' + (res.error || '')); return; }
-      const full = location.origin + res.url;
+      await originReady;
+      const full = giftUrl(res.card.id);
       urlBox.hidden = false;
       urlBox.innerHTML = '';
       urlBox.appendChild(el('div', 'cms-gcurl-t', '✓ Gjafabréf búið til — sendu viðskiptavininum þennan hlekk:'));
@@ -1134,6 +1140,7 @@
     }
     async function refresh() {
       const r = await api('/api/giftcards');
+      await originReady;
       listWrap.innerHTML = '';
       const cards = (r.cards || []);
       if (!cards.length) { listWrap.appendChild(el('div', 'cms-gcempty', 'Engin gjafabréf ennþá.')); return; }
@@ -1143,7 +1150,7 @@
         info.appendChild(el('div', 'cms-gcname', c.name + (c.phone ? ' · ' + c.phone : '')));
         info.appendChild(el('div', 'cms-gcbal', kr(c.balance)));
         row.appendChild(info);
-        const full = location.origin + '/gjafabref/' + c.id;
+        const full = giftUrl(c.id);
         row.appendChild(btnMini('⧉', async () => { try { await navigator.clipboard.writeText(full); toast('Hlekkur afritaður'); } catch (e) { } }));
         row.appendChild(btnMini('↗', () => window.open(full, '_blank')));
         row.appendChild(btnMini('🗑', async () => {
