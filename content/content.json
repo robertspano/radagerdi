@@ -10,7 +10,7 @@
       "DIV1>DIV2>H20": "Hádegistilboð 2000 kr",
       "DIV1>DIV2>P1": "Pizza af matseðli",
       "DIV1>DIV2>P2": "GILDIR EINUNGIS Í TAKE AWAY, EKKI EF BORÐAÐ ER Á STAÐNUM",
-      "DIV1>DIV2>P3": "(ath afsláttur gildir ekki með tilboði)<br>VANTAR AÐ SETJA AFSLÁTT Í SMÁU LETRI FYRIR NEÐAN HEADER"
+      "DIV1>DIV2>P3": "(ath afsláttur gildir ekki með tilboði)<br><br>"
     },
     "barnamatsedill.html": {},
     "hopar.html": {
@@ -248,6 +248,9 @@
         "padding-bottom": "0px"
       },
       "DIV1>DIV2>P2": {
+        "color": "#F0392F"
+      },
+      "DIV1>DIV2>P3": {
         "color": "#F0392F"
       }
     },
