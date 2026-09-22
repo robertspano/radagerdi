@@ -1,0 +1,13 @@
+# Gögn eigandans eru sótt úr GitHub þegar á þarf að halda — þau mega ALDREI
+# fara með í útgáfuna, því þá lægju þau á vefnum sem kyrrstæðar skrár.
+content/
+
+# Render-þjónninn og stillingar hans eiga ekkert erindi á Vercel
+server.js
+render.yaml
+
+# vinnuskrár
+.claude/
+README.md
+*.bak
+.git/

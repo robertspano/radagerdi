@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["dub1"],
+  "trailingSlash": false,
+  "functions": {
+    "api/page.js": { "includeFiles": "**/*.html" },
+    "api/gone.js": { "includeFiles": "cms/404.html" }
+  },
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)content/'",
+  "rewrites": [
+    { "source": "/admin", "destination": "/cms/admin.html" },
+    { "source": "/skann", "destination": "/cms/skann.html" },
+    { "source": "/gjafabref/:id", "destination": "/cms/wallet.html" },
+    { "source": "/api/giftcards/:id/redeem", "destination": "/api/giftcard-redeem?id=:id" },
+    { "source": "/api/giftcards/:id", "destination": "/api/giftcard?id=:id" },
+    { "source": "/assets/uploads/:name", "destination": "/api/asset?name=:name" },
+    { "source": "/(.*)", "destination": "/api/page?p=__404__" }
+  ],
+  "headers": [
+    { "source": "/fonts/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }] },
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] },
+    { "source": "/css/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=600" }] },
+    { "source": "/js/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=600" }] },
+    { "source": "/cms/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/gjafabref/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+  ]
+}

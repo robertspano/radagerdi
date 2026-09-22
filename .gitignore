@@ -7,3 +7,4 @@ content/giftcards.json
 *.bak
 content/uploads/
 assets/uploads/
+node_modules/
