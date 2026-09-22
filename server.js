@@ -616,7 +616,40 @@ function cacheFor(ext) {
   if (['.css', '.js', '.mjs'].includes(ext)) return 'public, max-age=600';
   return 'no-cache';
 }
+// Vistað efni síðunnar er fléttað beint inn í HTML-ið sem er sent. Annars birtist síðan fyrst
+// eins og hún er í kóðanum og hnikast til þegar breytingar eigandans berast — sýnilegt hopp.
+function cmsPreload(pageName) {
+  const all = readJSON(CONTENT_FILE, {});
+  const slice = {};
+  let has = false;
+  for (const k of ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style', 'settings']) {
+    const page = (all[k] || {})[pageName];
+    if (page && Object.keys(page).length) { slice[k] = { [pageName]: page }; has = true; }
+  }
+  if (!has) return null;
+  // </script> og < í efninu mega ekki loka script-tagginu
+  return JSON.stringify(slice).replace(/</g, '\\u003c');
+}
+function serveHtml(req, res, full) {
+  fs.readFile(full, 'utf8', (err, html) => {
+    if (err) return notFound(req, res, full);
+    let out = html;
+    try {
+      const json = cmsPreload(path.basename(full));
+      if (json && out.includes('</head>')) {
+        out = out.replace('</head>', '<script id="cms-preload">window.__CMS_PRELOAD__=' + json + '</script>\n</head>');
+      }
+    } catch (e) { /* efnið má aldrei fella síðuna */ }
+    const body = Buffer.from(out, 'utf8');
+    res.writeHead(200, {
+      // noindex-hausinn (onrender/innri síður) er þegar settur í beininum með setHeader
+      'Content-Type': MIME['.html'], 'Content-Length': body.length, 'Cache-Control': 'no-cache',
+    });
+    res.end(body);
+  });
+}
 function serveFile(req, res, full) {
+  if (path.extname(full).toLowerCase() === '.html' && !full.includes(path.sep + 'cms' + path.sep)) return serveHtml(req, res, full);
   fs.stat(full, (err, st) => {
     if (err || !st.isFile()) return notFound(req, res, full);
     const ext = path.extname(full).toLowerCase();

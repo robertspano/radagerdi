@@ -2055,7 +2055,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635537f7a7b90c2fbfc5c6c5_knockout-regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2063,7 +2063,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a2dbd7638b15d0999fb7_WindsorConDExtBol.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2071,7 +2071,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a2dbe708dc2405359a6a_WindsorDBol.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2079,7 +2079,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a2db0af27d33b8c399ba_WindsorEloD.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2087,7 +2087,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a2db71b74a4eaef13f21_WindsorD.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2095,7 +2095,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a2db41400e8625b84d58_WindsorAntDBol.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2103,7 +2103,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a2db0af27d2554c399b9_WindsorDUltHea.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2111,7 +2111,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a2dba7b90cfba1b5c33b_WindsorOutD.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2119,7 +2119,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6353a7766e708a234b53a45b_Knockout%20HTF49Liteweight%20Regular.otf") format("opentype"), url("../fonts/6353a7766e708a234b53a45b_Knockout%20HTF49Liteweight%20Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2127,7 +2127,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635537f7db028e3fad8fe6fc_Knockout%20HTF47Bantamweight%20Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2135,7 +2135,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635537f7d7638b8285a8c89f_Knockout%20HTF67FullBantamwt%20Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2143,7 +2143,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635537f75ee93e5c98969062_Knockout-HTF52-Cruiserweight.otf") format("opentype"), url("../fonts/635657194f90fd2600b887a5_Knockout-HTF52-Cruiserweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2151,7 +2151,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657199ee2d106b21f1995_Knockout-HTF26-JuniorFlyweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2159,7 +2159,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719a7b90c5040d3871b_Knockout-HTF29-JuniorLiteweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2167,7 +2167,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719f9e1cc529fdfedd2_Knockout-HTF30-JuniorWelterwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2175,7 +2175,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719e708dc562f524bce_Knockout-HTF27-JuniorBantamwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2183,7 +2183,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657198d905156abe5c762_Knockout-HTF28-JuniorFeatherwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2191,7 +2191,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657196e708a02ad7180b5_Knockout-HTF31-JuniorMiddlewt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2199,7 +2199,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719738f5f1e947371dd_Knockout-HTF68-FullFeatherwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2207,7 +2207,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719c396ae1ed856c705_Knockout-HTF67-FullBantamwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2215,7 +2215,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719cef9166da80fbcf1_Knockout-HTF69-FullLiteweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2223,7 +2223,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657194f90fdb41db887a7_Knockout-HTF70-FullWelterwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2231,7 +2231,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719e708dc65e5524bcf_Knockout-HTF71-FullMiddlewt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2239,7 +2239,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719d7135dd5f9098fab_Knockout-HTF47-Bantamweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2247,7 +2247,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657190af27d8018e0aaa8_Knockout-HTF34-JuniorSumo.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2255,7 +2255,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719db028e0d7f9cbe4b_Knockout-HTF46-Flyweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2263,7 +2263,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657191bb1a24e81e74897_Knockout-HTF48-Featherweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2271,7 +2271,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719256a8df9e2726d1e_Knockout-HTF32-JuniorCruiserwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2279,7 +2279,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6356571915baa664d51abd75_Knockout-HTF33-JuniorHeviwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2287,7 +2287,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657198d90515d8de5c764_Knockout-HTF72-FullCruiserwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2295,7 +2295,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657192cf250036477d161_Knockout-HTF74-FullSumo.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2303,7 +2303,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657195f0aee12d643a2b5_Knockout-HTF73-FullHeviweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2311,7 +2311,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6356571939e4e526b7d2732b_Knockout-HTF91-UltmtMiddlewt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2319,7 +2319,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657191bb1a25c3de74898_Knockout-HTF49-Liteweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2327,7 +2327,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657195ee93eb314a383d5_Knockout-HTF90-UltmtWelterwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2335,7 +2335,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657194f3fdf818f1c34c0_Knockout-HTF92-UltmtCruiserwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2343,7 +2343,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/63565719738f5f2a6e7371dc_Knockout-HTF50-Welterweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2351,7 +2351,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657194f3fdfe2721c34be_Knockout-HTF51-Middleweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2359,7 +2359,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6356571939e4e51e9ad2732a_Knockout-HTF53-Heviweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2367,7 +2367,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657199ee2d106f11f19a1_Knockout-HTF54-Sumo.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2375,7 +2375,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6356571adb028ef0c89cbe4c_Knockout-HTF93-UltmtHeviwt.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2383,7 +2383,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/6356571a73ae728d14ec0a88_Knockout-HTF94-UltmtSumo.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -2391,7 +2391,7 @@ textarea.w-input, textarea.w-select {
   src: url("../fonts/635657194f90fd0d77b887a6_Knockout-HTF66-FullFlyweight.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 :root {

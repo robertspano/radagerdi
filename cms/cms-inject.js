@@ -131,6 +131,14 @@
   // expose helpers for the editor
   window.__CMS__ = { PAGE, key, elByKey, textLeaves, panes, regions, inRegion, isTextLeaf, REGION_SEL };
 
+  // Efnið sem þjónninn fléttaði inn í síðuna — nothæft strax, engin bið eftir neti og ekkert hopp.
+  const PRELOAD = window.__CMS_PRELOAD__ || null;
+  let appliedEarly = false;
+  if (PRELOAD) {
+    window.__CMS__.content = PRELOAD;
+    try { apply(PRELOAD); appliedEarly = true; } catch (e) { console.warn('CMS apply error', e); }
+  }
+
   async function boot() {
     let content = {};
     try {
@@ -142,7 +150,10 @@
       try { content = await (await fetch('content/content.json', { cache: 'no-store' })).json(); } catch (e2) { }
     }
     window.__CMS__.content = content;
-    try { apply(content); } catch (e) { console.warn('CMS apply error', e); }
+    // Ekki setja sama efnið inn tvisvar — það hnikar síðunni til að óþörfu.
+    if (!appliedEarly || JSON.stringify(content) !== JSON.stringify(PRELOAD)) {
+      try { apply(content); } catch (e) { console.warn('CMS apply error', e); }
+    }
 
     // editor bootstrap
     const editParam = new URLSearchParams(location.search).has('cms');
@@ -157,6 +168,11 @@
       }
     }
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
+  // Ritillinn þarf allt efnið (allar síður) og ferskustu útgáfuna, svo hann sækir alltaf.
+  // Venjulegir gestir með fléttað efni þurfa hvorugt.
+  const needsFetch = !PRELOAD || /[?&]cms=1/.test(location.search);
+  if (needsFetch) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+    else boot();
+  }
 })();

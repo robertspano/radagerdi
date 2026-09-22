@@ -22,7 +22,7 @@
 <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:swap}
+  @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:optional}
   :root{--gr:#629F67;--red:#ff3132;--bg:#fff}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);font-family:'Montserrat',sans-serif;color:var(--gr)}
@@ -94,7 +94,7 @@
   .soonbar{background:var(--red);color:#fff;text-align:center;border-radius:14px;margin-top:30px;padding:14px 22px;font-size:15px;font-weight:600;letter-spacing:.02em}
   .subnav{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:44px 0 10px}
   .subnav a{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:76px;
-    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(20px,1.8vw,30px);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;transition:.15s}
+    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(20px,1.8vw,30px);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;transition:.15s;white-space:nowrap}
   .subnav a:hover,.subnav a.on{background:var(--gr);color:#fff}
   .hg-hero{background:var(--gr);color:#fff;text-align:center;border-radius:190px 190px 0 0;margin-top:30px;padding:46px 30px 42px}
   .hg-hero h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,4.4vw,68px);letter-spacing:.04em;margin:0 0 20px;text-transform:uppercase}
