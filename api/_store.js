@@ -177,11 +177,11 @@ const CMS_EMAILS = (process.env.CMS_EMAILS || '')
   .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 const EMAIL_LOGIN = !!(process.env.RESEND_API_KEY && CMS_EMAILS.length);
 // Resend sendir EKKERT frá léni sem er ekki staðfest hjá þeim — það svarar 403 og
-// pósturinn fer aldrei af stað. radagerdi.is er ekki staðfest þar (athugað 22.9.2026),
-// svo sjálfgefni sendandinn er reikningsfangið hjá Resend sjálfum, sem virkar án
-// staðfestingar en aðeins á netfang eigandans. Þegar radagerdi.is er staðfest í Resend
-// er MAIL_FROM sett í Vercel og þá má bæta fleirum á CMS_EMAILS.
-const MAIL_FROM = process.env.MAIL_FROM || 'Ráðagerði CMS <onboarding@resend.dev>';
+// pósturinn fer aldrei af stað. fyrirspurn.radagerdi.is ER staðfest (26. ágúst 2026,
+// Resend-reikningur spanoehf@gmail.com), svo sendandi verður að vera á því léni.
+// Sérstaklega: onboarding@resend.dev gengur EKKI — það nær aðeins á reikningsfangið
+// sjálft og svarar 403 á allt annað.
+const MAIL_FROM = process.env.MAIL_FROM || 'Ráðagerði CMS <cms@fyrirspurn.radagerdi.is>';
 const LINK_MINUTES = 15;
 
 const norm = (e) => String(e || '').trim().toLowerCase();

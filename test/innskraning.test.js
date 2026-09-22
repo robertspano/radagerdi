@@ -72,7 +72,11 @@ ok('rétt kaka fremst virkar', S.sessionEmail({ headers: { cookie: 'cms_session=
 ok('aðeins nágrannakaka → ekki innskráður', !S.sessionEmail({ headers: { cookie: 'a_cms_session=AAAA.1.00' } }));
 
 console.log('\nsendandinn');
-ok('sendandi er ekki óstaðfest lén', !/radagerdi\.is/.test(require('fs').readFileSync(require('path').join(__dirname,'..','api','_store.js'),'utf8').match(/const MAIL_FROM = .*/)[0]));
+// Sendandinn VERÐUR að vera á léni sem er staðfest hjá Resend, annars svarar það 403
+// og enginn kemst inn. Staðfest lén: fyrirspurn.radagerdi.is.
+const from = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', '_store.js'), 'utf8').match(/const MAIL_FROM = .*/)[0];
+ok('sendandi er á staðfesta léninu', /fyrirspurn\.radagerdi\.is/.test(from));
+ok('sendandi er ekki onboarding@resend.dev', !/resend\.dev/.test(from));
 
 console.log('\nsamtals: ' + pass + ' í lagi, ' + fail + ' brugðust');
 process.exit(fail ? 1 : 0);
