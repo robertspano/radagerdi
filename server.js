@@ -659,9 +659,13 @@ function serveFile(req, res, full) {
     if (err || !st.isFile()) return notFound(req, res, full);
     const ext = path.extname(full).toLowerCase();
     const type = MIME[ext] || 'application/octet-stream';
-    // ritilsskrárnar mega aldrei sitja fastar í skyndiminni — annars keyra notendur úrelta útgáfu
+    // ritilsskrárnar mega aldrei sitja fastar í skyndiminni — annars keyra notendur úrelta útgáfu.
+    // cms-inject.js er undantekning: hún stendur fremst á hverri síðu og stöðvar teikningu á meðan
+    // hún hleðst, svo hún má liggja stutt í skyndiminni gestsins (efnið sjálft kemur alltaf ferskt
+    // með síðunni). Án þess kostaði hver einasta síða auka netferð á undan fyrstu teikningu.
     const isCMS = full.includes(path.sep + 'cms' + path.sep);
-    const cache = isCMS ? 'no-cache' : cacheFor(ext);
+    const isInjector = isCMS && path.basename(full) === 'cms-inject.js';
+    const cache = isInjector ? 'public, max-age=300' : (isCMS ? 'no-cache' : cacheFor(ext));
     const stream = opts => fs.createReadStream(full, opts).on('error', () => res.destroy()).pipe(res);
     // Aðeins eitt bil er stutt (bytes=a-b, bytes=a-, bytes=-N); annað snið er hunsað og heil skrá send.
     // Bil sem passar ekki við skrána fær 416 — óyfirfarin gildi létu createReadStream kasta og drápu þjóninn.
