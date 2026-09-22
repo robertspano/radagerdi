@@ -33,6 +33,41 @@
   function setOverride(type, k, v) { content[type][PAGE][k] = v; markDirty(); }
   const payload = () => JSON.stringify({ texts: content.texts, images: content.images, bg: content.bg, html: content.html, hidden: content.hidden, order: content.order, style: content.style });
 
+  /* Ef innskráningin rennur út í miðri vinnu er vistunin ekki hægt að framkvæma — og
+   * áður stóð bara tilkynning um að breytingarnar „bíði í þessum flipa“. Það var ósatt:
+   * um leið og eigandinn fór á /admin (eins og tilkynningin bað hann um) fóru þær
+   * forgörðum. Hér er vinnan sett í geymslu vafrans og boðin aftur næst þegar hann
+   * opnar síðuna innskráður.
+   *
+   * Aðeins ÞESSI síða er geymd og sett aftur inn, ekki allur vefurinn: efnið sem kemur
+   * ferskt frá þjóninum getur verið nýrra (hinn eigandinn, eða Tristan, gæti hafa breytt
+   * öðrum síðum á meðan) og það má ekki yfirskrifast með gömlu eintaki.
+   */
+  const BUCKETS = ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style'];
+  const STASH = 'cms-obidud-vinna:' + PAGE;
+  const STASH_MAX_AGE = 7 * 864e5;
+  let authLost = false;
+
+  function stash() {
+    try { localStorage.setItem(STASH, JSON.stringify({ t: Date.now(), data: JSON.parse(payload()) })); } catch (e) { }
+  }
+  function clearStash() { try { localStorage.removeItem(STASH); } catch (e) { } }
+  function offerStash() {
+    let raw; try { raw = localStorage.getItem(STASH); } catch (e) { return; }
+    if (!raw) return;
+    let saved; try { saved = JSON.parse(raw); } catch (e) { return clearStash(); }
+    if (!saved || !saved.data || !(Date.now() - saved.t < STASH_MAX_AGE)) return clearStash();
+    const when = new Date(saved.t).toLocaleString('is-IS', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+    if (!confirm('Þú varst að breyta þessari síðu ' + when + ' þegar innskráningin rann út, og þær breytingar komust aldrei til skila.\n\nÁ ég að setja þær inn aftur?')) return clearStash();
+    for (const k of BUCKETS) {
+      const slice = saved.data[k] && saved.data[k][PAGE];
+      if (slice) { content[k] = content[k] || {}; content[k][PAGE] = slice; }
+    }
+    clearStash();
+    dirty = true;
+    save().then(() => { if (!dirty && !authLost) location.reload(); });
+  }
+
   function paneClean(pane) {
     const c = pane.cloneNode(true);
     c.querySelectorAll('[data-cms-ctl]').forEach(e => e.remove());
@@ -76,8 +111,10 @@
       saving = false;                        // annars festist vistun í „Vistar…“ að eilífu
     }
     if (res.status === 401) {                // útrunnin innskráning: endalausar tilraunir laga ekkert
+      authLost = true;
+      stash();                               // vinnan má ekki tapast þótt hann fari af síðunni
       setStatus('error', 'Innskráning útrunnin — skráðu þig inn aftur');
-      toast('Innskráningin er útrunnin. Opnaðu /admin og skráðu þig inn aftur — breytingarnar þínar bíða í þessum flipa.');
+      toast('Innskráningin er útrunnin. Breytingarnar eru geymdar — skráðu þig inn á /admin og opnaðu þessa síðu aftur, þá bjóðast þær til baka.');
       return;
     }
     if (res.ok) {
@@ -172,7 +209,6 @@
     add('🎁 Gjafabréf', openGiftcards);
     add('Matseðlar / flipar', openMenus);
     add('Opna skanna (/skann)', () => window.open('/skann', '_blank'));
-    add('Breyta lykilorði', openSettings);
     add('Skoða vef (án ritils)', () => confirmLeave(() => location.href = location.pathname));
     add('Útskrá', async () => { await flush(); await api('/api/logout', { method: 'POST' }); location.href = '/admin'; });
     document.body.appendChild(m);
@@ -1217,19 +1253,10 @@
     refresh();
   }
 
-  // ---------- settings ----------
-  function openSettings() {
-    const panel = makePanel('Stillingar', 'Breyttu lykilorði admin-svæðisins.');
-    const cur = field('Núverandi lykilorð', 'password');
-    const n1 = field('Nýtt lykilorð', 'password');
-    const n2 = field('Endurtaktu nýtt lykilorð', 'password');
-    panel.body.append(cur.wrap, n1.wrap, n2.wrap);
-    panel.foot.appendChild(btn('Breyta lykilorði', 'cms-primary', async () => {
-      if (n1.input.value !== n2.input.value) { toast('Lykilorðin passa ekki'); return; }
-      const res = await api('/api/password', { method: 'POST', body: JSON.stringify({ current: cur.input.value, next: n1.input.value }) });
-      if (res.ok) { toast('Lykilorði breytt'); closePanel(panel); } else toast('Villa: ' + (res.error || ''));
-    }));
-  }
+  // Hér var spjaldið „Breyta lykilorði". Sameiginlega lykilorðið er farið — aðgangur er
+  // bundinn netfangi og tengli í pósti — svo /api/password svarar 410 og spjaldið gat
+  // ekkert gert nema skila villu. Það er tekið út frekar en að standa sem blindgata.
+
   function field(label, type) { const wrap = el('label', 'cms-inputrow'); wrap.appendChild(el('span', null, label)); const input = el('input'); input.type = type || 'text'; wrap.appendChild(input); return { wrap, input }; }
 
   // ---------- panel shell ----------
@@ -1248,7 +1275,13 @@
   function closeAnyPanel() { if (openPanelEl) openPanelEl.remove(); openPanelEl = null; }
 
   // ---------- flush any pending change if the tab closes mid-edit ----------
-  window.addEventListener('pagehide', () => { if (dirty) { try { fetch('/api/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: payload(), keepalive: true }); } catch (e) { } } });
+  window.addEventListener('pagehide', () => {
+    if (!dirty) return;
+    // Sé innskráningin farin fær þessi beiðni 401 og enginn les svarið — vinnan hyrfi
+    // þegjandi. Þá fer hún í geymslu í staðinn.
+    if (authLost) return stash();
+    try { fetch('/api/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: payload(), keepalive: true }); } catch (e) { }
+  });
 
   // ---------- init ----------
   function init() {
@@ -1262,6 +1295,7 @@
     decorateMenus(); decorateGalleries(); decorateGalleryStrips();
     // re-decorate menus if tab content changes
     document.querySelectorAll('.w-tab-link').forEach(l => l.addEventListener('click', () => setTimeout(decorateMenus, 60)));
+    offerStash();
   }
   init();
 })();

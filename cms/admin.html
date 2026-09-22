@@ -33,21 +33,21 @@
     <p class="sub">Efnisstjórnun</p>
     <div id="step-email" hidden>
       <input id="em" type="email" autocomplete="email" placeholder="Netfangið þitt" style="margin-bottom:12px">
-      <button id="go-em" type="button">Fá kóða í tölvupósti</button>
+      <button id="go-em" type="button">Senda mér tengil</button>
+      <p class="hint">Þú færð póst með tengli sem opnar ritilinn. Ekkert lykilorð.</p>
     </div>
-    <div id="step-code" hidden>
-      <p class="hint" id="sentto"></p>
-      <input id="cd" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6 stafa kóði" style="margin-bottom:12px;letter-spacing:.3em;font-size:20px">
-      <button id="go-cd" type="button">Staðfesta</button>
-      <p class="hint"><a href="#" id="again">Senda kóðann aftur</a></p>
+    <div id="step-sent" hidden>
+      <p class="sent">📬</p>
+      <p id="sentto"></p>
+      <p class="hint">Opnaðu póstinn og smelltu á tengilinn. Hann gildir í 15 mínútur.<br>
+        <a href="#" id="again">Senda aftur</a></p>
     </div>
-    <div id="step-pw" hidden>
-      <input id="pw" type="password" autocomplete="current-password" placeholder="Lykilorð" style="margin-bottom:12px">
-      <button id="go" type="submit">Skrá inn</button>
+    <div id="step-off" hidden>
+      <p class="hint">Innskráning er ekki uppsett á þessum vef. Hafðu samband við Róbert.</p>
     </div>
     <div class="err" id="err"></div>
   </form>
-<style>.hint{color:#9aa0a4;font-size:12.5px;margin:2px 0 12px}.hint a{color:#629F67;font-weight:600;text-decoration:none}</style>
+<style>.sent{font-size:34px;margin:6px 0 2px}.hint{color:#9aa0a4;font-size:12.5px;margin:2px 0 12px}.hint a{color:#629F67;font-weight:600;text-decoration:none}</style>
 <script>
   const params = new URLSearchParams(location.search);
   // Aðeins slóðir á þessum vef: annars gæti smíðaður hlekkur (?next=https://… eða ?next=javascript:…)
@@ -59,53 +59,30 @@
   const next = safeNext(params.get('next')) || '/?cms=1';
   fetch('/api/session').then(r=>r.json()).then(s=>{ if(s.authed) location.replace(next); });
   const $=id=>document.getElementById(id), err=$('err');
-  const show=(id)=>{ ['step-email','step-code','step-pw'].forEach(x=>$(x).hidden=(x!==id)); err.textContent=''; };
+  const show=(id)=>{ ['step-email','step-sent','step-off'].forEach(x=>$(x).hidden=(x!==id)); err.textContent=''; };
   const jfetch=(url,body)=>fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
   let email='';
 
   fetch('/api/login-mode').then(r=>r.json()).then(m=>{
     if(m.mode==='email'){ show('step-email'); $('em').focus(); }
-    else { show('step-pw'); $('pw').focus(); }
-  }).catch(()=>{ show('step-pw'); });
+    else show('step-off');
+  }).catch(()=>{ show('step-email'); $('em').focus(); });
 
-  async function requestCode(){
+  async function sendLink(){
     email=$('em').value.trim().toLowerCase();
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ err.textContent='Sláðu inn gilt netfang'; return; }
-    $('go-em').disabled=true; $('go-em').textContent='Sendi kóða…';
+    $('go-em').disabled=true; $('go-em').textContent='Sendi…';
     try{
-      const j=await jfetch('/api/login-code',{email});
-      if(j.ok){ $('sentto').textContent='Kóði var sendur á '+email+' (ef það hefur aðgang)'; show('step-code'); $('cd').focus(); }
+      const j=await jfetch('/api/login-link',{email,next});
+      if(j.ok){ $('sentto').textContent='Tengill var sendur á '+email; show('step-sent'); }
       else err.textContent=j.error||'Villa';
     }catch(e){ err.textContent='Villa við tengingu'; }
-    $('go-em').disabled=false; $('go-em').textContent='Fá kóða í tölvupósti';
+    $('go-em').disabled=false; $('go-em').textContent='Senda mér tengil';
   }
-  async function verifyCode(){
-    const code=$('cd').value.trim();
-    if(code.length<6){ err.textContent='Sláðu inn 6 stafa kóðann'; return; }
-    $('go-cd').disabled=true; $('go-cd').textContent='Staðfesti…';
-    try{
-      const j=await jfetch('/api/login-verify',{email,code});
-      if(j.ok){ location.replace(next); return; }
-      err.textContent=j.error||'Rangur kóði';
-    }catch(e){ err.textContent='Villa við tengingu'; }
-    $('go-cd').disabled=false; $('go-cd').textContent='Staðfesta';
-  }
-  $('go-em').onclick=requestCode;
-  $('go-cd').onclick=verifyCode;
-  $('again').onclick=(e)=>{ e.preventDefault(); $('cd').value=''; requestCode(); };
-  $('em').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); requestCode(); } });
-  $('cd').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); verifyCode(); } });
-  $('cd').addEventListener('input',()=>{ if($('cd').value.trim().length===6) verifyCode(); });
-
-  $('f').addEventListener('submit', async (e)=>{
-    e.preventDefault(); if($('step-pw').hidden) return;
-    err.textContent=''; $('go').disabled=true; $('go').textContent='Skrái inn…';
-    try{
-      const j=await jfetch('/api/login',{password:$('pw').value});
-      if(j.ok){ location.replace(next); }
-      else { err.textContent=j.error||'Rangt lykilorð'; $('go').disabled=false; $('go').textContent='Skrá inn'; }
-    }catch(ex){ err.textContent='Villa við tengingu'; $('go').disabled=false; $('go').textContent='Skrá inn'; }
-  });
+  $('go-em').onclick=sendLink;
+  $('again').onclick=(e)=>{ e.preventDefault(); show('step-email'); $('em').focus(); };
+  $('em').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); sendLink(); } });
+  $('f').addEventListener('submit',e=>{ e.preventDefault(); sendLink(); });
 </script>
 </body>
 </html>

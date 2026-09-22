@@ -755,6 +755,10 @@ async function handleAPI(req, res, url) {
     return sendJSON(res, 401, { ok: false, error: 'Rangur kóði' });
   }
   if (p === '/api/login' && req.method === 'POST') {
+    // Sameiginlega lykilorðið er aflagt. Þessi þjónn er varaleið fyrir vefinn sjálfan;
+    // ritstjórn fer fram á radagerdi.is þar sem aðgangur er bundinn netfangi.
+    return sendJSON(res, 410, { ok: false, error: 'Ritstjórn fer fram á https://radagerdi.is/admin' });
+    /* eslint-disable no-unreachable */
     if (EMAIL_LOGIN) return sendJSON(res, 403, { ok: false, error: 'Innskráning fer fram með tölvupóstkóða' });
     const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
     if (verifyPassword(body.password || '')) {

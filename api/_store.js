@@ -167,40 +167,129 @@ async function update(name, fallback, mutate, message) {
   throw e;
 }
 
-// ---------- innskráning (sama kerfi og á Render) ----------
-async function getAuth() {
-  const a = await readJSON('auth', null, { strict: true });
-  if (!a || !a.salt || !a.hash) throw new Error('Lykilorðsskrá fannst ekki');
-  return a;
+// ---------- innskráning: tengill í tölvupósti, ekkert sameiginlegt lykilorð ----------
+//
+// Ekkert er geymt milli beiðna (það er enginn diskur og ekkert langlíft ferli), svo bæði
+// tengillinn og lotan eru undirrituð með leyndarmáli þjónsins og staðfest með útreikningi.
+// Aðgangslistinn (CMS_EMAILS) er lesinn við hverja staðfestingu: sé netfang tekið af
+// listanum lokast það strax, líka þótt kakan sé enn í gildi.
+const CMS_EMAILS = (process.env.CMS_EMAILS || '')
+  .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+const EMAIL_LOGIN = !!(process.env.RESEND_API_KEY && CMS_EMAILS.length);
+// Resend sendir EKKERT frá léni sem er ekki staðfest hjá þeim — það svarar 403 og
+// pósturinn fer aldrei af stað. radagerdi.is er ekki staðfest þar (athugað 22.9.2026),
+// svo sjálfgefni sendandinn er reikningsfangið hjá Resend sjálfum, sem virkar án
+// staðfestingar en aðeins á netfang eigandans. Þegar radagerdi.is er staðfest í Resend
+// er MAIL_FROM sett í Vercel og þá má bæta fleirum á CMS_EMAILS.
+const MAIL_FROM = process.env.MAIL_FROM || 'Ráðagerði CMS <onboarding@resend.dev>';
+const LINK_MINUTES = 15;
+
+const norm = (e) => String(e || '').trim().toLowerCase();
+
+// Slóð sem berst utan frá (?next=) má aðeins vísa innan vefsins. Það dugir EKKI að
+// heimta '/' fremst: '//annad-len.is' er líka gild slóð fyrir vafrann — hann les hana
+// sem annað lén og lætur samskiptaregluna fylgja síðunni. Tengill úr pósti sem skilar
+// fólki á ókunnugt lén er nákvæmlega veiðibragðið sem innskráningin á að útiloka.
+function safeNext(raw, fallback) {
+  const s = String(raw || '');
+  if (!s.startsWith('/')) return fallback;
+  if (s.startsWith('//') || s.startsWith('/\\')) return fallback;
+  return /^\/[A-Za-z0-9._\-\/?=&]*$/.test(s) ? s : fallback;
 }
-async function verifyPassword(pw) {
-  const a = await getAuth();
-  const h = crypto.scryptSync(String(pw), a.salt, 32).toString('hex');
-  const want = Buffer.from(a.hash), got = Buffer.from(h);
-  return want.length === got.length && crypto.timingSafeEqual(want, got);
+const mayEnter = (email) => CMS_EMAILS.includes(norm(email));
+const sign = (msg) => crypto.createHmac('sha256', SESSION_KEY).update(msg).digest('hex');
+const sameSig = (a, b) => {
+  const x = Buffer.from(String(a)), y = Buffer.from(String(b));
+  return x.length === y.length && crypto.timingSafeEqual(x, y);
+};
+
+// --- tengillinn ---
+function loginLink(email, origin, next) {
+  const exp = Date.now() + LINK_MINUTES * 60 * 1000;
+  const e = norm(email);
+  const sig = sign('link|' + e + '|' + exp);
+  return origin + '/api/login-verify?e=' + encodeURIComponent(e) + '&exp=' + exp + '&sig=' + sig +
+    (next ? '&next=' + encodeURIComponent(next) : '');
 }
-// Leyndarmál þjónsins er hluti af lyklinum: þótt lykilorðs-hashið kæmist út er ekki hægt
-// að búa til gilda innskráningarköku úr því einu. Sama gildi og á Render, svo innskráningar
-// sem eru í gildi haldast þegar skipt er um hýsingu.
-async function sessionToken() {
-  const a = await getAuth();
-  return crypto.createHmac('sha256', SESSION_KEY + ':' + (a.hash || 'x')).update('cms-authed-v2').digest('hex');
+function checkLink(email, exp, sig) {
+  const e = norm(email);
+  if (!mayEnter(e)) return false;
+  const n = Number(exp);
+  if (!Number.isFinite(n) || n < Date.now()) return false;
+  return sameSig(sign('link|' + e + '|' + n), sig);
 }
-async function isAuthed(req) {
-  const m = String((req.headers && req.headers.cookie) || '').match(/cms_session=([a-f0-9]+)/);
-  if (!m) return false;
-  try {
-    const want = Buffer.from(await sessionToken()), got = Buffer.from(m[1]);
-    return want.length === got.length && crypto.timingSafeEqual(want, got);
-  } catch (e) { return false; }
+
+// --- lotan ---
+// Gildistíminn er UNDIRRITAÐUR með í kökunni. Max-Age eitt og sér er aðeins tilmæli til
+// vafrans: kaka sem lekur (afrituð úr tæki, úr annál) myndi annars opna ritilinn um
+// aldur og ævi. Hér deyr hún á þjóninum á settum degi, hvar sem hún er niðurkomin.
+const SESSION_DAYS = 30;
+function sessionCookieValue(email, exp) {
+  const e = norm(email);
+  return Buffer.from(e).toString('base64url') + '.' + exp + '.' + sign('cms-v4|' + e + '|' + exp);
 }
-async function setPassword(pw) {
-  const salt = crypto.randomBytes(16).toString('hex');
-  const hash = crypto.scryptSync(String(pw), salt, 32).toString('hex');
-  await update('auth', {}, () => ({ salt, hash }), 'CMS: lykilorð uppfært af vefnum');
+function sessionEmail(req) {
+  // Akkerað við upphaf kökunnar: án þess passar líka kaka sem HEITIR eitthvað annað og
+  // endar á cms_session (t.d. a_cms_session frá undirléni) og skyggir á þá réttu.
+  const m = String((req.headers && req.headers.cookie) || '').match(/(?:^|;\s*)cms_session=([A-Za-z0-9_\-]+\.\d+\.[a-f0-9]+)/);
+  if (!m) return null;
+  const [b64, exp, sig] = m[1].split('.');
+  let e;
+  try { e = Buffer.from(b64, 'base64url').toString('utf8'); } catch (x) { return null; }
+  const n = Number(exp);
+  if (!Number.isFinite(n) || n < Date.now()) return null;
+  if (!mayEnter(e)) return null;                       // tekinn af listanum → lokað strax
+  return sameSig(sign('cms-v4|' + e + '|' + n), sig) ? e : null;
 }
-const cookieFor = (token) =>
-  `cms_session=${token}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=2592000`;
+async function isAuthed(req) { return !!sessionEmail(req); }
+
+/* Hemill á beiðnir.
+ *
+ * Render-þjónninn hafði þak (5 á 15 mín) sem datt út í flutningnum, því Vercel deilir
+ * ekki minni milli keyrslna. Án þaks má keyra endapunktinn í hring: pósthólf eigandans
+ * fyllist og dagskammturinn hjá Resend klárast — og þá kemst ENGINN inn þann daginn.
+ *
+ * Þetta er per-keyrslu og stöðvar því ekki dreifða árás ein og sér; Vercel Firewall
+ * (leiðarregla á /api/login-link) er lagið sem gerir það. Saman duga þau.
+ *
+ * Talið er á netfangið HVORT SEM ÞAÐ ER Á LISTANUM EÐA EKKI — annars mætti lesa út úr
+ * því hverjir eiga aðgang að ritlinum.
+ */
+const hits = new Map();
+function overLimit(key, max, windowMs) {
+  const now = Date.now();
+  const list = (hits.get(key) || []).filter(t => now - t < windowMs);
+  if (list.length >= max) { hits.set(key, list); return true; }
+  list.push(now);
+  hits.set(key, list);
+  if (hits.size > 500) for (const k of hits.keys()) { if (!hits.get(k).length) hits.delete(k); }
+  return false;
+}
+const LIMITS = { email: [3, 900000], ip: [10, 900000] };   // 15 mínútna gluggi
+
+async function sendLoginLink(email, origin, next) {
+  const link = loginLink(email, origin, next);
+  const r = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: MAIL_FROM, to: [norm(email)],
+      subject: 'Skrá mig inn í Ráðagerði CMS',
+      html: `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.6;color:#1a1b1f">
+        <p>Smelltu hér til að opna ritilinn:</p>
+        <p><a href="${link}" style="display:inline-block;background:#629F67;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:600">Opna Ráðagerði CMS</a></p>
+        <p style="color:#6b7280;font-size:14px">Tengillinn gildir í ${LINK_MINUTES} mínútur og aðeins fyrir þetta netfang.
+        Ef þú baðst ekki um hann máttu hunsa þennan póst — enginn kemst inn án hans.</p>
+      </div>`,
+    }),
+  });
+  if (!r.ok) throw new Error('Resend ' + r.status + ': ' + (await r.text()).slice(0, 200));
+}
+
+const cookieFor = (email) => {
+  const exp = Date.now() + SESSION_DAYS * 86400000;
+  return `cms_session=${sessionCookieValue(email, exp)}; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=${SESSION_DAYS * 86400}`;
+};
 
 // ---------- svarhjálp ----------
 function sendJSON(res, code, obj, headers) {
@@ -241,6 +330,8 @@ function sendWriteError(res, e) {
 module.exports = {
   GH_ON, GH_REPO, GH_BRANCH, PATHS, IS_PROD, emptyContent,
   encBuf, decBuf, ghGet, ghPut, readRaw, readJSON, update,
-  getAuth, verifyPassword, sessionToken, isAuthed, setPassword, cookieFor,
+  EMAIL_LOGIN, CMS_EMAILS, mayEnter, safeNext, loginLink, checkLink, sendLoginLink,
+  overLimit, LIMITS,
+  isAuthed, sessionEmail, cookieFor,
   sendJSON, readBody, requireAuth, sendWriteError,
 };

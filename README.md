@@ -1,6 +1,6 @@
 # Ráðagerði — vefur, CMS og gjafabréf
 
-**Vefurinn í loftinu:** <https://radagerdi.onrender.com> · **Efnisstjórnun:** <https://radagerdi.onrender.com/admin>
+**Vefurinn í loftinu:** <https://radagerdi.is> · **Efnisstjórnun:** <https://radagerdi.is/admin>
 
 ---
 
@@ -22,7 +22,7 @@ git push
 ```
 
 > **Push á `main` fer sjálfkrafa í loftið.** Render tekur við breytingunni um leið
-> og hún er komin á GitHub og uppfærir <https://radagerdi.onrender.com> á ~40 sekúndum.
+> og hún er komin á GitHub og uppfærir <https://radagerdi.is> á ~40 sekúndum.
 > Ekkert handvirkt skref, enginn Render-aðgangur nauðsynlegur.
 > Stöðuna má sjá á [Render dashboard](https://dashboard.render.com) eða í `Actions`-flipanum á GitHub.
 
@@ -84,7 +84,12 @@ node server.js
 - **Vefurinn:** <http://localhost:8787/>
 - **Efnisstjórnun (admin):** <http://localhost:8787/admin>
 
-> Sjálfgefið lykilorð: **`radagerdi`** — breyttu því strax í admin → **Stillingar**.
+> Innskráning er bundin netfangi: þú slærð netfangið þitt inn á `/admin` og færð
+> tengil í tölvupósti sem opnar ritilinn. Það er ekkert sameiginlegt lykilorð — og það
+> á ekkert slíkt að vera hér, því þessi skrá er opin öllum á GitHub.
+>
+> Netföngin sem komast inn eru talin upp í `CMS_EMAILS` í Vercel. Staðbundið þarf
+> `CMS_EMAILS` og `RESEND_API_KEY` í umhverfinu, annars er innskráning óvirk.
 
 ### Hvernig CMS-ið virkar
 
