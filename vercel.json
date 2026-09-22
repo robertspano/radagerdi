@@ -10,6 +10,9 @@
     },
     "api/gone.js": {
       "includeFiles": "cms/404.html"
+    },
+    "api/sitemap.js": {
+      "includeFiles": "**/*.html"
     }
   },
   "ignoreCommand": "sh -c 'case \"$VERCEL_GIT_COMMIT_MESSAGE\" in \"CMS:\"*) exit 0;; *) exit 1;; esac'",

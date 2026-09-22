@@ -1,187 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>https://radagerdi.is/</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/matsedlar.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/matsedlar.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-matsedlar.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/matsedlar.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/brons.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/brons.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-brons.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/brons.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/takeaway.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/takeaway.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-takeaway.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/takeaway.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/hopar.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/hopar.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-hopar.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/hopar.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/hoparhadegi.html</loc>
-    <lastmod>2026-09-14</lastmod>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/hoparkvold.html</loc>
-    <lastmod>2026-09-14</lastmod>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/hoparbrons.html</loc>
-    <lastmod>2026-09-14</lastmod>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/drykkir.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/drykkir.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-drykkir.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/drykkir.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/eftirrettir.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/eftirrettir.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-eftirrettir.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/eftirrettir.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/barnamatsedill.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/barnamatsedill.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-barnamatsedill.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/barnamatsedill.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/veisluthjonusta.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/veisluthjonusta.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-veisluthjonusta.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/veisluthjonusta.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/myndir.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/myndir.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-myndir.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/myndir.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/um-okkur.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/um-okkur.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-about-us.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/um-okkur.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/hafa-samband.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/hafa-samband.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-contact-us.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/hafa-samband.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-matsedlar.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/matsedlar.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-matsedlar.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/matsedlar.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-brons.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/brons.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-brons.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/brons.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-takeaway.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/takeaway.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-takeaway.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/takeaway.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-hopar.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/hopar.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-hopar.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/hopar.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-drykkir.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/drykkir.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-drykkir.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/drykkir.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-eftirrettir.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/eftirrettir.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-eftirrettir.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/eftirrettir.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-barnamatsedill.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/barnamatsedill.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-barnamatsedill.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/barnamatsedill.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-veisluthjonusta.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/veisluthjonusta.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-veisluthjonusta.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/veisluthjonusta.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-myndir.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/myndir.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-myndir.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/myndir.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-about-us.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/um-okkur.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-about-us.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/um-okkur.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-contact-us.html</loc>
-    <lastmod>2026-09-14</lastmod>
-    <xhtml:link rel="alternate" hreflang="is" href="https://radagerdi.is/hafa-samband.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://radagerdi.is/en-contact-us.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://radagerdi.is/hafa-samband.html"/>
-  </url>
-  <url>
-    <loc>https://radagerdi.is/en-seltjarnarnes-iceland-travel-guide.html</loc>
-    <lastmod>2026-09-14</lastmod>
-  </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://radagerdi.is/barnamatsedill.html</loc></url>
+  <url><loc>https://radagerdi.is/brons.html</loc></url>
+  <url><loc>https://radagerdi.is/drykkir.html</loc></url>
+  <url><loc>https://radagerdi.is/eftirrettir.html</loc></url>
+  <url><loc>https://radagerdi.is/en-about-us.html</loc></url>
+  <url><loc>https://radagerdi.is/en-barnamatsedill.html</loc></url>
+  <url><loc>https://radagerdi.is/en-brons.html</loc></url>
+  <url><loc>https://radagerdi.is/en-contact-us.html</loc></url>
+  <url><loc>https://radagerdi.is/en-drykkir.html</loc></url>
+  <url><loc>https://radagerdi.is/en-eftirrettir.html</loc></url>
+  <url><loc>https://radagerdi.is/en-hopar.html</loc></url>
+  <url><loc>https://radagerdi.is/en-matsedlar.html</loc></url>
+  <url><loc>https://radagerdi.is/en-myndir.html</loc></url>
+  <url><loc>https://radagerdi.is/en-seltjarnarnes-iceland-travel-guide.html</loc></url>
+  <url><loc>https://radagerdi.is/en-takeaway.html</loc></url>
+  <url><loc>https://radagerdi.is/en-veisluthjonusta.html</loc></url>
+  <url><loc>https://radagerdi.is/en.html</loc></url>
+  <url><loc>https://radagerdi.is/hafa-samband.html</loc></url>
+  <url><loc>https://radagerdi.is/hopar.html</loc></url>
+  <url><loc>https://radagerdi.is/hoparbrons.html</loc></url>
+  <url><loc>https://radagerdi.is/hoparhadegi.html</loc></url>
+  <url><loc>https://radagerdi.is/hoparkvold.html</loc></url>
+  <url><loc>https://radagerdi.is/</loc></url>
+  <url><loc>https://radagerdi.is/matsedlar.html</loc></url>
+  <url><loc>https://radagerdi.is/myndir.html</loc></url>
+  <url><loc>https://radagerdi.is/starfsumsokn.html</loc></url>
+  <url><loc>https://radagerdi.is/takeaway.html</loc></url>
+  <url><loc>https://radagerdi.is/um-okkur.html</loc></url>
+  <url><loc>https://radagerdi.is/veisluthjonusta.html</loc></url>
 </urlset>

@@ -85,6 +85,9 @@ export default function middleware(req) {
   // /brons.html/ → /brons.html
   if (p !== raw && /^\/[^/]+\.html$/.test(p)) return Response.redirect(new URL(p + url.search, req.url), 301);
 
+  // sitemap er búið til úr síðunum sjálfum, svo það uppfærist þegar síða bætist við eða fer
+  if (p === '/sitemap.xml') return rewrite(new URL('/api/sitemap', req.url));
+
   // síðurnar sjálfar: efnið fléttast inn í /api/page
   if (p === '/' || /^\/[^/]+\.html$/.test(p)) {
     const name = p === '/' ? 'index.html' : p.slice(1);
