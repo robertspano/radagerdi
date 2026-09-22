@@ -130,18 +130,21 @@ function decBuf(buf) {
   return Buffer.concat([d.update(ct), d.final()]).toString('utf8');
 }
 
-async function ghGet(repo) {
+async function ghGet(repo, opts) {
+  const binary = !!(opts && opts.binary);
   const r = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${encodeURI(repo)}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
   if (r.status === 404) return { missing: true };
   if (!r.ok) throw new Error('GitHub ' + r.status + ' við lestur á ' + repo);
   const j = await r.json();
-  let buf = Buffer.from(j.content || '', 'base64');
-  if (!j.content && j.download_url) {          // skrár yfir 1 MB koma ekki innbyggðar
+  // content-reiturinn er EKKI orðréttur fyrir tvíundarskrár: GitHub túlkar þær sem texta
+  // og skilar endurkóðuðum (mælt: 173 bæti → 256). Þess vegna komu dulkóðuðu skrárnar
+  // ólæsilegar til baka („óþekkt snið") og lykilorðið féll aftur í sjálfgefna gildið.
+  if ((binary || !j.content) && j.download_url) {
     const b = await fetch(j.download_url, { headers: ghHeaders() });
     if (!b.ok) throw new Error('GitHub ' + b.status + ' við niðurhal á ' + repo);
-    buf = Buffer.from(await b.arrayBuffer());
+    return { sha: j.sha, buf: Buffer.from(await b.arrayBuffer()) };
   }
-  return { sha: j.sha, buf };
+  return { sha: j.sha, buf: Buffer.from(j.content || '', 'base64') };
 }
 
 async function ghPut(repo, buf, message) {
@@ -176,7 +179,7 @@ async function ghPullAll() {
   let allOk = true;
   for (const m of MIRROR) {
     try {
-      const got = await ghGet(m.repo);
+      const got = await ghGet(m.repo, { binary: m.enc });
       if (got.missing) {
         // Ekkert til í GitHub enn — sáum því sem er á disknum (t.d. nýbúna lykilorðsskrá)
         // svo innskráningar og gjafabréf haldist stöðug frá og með næstu ræsingu.

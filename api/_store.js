@@ -57,7 +57,7 @@ const ghHeaders = () => ({
   'User-Agent': 'radagerdi-cms',
 });
 
-async function ghGet(repoPath) {
+async function ghGet(repoPath, { binary = false } = {}) {
   if (!GH_ON) throw new Error('GH_TOKEN vantar');
   const r = await fetch(
     `https://api.github.com/repos/${GH_REPO}/contents/${encodeURI(repoPath)}?ref=${GH_BRANCH}`,
@@ -66,13 +66,15 @@ async function ghGet(repoPath) {
   if (r.status === 404) return { missing: true };
   if (!r.ok) throw new Error('GitHub ' + r.status + ' við lestur á ' + repoPath);
   const j = await r.json();
-  let buf = Buffer.from(j.content || '', 'base64');
-  if (!j.content && j.download_url) {            // skrár yfir 1 MB koma ekki innbyggðar
+  // content-reiturinn úr Contents-API-inu er EKKI orðréttur fyrir tvíundarskrár:
+  // GitHub túlkar þær sem texta og skilar þeim endurkóðuðum (mælt: 173 bæti → 256).
+  // Dulkóðuðu skrárnar verða því alltaf að koma um download_url, sem er orðrétt.
+  if ((binary || !j.content) && j.download_url) {
     const b = await fetch(j.download_url, { headers: ghHeaders() });
     if (!b.ok) throw new Error('GitHub ' + b.status + ' við niðurhal á ' + repoPath);
-    buf = Buffer.from(await b.arrayBuffer());
+    return { sha: j.sha, buf: Buffer.from(await b.arrayBuffer()) };
   }
-  return { sha: j.sha, buf };
+  return { sha: j.sha, buf: Buffer.from(j.content || '', 'base64') };
 }
 
 async function ghPutOnce(repoPath, buf, message, sha) {
@@ -107,7 +109,7 @@ const memo = new Map();   // slóð -> { t, text, sha }
 async function readRaw(repoPath, { enc = false, fresh = false } = {}) {
   const hit = memo.get(repoPath);
   if (!fresh && hit && Date.now() - hit.t < TTL_MS) return hit;
-  const got = await ghGet(repoPath);
+  const got = await ghGet(repoPath, { binary: enc });
   if (got.missing) { const rec = { t: Date.now(), text: null, sha: null }; memo.set(repoPath, rec); return rec; }
   let text;
   if (enc) {
