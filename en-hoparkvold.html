@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Groups · Ráðagerði Restaurant Seltjarnarnes</title>
-<meta name="description" content="Group menus at Ráðagerði in Seltjarnarnes for parties of more than 10 — two set menus (6.900/9.900 kr.), group brunch and a kids menu.">
-<meta property="og:title" content="Groups · Ráðagerði Restaurant Seltjarnarnes">
-<meta property="og:description" content="Group menus at Ráðagerði — two set menus, group brunch and a kids menu.">
-<link rel="canonical" href="https://radagerdi.is/en-hopar.html">
-<link rel="alternate" hreflang="is" href="https://radagerdi.is/hopar.html">
-<link rel="alternate" hreflang="en" href="https://radagerdi.is/en-hopar.html">
-<link rel="alternate" hreflang="x-default" href="https://radagerdi.is/hopar.html">
+<title>Groups · Dinner · Ráðagerði Restaurant Seltjarnarnes</title>
+<meta name="description" content="Ráðagerði's group dinner menu, every day from 16:00, for parties of more than 10 guests. Two options: 6.900 kr. and 9.900 kr.">
+<meta property="og:title" content="Groups · Dinner · Ráðagerði Restaurant Seltjarnarnes">
+<meta property="og:description" content="Ráðagerði's group dinner menu, every day from 16:00, for parties of more than 10 guests. Two options: 6.900 kr. and 9.900 kr.">
+<link rel="canonical" href="https://radagerdi.is/en-hoparkvold.html">
+  <link rel="alternate" hreflang="is" href="https://radagerdi.is/hoparkvold.html" />
+  <link rel="alternate" hreflang="en" href="https://radagerdi.is/en-hoparkvold.html" />
+  <link rel="alternate" hreflang="x-default" href="https://radagerdi.is/hoparkvold.html" />
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ráðagerði">
-<meta property="og:url" content="https://radagerdi.is/en-hopar.html">
+<meta property="og:url" content="https://radagerdi.is/en-hoparkvold.html">
 <meta property="og:locale" content="en_GB">
-<meta property="og:image" content="https://radagerdi.is/assets/insta/insta-08.jpg">
+<meta property="og:image" content="https://radagerdi.is/assets/insta/insta-03.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://radagerdi.is/assets/insta/insta-08.jpg">
+<meta name="twitter:image" content="https://radagerdi.is/assets/insta/insta-03.jpg">
 <link rel="shortcut icon" href="assets/63bddf55571e7c33b03fb181_radagerdi-32x32%20v2.png">
 <link rel="apple-touch-icon" href="assets/63bddf5d206bdd48525b5210_radagerdi-256x256-v2.png">
 <link rel="preload" href="fonts/6353a2db71b74a4eaef13f21_WindsorD.otf" as="font" type="font/otf" crossorigin>
@@ -42,7 +42,7 @@
   .wrap{max-width:1920px;margin:0 auto;padding:0 clamp(20px,3.2vw,62px)}
 
   /* green info box */
-  .gbox{border:3px solid var(--gr);border-radius:190px 190px 26px 26px;overflow:hidden;margin-top:52px}
+  .gbox{border:3px solid var(--gr);border-radius:26px;overflow:hidden;margin-top:52px}
   .gbox-top{background:var(--gr);color:#fff;text-align:center;padding:44px 40px 40px}
   .gbox-top h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(23px,2.35vw,44px);letter-spacing:.04em;margin:0;text-transform:uppercase;line-height:1.45}
   .gbox-top h1 .line2{display:inline-block;margin-top:18px;border-bottom:3px solid #fff;padding-bottom:5px}
@@ -50,27 +50,34 @@
   .gbox-bot p{font-size:clamp(16px,1.5vw,21px);line-height:2;margin:0 auto;max-width:1400px}
 
   /* three menu columns */
-  .mcols{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin:84px 0 74px;text-align:center}
+  .mcols{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin:84px 0 120px;text-align:center}
   .mcols .lbl{font-size:clamp(16px,1.5vw,21px);font-weight:700;margin:0 0 46px}
   .mbtn{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:22px;min-height:170px;
     color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(28px,2.6vw,40px);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;
     transition:background-color .15s,color .15s;margin:0 4px}
   .mbtn:hover{background:var(--gr);color:#fff}
 
-  .mbtn{position:relative}
-  .mbtn.soon{pointer-events:none;opacity:.55}
-  .soon-tag{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-family:'Montserrat',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-indent:0;padding:5px 14px;border-radius:99px;white-space:nowrap}
-  .guidebox{text-align:center;margin:64px 0 110px}
-  .guidebox .glbl{font-size:clamp(16px,1.5vw,21px);font-weight:700;margin:0 0 30px}
-  .guidebox .mbtn{display:inline-flex;min-height:0;padding:26px 52px;font-size:clamp(22px,2.1vw,32px);letter-spacing:.18em;text-indent:.18em}
+  .ginfo{border:3px solid var(--red);color:var(--red);text-align:center;padding:34px clamp(20px,3vw,48px);margin:26px 0 0}
+  .ginfo p{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(16px,1.4vw,23px);line-height:1.75;letter-spacing:.02em;margin:0 0 14px}
+  .ginfo p:last-child{margin-bottom:0}
+  .redcols{grid-template-columns:1fr !important;margin-top:20px !important}
+  .gbox2{border:3px solid var(--red);color:var(--red);text-align:center;padding:38px clamp(20px,3vw,52px) 46px;margin:26px 0 26px}
+  .gbox2 .gi{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(16px,1.4vw,23px);line-height:1.75;margin:0 0 14px}
+  .gbox2 .gi:last-of-type{margin-bottom:0}
+  .gmenu{border:3px solid var(--gr);color:var(--gr);text-align:center;padding:38px clamp(20px,3vw,52px) 46px;margin:0 0 60px;border-radius:26px}
+  .gmenu .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(20px,1.8vw,29px);letter-spacing:.03em;margin:34px 0 12px}
+  .gmenu .rn:first-child{margin-top:0}
+  .gmenu .rd{font-family:'Montserrat',sans-serif;font-size:16.5px;line-height:1.8;margin:0}
+  .valcols{display:grid;grid-template-columns:1fr 1fr;gap:0 50px;text-align:center}
 
-  .introp{text-align:center;max-width:1000px;margin:64px auto -4px;font-size:clamp(15px,1.4vw,19px);line-height:1.9;color:var(--gr);padding:0 6px}
-  .redcols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:30px 0 0;align-items:stretch}
-  .redbox{border:3px solid var(--red);color:var(--red);text-align:center;padding:44px 30px}
-  .rbt{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(22px,2vw,32px);letter-spacing:.06em;margin:0 0 6px;border-bottom:2px solid var(--red);display:inline-block;padding-bottom:6px}
-  .redbox .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(19px,1.7vw,27px);letter-spacing:.03em;margin:30px 0 12px}
-  .redbox .rd{font-family:'Montserrat',sans-serif;font-size:16px;line-height:1.8;margin:0}
-  @media(max-width:900px){.redcols{grid-template-columns:1fr;gap:16px;margin-top:20px}.redbox{padding:34px 20px}}
+  /* lóðrétt lína milli valkostanna — nær ekki í rammann (bil að ofan/neðan) */
+  .valcols{position:relative}
+  .valcols::before{content:"";position:absolute;left:50%;top:18px;bottom:18px;width:2px;transform:translateX(-50%);background:var(--gr);opacity:.45}
+  @media(max-width:700px){
+    .valcols::before{display:none}
+    .valcol + .valcol{margin-top:34px;padding-top:34px;border-top:2px solid rgba(98,159,103,.45)}
+  }
+  @media(max-width:700px){.valcols{grid-template-columns:1fr;gap:0}}
   /* footer */
   .rg2-footer{background:var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:start}
   .rg2-logo{justify-self:center;align-self:stretch;display:flex;align-items:center}
@@ -86,15 +93,14 @@
   .rg2-hours p{color:#fff;font-size:15.5px;font-weight:400;margin:0 0 18px;letter-spacing:.02em}
 
   @media(max-width:900px){
-    .mcols{grid-template-columns:1fr;gap:40px;margin:56px 0 44px}
+    .mcols{grid-template-columns:1fr;gap:40px;margin:56px 0 70px}
     .mcols .lbl{margin-bottom:22px}
     .mbtn{min-height:120px}
-    .gbox{border-radius:110px 110px 26px 26px}
+    .hg-hero{border-radius:110px 110px 0 0}
     .gbox-top{padding:40px 22px 36px}
     .gbox-bot{padding:48px 22px 52px}
     .bar{padding:20px 18px}
     .bar .brand img{height:34px}
-    .guidebox{margin:44px 0 70px}.guidebox .mbtn{width:100%;padding:20px 24px}
     .rg2-footer{grid-template-columns:1fr;text-align:center;padding:54px 24px 60px}
     .rg2-logo{order:-1;align-self:auto}
     .rg2-logo img{height:70px;width:70px;margin:0 auto 10px}
@@ -102,12 +108,31 @@
     .rg2-footer>div:first-child{display:flex;flex-direction:column;align-items:center}
   }
 
+  .soonbar{background:var(--red);color:#fff;text-align:center;border-radius:14px;margin-top:30px;padding:14px 22px;font-size:15px;font-weight:600;letter-spacing:.02em}
+  .subnav{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:44px 0 10px}
+  .subnav a{display:flex;align-items:center;justify-content:center;border:2px solid var(--gr);border-radius:18px;min-height:76px;
+    color:var(--gr);text-decoration:none;font-family:'Windsord',serif;font-size:clamp(20px,1.8vw,30px);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;transition:.15s;white-space:nowrap}
+  .subnav a:hover,.subnav a.on{background:var(--gr);color:#fff}
+  .hg-hero{background:var(--gr);color:#fff;text-align:center;border-radius:190px 190px 0 0;margin-top:30px;padding:46px 30px 42px}
+  .hg-hero h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,4.4vw,68px);letter-spacing:.04em;margin:0 0 20px;text-transform:uppercase}
+  .hg-hero p{font-family:'Windsord',serif;font-size:clamp(17px,1.6vw,26px);letter-spacing:.08em;text-transform:uppercase;margin:0}
+  @media(max-width:480px){.hg-hero{border-radius:60px 60px 0 0;padding:56px 18px 34px}.hg-hero h1{font-size:clamp(22px,7.5vw,30px)}.hg-hero p{font-size:clamp(13px,3.6vw,17px)}}
+  .redcols{display:grid;grid-template-columns:1fr 1.3fr;gap:26px;margin:26px 0 60px;align-items:stretch}
+  .redbox{border:3px solid var(--red);color:var(--red);text-align:center;padding:50px 34px}
+  .redbox.info{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(17px,1.5vw,25px);line-height:1.75;display:flex;flex-direction:column;justify-content:center;gap:34px}
+  .redbox .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(20px,1.8vw,29px);letter-spacing:.03em;margin:34px 0 16px}
+  .redbox .rn:first-child{margin-top:0}
+  .redbox .rd{font-family:'Montserrat',sans-serif;font-size:16.5px;line-height:1.8;margin:0}
+  @media(max-width:900px){.redcols{grid-template-columns:1fr}.subnav{grid-template-columns:1fr;gap:14px}.subnav a{min-height:58px}}
+
   /* hamburger menu */
   .rg-burger{background:none;border:0;cursor:pointer;color:#fff;display:flex;align-items:center;padding:0;margin-left:2px}
   .rg-menu{position:fixed;top:0;right:0;bottom:0;width:min(380px,86vw);background:#ff3132;z-index:999;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:clamp(7px,1.9vh,17px);overflow:auto;padding:70px 42px 44px;transform:translateX(105%);transition:transform .26s ease;box-shadow:-14px 0 36px rgba(0,0,0,.28);visibility:hidden}
   .rg-menu.open{transform:translateX(0);visibility:visible}
   .rg-menu a{color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,2.6vh,29px);letter-spacing:.12em;text-indent:.12em;text-transform:uppercase;line-height:1.3;text-align:left}
   .rg-menu a:hover{text-decoration:underline}
+  .rg-menu a.rg-menu-off{opacity:.5;cursor:default;pointer-events:none}
+  .rg-menu a.rg-menu-off .tag{display:block;font-size:.48em;letter-spacing:.05em;margin-top:2px}
   .rg-menu .sep{width:44px;border-top:2px solid rgba(255,255,255,.7);margin:6px 0}
   .rg-close{position:absolute;top:20px;right:24px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
   .menu-group-toggle{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;width:100%}
@@ -121,7 +146,7 @@
      fengu aðra hæð þegar letrið var ekki komið — og efnið hoppaði til. Fest hér á
      sama gildi og letrið gefur, svo útlitið er það sama hvort sem letrið nær að
      hlaðast eða ekki. :where() heldur vægi 0, svo allar aðrar reglur ráða áfram. */
-  :where(.bar .brand,.mbtn,.rbt,.redbox .rn,.rg2-book){line-height:2.355}  /* rg-linehold */
+  :where(.bar .brand,.gmenu .rn,.hg-hero h1,.hg-hero p,.mbtn,.redbox .rn,.rg2-book,.subnav a){line-height:2.355}  /* rg-linehold */
 </style>
 <style id="rg-bar-mobile">
   /* sími: haus sem passar — merkið í miðju með bili við tengla og tákn */
@@ -143,36 +168,48 @@
 </head>
 <body>
   <div class="bar">
-    <div class="nvl"><a class="heim" href="en.html">HOME</a><a class="heim" href="hopar.html">IS</a></div>
-    <a class="brand" href="en.html"><img src="assets/6353fbae1bb1a20968cdcc9f_logo-white.svg" alt="Ráðagerði"/></a>
+    <div class="nvl"><a class="heim" href="en.html">HOME</a><a class="heim" href="hoparkvold.html">IS</a></div>
+<a class="brand" href="/"><img src="assets/6353fbae1bb1a20968cdcc9f_logo-white.svg" alt="Ráðagerði"/></a>
     <div class="soc">
       <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="2"/><circle cx="17.6" cy="6.4" r="1.5" fill="currentColor"/></svg></a>
-      <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a><a href="https://www.tripadvisor.com/Restaurant_Review-g3195219-d24121834-Reviews-Radagerdi_Veitingahus-Seltjarnarnes_Reykjavik_Capital_Region.html" target="_blank" aria-label="Tripadvisor"><img src="assets/6356f343d6e39060cee0f77e_trip-circ.svg" width="24" height="24" alt="Tripadvisor"/></a><a href="https://maps.app.goo.gl/NH8UnZoNmyeqQ6nT6" target="_blank" aria-label="Google Maps"><img src="assets/6603f3abc44775bd71a5cc3f_location-icon.svg" width="24" height="24" alt="Google Maps"/></a><a href="https://www.tiktok.com/@radagerdi" target="_blank" aria-label="TikTok"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg></a><button class="rg-burger" aria-label="Menu" onclick="document.getElementById('rg-menu').classList.toggle('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3.5 6h17M3.5 12h17M3.5 18h17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a><a href="https://www.tripadvisor.com/Restaurant_Review-g3195219-d24121834-Reviews-Radagerdi_Veitingahus-Seltjarnarnes_Reykjavik_Capital_Region.html" target="_blank" aria-label="Tripadvisor"><img src="assets/6356f343d6e39060cee0f77e_trip-circ.svg" width="24" height="24" alt="Tripadvisor"/></a><a href="https://maps.app.goo.gl/NH8UnZoNmyeqQ6nT6" target="_blank" aria-label="Google Maps"><img src="assets/6603f3abc44775bd71a5cc3f_location-icon.svg" width="24" height="24" alt="Google Maps"/></a><a href="https://www.tiktok.com/@radagerdi" target="_blank" aria-label="TikTok"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg></a><button class="rg-burger" aria-label="Valmynd" onclick="document.getElementById('rg-menu').classList.toggle('open')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3.5 6h17M3.5 12h17M3.5 18h17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     </div>
   </div>
 
+  
   <div class="wrap">
-    <div class="gbox">
-      <div class="gbox-top">
-        <h1>Group menus are intended for parties of more than<br><span class="line2">10 people</span></h1>
-      </div>
-      <div class="gbox-bot">
-        <p>Call us or send us an email with your <b>number of guests, date, time and which group menu</b> suits your party. We will then book you in, provided a table is available</p>
-      </div>
+    <div class="subnav">
+      <a href="en-hoparhadegi.html">LUNCH</a>
+      <a href="en-hoparkvold.html" class="on">DINNER</a>
+      <a href="en-hoparbrons.html">BRUNCH</a>
     </div>
-
-        <div class="mcols">
-      <div>
-        <p class="lbl">Weekdays from 11:30–16:00</p>
-        <a class="mbtn" href="en-hoparhadegi.html">Lunch</a>
-      </div>
-      <div>
-        <p class="lbl">Every day from 16:00</p>
-        <a class="mbtn" href="en-hoparkvold.html">Dinner</a>
-      </div>
-      <div>
-        <p class="lbl">Weekends from 11:00–15:30</p>
-        <a class="mbtn" href="en-hoparbrons.html">Brunch</a>
+    <div class="hg-hero">
+      <h1>Groups - Dinner</h1>
+      <p>Every day from 16:00</p>
+    </div>
+    <div class="gbox2">
+      <p class="gi">For parties of more than 10 guests we offer a smaller version of our menu.</p>
+      <p class="gi">The reason for this is to make sure the kitchen is able to keep up and avoid long waiting times. All members of the party then choose one of the dishes from the group menu below.</p>
+      <p class="gi">Please note that children over the age of 12 count towards the number of guests.</p>
+    </div>
+    <div class="gmenu">
+      <div class="valcols">
+        <div class="valcol">
+          <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:0;border-bottom:2px solid var(--gr);display:inline-block;padding-bottom:6px">Option 1 · 6.900 kr.</p>
+          <div><p class="rn">Burrata</p><p class="rd">Italian burrata cheese, fresh and semi-dried cherry tomatoes, kale chips and a black garlic dressing, served with crispy bread</p></div>
+          <div><p class="rn">Arancini</p><p class="rd">Crispy mushroom risotto balls filled with mozzarella cheese, served with homemade marinara sauce and sautéed chestnut mushrooms, topped with gremolata and parmesan</p></div>
+          <div><p class="rn">Pizzas</p><p class="rd">Pizzas from our menu to share</p></div>
+          <div><p class="rn">Tiramisu</p><p class="rd">Our house-made Tiramisu</p></div>
+        </div>
+        <div class="valcol">
+          <p class="rn" style="font-size:clamp(24px,2.1vw,34px);margin-top:0;border-bottom:2px solid var(--gr);display:inline-block;padding-bottom:6px">Option 2 · 9.900 kr.</p>
+          <div><p class="rn">Burrata</p><p class="rd">Italian burrata cheese, fresh and semi-dried cherry tomatoes, kale chips and a black garlic dressing, served with crispy bread</p></div>
+          <div><p class="rn">Arancini</p><p class="rd">Crispy mushroom risotto balls filled with mozzarella cheese, served with homemade marinara sauce and sautéed chestnut mushrooms, topped with gremolata and parmesan</p></div>
+          <div><p class="rn">Garlic Shrimp</p><p class="rd">Tiger shrimp in butter with garlic and chili, served with wood-fired bread</p></div>
+          <div><p class="rn">Mascarpone Meatballs</p><p class="rd">Wood-fired meatballs with mascarpone mushroom sauce, sautéed mushrooms, potatoes, red onion, gremolata, parmesan and spinach. Served with wood-fired bread</p></div>
+          <div><p class="rn">Pizzas</p><p class="rd">Pizzas from our menu to share</p></div>
+          <div><p class="rn">Tiramisu</p><p class="rd">Our house-made Tiramisu</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -183,15 +220,15 @@
         <a href="https://www.instagram.com/radagerdi170/?hl=en" target="_blank" aria-label="Instagram"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.6" cy="6.4" r="1.4" fill="currentColor"/></svg></a>
         <a href="https://www.facebook.com/Radagerdi/" target="_blank" aria-label="Facebook"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M13.6 21.5v-7.1h2.6l.5-3.1h-3.1V9.2c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.5H7.7v3.1h2.7v7.1h3.2z"/></svg></a><a href="https://www.tripadvisor.com/Restaurant_Review-g3195219-d24121834-Reviews-Radagerdi_Veitingahus-Seltjarnarnes_Reykjavik_Capital_Region.html" target="_blank" aria-label="Tripadvisor"><img src="assets/6356f343d6e39060cee0f77e_trip-circ.svg" width="30" height="30" alt="Tripadvisor"/></a><a href="https://maps.app.goo.gl/NH8UnZoNmyeqQ6nT6" target="_blank" aria-label="Google Maps"><img src="assets/6603f3abc44775bd71a5cc3f_location-icon.svg" width="30" height="30" alt="Google Maps"/></a><a href="https://www.tiktok.com/@radagerdi" target="_blank" aria-label="TikTok"><svg width="30" height="30" viewBox="0 0 16 16" fill="currentColor"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg></a>
       </div>
-      <a class="rg2-mail" href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a><a class="rg2-book" href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Book a table</a>
+      <a class="rg2-mail" href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a><a class="rg2-book" href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Bóka borð</a>
     </div>
     <div class="rg2-logo"><img src="assets/6345d37b6a29219af60d57f4_Radagerdi-logo-1.svg" alt="Ráðagerði"/></div>
     <div class="rg2-hours">
-      <h3>Opening hours</h3>
-      <p>MON–THU 11:30–22</p>
-      <p>FRI 11:30–23</p>
-      <p>SAT 11–23</p>
-      <p>SUN 11–22</p><p class="fine">Kitchen closes an hour before closing</p>
+      <h3>Opnunartímar</h3>
+      <p>MÁN–FIM 11:30–22</p>
+      <p>FÖS 11:30–23</p>
+      <p>LAU 11–23</p>
+      <p>SUN 11–22</p><p class="fine">Eldhús lokar klukkutíma fyrir lokun</p>
     </div>
   </footer>
 <div class="rg-menu" id="rg-menu">
@@ -216,7 +253,7 @@
     <a href="en-seltjarnarnes-iceland-travel-guide.html">Guide to Seltjarnarnes</a>
     <a href="en-about-us.html">About us</a>
     <a href="en-contact-us.html">Contact</a>
-    <a href="hopar.html">Íslenska</a>
+    <a href="hoparkvold.html">Íslenska</a>
 </div>
 </body>
 </html>
