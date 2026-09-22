@@ -58,7 +58,10 @@
     "index.html": {
       "HEADER0>DIV2>DIV0>A5>SPAN0": "Veislu<br>þjónusta"
     },
-    "en-seltjarnarnes-iceland-travel-guide.html": {}
+    "en-seltjarnarnes-iceland-travel-guide.html": {},
+    "en-contact-us.html": {
+      "DIV1>DIV0>DIV1>P0": "We look forward to welcoming you every day — <b class=\"cms-hover\">Mon–Thu 11:30–22 · Fri 11:30–23 · Sat 11–23 · Sun 11–22</b> (the kitchen closes one hour before closing). Give us a call or drop us a line and we will get back to you as soon as we can."
+    }
   },
   "images": {
     "drykkir.html": {},
@@ -80,7 +83,8 @@
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
     "index.html": {},
-    "en-seltjarnarnes-iceland-travel-guide.html": {}
+    "en-seltjarnarnes-iceland-travel-guide.html": {},
+    "en-contact-us.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -102,7 +106,8 @@
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
     "index.html": {},
-    "en-seltjarnarnes-iceland-travel-guide.html": {}
+    "en-seltjarnarnes-iceland-travel-guide.html": {},
+    "en-contact-us.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -173,7 +178,8 @@
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
     "index.html": {},
-    "en-seltjarnarnes-iceland-travel-guide.html": {}
+    "en-seltjarnarnes-iceland-travel-guide.html": {},
+    "en-contact-us.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -198,7 +204,8 @@
       "DIV1>DIV3>DIV0>DIV0>DIV1>P1": true
     },
     "index.html": {},
-    "en-seltjarnarnes-iceland-travel-guide.html": {}
+    "en-seltjarnarnes-iceland-travel-guide.html": {},
+    "en-contact-us.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -220,7 +227,8 @@
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
     "index.html": {},
-    "en-seltjarnarnes-iceland-travel-guide.html": {}
+    "en-seltjarnarnes-iceland-travel-guide.html": {},
+    "en-contact-us.html": {}
   },
   "settings": {},
   "style": {
@@ -388,6 +396,7 @@
       "FOOTER0>DIV2>P4": {
         "font-weight": "700"
       }
-    }
+    },
+    "en-contact-us.html": {}
   }
 }
