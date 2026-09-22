@@ -207,6 +207,9 @@ function sendJSON(res, code, obj, headers) {
   res.statusCode = code;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
+  // Ekkert svar héðan á erindi í leitarvél. Sett hér svo það gildi um alla endapunkta,
+  // líka þótt leiðastillingum sé breytt seinna.
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   if (headers) for (const k of Object.keys(headers)) res.setHeader(k, headers[k]);
   res.end(JSON.stringify(obj));
 }

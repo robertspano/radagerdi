@@ -35,9 +35,13 @@ function build() {
     let html;
     try { html = fs.readFileSync(path.join(root, f), 'utf8'); } catch (e) { continue; }
     if (/<meta[^>]*name=["']robots["'][^>]*noindex/i.test(html)) continue;
-    const m = html.match(/rel=["']canonical["']\s+href=["']([^"']+)["']/i);
-    if (!m) continue;
-    const canonical = m[1];
+    // Lesum link-taggið fyrst og drögum svo út href — svo röð eigindanna skipti ekki máli
+    // (Webflow-útflutningur skrifar t.d. content á undan property í meta-töggum).
+    const tag = html.match(/<link[^>]*rel=["']canonical["'][^>]*>/i);
+    if (!tag) continue;
+    const href = tag[0].match(/href=["']([^"']+)["']/i);
+    if (!href) continue;
+    const canonical = href[1];
     const self = HOST + '/' + (f === 'index.html' ? '' : f);
     if (canonical !== self) continue;          // áframsendingarsíður vísa annað — sleppa
     urls.push(self);
