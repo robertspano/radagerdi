@@ -1,29 +1,120 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["dub1"],
+  "regions": [
+    "dub1"
+  ],
   "trailingSlash": false,
   "functions": {
-    "api/page.js": { "includeFiles": "**/*.html" },
-    "api/gone.js": { "includeFiles": "cms/404.html" }
+    "api/page.js": {
+      "includeFiles": "**/*.html"
+    },
+    "api/gone.js": {
+      "includeFiles": "cms/404.html"
+    }
   },
-  "ignoreCommand": "bash -c 'if [ -z \"$VERCEL_GIT_PREVIOUS_SHA\" ]; then exit 1; fi; git diff --quiet \"$VERCEL_GIT_PREVIOUS_SHA\" \"$VERCEL_GIT_COMMIT_SHA\" -- . \":(exclude)content/\"'",
+  "ignoreCommand": "sh -c 'case \"$VERCEL_GIT_COMMIT_MESSAGE\" in \"CMS:\"*) exit 0;; *) exit 1;; esac'",
   "rewrites": [
-    { "source": "/admin", "destination": "/cms/admin.html" },
-    { "source": "/skann", "destination": "/cms/skann.html" },
-    { "source": "/gjafabref/:id", "destination": "/cms/wallet.html" },
-    { "source": "/api/giftcards/:id/redeem", "destination": "/api/giftcard-redeem?id=:id" },
-    { "source": "/api/giftcards/:id", "destination": "/api/giftcard?id=:id" },
-    { "source": "/assets/uploads/:name", "destination": "/api/asset?name=:name" },
-    { "source": "/(.*)", "destination": "/api/page?p=__404__" }
+    {
+      "source": "/admin",
+      "destination": "/cms/admin.html"
+    },
+    {
+      "source": "/skann",
+      "destination": "/cms/skann.html"
+    },
+    {
+      "source": "/gjafabref/:id",
+      "destination": "/cms/wallet.html"
+    },
+    {
+      "source": "/api/giftcards/:id/redeem",
+      "destination": "/api/giftcard-redeem?id=:id"
+    },
+    {
+      "source": "/api/giftcards/:id",
+      "destination": "/api/giftcard?id=:id"
+    },
+    {
+      "source": "/assets/uploads/:name",
+      "destination": "/api/asset?name=:name"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/page?p=__404__"
+    }
   ],
   "headers": [
-    { "source": "/fonts/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }] },
-    { "source": "/assets/((?!uploads/).*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] },
-    { "source": "/css/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=600" }] },
-    { "source": "/js/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=600" }] },
-    { "source": "/cms/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/admin", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/skann", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/gjafabref/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/((?!uploads/).*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/css/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600"
+        }
+      ]
+    },
+    {
+      "source": "/js/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600"
+        }
+      ]
+    },
+    {
+      "source": "/cms/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/admin",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/skann",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/gjafabref/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
   ]
 }
