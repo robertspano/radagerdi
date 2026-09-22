@@ -57,7 +57,8 @@
     },
     "index.html": {
       "HEADER0>DIV2>DIV0>A5>SPAN0": "Veislu<br>þjónusta"
-    }
+    },
+    "en-seltjarnarnes-iceland-travel-guide.html": {}
   },
   "images": {
     "drykkir.html": {},
@@ -78,7 +79,8 @@
     "hoparkvold.html": {},
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
-    "index.html": {}
+    "index.html": {},
+    "en-seltjarnarnes-iceland-travel-guide.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -99,7 +101,8 @@
     "hoparkvold.html": {},
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
-    "index.html": {}
+    "index.html": {},
+    "en-seltjarnarnes-iceland-travel-guide.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -169,7 +172,8 @@
     "hoparkvold.html": {},
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
-    "index.html": {}
+    "index.html": {},
+    "en-seltjarnarnes-iceland-travel-guide.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -193,7 +197,8 @@
       "DIV1>DIV3>DIV0>DIV0>DIV1>P0": true,
       "DIV1>DIV3>DIV0>DIV0>DIV1>P1": true
     },
-    "index.html": {}
+    "index.html": {},
+    "en-seltjarnarnes-iceland-travel-guide.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -214,7 +219,8 @@
     "hoparkvold.html": {},
     "hoparbrons.html": {},
     "hoparhadegi.html": {},
-    "index.html": {}
+    "index.html": {},
+    "en-seltjarnarnes-iceland-travel-guide.html": {}
   },
   "settings": {},
   "style": {
@@ -377,6 +383,11 @@
         "font-size": "23px"
       }
     },
-    "index.html": {}
+    "index.html": {},
+    "en-seltjarnarnes-iceland-travel-guide.html": {
+      "FOOTER0>DIV2>P4": {
+        "font-weight": "700"
+      }
+    }
   }
 }
