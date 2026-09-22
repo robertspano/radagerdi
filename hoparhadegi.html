@@ -66,6 +66,14 @@
   .gmenu .rn:first-child{margin-top:0}
   .gmenu .rd{font-family:'Montserrat',sans-serif;font-size:16.5px;line-height:1.8;margin:0}
   .valcols{display:grid;grid-template-columns:1fr 1fr;gap:0 50px;text-align:center}
+
+  /* lóðrétt lína milli valkostanna — nær ekki í rammann (bil að ofan/neðan) */
+  .valcols{position:relative}
+  .valcols::before{content:"";position:absolute;left:50%;top:18px;bottom:18px;width:2px;transform:translateX(-50%);background:var(--gr);opacity:.45}
+  @media(max-width:700px){
+    .valcols::before{display:none}
+    .valcol + .valcol{margin-top:34px;padding-top:34px;border-top:2px solid rgba(98,159,103,.45)}
+  }
   @media(max-width:700px){.valcols{grid-template-columns:1fr;gap:0}}
   /* footer */
   .rg2-footer{background:var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:start}
