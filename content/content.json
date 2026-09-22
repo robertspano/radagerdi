@@ -65,7 +65,9 @@
     },
     "starfsumsokn.html": {
       "DIV1>DIV0>DIV1>P1": "Við erum alltaf spennt að heyra frá fólki sem vill starfa með okkur á Ráðagerði. Reynsla úr veitingabransanum er plús, en ekki skilyrði. <br>Íslensku kunnátta er krafa.<br><br>",
-      "DIV1>DIV0>DIV1>P2": "Sendu okkur nokkrar línur um þig á <a href=\"mailto:radagerdi@radagerdi170.is\" style=\"color:var(--gr);font-weight:700\">radagerdi@radagerdi170.is</a>. <br>Segðu okkur hvað þig langar að gera, frá reynslu þinni ef þú hefur hana og hvenær þú gætir byrjað. Ferilskrá og/eða kynningarbréf mega endilega fylgja með.<br>"
+      "DIV1>DIV0>DIV1>P2": "Sendu okkur nokkrar línur um þig á <a href=\"mailto:radagerdi@radagerdi170.is\" style=\"color:var(--gr);font-weight:700\">radagerdi@radagerdi170.is</a>. <br>Segðu okkur hvað þig langar að gera, frá reynslu þinni ef þú hefur hana og hvenær þú gætir byrjað. Ferilskrá og/eða kynningarbréf mega endilega fylgja með.<br>",
+      "DIV1>DIV0>DIV1>P0": "<b class=\"cms-hover\">Góður matur, góð stemning og frábært fólk. Hljómar eins og eitthvað fyrir þig?<br><br></b>",
+      "DIV1>DIV0>DIV1>P0>B0": "Góður matur, góð stemning og frábært fólk. <br>Hljómar eins og eitthvað fyrir þig?<br><br>"
     }
   },
   "images": {
