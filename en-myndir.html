@@ -81,10 +81,11 @@
   .hh h2{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;font-size:clamp(26px,2.6vw,44px);letter-spacing:.14em;text-indent:.14em;margin:0 0 10px}
   .hh p{font-size:clamp(15px,1.4vw,19px);margin:4px 0}
   .card.gal{padding-left:clamp(20px,2.5vw,44px);padding-right:clamp(20px,2.5vw,44px)}
+    .ta-hero+.card{margin-top:30px}
   .gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:6px 0 10px}
   .gal-grid figure{margin:0}
   .gal-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block}
-  @media(max-width:700px){.gal-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+  @media(max-width:700px){.ta-hero+.card{margin-top:20px}.card h2{font-size:clamp(26px,7.4vw,36px);margin-bottom:24px}.gal-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
   /* footer */
   .rg2-footer{background:var(--gr);margin-top:44px;padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:start}
   .rg2-logo{justify-self:center;align-self:stretch;display:flex;align-items:center}
@@ -125,6 +126,12 @@
   .menu-group{display:none;flex-direction:column;gap:clamp(7px,1.9vh,17px);padding-left:20px;margin:-2px 0 0}
   .menu-group.open{display:flex}
   .menu-group a{font-size:.78em}
+
+  /* Windsord gefur óvenju háan línukassa (2.355x). Hvergi var fest hæð, svo hlutir
+     fengu aðra hæð þegar letrið var ekki komið — og efnið hoppaði til. Fest hér á
+     sama gildi og letrið gefur, svo útlitið er það sama hvort sem letrið nær að
+     hlaðast eða ekki. :where() heldur vægi 0, svo allar aðrar reglur ráða áfram. */
+  :where(.bar .brand,.card h2,.drlink,.hh h2,.lunch h2,.rg2-book,.serif,.sub,.ta-hero h1){line-height:2.355}  /* rg-linehold */
 </style>
 <style id="rg-bar-mobile">
   /* sími: haus sem passar — merkið í miðju með bili við tengla og tákn */
@@ -141,6 +148,7 @@
     .bar .soc a,.rg2-bar .soc a{display:none !important}
   }
 </style>
+  <script src="cms/cms-inject.js"></script>
 </head>
 <body>
   <div class="bar">
@@ -218,6 +226,5 @@
     <a href="en-contact-us.html">Contact</a>
     <a href="myndir.html">Íslenska</a>
 </div>
-<script src="cms/cms-inject.js" defer></script>
 </body>
 </html>

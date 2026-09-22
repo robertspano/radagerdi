@@ -136,7 +136,22 @@
   let appliedEarly = false;
   if (PRELOAD) {
     window.__CMS__.content = PRELOAD;
-    try { apply(PRELOAD); appliedEarly = true; } catch (e) { console.warn('CMS apply error', e); }
+    const run = () => { if (!document.body) return; try { apply(PRELOAD); appliedEarly = true; } catch (e) { console.warn('CMS apply error', e); } };
+    run();
+    if (document.readyState === 'loading') {
+      // Skriftan keyrir í hausnum, á undan efninu. Meðan vafrinn les síðuna inn setjum
+      // við stillingar eigandans á hvern hluta um leið og hann verður til — og alltaf
+      // rétt á undan næstu teikningu (requestAnimationFrame). Þannig er ekkert teiknað
+      // fyrst í röngu útliti og leiðrétt á eftir; það var hoppið sem sást.
+      let pending = false;
+      const schedule = () => {
+        if (pending) return; pending = true;
+        requestAnimationFrame(() => { pending = false; run(); });
+      };
+      const mo = new MutationObserver(schedule);
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      document.addEventListener('DOMContentLoaded', () => { mo.disconnect(); run(); });
+    }
   }
 
   async function boot() {

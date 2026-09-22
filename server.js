@@ -636,8 +636,13 @@ function serveHtml(req, res, full) {
     let out = html;
     try {
       const json = cmsPreload(path.basename(full));
-      if (json && out.includes('</head>')) {
-        out = out.replace('</head>', '<script id="cms-preload">window.__CMS_PRELOAD__=' + json + '</script>\n</head>');
+      if (json) {
+        const tag = '<script id="cms-preload">window.__CMS_PRELOAD__=' + json + '</script>\n';
+        // Efnið verður að standa Á UNDAN cms-inject.js, annars les skriftin það ekki og
+        // stillingar eigandans kæmust ekki á fyrr en eftir að síðan er teiknuð.
+        const i = out.indexOf('<script src="cms/cms-inject.js"');
+        if (i >= 0) out = out.slice(0, i) + tag + '  ' + out.slice(i);
+        else if (out.includes('</head>')) out = out.replace('</head>', tag + '</head>');
       }
     } catch (e) { /* efnið má aldrei fella síðuna */ }
     const body = Buffer.from(out, 'utf8');

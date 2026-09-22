@@ -44,6 +44,11 @@
   /* green info box */
   .gbox{border:3px solid var(--gr);border-radius:26px;overflow:hidden;margin-top:52px}
   .gbox-top{background:var(--gr);color:#fff;text-align:center;padding:44px 40px 40px}
+  /* Fyrirsögnin á að sitja mitt í græna reitnum. Bilið fyrir ofan hana kemur úr
+     stillingu sem vistuð var í CMS-inu (40px) og vistaðar stillingar eru sterkari en
+     stílar síðunnar — því gefum við sama bil fyrir neðan hér, annars sest textinn
+     ofan á hvíta rammann (Windsord teiknar stafina út fyrir línuna). */
+  .gbox-top h1{padding-bottom:40px}
   .gbox-top h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(23px,2.35vw,44px);letter-spacing:.04em;margin:0;text-transform:uppercase;line-height:1.45}
   .gbox-top h1 .line2{display:inline-block;margin-top:18px;border-bottom:3px solid #fff;padding-bottom:5px}
   .gbox-bot{background:#fff;text-align:center;padding:62px 40px 66px}
@@ -99,6 +104,12 @@
   .menu-group{display:none;flex-direction:column;gap:clamp(7px,1.9vh,17px);padding-left:20px;margin:-2px 0 0}
   .menu-group.open{display:flex}
   .menu-group a{font-size:.78em}
+
+  /* Windsord gefur óvenju háan línukassa (2.355x). Hvergi var fest hæð, svo hlutir
+     fengu aðra hæð þegar letrið var ekki komið — og efnið hoppaði til. Fest hér á
+     sama gildi og letrið gefur, svo útlitið er það sama hvort sem letrið nær að
+     hlaðast eða ekki. :where() heldur vægi 0, svo allar aðrar reglur ráða áfram. */
+  :where(.bar .brand,.mbtn,.rg2-book){line-height:2.355}  /* rg-linehold */
 </style>
 <style id="rg-bar-mobile">
   /* sími: haus sem passar — merkið í miðju með bili við tengla og tákn */
@@ -115,6 +126,7 @@
     .bar .soc a,.rg2-bar .soc a{display:none !important}
   }
 </style>
+  <script src="cms/cms-inject.js"></script>
 </head>
 <body>
   <div class="bar">
@@ -189,6 +201,5 @@
     <a href="hafa-samband.html">Hafa samband</a>
     <a href="en-contact-us.html">English</a>
 </div>
-<script src="cms/cms-inject.js" defer></script>
 </body>
 </html>

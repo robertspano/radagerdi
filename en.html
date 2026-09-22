@@ -155,6 +155,12 @@ src="https://www.facebook.com/tr?id=436313402032558&ev=PageView&noscript=1"
   .menu-group{display:none;flex-direction:column;gap:clamp(7px,1.9vh,17px);padding-left:20px;margin:-2px 0 0}
   .menu-group.open{display:flex}
   .menu-group a{font-size:.78em}
+
+  /* Windsord gefur óvenju háan línukassa (2.355x). Hvergi var fest hæð, svo hlutir
+     fengu aðra hæð þegar letrið var ekki komið — og efnið hoppaði til. Fest hér á
+     sama gildi og letrið gefur, svo útlitið er það sama hvort sem letrið nær að
+     hlaðast eða ekki. :where() heldur vægi 0, svo allar aðrar reglur ráða áfram. */
+  :where(.rg2-bar .brand,.rg2-book){line-height:2.355}  /* rg-linehold */
 </style><style id="rg-vars">:root{--gr:#629F67}</style>
 <style id="rg-bar-mobile">
   /* sími: haus sem passar — merkið í miðju með bili við tengla og tákn */
@@ -171,6 +177,7 @@ src="https://www.facebook.com/tr?id=436313402032558&ev=PageView&noscript=1"
     .bar .soc a,.rg2-bar .soc a{display:none !important}
   }
 </style>
+  <script src="cms/cms-inject.js"></script>
 </head><body class="body"><div class="w-embed"><style>
 a. {
 text-decoration: none;
@@ -265,4 +272,4 @@ window.onload = function () {
     <a href="en-contact-us.html">Contact</a>
     <a href="/">Íslenska</a>
 </div>
-<script src="cms/cms-inject.js" defer></script></body></html>
+</body></html>
