@@ -40,6 +40,8 @@ src="https://www.facebook.com/tr?id=436313402032558&ev=PageView&noscript=1"
   .rg-menu.open{transform:translateX(0);visibility:visible}
   .rg-menu a{color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,2.6vh,29px);letter-spacing:.12em;text-indent:.12em;text-transform:uppercase;line-height:1.3;text-align:left}
   .rg-menu a:hover{text-decoration:underline}
+  .rg-menu a.rg-menu-off{opacity:.5;cursor:default;pointer-events:none}
+  .rg-menu a.rg-menu-off .tag{display:block;font-size:.48em;letter-spacing:.05em;margin-top:2px}
   .rg-menu .sep{width:44px;border-top:2px solid rgba(255,255,255,.7);margin:6px 0}
   .rg-close{position:absolute;top:20px;right:24px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
   .menu-group-toggle{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;width:100%}
@@ -151,14 +153,14 @@ src="https://www.facebook.com/tr?id=436313402032558&ev=PageView&noscript=1"
       <a href="brons.html">Bröns</a>
       <a href="hopar.html">Hópar</a>
     </div>
-    <a href="veisluthjonusta.html">Veisluþjónusta</a>
+    <a href="#" class="rg-menu-off" aria-disabled="true" tabindex="-1" onclick="return false">Veisluþjónusta<span class="tag">(Væntanleg)</span></a>
     <div class="sep"></div>
     <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Bóka borð</a>
     <a href="https://bookings.dineout.is/radagerdi/order?lng=is" target="_blank">Gjafakort</a>
     <div class="sep"></div>
     <a href="myndir.html">Myndir</a>
     <a href="en-seltjarnarnes-iceland-travel-guide.html">Guide to Seltjarnarnes</a>
-    <a href="um-okkur.html">Um okkur</a>
+    <a href="um-okkur.html">Um okkur</a><a href="starfsumsokn.html">Starfsumsókn</a>
     <a href="hafa-samband.html">Hafa samband</a>
     <a href="en-about-us.html">English</a>
 </div>
