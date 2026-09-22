@@ -109,7 +109,14 @@ async function readRaw(repoPath, { enc = false, fresh = false } = {}) {
   if (!fresh && hit && Date.now() - hit.t < TTL_MS) return hit;
   const got = await ghGet(repoPath);
   if (got.missing) { const rec = { t: Date.now(), text: null, sha: null }; memo.set(repoPath, rec); return rec; }
-  const text = enc ? decBuf(got.buf) : got.buf.toString('utf8');
+  let text;
+  if (enc) {
+    // Aðgreint frá lesvillu: hér næst í skrána en lykillinn gengur ekki.
+    try { text = decBuf(got.buf); }
+    catch (e) { const err = new Error('Dulkóðunarlykillinn gengur ekki upp (DATA_KEY/GH_TOKEN er ekki sá sami og gögnin voru dulkóðuð með)'); err.code = 'BADKEY'; throw err; }
+  } else {
+    text = got.buf.toString('utf8');
+  }
   const rec = { t: Date.now(), text, sha: got.sha };
   memo.set(repoPath, rec);
   return rec;
