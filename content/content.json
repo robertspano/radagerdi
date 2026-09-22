@@ -54,6 +54,9 @@
       "DIV1>DIV2>P4>SPAN0>B3": "Uppáhellt kaffi eða te eftir matinn<br><br>SKIPTA VALKOSTUM Í 2 DÁLKA EINS OG KVÖLD-VALKOSTIR OG SETJA Í GRÆNAN RAMMA",
       "DIV1>DIV3>DIV0>DIV0>DIV0>P1": "<b class=\"\"><b class=\"\">Tómat-basil súpa: </b><span style=\"font-weight: 400;\" class=\"\">Rjómalöguð tómat-basil súpa</span><br>Eldbökuð focaccia samloka:</b>&nbsp;með hráskinku ,klettasalati, burrata stracciatella, pistasíu pestói, tómötum, rauðlauk og blönduðum ólífum.<br>",
       "DIV1>DIV3>DIV0>DIV0>DIV0>P0": "SÚPA &amp; samloka"
+    },
+    "index.html": {
+      "HEADER0>DIV2>DIV0>A5>SPAN0": "Veislu<br>þjónusta"
     }
   },
   "images": {
@@ -74,7 +77,8 @@
     "en-hopar.html": {},
     "hoparkvold.html": {},
     "hoparbrons.html": {},
-    "hoparhadegi.html": {}
+    "hoparhadegi.html": {},
+    "index.html": {}
   },
   "bg": {
     "drykkir.html": {},
@@ -94,7 +98,8 @@
     "en-hopar.html": {},
     "hoparkvold.html": {},
     "hoparbrons.html": {},
-    "hoparhadegi.html": {}
+    "hoparhadegi.html": {},
+    "index.html": {}
   },
   "html": {
     "drykkir.html": {
@@ -163,7 +168,8 @@
     "en-hopar.html": {},
     "hoparkvold.html": {},
     "hoparbrons.html": {},
-    "hoparhadegi.html": {}
+    "hoparhadegi.html": {},
+    "index.html": {}
   },
   "hidden": {
     "drykkir.html": {},
@@ -186,7 +192,8 @@
     "hoparhadegi.html": {
       "DIV1>DIV3>DIV0>DIV0>DIV1>P0": true,
       "DIV1>DIV3>DIV0>DIV0>DIV1>P1": true
-    }
+    },
+    "index.html": {}
   },
   "order": {
     "drykkir.html": {},
@@ -206,7 +213,8 @@
     "en-hopar.html": {},
     "hoparkvold.html": {},
     "hoparbrons.html": {},
-    "hoparhadegi.html": {}
+    "hoparhadegi.html": {},
+    "index.html": {}
   },
   "settings": {},
   "style": {
@@ -368,6 +376,7 @@
       "DIV1>DIV2>P4>B0>SPAN0": {
         "font-size": "23px"
       }
-    }
+    },
+    "index.html": {}
   }
 }
