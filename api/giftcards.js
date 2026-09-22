@@ -7,9 +7,13 @@ module.exports = async (req, res) => {
   if (!(await S.requireAuth(req, res))) return;
 
   if (req.method === 'GET') {
-    const g = await S.readJSON('gift', { cards: {} });
-    const cards = Object.values(g.cards).sort((a, b) => (a.created < b.created ? 1 : -1));
-    return S.sendJSON(res, 200, { ok: true, cards });
+    try {
+      const g = await S.readJSON('gift', { cards: {} }, { strict: true });
+      const cards = Object.values(g.cards || {}).sort((a, b) => (a.created < b.created ? 1 : -1));
+      return S.sendJSON(res, 200, { ok: true, cards });
+    } catch (e) {
+      return S.sendJSON(res, 503, { error: 'Næ ekki í gjafabréfin núna: ' + e.message });
+    }
   }
 
   if (req.method === 'POST') {
@@ -22,10 +26,11 @@ module.exports = async (req, res) => {
     const id = crypto.randomBytes(12).toString('hex');
     const now = new Date().toISOString();
     const card = { id, name, phone, balance: amount, created: now, history: [{ ts: now, type: 'create', amount, balanceAfter: amount }] };
-    const g = await S.readJSON('gift', { cards: {} }, { fresh: true });
-    g.cards[id] = card;
-    await S.writeJSON('gift', g, 'CMS: gjafabréf gefið út af vefnum');
-    return S.sendJSON(res, 200, { ok: true, card, url: '/gjafabref/' + id });
+    try {
+      await S.update('gift', { cards: {} }, (g) => { g.cards = g.cards || {}; g.cards[id] = card; return g; },
+        'CMS: gjafabréf gefið út af vefnum');
+      return S.sendJSON(res, 200, { ok: true, card, url: '/gjafabref/' + id });
+    } catch (e) { return S.sendWriteError(res, e); }
   }
 
   return S.sendJSON(res, 405, { error: 'Óþekkt aðferð' });

@@ -386,11 +386,49 @@
       if (img && isEditableImg(img)) { e.preventDefault(); e.stopPropagation(); pickImage(img, false); }
     }, true);
   }
+  // Myndir úr síma eru oft 4–8 MB og vefurinn þarf ekki nema brot af því. Við minnkum
+  // þær í vafranum áður en þær eru sendar: síðan verður léttari og upphleðslan kemst
+  // örugglega í gegn (þjónninn tekur ekki við stærri beiðni en 4 MB).
+  const MAX_HLID = 2200;          // lengri hlið myndarinnar í punktum
+  function skalaMynd(f) {
+    return new Promise((resolve) => {
+      if (/svg/i.test(f.type)) return resolve(null);          // SVG er ekki leyft
+      if (/gif/i.test(f.type)) return resolve(null);          // hreyfimyndir mega ekki flatna
+      const fr = new FileReader();
+      fr.onload = () => {
+        const im = new Image();
+        im.onload = () => {
+          const stig = Math.min(1, MAX_HLID / Math.max(im.width, im.height));
+          if (stig >= 1 && f.size <= 1.5 * 1024 * 1024) return resolve(null);   // nógu lítil nú þegar
+          const c = document.createElement('canvas');
+          c.width = Math.round(im.width * stig);
+          c.height = Math.round(im.height * stig);
+          const g = c.getContext('2d');
+          g.drawImage(im, 0, 0, c.width, c.height);
+          const gagnsaett = /png|webp/i.test(f.type);
+          resolve({
+            data: c.toDataURL(gagnsaett ? 'image/webp' : 'image/jpeg', 0.86),
+            ext: gagnsaett ? '.webp' : '.jpg',
+          });
+        };
+        im.onerror = () => resolve(null);
+        im.src = fr.result;
+      };
+      fr.onerror = () => resolve(null);
+      fr.readAsDataURL(f);
+    });
+  }
   async function uploadImageFile(f) {
     if (!f || !/^image\//.test(f.type)) { toast('Þetta er ekki mynd'); return null; }
-    const data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); });
+    if (/svg/i.test(f.type)) { toast('SVG-myndir eru ekki leyfðar — notaðu JPG eða PNG'); return null; }
+    toast('Undirbý mynd…');
+    let name = f.name, data;
+    const minni = await skalaMynd(f);
+    if (minni) { data = minni.data; name = f.name.replace(/\.[^.]+$/, '') + minni.ext; }
+    else data = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); });
+    if (data.length > 5.4 * 1024 * 1024) { toast('Myndin er of stór — veldu minni mynd'); return null; }
     toast('Hleð upp mynd…');
-    const res = await api('/api/upload', { method: 'POST', body: JSON.stringify({ name: f.name, data }) });
+    const res = await api('/api/upload', { method: 'POST', body: JSON.stringify({ name, data }) });
     if (!res.ok) { toast('Villa: ' + (res.error || '')); return null; }
     return res.url;
   }

@@ -8,18 +8,27 @@ module.exports = async (req, res) => {
   if (!/^[a-f0-9]{16,64}$/.test(id)) return S.sendJSON(res, 404, { error: 'Gjafabréf fannst ekki' });
 
   if (req.method === 'GET') {
-    const g = await S.readJSON('gift', { cards: {} });
-    const card = g.cards[id];
-    if (!card) return S.sendJSON(res, 404, { error: 'Gjafabréf fannst ekki' });
-    return S.sendJSON(res, 200, { ok: true, card });
+    try {
+      const g = await S.readJSON('gift', { cards: {} }, { strict: true });
+      const card = (g.cards || {})[id];
+      if (!card) return S.sendJSON(res, 404, { error: 'Gjafabréf fannst ekki' });
+      return S.sendJSON(res, 200, { ok: true, card });
+    } catch (e) {
+      return S.sendJSON(res, 503, { error: 'Næ ekki í gjafabréfið núna' });
+    }
   }
 
   if (req.method === 'DELETE') {
     if (!(await S.requireAuth(req, res))) return;
-    const g = await S.readJSON('gift', { cards: {} }, { fresh: true });
-    if (!g.cards[id]) return S.sendJSON(res, 404, { error: 'Gjafabréf fannst ekki' });
-    delete g.cards[id];
-    await S.writeJSON('gift', g, 'CMS: gjafabréf fjarlægt af vefnum');
+    let fannst = true;
+    try {
+      await S.update('gift', { cards: {} }, (g) => {
+        if (!g.cards || !g.cards[id]) { fannst = false; return undefined; }
+        delete g.cards[id];
+        return g;
+      }, 'CMS: gjafabréf fjarlægt af vefnum');
+    } catch (e) { return S.sendWriteError(res, e); }
+    if (!fannst) return S.sendJSON(res, 404, { error: 'Gjafabréf fannst ekki' });
     return S.sendJSON(res, 200, { ok: true });
   }
 

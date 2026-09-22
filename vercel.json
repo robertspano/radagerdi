@@ -6,7 +6,7 @@
     "api/page.js": { "includeFiles": "**/*.html" },
     "api/gone.js": { "includeFiles": "cms/404.html" }
   },
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)content/'",
+  "ignoreCommand": "bash -c 'if [ -z \"$VERCEL_GIT_PREVIOUS_SHA\" ]; then exit 1; fi; git diff --quiet \"$VERCEL_GIT_PREVIOUS_SHA\" \"$VERCEL_GIT_COMMIT_SHA\" -- . \":(exclude)content/\"'",
   "rewrites": [
     { "source": "/admin", "destination": "/cms/admin.html" },
     { "source": "/skann", "destination": "/cms/skann.html" },
@@ -18,10 +18,12 @@
   ],
   "headers": [
     { "source": "/fonts/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }] },
-    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] },
+    { "source": "/assets/((?!uploads/).*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] },
     { "source": "/css/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=600" }] },
     { "source": "/js/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=600" }] },
     { "source": "/cms/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/admin", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/skann", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
     { "source": "/gjafabref/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
   ]
 }

@@ -1,4 +1,6 @@
-/* Úttekt af gjafabréfi (skanninn) — krefst innskráningar. */
+/* Úttekt af gjafabréfi (skanninn) — krefst innskráningar.
+ * Upphæðin er peningar, svo úttektin er framkvæmd inni í les-breyt-skrifa lykkju:
+ * rekist tvær úttektir á er sú síðari reiknuð upp á nýtt af ferskri stöðu. */
 'use strict';
 const S = require('./_store');
 
@@ -13,14 +15,20 @@ module.exports = async (req, res) => {
   const amount = Math.round(Number(body.amount));
   if (!Number.isFinite(amount) || amount <= 0) return S.sendJSON(res, 400, { error: 'Ógild upphæð' });
 
-  const g = await S.readJSON('gift', { cards: {} }, { fresh: true });
-  const card = g.cards[id];
-  if (!card) return S.sendJSON(res, 404, { error: 'Gjafabréf fannst ekki' });
-  if (card.balance <= 0) return S.sendJSON(res, 400, { error: 'Engin inneign eftir á þessu gjafabréfi' });
+  let villa = null, svar = null;
+  try {
+    await S.update('gift', { cards: {} }, (g) => {
+      const card = (g.cards || {})[id];
+      if (!card) { villa = { code: 404, error: 'Gjafabréf fannst ekki' }; return undefined; }
+      if (card.balance <= 0) { villa = { code: 400, error: 'Engin inneign eftir á þessu gjafabréfi' }; return undefined; }
+      const deducted = Math.min(card.balance, amount);
+      card.balance -= deducted;
+      card.history.push({ ts: new Date().toISOString(), type: 'redeem', amount: deducted, balanceAfter: card.balance });
+      svar = { ok: true, deducted, remainder: amount - deducted, balance: card.balance, card };
+      return g;
+    }, 'CMS: úttekt af gjafabréfi');
+  } catch (e) { return S.sendWriteError(res, e); }
 
-  const deducted = Math.min(card.balance, amount);
-  card.balance -= deducted;
-  card.history.push({ ts: new Date().toISOString(), type: 'redeem', amount: deducted, balanceAfter: card.balance });
-  await S.writeJSON('gift', g, 'CMS: úttekt af gjafabréfi');
-  return S.sendJSON(res, 200, { ok: true, deducted, remainder: amount - deducted, balance: card.balance, card });
+  if (villa) return S.sendJSON(res, villa.code, { error: villa.error });
+  return S.sendJSON(res, 200, svar);
 };

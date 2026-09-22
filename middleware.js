@@ -52,10 +52,22 @@ function queryWithoutTab(search) {
   return kept.length ? '?' + kept.join('&') : '';
 }
 
+// Slóðir sem mega aldrei afhendast, hvað sem stillingum líður. .vercelignore heldur
+// þeim utan útgáfunnar — þetta er annað lagið, sem stillingaskrá getur ekki slökkt á.
+const BANNAD = /^\/(content|server\.js|render\.yaml|package(-lock)?\.json|vercel\.json|middleware\.js|\.git|\.env)/i;
+
 export default function middleware(req) {
   const url = new URL(req.url);
   const raw = url.pathname;
   const p = raw.length > 1 ? (raw.replace(/\/+$/, '') || '/') : raw;
+
+  if (BANNAD.test(raw)) {
+    return new Response('Not found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' } });
+  }
+
+  // Afrit af vefnum á öðrum lénum (t.d. <verkefni>.vercel.app) mega ekki lenda í leitarvélum.
+  const host = (url.hostname || req.headers.get('host') || '').toLowerCase();
+  const rettLen = host === 'radagerdi.is' || host === 'www.radagerdi.is';
 
   if (req.method !== 'GET' && req.method !== 'HEAD') return next();
 
@@ -79,8 +91,8 @@ export default function middleware(req) {
     const target = new URL('/api/page', req.url);
     target.search = url.search;
     target.searchParams.set('p', name);
-    return rewrite(target);
+    return rewrite(target, rettLen ? undefined : { headers: { 'X-Robots-Tag': 'noindex, nofollow' } });
   }
 
-  return next();
+  return next(rettLen ? undefined : { headers: { 'X-Robots-Tag': 'noindex, nofollow' } });
 }

@@ -49,26 +49,37 @@ module.exports = async (req, res) => {
   const html = name ? readPage(name) : null;
 
   if (!html) {
-    const fallback = readPage('cms/404.html') || '<!doctype html><title>404</title><p>Síða fannst ekki';
+    // Týnd mynd eða vélmenni sem leitar að /.env á ekki að fá 3 kB af HTML.
+    const asked = String((req.headers && req.headers['x-cms-path']) || url.searchParams.get('p') || '');
+    const hasExt = /\.[a-z0-9]{1,5}$/i.test(asked) && !/\.html?$/i.test(asked);
+    const wantsHtml = /\btext\/html\b/.test(String((req.headers && req.headers.accept) || ''));
     res.statusCode = 404;
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    if (hasExt || !wantsHtml) {
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      return res.end('Not found');
+    }
+    const fallback = readPage('cms/404.html') || '<!doctype html><title>404</title><p>Síða fannst ekki';
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'no-store');
     return res.end(fallback);
   }
 
   let out = html;
+  let contentOk = true;
   try {
-    const content = await S.readJSON('content', S.EMPTY_CONTENT);
-    const json = preloadFor(content, name);
-    if (json) {
-      const tag = '<script id="cms-preload">window.__CMS_PRELOAD__=' + json + '</script>\n';
-      // Efnið verður að standa Á UNDAN cms-inject.js, annars les skriftin það ekki.
-      const i = out.indexOf('<script src="cms/cms-inject.js"');
-      if (i >= 0) out = out.slice(0, i) + tag + '  ' + out.slice(i);
-      else if (out.includes('</head>')) out = out.replace('</head>', tag + '</head>');
-    }
+    const content = await S.readJSON('content', null, { strict: true });
+    // Taggið fer ALLTAF inn, líka tómt: þá veit cms-inject að efnið er komið og
+    // gesturinn sækir ekki allt content.json að óþörfu.
+    const json = preloadFor(content || {}, name) || '{}';
+    const tag = '<script id="cms-preload">window.__CMS_PRELOAD__=' + json + '</script>\n';
+    // Efnið verður að standa Á UNDAN cms-inject.js, annars les skriftin það ekki.
+    const i = out.indexOf('<script src="cms/cms-inject.js"');
+    if (i >= 0) out = out.slice(0, i) + tag + '  ' + out.slice(i);
+    else if (out.includes('</head>')) out = out.replace('</head>', tag + '</head>');
   } catch (e) {
     // Efnið má aldrei fella síðuna — hún birtist þá eins og hún er í kóðanum.
+    // En þá má hraðnetið EKKI geyma hana, annars festist útgáfa án efnis eigandans.
+    contentOk = false;
     console.error('preload failed:', e.message);
   }
 
@@ -76,7 +87,7 @@ module.exports = async (req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   // Gestir fá síðuna úr hraðneti Vercel í 15 sek. í senn; eigandinn í ritham fær hana alltaf ferska.
-  res.setHeader('Cache-Control', editing
+  res.setHeader('Cache-Control', (editing || !contentOk)
     ? 'no-store'
     : 'public, max-age=0, s-maxage=15, stale-while-revalidate=60');
   if (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production') {

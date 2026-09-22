@@ -1,22 +1,38 @@
-/* Efni vefsins: opinn lestur, vistun aðeins fyrir innskráðan eiganda. */
+/* Efni vefsins: opinn lestur, vistun aðeins fyrir innskráðan eiganda.
+ *
+ * Mikilvægt: ef ekki næst í gögnin má ALDREI svara 200 með tómu efni — ritillinn
+ * myndi þá halda að vefurinn væri tómur og gæti vistað það tóma yfir allt saman.
+ */
 'use strict';
 const S = require('./_store');
 
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
-    const c = await S.readJSON('content', S.EMPTY_CONTENT);
-    return S.sendJSON(res, 200, c);
+    try {
+      const c = await S.readJSON('content', null, { strict: true });
+      return S.sendJSON(res, 200, c || S.emptyContent());
+    } catch (e) {
+      return S.sendJSON(res, 503, { error: 'Næ ekki í efnið núna: ' + e.message });
+    }
   }
+
   if (req.method === 'PUT') {
     if (!(await S.requireAuth(req, res))) return;
-    const body = await S.readBody(req);
-    // Ferskur lestur rétt fyrir vistun: annars gæti vistun frá öðrum glatast.
-    const cur = await S.readJSON('content', Object.assign({}, S.EMPTY_CONTENT), { fresh: true });
-    for (const k of ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style', 'settings']) {
-      if (body[k] && typeof body[k] === 'object') cur[k] = body[k];
+    let body;
+    try { body = await S.readBody(req); }
+    catch (e) { return S.sendJSON(res, 413, { error: 'Of stór vistun', durable: false }); }
+    try {
+      await S.update('content', S.emptyContent(), (cur) => {
+        for (const k of ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style', 'settings']) {
+          if (body[k] && typeof body[k] === 'object') cur[k] = body[k];
+        }
+        return cur;
+      }, 'CMS: efni uppfært af vefnum');
+      return S.sendJSON(res, 200, { ok: true, durable: true });
+    } catch (e) {
+      return S.sendWriteError(res, e);
     }
-    await S.writeJSON('content', cur, 'CMS: efni uppfært af vefnum');
-    return S.sendJSON(res, 200, { ok: true, durable: true });
   }
+
   return S.sendJSON(res, 405, { error: 'Óþekkt aðferð' });
 };
