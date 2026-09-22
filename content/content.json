@@ -60,7 +60,7 @@
     },
     "en-seltjarnarnes-iceland-travel-guide.html": {},
     "en-contact-us.html": {
-      "DIV1>DIV0>DIV1>P0": "We look forward to welcoming you every day<br>&nbsp;<b class=\"cms-hover\">Mon–Thu 11:30–22 · Fri 11:30–23 · Sat 11–23 · Sun 11–22</b> (the kitchen closes one hour before closing). Give us a call or drop us a line and we will get back to you as soon as we can.",
+      "DIV1>DIV0>DIV1>P0": "We look forward to welcoming you every day<br>&nbsp;<b class=\"\" style=\"\">Mon–Thu 11:30–22&nbsp;<br>&nbsp;Fri 11:30–23&nbsp;<br>&nbsp;Sat 11–23&nbsp;<br>&nbsp;Sun 11–22<br></b><b class=\"\"> (the kitchen closes one hour before closing)</b><br>Give us a call or drop us a line and we will get back to you as soon as we can.",
       "DIV1>DIV0>DIV1>P0>B0": "Mon–Thu 11:30–22&nbsp;<br>&nbsp;Fri 11:30–23&nbsp;<br>&nbsp;Sat 11–23&nbsp;<br>&nbsp;Sun 11–22<br>"
     }
   },
