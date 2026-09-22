@@ -344,20 +344,29 @@
     mark(); window.addEventListener('load', mark);
     document.querySelectorAll('img').forEach(im => im.addEventListener('load', () => { if (isEditableImg(im)) im.classList.add('cms-img'); }));
 
-    let btnEl = null, curTarget = null, hideT = null;
-    const clearBtn = () => { if (btnEl) { btnEl.remove(); btnEl = null; curTarget = null; } };
+    let btnEl = null, curTarget = null, hideT = null, followRaf = 0;
+    const clearBtn = () => { cancelAnimationFrame(followRaf); followRaf = 0; if (btnEl) { btnEl.remove(); btnEl = null; curTarget = null; } };
+    // Hnappurinn á alltaf að sitja á sinni eigin mynd. Sumt á síðunni hreyfist af sjálfu sér
+    // (myndaröndin á forsíðunni skríður stanslaust) og annað breytir stærð þegar myndir
+    // klárast eða texti er skrifaður — þess vegna eltir hnappurinn myndina sína í hverjum ramma.
+    function place() {
+      if (!btnEl || !curTarget) return;
+      const r = curTarget.getBoundingClientRect();
+      if (r.width === 0 || r.bottom < 0 || r.top > innerHeight) { clearBtn(); return; }
+      btnEl.style.top = (r.top + window.scrollY + 8) + 'px';
+      btnEl.style.left = (Math.max(r.left, 4) + window.scrollX + 8) + 'px';
+      followRaf = requestAnimationFrame(place);
+    }
     function showBtn(target, isBg) {
       clearTimeout(hideT);
       if (curTarget === target && btnEl) return;
       clearBtn(); curTarget = target;
       btnEl = el('button', 'cms-imgbtn', '🖼 Skipta um mynd'); btnEl.type = 'button';
-      const r = target.getBoundingClientRect();
-      btnEl.style.top = (r.top + window.scrollY + 8) + 'px';
-      btnEl.style.left = (r.left + window.scrollX + 8) + 'px';
       btnEl.onmousedown = (ev) => { ev.preventDefault(); ev.stopPropagation(); pickImage(target, isBg); };
       btnEl.onmouseenter = () => clearTimeout(hideT);
       btnEl.onmouseleave = () => { hideT = setTimeout(clearBtn, 150); };
       document.body.appendChild(btnEl);
+      place();
     }
     document.body.addEventListener('mouseover', (e) => {
       const img = e.target.closest('img');
@@ -1199,6 +1208,10 @@
 
   // ---------- init ----------
   function init() {
+    // Hvert svæði (.card, .redbox, flipi …) þarf grunnstöðu ÁÐUR en nokkru er breytt.
+    // Annars ber savePane fyrstu breytinguna saman við sjálfa sig, telur að ekkert hafi
+    // breyst og sleppir henni þegjandi — á meðan stikan segir „Allt vistað ✓“.
+    try { (CMS.regions ? CMS.regions() : []).forEach(r => { if (r._cmsBase === undefined) r._cmsBase = paneClean(r); }); } catch (e) { }
     buildToolbar();
     enableText();
     enableImages();

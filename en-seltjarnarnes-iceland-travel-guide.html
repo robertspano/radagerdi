@@ -89,6 +89,7 @@ src="https://www.facebook.com/tr?id=436313402032558&ev=PageView&noscript=1"
   .card.faqi.closed h2::after{transform:rotate(-90deg)}
   .card.faqi.closed > *:not(h2){display:none}
   .card.faqi p{margin:16px 0 2px;font-size:clamp(15px,1.15vw,18px);line-height:1.9}
+  .card.faqi h2:focus-visible{outline:3px solid var(--red);outline-offset:4px;border-radius:6px}
   /* hnappar neðst */
   .drlink{display:inline-flex;align-items:center;justify-content:center;border:2px solid var(--red);border-radius:14px;
     padding:14px 26px;background:#fff;color:var(--red);text-decoration:none;font-family:'Windsord',serif;
@@ -240,44 +241,44 @@ src="https://www.facebook.com/tr?id=436313402032558&ev=PageView&noscript=1"
 
       <h2 class="faq-head"><span>Frequently asked questions about Seltjarnarnes</span></h2>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">Where is Seltjarnarnes located?</strong></span></h2>
-        <p>Seltjarnarnes is a small town located on a peninsula to the west of Reykjavík, the capital of Iceland.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq1"><span><strong class="h3">Where is Seltjarnarnes located?</strong></span></h2>
+        <p id="faq1">Seltjarnarnes is a small town located on a peninsula to the west of Reykjavík, the capital of Iceland.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">How can I reach Seltjarnarnes from Reykjavík?</strong></span></h2>
-        <p>Seltjarnarnes is easily accessible from Reykjavík. It&#x27;s just a short drive (around 7-9 minutes) from the city centre. There are also public buses that run regularly between the two locations, bus number 11 goes from downtown Reykjavík to Seltjarnarnes. It takes about 40 minutes to walk from Reykjavík city centre to Grótta Lighthouse.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq2"><span><strong class="h3">How can I reach Seltjarnarnes from Reykjavík?</strong></span></h2>
+        <p id="faq2">Seltjarnarnes is easily accessible from Reykjavík. It&#x27;s just a short drive (around 7-9 minutes) from the city centre. There are also public buses that run regularly between the two locations, bus number 11 goes from downtown Reykjavík to Seltjarnarnes. It takes about 40 minutes to walk from Reykjavík city centre to Grótta Lighthouse.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">What is the best time to visit Seltjarnarnes?</strong></span></h2>
-        <p>Seltjarnarnes is beautiful all year round. If you want to see the Northern Lights, the best time is between September and April. Summer offers milder weather and the Midnight Sun.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq3"><span><strong class="h3">What is the best time to visit Seltjarnarnes?</strong></span></h2>
+        <p id="faq3">Seltjarnarnes is beautiful all year round. If you want to see the Northern Lights, the best time is between September and April. Summer offers milder weather and the Midnight Sun.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">What is there to do in Seltjarnarnes?</strong></span></h2>
-        <p>There are various activities to enjoy, such as visiting the Grótta lighthouse, bird watching at Bakkatjörn pond, golfing, swimming, exploring the Nesstofa museum, or simply enjoying the beautiful natural scenery.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq4"><span><strong class="h3">What is there to do in Seltjarnarnes?</strong></span></h2>
+        <p id="faq4">There are various activities to enjoy, such as visiting the Grótta lighthouse, bird watching at Bakkatjörn pond, golfing, swimming, exploring the Nesstofa museum, or simply enjoying the beautiful natural scenery.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">Can I see the Northern Lights from Seltjarnarnes?</strong></span></h2>
-        <p>Yes, Seltjarnarnes is a great place to watch the Northern Lights, particularly near Grótta lighthouse due to its low light pollution. However, sightings are weather-dependent and typically occur from September to April.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq5"><span><strong class="h3">Can I see the Northern Lights from Seltjarnarnes?</strong></span></h2>
+        <p id="faq5">Yes, Seltjarnarnes is a great place to watch the Northern Lights, particularly near Grótta lighthouse due to its low light pollution. However, sightings are weather-dependent and typically occur from September to April.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">What is the Grótta lighthouse?</strong></span></h2>
-        <p>Grótta lighthouse is a landmark located on the tip of the Seltjarnarnes peninsula. It&#x27;s a great spot for bird watching, and for viewing sunsets and the Northern Lights.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq6"><span><strong class="h3">What is the Grótta lighthouse?</strong></span></h2>
+        <p id="faq6">Grótta lighthouse is a landmark located on the tip of the Seltjarnarnes peninsula. It&#x27;s a great spot for bird watching, and for viewing sunsets and the Northern Lights.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">What kind of bird species can I find at Bakkatjörn pond?</strong></span></h2>
-        <p>Bakkatjörn pond is a sanctuary for many bird species, particularly ducks, such as the Eider duck and various types of seagulls.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq7"><span><strong class="h3">What kind of bird species can I find at Bakkatjörn pond?</strong></span></h2>
+        <p id="faq7">Bakkatjörn pond is a sanctuary for many bird species, particularly ducks, such as the Eider duck and various types of seagulls.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">What is the Kvika Foot Bath?</strong></span></h2>
-        <p>The Kvika Foot Bath is a geothermal footbath located in Seltjarnarnes. It was designed by Icelandic artist Ólöf Nordal and is a great spot to relax while enjoying the surrounding scenery.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq8"><span><strong class="h3">What is the Kvika Foot Bath?</strong></span></h2>
+        <p id="faq8">The Kvika Foot Bath is a geothermal footbath located in Seltjarnarnes. It was designed by Icelandic artist Ólöf Nordal and is a great spot to relax while enjoying the surrounding scenery.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">What can I expect to see at Nesstofa museum?</strong></span></h2>
-        <p>Nesstofa is a historical building that houses a medical museum. Visitors can learn about the history of medicine in Iceland.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq9"><span><strong class="h3">What can I expect to see at Nesstofa museum?</strong></span></h2>
+        <p id="faq9">Nesstofa is a historical building that houses a medical museum. Visitors can learn about the history of medicine in Iceland.</p>
       </div>
       <div class="card faqi">
-        <h2 tabindex="0"><span><strong class="h3">What dining options are available in Seltjarnarnes?</strong></span></h2>
-        <p>There are a few dining options, including the popular Ráðagerði restaurant which offers a menu of dishes made with locally-sourced ingredients.</p>
+        <h2 tabindex="0" role="button" aria-expanded="false" aria-controls="faq10"><span><strong class="h3">What dining options are available in Seltjarnarnes?</strong></span></h2>
+        <p id="faq10">There are a few dining options, including the popular Ráðagerði restaurant which offers a menu of dishes made with locally-sourced ingredients.</p>
       </div>
 
       <div class="shortcuts">
@@ -309,7 +310,10 @@ src="https://www.facebook.com/tr?id=436313402032558&ev=PageView&noscript=1"
     (function () {
       if (/[?&]cms=1/.test(location.search)) return;
       document.querySelectorAll('.card.faqi').forEach(function (c) { c.classList.add('closed'); });
-      function toggle(h) { h.parentElement.classList.toggle('closed'); }
+      function toggle(h) {
+        const lokad = h.parentElement.classList.toggle('closed');
+        h.setAttribute('aria-expanded', lokad ? 'false' : 'true');
+      }
       document.addEventListener('click', function (e) {
         var h = e.target.closest && e.target.closest('.card.faqi h2');
         if (h) toggle(h);
