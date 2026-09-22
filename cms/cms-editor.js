@@ -442,7 +442,13 @@
       }
     } else {
       const before = target.getAttribute('src') || target.src || '';
-      target.src = url; target.removeAttribute('srcset'); target.removeAttribute('sizes');
+      // Myndaröndin á forsíðunni er tvítekin í HTML-inu svo hringrásin sé samfelld: hver mynd
+      // er þar tvisvar. Ef aðeins önnur er uppfærð skríður gamla myndin framhjá á ~22 sek.
+      // fresti og röndin kippist til. Því uppfærum við öll eintök sömu myndar í sömu rönd.
+      const track = target.closest && target.closest('.rg-gallery-track');
+      const twins = track ? [...track.querySelectorAll('img')].filter(i => i.getAttribute('src') === before) : [];
+      if (!twins.includes(target)) twins.push(target);     // aldrei tómt — smellurinn má aldrei gera ekkert
+      twins.forEach(im => { im.src = url; im.removeAttribute('srcset'); im.removeAttribute('sizes'); });
       if (!saveContext(target)) {
         const key = CMS.key(target), b = content.images[PAGE][key] !== undefined ? content.images[PAGE][key] : before;
         content.images[PAGE][key] = url; pushRecord('images', key, b, url); markDirty();

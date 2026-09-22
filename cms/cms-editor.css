@@ -5,6 +5,9 @@ body.cms-on { padding-top:var(--cms-h) !important; }
 body.cms-on .navbar, body.cms-on .navbar-red, body.cms-on .menu-red,
 body.cms-on .menu-overlay, body.cms-on .menu-overlay-mobile, body.cms-on .overlay-close-menu,
 body.cms-on .w-nav { top:var(--cms-h) !important; }
+/* Rauða valmyndin (.rg-menu) er fixed í top:0 — efstu 52px hennar lágu undir CMS-stikunni,
+   og þar með ✕-hnappurinn. Eigandinn komst þá ekki út úr valmyndinni nema endurhlaða. */
+body.cms-on .rg-menu { top:var(--cms-h) !important; }
 
 /* top bar */
 .cms-bar{position:fixed;top:0;left:0;right:0;height:52px;z-index:2147483000;display:flex;align-items:center;gap:10px;
