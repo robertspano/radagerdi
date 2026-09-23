@@ -881,6 +881,27 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url.startsWith('/') ? 'http://localhost' + req.url : req.url, 'http://localhost');
     const isRead = req.method === 'GET' || req.method === 'HEAD';
     const hostInfo = parseHost(req.headers.host);
+    // Vefurinn er fluttur á radagerdi.is (Vercel) og gamla onrender.com-slóðin vísar öllum
+    // þangað. Tvær ástæður, og sú seinni er alvarlegri:
+    //   1. Fólk með gömul bókamerki lenti á /admin hér, sem kann ekki lengur að skrá inn
+    //      og sagði „Innskráning er ekki uppsett“ — það gerðist hjá Viktori.
+    //   2. Vistun hér sendi ÞETTA eintak af efninu í GitHub. Það er það sem var til þegar
+    //      þjónninn ræsti sig, svo það myndi skrifa yfir allt sem gert hefur verið á
+    //      radagerdi.is síðan. Því er öllum vistunum hafnað hér.
+    if (hostInfo && hostInfo.hostname.endsWith('.onrender.com')) {
+      if (!isRead) return sendJSON(res, 410, { error: 'Vefurinn er fluttur á https://radagerdi.is — ekkert var vistað hér' });
+      if (url.pathname === '/') {
+        // Heilsuathugun Render (healthCheckPath: /) fær 200 svo þjónninn teljist lifandi;
+        // fólk fer samstundis áfram.
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' });
+        return res.end('<!doctype html><meta charset="utf-8"><title>Ráðagerði</title>' +
+          '<link rel="canonical" href="https://radagerdi.is/"><meta http-equiv="refresh" content="0;url=https://radagerdi.is/">' +
+          '<p style="font-family:sans-serif;margin:20vh auto;max-width:28rem;text-align:center">Vefurinn er fluttur á ' +
+          '<a href="https://radagerdi.is/">radagerdi.is</a></p>');
+      }
+      res.writeHead(301, { Location: 'https://radagerdi.is' + url.pathname + url.search, 'Cache-Control': 'public, max-age=3600', 'X-Robots-Tag': 'noindex, nofollow' });
+      return res.end();
+    }
     let decodedPath = url.pathname;
     try { decodedPath = decodeURIComponent(url.pathname); } catch { }
     // onrender.com-afritið og innri síður (admin, skanni, gjafabréf, cms/*.html) mega aldrei lenda í leitarvélum

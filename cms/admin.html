@@ -63,9 +63,19 @@
   const jfetch=(url,body)=>fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
   let email='';
 
+  // Innskráningin býr aðeins á radagerdi.is. Sé þessi síða opnuð annars staðar — gamla
+  // Render-afritið, forskoðunarslóð hjá Vercel — er innskráning ekki til þar, og áður sá
+  // fólk þá „Innskráning er ekki uppsett“. Nú er því vísað beint á réttan stað.
+  const HOME = 'radagerdi.is';
+  const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  const goHome = () => {
+    if (isLocal || location.hostname === HOME) return false;
+    location.replace('https://' + HOME + '/admin' + location.search);
+    return true;
+  };
   fetch('/api/login-mode').then(r=>r.json()).then(m=>{
     if(m.mode==='email'){ show('step-email'); $('em').focus(); }
-    else show('step-off');
+    else if(!goHome()) show('step-off');
   }).catch(()=>{ show('step-email'); $('em').focus(); });
 
   async function sendLink(){
