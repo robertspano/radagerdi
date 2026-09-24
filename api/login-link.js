@@ -1,16 +1,14 @@
 /* Sendir innskráningartengil í tölvupósti.
  *
- * Tvennt togast á hér og það er meðvitað leyst svona:
+ * Síðan segir HREINT ÚT ef netfangið er ekki á aðgangslistanum. Áður svaraði hún eins
+ * fyrir öll netföng („Tengill var sendur“) svo ekki mætti lesa út hverjir eiga aðgang —
+ * en þá beið Viktor eftir pósti sem var aldrei sendur, án þess að nokkuð segði hvers
+ * vegna. Fyrir ritil sem þrír eigendur nota er það margfalt verra en að einhver geti
+ * komist að því að tiltekið netfang sé á listanum: hann kemst samt ekki inn án
+ * pósthólfsins, og hemillinn hér að neðan heldur slíkum þreifingum í skefjum.
  *
- *   Netfang sem er EKKI á listanum fær alltaf sama svar og eitt sem er á honum (200,
- *   enginn póstur sendur) — annars mætti lesa út úr svörunum hverjir eiga aðgang.
- *
- *   En ef netfangið ER á listanum og pósturinn kemst samt ekki af stað, þá SEGJUM VIÐ
- *   FRÁ ÞVÍ. Áður var villan gleypt og skjárinn sagði „Tengill var sendur“ hvað sem
- *   gekk á. Þar með gat röng uppsetning (óstaðfest lén hjá Resend, útrunninn lykill,
- *   fullur dagskammtur) læst báðum eigendum úti án þess að nokkurs staðar sæist hvers
- *   vegna — og það er engin lykilorðsleið til baka lengur. Villuboð sem ljóstra upp um
- *   að netfang sé á listanum meðan póstþjónustan liggur niðri eru margfalt minna tjón.
+ * Sama gildir um sendingarvillur: ef netfangið er á listanum en pósturinn kemst ekki af
+ * stað segjum við frá því, í stað þess að sýna „Tengill var sendur“.
  */
 'use strict';
 const S = require('./_store');
@@ -26,21 +24,23 @@ module.exports = async (req, res) => {
   try { body = await S.readBody(req, 1); } catch (e) { return S.sendJSON(res, 400, { ok: false }); }
   const email = String(body.email || '').trim().toLowerCase();
 
-  // Talið á netfangið hvort sem það er á listanum eða ekki, svo þakið ljóstri engu upp.
+  // Talið á IP-tölu og netfang, hvort sem það er á listanum eða ekki — þannig er ekki hægt
+  // að þreifa sig í gegnum mörg netföng til að finna hver eru á listanum.
   if (S.overLimit('ip:' + clientIp(req), ...S.LIMITS.ip) ||
       S.overLimit('e:' + email, ...S.LIMITS.email)) {
     return S.sendJSON(res, 429, { ok: false, error: 'Of margar beiðnir í röð — bíddu í nokkrar mínútur og reyndu aftur' });
   }
 
-  if (S.mayEnter(email)) {
-    const host = (req.headers['x-forwarded-host'] || req.headers.host || 'radagerdi.is').split(',')[0];
-    const next = S.safeNext(body.next, '/?cms=1');
-    try {
-      await S.sendLoginLink(email, 'https://' + host, next);
-    } catch (e) {
-      console.error('login link failed:', e.message);
-      return S.sendJSON(res, 502, { ok: false, error: 'Pósturinn komst ekki af stað: ' + e.message });
-    }
+  if (!S.mayEnter(email)) {
+    return S.sendJSON(res, 403, { ok: false, error: 'Netfangið ' + email + ' hefur ekki aðgang að ritlinum. Athugaðu stafsetninguna, eða biddu Róbert að bæta því á listann.' });
+  }
+  const host = (req.headers['x-forwarded-host'] || req.headers.host || 'radagerdi.is').split(',')[0];
+  const next = S.safeNext(body.next, '/?cms=1');
+  try {
+    await S.sendLoginLink(email, 'https://' + host, next);
+  } catch (e) {
+    console.error('login link failed:', e.message);
+    return S.sendJSON(res, 502, { ok: false, error: 'Pósturinn komst ekki af stað: ' + e.message });
   }
   return S.sendJSON(res, 200, { ok: true });
 };

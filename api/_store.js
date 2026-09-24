@@ -173,8 +173,10 @@ async function update(name, fallback, mutate, message) {
 // tengillinn og lotan eru undirrituð með leyndarmáli þjónsins og staðfest með útreikningi.
 // Aðgangslistinn (CMS_EMAILS) er lesinn við hverja staðfestingu: sé netfang tekið af
 // listanum lokast það strax, líka þótt kakan sé enn í gildi.
+// Listinn er sleginn inn af fólki í Vercel, svo hann þolir það sem fólk slær inn: kommur,
+// semíkommur, bil eða línuskil á milli, og netföng innan <> eða gæsalappa.
 const CMS_EMAILS = (process.env.CMS_EMAILS || '')
-  .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  .split(/[\s,;]+/).map(s => s.replace(/^[<"']+|[>"']+$/g, '').trim().toLowerCase()).filter(Boolean);
 const EMAIL_LOGIN = !!(process.env.RESEND_API_KEY && CMS_EMAILS.length);
 // Resend sendir EKKERT frá léni sem er ekki staðfest hjá þeim — það svarar 403 og
 // pósturinn fer aldrei af stað. fyrirspurn.radagerdi.is ER staðfest (26. ágúst 2026,

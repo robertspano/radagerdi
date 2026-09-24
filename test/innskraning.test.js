@@ -78,5 +78,20 @@ const from = require('fs').readFileSync(require('path').join(__dirname, '..', 'a
 ok('sendandi er á staðfesta léninu', /fyrirspurn\.radagerdi\.is/.test(from));
 ok('sendandi er ekki onboarding@resend.dev', !/resend\.dev/.test(from));
 
+console.log('\nlistinn eins og fólk slær hann inn í Vercel');
+{
+  const pth = require('path').join(__dirname, '..', 'api', '_store.js');
+  const load = (v) => { process.env.CMS_EMAILS = v; delete require.cache[require.resolve(pth)]; return require(pth); };
+  const V = 'viktor@radagerdi170.is', R = 'robertstefansson2404@gmail.com';
+  let L = load(R + ';' + V);                      ok('semíkomma á milli', L.mayEnter(V) && L.mayEnter(R));
+  L = load(R + ' ' + V);                          ok('bil á milli', L.mayEnter(V) && L.mayEnter(R));
+  L = load(R + '\n' + V + '\n');                 ok('línuskil á milli', L.mayEnter(V) && L.mayEnter(R));
+  L = load(R + ', ' + V + ',');                   ok('komma og bil, komma í lokin', L.mayEnter(V) && L.mayEnter(R));
+  L = load('"' + R + '", <' + V + '>');           ok('gæsalappir og <>', L.mayEnter(V) && L.mayEnter(R));
+  L = load(R + ',viktor@radagerdi.is');           ok('rangt lén (án 170) hleypir EKKI viktor@radagerdi170.is inn', !L.mayEnter(V));
+  L = load(R + ',' + V);                          ok('tómt netfang kemst ekki inn', !L.mayEnter('') && !L.mayEnter(' '));
+  load('robertstefansson2404@gmail.com, Viktor@RADAGERDI.is');   // skila upprunalegum lista
+}
+
 console.log('\nsamtals: ' + pass + ' í lagi, ' + fail + ' brugðust');
 process.exit(fail ? 1 : 0);
