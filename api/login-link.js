@@ -1,6 +1,6 @@
 /* Sendir innskráningartengil í tölvupósti.
  *
- * Síðan segir HREINT ÚT ef netfangið er ekki á aðgangslistanum. Áður svaraði hún eins
+ * Síðan segir HREINT ÚT ef netfangið er ekki á aðgangslistanum („Þú átt ekki aðgang“). Áður svaraði hún eins
  * fyrir öll netföng („Tengill var sendur“) svo ekki mætti lesa út hverjir eiga aðgang —
  * en þá beið Viktor eftir pósti sem var aldrei sendur, án þess að nokkuð segði hvers
  * vegna. Fyrir ritil sem þrír eigendur nota er það margfalt verra en að einhver geti
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
   }
 
   if (!S.mayEnter(email)) {
-    return S.sendJSON(res, 403, { ok: false, error: 'Netfangið ' + email + ' hefur ekki aðgang að ritlinum. Athugaðu stafsetninguna, eða biddu Róbert að bæta því á listann.' });
+    return S.sendJSON(res, 403, { ok: false, error: 'Þú átt ekki aðgang að ritlinum.' });
   }
   const host = (req.headers['x-forwarded-host'] || req.headers.host || 'radagerdi.is').split(',')[0];
   const next = S.safeNext(body.next, '/?cms=1');
