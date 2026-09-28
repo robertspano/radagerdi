@@ -323,9 +323,6 @@
       "DIV1>DIV0>DIV1": {
         "padding-top": "15px",
         "padding-bottom": "19px"
-      },
-      "DIV1>DIV1>DIV0>A0": {
-        "color": "#1B7C38"
       }
     },
     "hafa-samband.html": {
