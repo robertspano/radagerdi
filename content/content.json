@@ -233,7 +233,9 @@
     "en-contact-us.html": {},
     "starfsumsokn.html": {},
     "myndir.html": {},
-    "en-hoparkvold.html": {}
+    "en-hoparkvold.html": {
+      "DIV1>DIV2>P1": true
+    }
   },
   "order": {
     "drykkir.html": {},
