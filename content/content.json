@@ -438,6 +438,9 @@
     "en-hoparkvold.html": {
       "DIV1>DIV3>DIV0>DIV0>P0": {
         "font-weight": "700"
+      },
+      "DIV1>DIV2>P2": {
+        "margin-top": "-16px"
       }
     }
   }
