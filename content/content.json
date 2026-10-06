@@ -223,7 +223,9 @@
     "hopar.html": {},
     "hafa-samband.html": {},
     "en-brons.html": {},
-    "en-matsedlar.html": {},
+    "en-matsedlar.html": {
+      "DIV1>DIV2>P2": true
+    },
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
     "en-takeaway.html": {},
