@@ -320,7 +320,7 @@
         "color": "#F0392F"
       },
       "DIV1>DIV0>P0": {
-        "font-size": "clamp(19px, 1.75vw, 21px)",
+        "font-size": "25px",
         "color": "#ffffff"
       }
     },
