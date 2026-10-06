@@ -23,7 +23,9 @@
       "DIV1>DIV0>DIV1>P0>B0": "mán–fim 11:30–22 <br>fös 11:30–23 <br>lau 11–23 <br>sun 11–22"
     },
     "en-brons.html": {},
-    "en-matsedlar.html": {},
+    "en-matsedlar.html": {
+      "DIV1>DIV2>H20": "Lunch Offer 2990 kr"
+    },
     "en-drykkir.html": {},
     "en-eftirrettir.html": {},
     "en-takeaway.html": {
