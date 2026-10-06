@@ -215,7 +215,9 @@
   },
   "hidden": {
     "drykkir.html": {},
-    "matsedlar.html": {},
+    "matsedlar.html": {
+      "DIV1>DIV2>P2": true
+    },
     "eftirrettir.html": {},
     "brons.html": {},
     "takeaway.html": {},
