@@ -321,7 +321,7 @@
       },
       "DIV1>DIV0>P0": {
         "font-size": "clamp(19px, 1.75vw, 21px)",
-        "color": "#ff3132"
+        "color": "#ffffff"
       }
     },
     "barnamatsedill.html": {
