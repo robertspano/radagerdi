@@ -30,7 +30,8 @@
       "DIV1>DIV2>H20": "Lunch Offer 2000 kr",
       "DIV1>DIV2>P1": "ANY PIZZA ON THE MENU",
       "DIV1>DIV2>P2": "Only applies for take away and not if eaten on the premises",
-      "DIV1>DIV2>P3": "(take away discount does not apply to the lunch offer)<br><br>Er hægt að setja inn formúlu sem reiknar 10% afslátt á yfirstrikaða verðið?"
+      "DIV1>DIV2>P3": "(take away discount does not apply to the lunch offer)<br><br>Er hægt að setja inn formúlu sem reiknar 10% afslátt á yfirstrikaða verðið?",
+      "DIV1>DIV0>P0": "10% off ever"
     },
     "en-barnamatsedill.html": {},
     "en-hopar.html": {
@@ -387,7 +388,7 @@
         "padding-bottom": "12px"
       },
       "DIV1>DIV0>P0": {
-        "font-size": "clamp(19px, 1.75vw, 21px)"
+        "font-size": "clamp(19px, 1.92vw, 23px)"
       }
     },
     "en-barnamatsedill.html": {
