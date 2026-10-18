@@ -70,7 +70,7 @@
 
   function make(prefill) {
     var z = Math.pow(Math.random(), 1.5);                      // flest langt í burtu
-    var r = 1.8 + z * 3.4 + Math.random() * 0.9;               // lítil: 4–12 dílar í þvermál (Róbert: „minnka aðeins")
+    var r = 1.3 + z * 2.3 + Math.random() * 0.6;               // lítil: 3–8 dílar í þvermál (Róbert: „minnka aðeins meira")
     return {
       img: KORN[(Math.random() * KORN.length) | 0], z: z, r: r,
       x: Math.random() * W,
