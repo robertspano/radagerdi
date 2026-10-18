@@ -529,8 +529,9 @@ const LEGACY_REDIRECTS = new Map([
   ['/en/about-us', { to: '/en-about-us.html' }],
   ['/en/contact-us', { to: '/en-contact-us.html' }],
   ['/en/seltjarnarnes-iceland-travel-guide', { to: '/en-seltjarnarnes-iceland-travel-guide.html' }],
-  ['/jolasedill', { to: '/matsedlar.html' }],
-  ['/inactive/jolasedill', { to: '/matsedlar.html' }],
+  ['/jolasedill', { to: '/jolasedill.html' }],
+  ['/inactive/jolasedill', { to: '/jolasedill.html' }],
+  ['/en/christmas-menu', { to: '/en-jolasedill.html' }],
 ]);
 // ?tab= er Webflow-leifar: fellt burt eftir vörpun, aðrir fyrirspurnarliðir (t.d. utm_*) haldast óbreyttir
 function queryWithoutTab(search) {
