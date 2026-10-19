@@ -42,7 +42,7 @@ function build() {
     const href = tag[0].match(/href=["']([^"']+)["']/i);
     if (!href) continue;
     const canonical = href[1];
-    const self = HOST + '/' + (f === 'index.html' ? '' : f);
+    const self = HOST + '/' + (f === 'index.html' ? '' : f.slice(0, -5));   // slóðir án .html
     if (canonical !== self) continue;          // áframsendingarsíður vísa annað — sleppa
     urls.push(self);
   }

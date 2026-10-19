@@ -47,7 +47,7 @@ ok('kaka fyrir netfang utan lista fellur', !S.sessionEmail(cookieReq(Buffer.from
 ok('gildistími er ~30 dagar', Math.abs(Number(cexp) - Date.now() - 30 * 864e5) < 5000);
 
 console.log('\nslóðin sem tengillinn skilar á');
-ok('venjuleg innri slóð helst', S.safeNext('/matsedlar.html', '/admin') === '/matsedlar.html');
+ok('venjuleg innri slóð helst', S.safeNext('/matsedlar', '/admin') === '/matsedlar');
 ok('ritháttur helst', S.safeNext('/?cms=1', '/admin') === '/?cms=1');
 ok('//annad-len.is er STÖÐVAÐ', S.safeNext('//evil.com', '/admin') === '/admin');
 ok('///annad-len.is er stöðvað', S.safeNext('///evil.com', '/admin') === '/admin');
