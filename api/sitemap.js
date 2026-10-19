@@ -14,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const HOST = 'https://radagerdi.is';
+const DROG = require('./_drog');          // faldar síður fara ekki í sitemap
 const ROOTS = [process.cwd(), path.join(__dirname, '..')];
 
 function listPages() {
@@ -32,6 +33,7 @@ function build() {
   const { root, files } = listPages();
   const urls = [];
   for (const f of files.sort()) {
+    if (Object.prototype.hasOwnProperty.call(DROG, f)) continue;
     let html;
     try { html = fs.readFileSync(path.join(root, f), 'utf8'); } catch (e) { continue; }
     if (/<meta[^>]*name=["']robots["'][^>]*noindex/i.test(html)) continue;

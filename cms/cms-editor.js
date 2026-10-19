@@ -190,6 +190,8 @@
     document.body.classList.add('cms-on');
     const bar = el('div', 'cms-bar');
     bar.appendChild(el('div', 'cms-brand', 'RÁÐAGERÐI <span>CMS</span>'));
+    // Falin síða (api/_drog.js): eigendurnir eiga að vita að gestir sjá hana ekki
+    if (window.__CMS_DROG__) { const d = el('div', 'cms-drog', 'Falin síða · gestir sjá hana ekki'); d.title = 'Aðeins þeir sem eru skráðir inn í ritilinn sjá þessa síðu. Róbert birtir hana þegar hún er tilbúin.'; bar.appendChild(d); }
     bar.appendChild(el('div', 'cms-spacer'));
     const undoBtn = btn('↶ Afturkalla', 'cms-hist cms-undo', undo); undoBtn.id = 'cms-undo'; undoBtn.title = 'Afturkalla síðustu breytingu (⌘Z)'; undoBtn.disabled = true; bar.appendChild(undoBtn);
     const redoBtn = btn('↷ Endurtaka', 'cms-hist cms-redo', redo); redoBtn.id = 'cms-redo'; redoBtn.title = 'Endurtaka (⇧⌘Z)'; redoBtn.disabled = true; bar.appendChild(redoBtn);

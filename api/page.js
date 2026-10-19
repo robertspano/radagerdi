@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const S = require('./_store');
+const DROG = require('./_drog');
 
 const ROOTS = [process.cwd(), path.join(__dirname, '..')];
 const BUCKETS = ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style', 'settings'];
@@ -64,6 +65,21 @@ module.exports = async (req, res) => {
     return res.end(fallback);
   }
 
+  // Falin síða (api/_drog.js): aðeins innskráðir eigendur fá hana. Á forskoðunum er
+  // Vercel-lásinn fyrir framan, og þar er engin innskráning — því aðeins í Production.
+  const drog = Object.prototype.hasOwnProperty.call(DROG, name);
+  if (drog && S.IS_PROD && !S.sessionEmail(req)) {
+    // Eigandi sem ætlar að breyta (?cms=1) fer í innskráninguna og kemur svo aftur hingað,
+    // eins og á öðrum síðum. Allir aðrir fá síðuna á listanum, eins og þessi væri ekki til.
+    const editing = /[?&]cms=1(&|$)/.test(url.search);
+    const to = editing ? '/admin?next=' + encodeURIComponent('/' + name.slice(0, -5) + '?cms=1') : DROG[name];
+    res.statusCode = 302;
+    res.setHeader('Location', to);
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    return res.end();
+  }
+
   let out = html;
   let contentOk = true;
   try {
@@ -83,15 +99,24 @@ module.exports = async (req, res) => {
     console.error('preload failed:', e.message);
   }
 
+  if (drog) {
+    // Ritillinn sýnir „Falin síða“ svo eigendurnir viti að gestir sjá hana ekki
+    // (í <head>, svo það hliðri ekki staðsetningarlyklum efnisins í <body>).
+    out = out.replace('</head>', '<script>window.__CMS_DROG__=1</script>\n</head>');
+  }
+
   const editing = /[?&]cms=1/.test(req.url || '');
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   // Gestir fá síðuna úr hraðneti Vercel í 15 sek. í senn; eigandinn í ritham fær hana alltaf ferska.
-  res.setHeader('Cache-Control', (editing || !contentOk)
-    ? 'no-store'
-    : 'public, max-age=0, s-maxage=15, stale-while-revalidate=60');
-  if (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production') {
-    res.setHeader('X-Robots-Tag', 'noindex, nofollow');   // forskoðunarslóðir mega ekki lenda í Google
+  // Falin síða má ALDREI fara í hraðnetið: þá fengi næsti gestur eintak eigandans.
+  res.setHeader('Cache-Control', drog
+    ? 'private, no-store'
+    : (editing || !contentOk)
+      ? 'no-store'
+      : 'public, max-age=0, s-maxage=15, stale-while-revalidate=60');
+  if (drog || (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production')) {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');   // forskoðanir og faldar síður mega ekki lenda í Google
   }
   res.end(out);
 };

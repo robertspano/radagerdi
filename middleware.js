@@ -64,7 +64,12 @@ const BANNAD = /^\/(content|server\.js|render\.yaml|package(-lock)?\.json|vercel
 
 export default function middleware(req) {
   const url = new URL(req.url);
-  const raw = url.pathname;
+  // Slóðin er lesin eins og skráakerfið les hana: /matsedlar%2Ehtml og //matsedlar.html eru
+  // sama skrá og /matsedlar.html. Án þessa rataði stafakóðuð slóð framhjá öllu hér á eftir,
+  // beint á kyrrstæðu skrána — án efnis eigandans, og framhjá lásnum á földum síðum.
+  let raw = url.pathname;
+  try { raw = decodeURIComponent(raw); } catch (e) { }
+  raw = raw.replace(/\/{2,}/g, '/');
   const p = raw.length > 1 ? (raw.replace(/\/+$/, '') || '/') : raw;
 
   if (BANNAD.test(raw)) {
@@ -75,7 +80,10 @@ export default function middleware(req) {
   const host = (url.hostname || req.headers.get('host') || '').toLowerCase();
   const rettLen = host === 'radagerdi.is' || host === 'www.radagerdi.is';
 
-  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    if (/\.html?$/i.test(p)) return new Response('Not found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' } });
+    return next();
+  }
 
   // gamlar bloggfærslur Webflow eru farnar fyrir fullt og allt
   if (p.startsWith('/post/')) return rewrite(new URL('/api/gone', req.url));
@@ -104,6 +112,11 @@ export default function middleware(req) {
     target.search = url.search;
     target.searchParams.set('p', name);
     return rewrite(target, rettLen ? undefined : { headers: { 'X-Robots-Tag': 'noindex, nofollow' } });
+  }
+
+  // Síðuskrá er aldrei afhent beint (aðeins í gegnum /api/page hér að ofan).
+  if (/\.html?$/i.test(p)) {
+    return new Response('Not found', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' } });
   }
 
   return next(rettLen ? undefined : { headers: { 'X-Robots-Tag': 'noindex, nofollow' } });
