@@ -502,37 +502,36 @@ function onWrongHost(req) {
   return !!h && h.host !== CANONICAL.host && !isInternalHostname(h.hostname);
 }
 
-// ---------- gamlar Webflow-slóðir → nýju .html-síðurnar (301, eitt stökk) ----------
-// Aldrei þjóna gömlu slóðunum beint: síðu-auðkenni CMS-ins er síðasti hluti slóðarinnar,
-// svo breytingar eigandans fylgja aðeins .html-skránum.
+// ---------- gamlar Webflow-slóðir og .html-slóðir → hreinu slóðirnar (301, eitt stökk) ----------
+// Aldrei þjóna gömlu slóðunum beint: síðu-auðkenni CMS-ins er dregið af síðasta hluta slóðarinnar,
+// svo breytingar eigandans fylgja aðeins síðunum sjálfum.
 const IS_MENU_TABS = {
-  'tab-matsedill-is': '/matsedlar.html', 'tab-menu-is': '/matsedlar.html',
-  'tab-brons-is': '/brons.html', 'tab-brunch-is': '/brons.html',
-  'tab-takeaway-is': '/takeaway.html',
-  'tab-hopar-is': '/hopar.html', 'tab-groups-is': '/hopar.html',
+  'tab-matsedill-is': '/matsedlar', 'tab-menu-is': '/matsedlar',
+  'tab-brons-is': '/brons', 'tab-brunch-is': '/brons',
+  'tab-takeaway-is': '/takeaway',
+  'tab-hopar-is': '/hopar', 'tab-groups-is': '/hopar',
 };
 const EN_MENU_TABS = {
-  'tab-menu-en': '/en-matsedlar.html', 'tab-brunch-en': '/en-brons.html',
-  'tab-takeaway-en': '/en-takeaway.html', 'tab-groups-en': '/en-hopar.html',
+  'tab-menu-en': '/en-matsedlar', 'tab-brunch-en': '/en-brons',
+  'tab-takeaway-en': '/en-takeaway', 'tab-groups-en': '/en-hopar',
 };
+// Sama og í middleware.js: lyklarnir eru án .html, svo /matsedill.html og /matsedill fara sömu leið.
 const LEGACY_REDIRECTS = new Map([
-  ['/matsedill', { to: '/matsedlar.html', tabs: IS_MENU_TABS }],
-  ['/is/matsedill', { to: '/matsedlar.html', tabs: IS_MENU_TABS }],
-  ['/matsedill.html', { to: '/matsedlar.html', tabs: IS_MENU_TABS }],
-  ['/en/menu', { to: '/en-matsedlar.html', tabs: EN_MENU_TABS }],
-  ['/en-menu.html', { to: '/en-matsedlar.html', tabs: EN_MENU_TABS }],
-  ['/en', { to: '/en.html' }],
-  ['/en/radagerdi', { to: '/en.html' }],
-  ['/en-radagerdi.html', { to: '/en.html' }],
-  ['/um-okkur', { to: '/um-okkur.html' }],
-  ['/hafa-samband', { to: '/hafa-samband.html' }],
-  ['/en/about-us', { to: '/en-about-us.html' }],
-  ['/en/contact-us', { to: '/en-contact-us.html' }],
-  ['/en/seltjarnarnes-iceland-travel-guide', { to: '/en-seltjarnarnes-iceland-travel-guide.html' }],
-  ['/jolasedill', { to: '/jolasedill.html' }],
-  ['/inactive/jolasedill', { to: '/jolasedill.html' }],
-  ['/en/christmas-menu', { to: '/en-jolasedill.html' }],
+  ['/matsedill', { to: '/matsedlar', tabs: IS_MENU_TABS }],
+  ['/is/matsedill', { to: '/matsedlar', tabs: IS_MENU_TABS }],
+  ['/en/menu', { to: '/en-matsedlar', tabs: EN_MENU_TABS }],
+  ['/en-menu', { to: '/en-matsedlar', tabs: EN_MENU_TABS }],
+  ['/en/radagerdi', { to: '/en' }],
+  ['/en-radagerdi', { to: '/en' }],
+  ['/en/about-us', { to: '/en-about-us' }],
+  ['/en/contact-us', { to: '/en-contact-us' }],
+  ['/en/seltjarnarnes-iceland-travel-guide', { to: '/en-seltjarnarnes-iceland-travel-guide' }],
+  ['/inactive/jolasedill', { to: '/jolasedill' }],
+  ['/en/christmas-menu', { to: '/en-jolasedill' }],
 ]);
+// Slóð síðu: eitt orð án endingar (/matsedlar → matsedlar.html)
+const PAGE_PATH = /^\/[A-Za-z0-9_-]+$/;
+
 // ?tab= er Webflow-leifar: fellt burt eftir vörpun, aðrir fyrirspurnarliðir (t.d. utm_*) haldast óbreyttir
 function queryWithoutTab(search) {
   if (!search || search.length < 2) return '';
@@ -544,22 +543,20 @@ function queryWithoutTab(search) {
   });
   return kept.length ? '?' + kept.join('&') : '';
 }
-// → { gone: true } fyrir /post/* (410), { to: '/x.html?…' } fyrir 301, annars null
+// → { gone: true } fyrir /post/* (410), { to: '/x?…' } fyrir 301, annars null
 function legacyTarget(url) {
   const p = url.pathname.length > 1 ? (url.pathname.replace(/\/+$/, '') || '/') : url.pathname;
   if (p.startsWith('/post/')) return { gone: true };
-  const r = LEGACY_REDIRECTS.get(p);
+  // Slóðirnar eru án endingar: /matsedlar.html → /matsedlar, /matsedlar/ → /matsedlar, /index.html → /
+  let clean = p.endsWith('.html') ? p.slice(0, -5) : p;
+  if (clean === '/index') clean = '/';
+  const r = LEGACY_REDIRECTS.get(clean);
   if (r) {
     const tab = url.searchParams.get('tab');
     const to = r.tabs && tab && Object.prototype.hasOwnProperty.call(r.tabs, tab) ? r.tabs[tab] : r.to;
     return { to: to + queryWithoutTab(url.search) };
   }
-  // /index.html er sama síða og / (sama síðu-auðkenni í CMS) — kanóníska slóðin er /, fyrirspurn (t.d. ?cms=1) helst
-  if (p === '/index.html') return { to: '/' + url.search };
-  // /brons.html/ → /brons.html — .html-síða er aldrei afhent með skástriki aftan við
-  if (p !== url.pathname && /^\/[^/]+\.html$/.test(p) && isPublicPath(p.slice(1)) && fs.existsSync(path.join(ROOT, p.slice(1)))) {
-    return { to: p + url.search };
-  }
+  if (clean !== url.pathname && (clean === '/' || PAGE_PATH.test(clean))) return { to: clean + url.search };
   return null;
 }
 function redirect(res, location) {
@@ -595,7 +592,7 @@ function isPrivatePagePath(p) {
 // ---------- static file serving (with range for media) ----------
 // Aðeins opinberar skrár eru afhentar. Allt annað í möppunni — gögn (content/), lykilorðsskrá,
 // gjafabréf, bakendakóði, stillingar og faldar skrár — skilar 404, jafnvel þótt skráin sé til.
-const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'llms.txt', 'sitemap.xml', 'favicon.ico']);
+const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'llms.txt', 'favicon.ico']);
 const PUBLIC_DIRS = ['assets/', 'fonts/', 'css/', 'js/', 'cms/vendor/', 'cms/pass-assets/'];
 const PUBLIC_CMS_FILES = new Set(['cms/admin.html', 'cms/skann.html', 'cms/wallet.html', 'cms/cms-inject.js', 'cms/cms-editor.js', 'cms/cms-editor.css']);
 function isPublicPath(rel) {
@@ -900,7 +897,10 @@ const server = http.createServer(async (req, res) => {
           '<p style="font-family:sans-serif;margin:20vh auto;max-width:28rem;text-align:center">Vefurinn er fluttur á ' +
           '<a href="https://radagerdi.is/">radagerdi.is</a></p>');
       }
-      res.writeHead(301, { Location: 'https://radagerdi.is' + url.pathname + url.search, 'Cache-Control': 'public, max-age=3600', 'X-Robots-Tag': 'noindex, nofollow' });
+      // Eitt stökk alla leið: gömul .html- eða Webflow-slóð fer beint á hreinu slóðina á radagerdi.is
+      const lt = legacyTarget(url);
+      const to = lt && lt.to ? lt.to : url.pathname + url.search;
+      res.writeHead(301, { Location: 'https://radagerdi.is' + to, 'Cache-Control': 'public, max-age=3600', 'X-Robots-Tag': 'noindex, nofollow' });
       return res.end();
     }
     let decodedPath = url.pathname;
@@ -954,6 +954,10 @@ const server = http.createServer(async (req, res) => {
     if (/^\/gjafabref\/[a-f0-9]{16,64}$/.test(url.pathname)) {
       return serveStatic(req, res, '/cms/wallet.html');
     }
+    // sitemap er búið til úr síðunum sjálfum, eins og á Vercel (api/sitemap.js)
+    if (url.pathname === '/sitemap.xml' && isRead) return require('./api/sitemap')(req, res);
+    // /matsedlar → matsedlar.html (skráin heldur nafninu; CMS-ið þekkir síðuna á því)
+    if (PAGE_PATH.test(url.pathname)) return serveStatic(req, res, url.pathname + '.html');
     return serveStatic(req, res, url.pathname);
   } catch (e) {
     console.error(e);

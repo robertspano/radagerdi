@@ -9,7 +9,13 @@
  */
 (function () {
   'use strict';
-  const PAGE = (location.pathname.split('/').pop() || 'index.html') || 'index.html';
+  // Síðan heitir eftir skránni (matsedlar.html) þótt slóðin sé án endingar (/matsedlar) —
+  // efni eigandans í content.json er geymt undir skráarnafninu.
+  const PAGE = (function () {
+    const seg = location.pathname.replace(/\/+$/, '').split('/').pop();
+    if (!seg) return 'index.html';
+    return /\.html$/.test(seg) ? seg : seg + '.html';
+  })();
   // Rauði merkjaliturinn er #ff3132. Eldra efni sem vistað var í CMS-inu með fyrri rauðu
   // tónunum (t.d. litahnappnum „Rauður") birtist í nýja litnum án þess að breyta gögnunum.
   const OLD_RED = /#(?:f0392f|ff3031|fe3032|ff3030|de2c2c)\b|rgb\(\s*240\s*,\s*57\s*,\s*47\s*\)/gi;
