@@ -60,7 +60,7 @@ function queryWithoutTab(search) {
 
 // Slóðir sem mega aldrei afhendast, hvað sem stillingum líður. .vercelignore heldur
 // þeim utan útgáfunnar — þetta er annað lagið, sem stillingaskrá getur ekki slökkt á.
-const BANNAD = /^\/(content|server\.js|render\.yaml|package(-lock)?\.json|vercel\.json|middleware\.js|\.git|\.env)/i;
+const BANNAD = /^\/(content|test\/|server\.js|render\.yaml|package(-lock)?\.json|vercel\.json|middleware\.js|\.git|\.env)/i;
 
 export default function middleware(req) {
   const url = new URL(req.url);

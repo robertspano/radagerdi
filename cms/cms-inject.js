@@ -161,12 +161,17 @@
   }
 
   async function boot() {
-    let content = {};
-    try {
-      const r = await fetch('/api/content', { cache: 'no-store' });
-      if (!r.ok) throw new Error('no api');
-      content = await r.json();
-    } catch (e) {
+    const editParam = new URLSearchParams(location.search).has('cms');
+    let content = {}, fresh = false;
+    // Ritillinn reiðir sig á ferskt efni: tvær tilraunir áður en gefist er upp
+    for (let i = 0; i < (editParam ? 2 : 1) && !fresh; i++) {
+      if (i) await new Promise(r => setTimeout(r, 1500));
+      try {
+        const r = await fetch('/api/content', { cache: 'no-store' });
+        if (r.ok) { content = await r.json(); fresh = true; }
+      } catch (e) { }
+    }
+    if (!fresh) {
       // static hosting (e.g. GitHub Pages): fall back to the committed content file
       try { content = await (await fetch('content/content.json', { cache: 'no-store' })).json(); } catch (e2) { }
     }
@@ -177,7 +182,16 @@
     }
 
     // editor bootstrap
-    const editParam = new URLSearchParams(location.search).has('cms');
+    if (editParam && !fresh) {
+      // Ritill með tómt eða gamalt efni gæti vistað það yfir verk eigendanna — betra að opna hann ekki.
+      // (Bætt aftast í <body> svo það hliðri ekki staðsetningarlyklum efnisins.)
+      const n = document.createElement('div');
+      n.setAttribute('role', 'alert');
+      n.textContent = 'Næ ekki í efni vefsins núna, svo ritillinn opnaðist ekki. Endurhlaðið síðuna eftir smá stund.';
+      n.style.cssText = 'position:fixed;left:50%;top:16px;transform:translateX(-50%);z-index:2147483647;background:#14161a;color:#fff;padding:12px 18px;border-radius:8px;font:600 14px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);max-width:90vw;text-align:center';
+      document.body.appendChild(n);
+      return;
+    }
     if (editParam) {
       let authed = false;
       try { authed = (await (await fetch('/api/session')).json()).authed; } catch (e) { }

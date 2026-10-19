@@ -65,10 +65,11 @@ module.exports = async (req, res) => {
     return res.end(fallback);
   }
 
-  // Falin síða (api/_drog.js): aðeins innskráðir eigendur fá hana. Á forskoðunum er
-  // Vercel-lásinn fyrir framan, og þar er engin innskráning — því aðeins í Production.
+  // Falin síða (api/_drog.js): aðeins innskráðir eigendur fá hana — á ÖLLUM útgáfum.
+  // Forskoðanir hafa enga innskráningu, og deilitengill („Anyone with the link") opnar
+  // þær hverjum sem er; þar fær því enginn síðuna. Hún sést staðbundið í server.js.
   const drog = Object.prototype.hasOwnProperty.call(DROG, name);
-  if (drog && S.IS_PROD && !S.sessionEmail(req)) {
+  if (drog && !S.sessionEmail(req)) {
     // Eigandi sem ætlar að breyta (?cms=1) fer í innskráninguna og kemur svo aftur hingað,
     // eins og á öðrum síðum. Allir aðrir fá síðuna á listanum, eins og þessi væri ekki til.
     const editing = /[?&]cms=1(&|$)/.test(url.search);

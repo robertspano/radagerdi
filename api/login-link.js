@@ -34,7 +34,10 @@ module.exports = async (req, res) => {
   if (!S.mayEnter(email)) {
     return S.sendJSON(res, 403, { ok: false, error: 'Þú átt ekki aðgang að ritlinum.' });
   }
-  const host = (req.headers['x-forwarded-host'] || req.headers.host || 'radagerdi.is').split(',')[0];
+  // Tengillinn í póstinum er lykill að ritlinum, svo hann má aldrei vísa annað en á vefinn
+  // sjálfan. Hausarnir koma frá þeim sem sendir beiðnina: ef lénið væri lesið úr þeim gæti
+  // hver sem er látið senda eigandanum ósvikinn póst með tengli á sitt eigið lén.
+  const host = S.IS_PROD ? 'radagerdi.is' : (req.headers['x-forwarded-host'] || req.headers.host || 'radagerdi.is').split(',')[0];
   const next = S.safeNext(body.next, '/?cms=1');
   try {
     await S.sendLoginLink(email, 'https://' + host, next);

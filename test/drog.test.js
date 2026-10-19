@@ -139,12 +139,26 @@ const cookieOf = (email, exp) => 'cms_session=' + Buffer.from(email).toString('b
     ok('gestur getur ekki vistað', r4.status === 401);
   }
 
-  console.log('\nforskoðun (Vercel-lásinn er fyrir; þar er engin innskráning)');
-  {
-    const P = load('preview');
+  console.log('\nforskoðun — deilitengill („Anyone with the link") opnar hana hverjum sem er');
+  for (const env of ['preview', 'development', undefined]) {
+    const P = load(env);
     const r = await call(P.page, { url: '/api/page?p=jolasedill.html' });
-    ok('forskoðun sýnir síðuna (tengill Gísla virkar)', r.status === 200 && /Jól í Ráðagerði/.test(r.body));
-    ok('forskoðun: samt aldrei í hraðnet eða Google', /private, no-store/.test(r.h['cache-control']) && /noindex/.test(r.h['x-robots-tag'] || ''));
+    ok(`VERCEL_ENV=${env}: gestur fær ekki síðuna`, r.status === 302 && r.h.location === '/matsedlar' && !leak(r));
+  }
+
+  console.log('\ninnskráningartengillinn vísar aðeins á radagerdi.is');
+  {
+    M = load('production');
+    let sentTo = null;
+    M.S.sendLoginLink = async (email, origin) => { sentTo = origin; };
+    const login = require(path.join(ROOT, 'api', 'login-link.js'));
+    for (const [lbl, headers] of [['x-forwarded-host frá sendanda', { 'x-forwarded-host': 'illt.example' }], ['host frá sendanda', { host: 'illt.example' }], ['venjuleg beiðni', { host: 'radagerdi.is' }]]) {
+      sentTo = null;
+      const req = { method: 'POST', url: '/api/login-link', headers: Object.assign({ 'x-forwarded-for': '10.0.0.' + Math.floor(Math.random() * 200) }, headers), body: JSON.stringify({ email: 'viktor@radagerdi170.is', next: '/jolasedill?cms=1' }) };
+      // kallað beint (ekki með call()), því hér skipta hausar sendandans máli
+      await new Promise((resolve) => { const res = { statusCode: 200, setHeader() {}, end() { resolve(); } }; Promise.resolve(login(req, res)).then(resolve, resolve); });
+      ok(`${lbl} → tengill á https://radagerdi.is (var: ${sentTo})`, sentTo === 'https://radagerdi.is');
+    }
   }
 
   console.log(`\nsamtals: ${pass} í lagi, ${fail} brugðust`);

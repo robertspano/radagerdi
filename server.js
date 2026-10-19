@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const passkit = require('./cms/pass.js');
+const EFNI = require('./api/_efni.js');     // vistun og faldar síður — sama og á Vercel
 
 const ROOT = __dirname;
 // Mutable data lives in DATA_DIR — locally ./content, on Render a persistent disk (/data)
@@ -631,7 +632,22 @@ function cmsPreload(pageName) {
   // </script> og < í efninu mega ekki loka script-tagginu
   return JSON.stringify(slice).replace(/</g, '\\u003c');
 }
+// Faldar síður (api/_drog.js) sjást aðeins hér á localhost. Á Render (gamli þjónninn, sem
+// smíðast enn úr main) og á hvaða öðru léni sem er fær enginn þær — þar er engin innskráning
+// sem dugir, og síðan á að vera ósýnileg öllum nema eigendunum á radagerdi.is.
+function drogOpin(req) {
+  if (process.env.RENDER) return false;
+  const h = parseHost(req.headers.host);
+  const n = h ? h.hostname : '';
+  return n === 'localhost' || n === '127.0.0.1' || n === '[::1]' || n === '::1' || n.endsWith('.localhost');
+}
 function serveHtml(req, res, full) {
+  const fname = path.basename(full);
+  if (EFNI.isDrog(fname) && !drogOpin(req)) {
+    const to = require('./api/_drog.js')[fname];
+    res.writeHead(302, { Location: to, 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' });
+    return res.end();
+  }
   fs.readFile(full, 'utf8', (err, html) => {
     if (err) return notFound(req, res, full);
     let out = html;
@@ -696,7 +712,7 @@ async function handleAPI(req, res, url) {
   // public read
   if (p === '/api/content' && req.method === 'GET') {
     const c = readJSON(CONTENT_FILE, {});
-    return sendJSON(res, 200, c);
+    return sendJSON(res, 200, drogOpin(req) ? c : EFNI.withoutDrafts(c));
   }
   if (p === '/api/session' && req.method === 'GET') {
     // publicOrigin: lénið sem hlekkir/QR-kóðar til viðskiptavina eiga að nota (null þar til aðallénið vísar hingað)
@@ -836,10 +852,10 @@ async function handleAPI(req, res, url) {
   if (p === '/api/content' && req.method === 'PUT') {
     const body = JSON.parse((await readBody(req)).toString('utf8') || '{}');
     const cur = readJSON(CONTENT_FILE, { texts: {}, images: {}, bg: {}, html: {}, hidden: {}, order: {}, settings: {} });
-    for (const k of ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style', 'settings']) {
-      if (body[k] && typeof body[k] === 'object') cur[k] = body[k];
-    }
-    writeJSON(CONTENT_FILE, cur);         // writeJSON speglar sjálfkrafa í GitHub
+    let next;
+    try { next = EFNI.applyEdit(cur, body); }          // aðeins breytingar þessa eiganda (api/_efni.js)
+    catch (e) { return sendJSON(res, 400, { error: e.message, durable: false }); }
+    writeJSON(CONTENT_FILE, next);        // writeJSON speglar sjálfkrafa í GitHub
     // durable segir ritlinum hvort breytingin lifi endurræsingu af — annars lýgur hann „Allt vistað ✓“
     return sendJSON(res, 200, { ok: true, durable: GH_ON && !ghBlocked });
   }

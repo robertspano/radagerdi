@@ -4,8 +4,25 @@
   const CMS = window.__CMS__;
   const PAGE = CMS.PAGE;
   const content = CMS.content || {};
-  ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style'].forEach(k => { content[k] = content[k] || {}; content[k][PAGE] = content[k][PAGE] || {}; });
+  const PAGE_BUCKETS = ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style'];
+  PAGE_BUCKETS.forEach(k => { content[k] = content[k] || {}; content[k][PAGE] = content[k][PAGE] || {}; });
   let dirty = false;
+
+  /* Vistun sendir aðeins það sem ÞESSI eigandi breytti á ÞESSARI síðu (sjá api/_efni.js).
+   * Áður fór allur vefurinn með, eins og hann var þegar síðan opnaðist — og þá þurrkaði
+   * hver vistun út það sem aðrir eigendur höfðu vistað á meðan.
+   * base = síðan eins og hún er á þjóninum, svo langt sem við vitum. */
+  const snap = () => { const o = {}; PAGE_BUCKETS.forEach(k => { o[k] = JSON.parse(JSON.stringify(content[k][PAGE] || {})); }); return o; };
+  let base = snap();
+  function diffOf(a, b) {
+    const set = {}, del = {}; let n = 0;
+    PAGE_BUCKETS.forEach(k => {
+      const x = a[k] || {}, y = b[k] || {};
+      Object.keys(y).forEach(key => { if (JSON.stringify(x[key]) !== JSON.stringify(y[key])) { (set[k] = set[k] || {})[key] = y[key]; n++; } });
+      Object.keys(x).forEach(key => { if (!Object.prototype.hasOwnProperty.call(y, key)) { (del[k] = del[k] || []).push(key); n++; } });
+    });
+    return { set, del, n };
+  }
 
   const PAGES = [
     ['index.html', 'Forsíða'], ['jolasedill.html', 'Jólaseðill'], ['matsedlar.html', 'Matseðill'], ['drykkir.html', 'Drykkir'], ['eftirrettir.html', 'Eftirréttir'], ['takeaway.html', 'Take Away'], ['brons.html', 'Bröns'],
@@ -31,7 +48,7 @@
   function scheduleSave() { clearTimeout(saveT); saveT = setTimeout(save, 600); }
   function markDirty() { dirty = true; setStatus('pending'); scheduleSave(); }
   function setOverride(type, k, v) { content[type][PAGE][k] = v; markDirty(); }
-  const payload = () => JSON.stringify({ texts: content.texts, images: content.images, bg: content.bg, html: content.html, hidden: content.hidden, order: content.order, style: content.style });
+  const payload = (now) => { const d = diffOf(base, now || snap()); return JSON.stringify({ v: 2, page: PAGE, set: d.set, del: d.del }); };
 
   /* Ef innskráningin rennur út í miðri vinnu er vistunin ekki hægt að framkvæma — og
    * áður stóð bara tilkynning um að breytingarnar „bíði í þessum flipa“. Það var ósatt:
@@ -49,7 +66,8 @@
   let authLost = false;
 
   function stash() {
-    try { localStorage.setItem(STASH, JSON.stringify({ t: Date.now(), data: JSON.parse(payload()) })); } catch (e) { }
+    // base fylgir með, svo það sem býðst aftur verði aðeins breytingar eigandans, ekki gamalt eintak af síðunni
+    try { localStorage.setItem(STASH, JSON.stringify({ t: Date.now(), v: 2, base: base, data: snap() })); } catch (e) { }
   }
   function clearStash() { try { localStorage.removeItem(STASH); } catch (e) { } }
   function offerStash() {
@@ -58,10 +76,16 @@
     let saved; try { saved = JSON.parse(raw); } catch (e) { return clearStash(); }
     if (!saved || !saved.data || !(Date.now() - saved.t < STASH_MAX_AGE)) return clearStash();
     const when = new Date(saved.t).toLocaleString('is-IS', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
-    if (!confirm('Þú varst að breyta þessari síðu ' + when + ' þegar innskráningin rann út, og þær breytingar komust aldrei til skila.\n\nÁ ég að setja þær inn aftur?')) return clearStash();
-    for (const k of BUCKETS) {
-      const slice = saved.data[k] && saved.data[k][PAGE];
-      if (slice) { content[k] = content[k] || {}; content[k][PAGE] = slice; }
+    if (!confirm('Þú varst að breyta þessari síðu ' + when + ' og þær breytingar komust aldrei til skila.\n\nÁ ég að setja þær inn aftur?')) return clearStash();
+    if (saved.v === 2) {
+      // Breytingarnar frá því þá (saved.base → saved.data) eru vistaðar ofan á nýjasta efnið
+      for (const k of BUCKETS) { content[k] = content[k] || {}; content[k][PAGE] = (saved.data && saved.data[k]) || {}; }
+      base = saved.base || base;
+    } else {
+      for (const k of BUCKETS) {                // eldra snið: heill vefur — aðeins þessi síða sett inn
+        const slice = saved.data[k] && saved.data[k][PAGE];
+        if (slice) { content[k] = content[k] || {}; content[k][PAGE] = slice; }
+      }
     }
     clearStash();
     dirty = true;
@@ -101,10 +125,12 @@
   async function save() {
     if (saving) { scheduleSave(); return; }
     if (!dirty) { setStatus('ok'); return; }
+    const now = snap();
+    if (!diffOf(base, now).n) { dirty = false; setStatus('ok'); return; }   // breytt og svo afturkallað
     saving = true; setStatus('saving');
     let res;
     try {
-      res = await api('/api/content', { method: 'PUT', body: payload() });
+      res = await api('/api/content', { method: 'PUT', body: payload(now) });
     } catch (e) {
       res = { status: 0 };                   // netbilun — reynum aftur
     } finally {
@@ -117,8 +143,17 @@
       toast('Innskráningin er útrunnin. Breytingarnar eru geymdar — skráðu þig inn á /admin og opnaðu þessa síðu aftur, þá bjóðast þær til baka.');
       return;
     }
+    if (res.status === 400 || res.status === 413) {   // þjónninn hafnar sendingunni — endurtekning lagar ekkert
+      stash();
+      setStatus('error', 'Vistun hafnað: ' + (res.error || res.status));
+      toast('Þjónninn tók ekki við breytingunni (' + (res.error || res.status) + '). Hún er geymd í vafranum — hafðu samband við Róbert.');
+      return;
+    }
     if (res.ok) {
-      dirty = false;
+      base = now;                            // þetta er nú á þjóninum
+      const more = diffOf(base, snap()).n > 0;   // breytt á meðan vistað var → vista það líka
+      dirty = more;
+      if (more) { setStatus('pending'); scheduleSave(); return; }
       if (res.durable === false) {           // vistað staðbundið en lifir ekki endurræsingu af
         setStatus('error', 'Vistað — EN ekki varanlega (GitHub-tenging vantar)');
         if (!warnedNotDurable) {
@@ -191,7 +226,7 @@
     const bar = el('div', 'cms-bar');
     bar.appendChild(el('div', 'cms-brand', 'RÁÐAGERÐI <span>CMS</span>'));
     // Falin síða (api/_drog.js): eigendurnir eiga að vita að gestir sjá hana ekki
-    if (window.__CMS_DROG__) { const d = el('div', 'cms-drog', 'Falin síða · gestir sjá hana ekki'); d.title = 'Aðeins þeir sem eru skráðir inn í ritilinn sjá þessa síðu. Róbert birtir hana þegar hún er tilbúin.'; bar.appendChild(d); }
+    if (window.__CMS_DROG__) { const d = el('div', 'cms-drog', 'Falin síða<span class="cms-drog-l"> · gestir sjá hana ekki</span>'); d.title = 'Aðeins þeir sem eru skráðir inn í ritilinn sjá þessa síðu. Róbert birtir hana þegar hún er tilbúin.'; bar.appendChild(d); }
     bar.appendChild(el('div', 'cms-spacer'));
     const undoBtn = btn('↶ Afturkalla', 'cms-hist cms-undo', undo); undoBtn.id = 'cms-undo'; undoBtn.title = 'Afturkalla síðustu breytingu (⌘Z)'; undoBtn.disabled = true; bar.appendChild(undoBtn);
     const redoBtn = btn('↷ Endurtaka', 'cms-hist cms-redo', redo); redoBtn.id = 'cms-redo'; redoBtn.title = 'Endurtaka (⇧⌘Z)'; redoBtn.disabled = true; bar.appendChild(redoBtn);
@@ -1282,7 +1317,10 @@
     // Sé innskráningin farin fær þessi beiðni 401 og enginn les svarið — vinnan hyrfi
     // þegjandi. Þá fer hún í geymslu í staðinn.
     if (authLost) return stash();
-    try { fetch('/api/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: payload(), keepalive: true }); } catch (e) { }
+    const body = payload();
+    // Vafrinn sendir ekki keepalive-beiðni yfir 64 KB. Stærri breyting fer í geymslu og býðst næst.
+    if (body.length > 60000) return stash();
+    try { fetch('/api/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }); } catch (e) { stash(); }
   });
 
   // ---------- init ----------

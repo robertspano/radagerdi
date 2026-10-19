@@ -133,6 +133,8 @@ t('/matsedlar?p=../server.js', 'rw /api/page?p=matsedlar.html');
 t('/.env', '404');
 t('/content/content.json', '404');
 t('/server.js', '404');
+t('/test/drog.test.js', '404');           // prófin lýsa földum síðum — aldrei á vefinn
+t('/test%2Fdrog.test.js', '404');
 t('/matsedlar', 'next', 'POST');
 t('/matsedlar', 'rw /api/page?p=matsedlar.html', 'HEAD');
 t('/matsedlar', 'rw /api/page?p=matsedlar.html +noindex', 'GET', 'radagerdi-git-x.vercel.app');

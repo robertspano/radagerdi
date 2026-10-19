@@ -6,7 +6,8 @@ content/
 server.js
 render.yaml
 
-# vinnuskrár
+# vinnuskrár (prófin lýsa m.a. földum síðum — þau eiga ekkert erindi á vefinn)
+test/
 .claude/
 README.md
 *.bak

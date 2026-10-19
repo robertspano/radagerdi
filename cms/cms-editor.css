@@ -16,7 +16,7 @@ body.cms-on .rg-menu { top:var(--cms-h) !important; }
 .cms-brand{font-weight:800;letter-spacing:.06em;font-size:13px;white-space:nowrap}
 .cms-brand span{color:var(--cms-red);margin-left:2px}
 .cms-drog{margin-left:14px;padding:3px 9px;border:1px solid #d9b45a;border-radius:4px;color:#f0d48a;font-size:12px;font-weight:600;white-space:nowrap}
-@media (max-width:640px){.cms-drog{margin-left:8px;font-size:11px;padding:2px 6px}}
+@media (max-width:640px){.cms-drog{margin-left:8px;font-size:11px;padding:2px 6px}.cms-drog-l{display:none}}
 .cms-spacer{flex:1}
 .cms-field{display:flex;align-items:center;gap:6px;font-size:11px;color:#9aa0aa}
 .cms-pagesel{background:#23262d;color:#fff;border:1px solid #33373f;border-radius:8px;padding:6px 8px;font-size:13px;outline:none}
