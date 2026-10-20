@@ -247,6 +247,9 @@
     "myndir.html": {},
     "en-hoparkvold.html": {
       "DIV1>DIV2>P1": true
+    },
+    "jolasedill.html": {
+      "MAIN0>SECTION0>DIV2>P0": true
     }
   },
   "order": {
