@@ -469,7 +469,8 @@
     },
     "jolasedill.html": {
       "MAIN0>SECTION0>DIV2>DL0>DIV0>DD0": {
-        "margin-top": "32px"
+        "margin-top": "32px",
+        "font-size": "11px"
       }
     }
   }
