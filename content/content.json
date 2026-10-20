@@ -471,7 +471,7 @@
       "MAIN0>SECTION0>DIV2>DL0>DIV0>DD0": {
         "margin-top": "32px",
         "font-size": "13px",
-        "text-align": "right"
+        "text-align": "left"
       },
       "MAIN0>SECTION0>DIV2>DL0>DIV0>DT0": {
         "font-size": "clamp(14px, 1.33vw, 16px)"
