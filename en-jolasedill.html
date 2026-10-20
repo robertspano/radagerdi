@@ -170,7 +170,10 @@ body{background:var(--kj-ink)}
 .kj-takkar{order:2;display:flex;flex-wrap:wrap;align-items:center;gap:8px 28px}
 
 /* ===== MATSEÐILL — gyllt bogaspjald (radíus eins og bogarnir á vefnum: 110/190 að ofan, 26 að neðan) ===== */
-.kj-sedill-svaedi{padding:12px 16px 44px;scroll-margin-top:16px}
+/* Bilið milli kafla er eitt og það sama alls staðar: --kj-bil neðst í einum kafla + --kj-bil efst í þeim næsta
+   (104 px í síma, 120 á spjaldi, 144 í tölvu). Áður valdi hver kafli sitt og bilin urðu 94–200 px. */
+.kj{--kj-bil:52px}
+.kj-sedill-svaedi{padding:12px 16px var(--kj-bil);scroll-margin-top:16px}
 .kj-sedill{position:relative;width:100%;max-width:660px;margin:0 auto;text-align:center;padding:76px 22px 44px;
   background:var(--kj-ink2);
   border:1px solid var(--kj-lina);border-radius:110px 110px 26px 26px}
@@ -203,7 +206,7 @@ body{background:var(--kj-ink)}
 
 /* ===== OPNUNARTÍMAR — dagatal með bogadyrum ===== */
 .kj-timar{background:var(--kj-ink)}
-.kj-timar-inn{max-width:1240px;margin:0 auto;padding:40px 20px 64px}
+.kj-timar-inn{max-width:1240px;margin:0 auto;padding:var(--kj-bil) 20px var(--kj-bil)}
 .kj-timar-haus{text-align:center;margin-bottom:36px}
 .kj-timar-lead{max-width:36em;margin:18px auto 0;font-size:16.5px;line-height:1.7;color:var(--kj-krem)}
 .kj-vika + .kj-vika{margin-top:34px}
@@ -238,7 +241,7 @@ body{background:var(--kj-ink)}
 .kj-lokad .kj-heitid{color:var(--kj-krem)}
 
 /* ===== SÖLUTEXTI — mynd og venjulegur texti, eins og á Um okkur ===== */
-.kj-saga{padding:72px 20px 72px}
+.kj-saga{padding:var(--kj-bil) 20px var(--kj-bil)}
 .kj-saga-inn{max-width:1180px;margin:0 auto;display:grid;gap:36px;align-items:center}
 .kj-saga-mynd{margin:0}
 .kj-saga-mynd img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:18px}
@@ -249,12 +252,13 @@ body{background:var(--kj-ink)}
 
 /* ===== HÓPAR ===== */
 .kj-hopar{background:var(--kj-ink);color:var(--kj-krem)}
-.kj-hopar-inn{max-width:760px;margin:0 auto;padding:56px 20px 72px;text-align:center;border-top:1px solid var(--kj-lina-d)}
+.kj-hopar-inn{max-width:760px;margin:0 auto;padding:var(--kj-bil) 20px 72px;text-align:center;border-top:1px solid var(--kj-lina-d)}
 .kj-hopar h2{color:var(--kj-krem);margin:0 auto 18px}
 .kj-hopar-texti p{font-size:17px;line-height:1.8;color:var(--kj-krem);max-width:38em;margin-left:auto;margin-right:auto}
 .kj-hopar-texti p + p{margin-top:14px}
 .kj-hopar-texti a{font-weight:700;color:var(--kj-gull-l);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 .kj-hopar-texti a.kj-netfang{overflow-wrap:anywhere}
+.kj-hopar-texti strong,.kj-hopar-texti b{white-space:nowrap}   /* símanúmerið slitnar ekki í sundur: „546 / 1700“ */
 
 /* ===== LOKAKALL ===== */
 
@@ -269,10 +273,11 @@ body{background:var(--kj-ink)}
   .kj-stadir{order:0}
   .kj-takkar{order:0}
   .kj-sedill{padding:100px 56px 56px;border-radius:190px 190px 26px 26px}
-  .kj-timar-inn{padding:48px 40px 72px}
+  .kj{--kj-bil:60px}
+  .kj-timar-inn{padding:var(--kj-bil) 40px var(--kj-bil)}
   .kj-vika{max-width:620px;margin-left:auto;margin-right:auto}
-  .kj-saga{padding:92px 40px 84px}
-  .kj-hopar-inn{padding:64px 40px 88px}
+  .kj-saga{padding:var(--kj-bil) 40px var(--kj-bil)}
+  .kj-hopar-inn{padding:var(--kj-bil) 40px 88px}
 }
 
 /* ===== tölva ===== */
@@ -288,9 +293,10 @@ body{background:var(--kj-ink)}
   .kj-hero-nedri{grid-column:7/13;grid-row:3;align-self:start;margin-top:0;padding:30px clamp(32px,5vw,96px) 48px 0;max-width:none}
   .kj h1{font-size:clamp(56px,5.6vw,86px);max-width:8.4em}
   .kj-inngangur{font-size:18px}
-  .kj-sedill-svaedi{padding:36px 24px 56px}
+  .kj{--kj-bil:72px}
+  .kj-sedill-svaedi{padding:36px 24px var(--kj-bil)}
 
-  .kj-timar-inn{padding:56px 40px 88px}
+  .kj-timar-inn{padding:var(--kj-bil) 40px var(--kj-bil)}
   .kj-vika{max-width:none}
   .kj-timar-haus{margin-bottom:44px}
   .kj-vika + .kj-vika{margin-top:30px}
@@ -311,11 +317,11 @@ body{background:var(--kj-ink)}
   .kj-ljos time{background:none}
   .kj-lokad time{background:none}
 
-  .kj-saga{padding:112px 40px 100px}
+  .kj-saga{padding:var(--kj-bil) 40px var(--kj-bil)}
   .kj-saga-inn{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:72px}
   .kj-saga-texti p{font-size:18px}
 
-  .kj-hopar-inn{padding:72px 40px 104px}
+  .kj-hopar-inn{padding:var(--kj-bil) 40px 104px}
   }
 @media (max-width:999px){
   .kj-dagar{gap:0}

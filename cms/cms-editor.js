@@ -393,6 +393,9 @@
       deleteBlock(leaf);
       return;
     }
+    // Merkingar ritilsins (sveimun, virk eining) mega ekki vistast með textanum — þær festust
+    // annars í efninu, t.d. í málsgrein sem var límd inn (class="cms-hover" í texta Gísla)
+    leaf.querySelectorAll('.cms-hover,.cms-active').forEach(e => { e.classList.remove('cms-hover', 'cms-active'); if (!e.getAttribute('class')) e.removeAttribute('class'); });
     const html = leaf.innerHTML;
     if (html !== activeOrig) {
       if (!saveContext(leaf)) { // non-menu text leaf → text override (pane text is recorded by savePane)
