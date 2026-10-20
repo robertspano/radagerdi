@@ -254,7 +254,8 @@
     },
     "jolasedill.html": {
       "MAIN0>SECTION0>DIV2>P0": true,
-      "MAIN0>SECTION2>DIV0>DIV1>OL0>LI4>SPAN1>SPAN1": true
+      "MAIN0>SECTION2>DIV0>DIV1>OL0>LI4>SPAN1>SPAN1": true,
+      "MAIN0>SECTION2>DIV0>DIV2>OL0>LI6>SPAN1>SPAN1": true
     }
   },
   "order": {
