@@ -266,7 +266,8 @@
       "MAIN0>SECTION4>DIV0>DIV0>P1": true
     },
     "en-jolasedill.html": {
-      "MAIN0>SECTION0>DIV2>DL0>DIV0>DD0": true
+      "MAIN0>SECTION0>DIV2>DL0>DIV0>DD0": true,
+      "MAIN0>SECTION1>ARTICLE0>FOOTER0>P1": true
     }
   },
   "order": {
