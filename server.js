@@ -637,12 +637,15 @@ function cmsPreload(pageName) {
 // sem dugir, og síðan á að vera ósýnileg öllum nema eigendunum á radagerdi.is.
 function drogOpin(req) {
   if (process.env.RENDER) return false;
+  // Host-hausinn ræður sá sem sendir; tengingin sjálf verður að koma frá þessari tölvu
+  const a = String((req.socket && req.socket.remoteAddress) || '');
+  if (!(a === '127.0.0.1' || a === '::1' || a === '::ffff:127.0.0.1')) return false;
   const h = parseHost(req.headers.host);
   const n = h ? h.hostname : '';
   return n === 'localhost' || n === '127.0.0.1' || n === '[::1]' || n === '::1' || n.endsWith('.localhost');
 }
 function serveHtml(req, res, full) {
-  const fname = path.basename(full);
+  const fname = path.basename(full).toLowerCase();   // diskur macOS gerir ekki greinarmun á /Jolasedill og /jolasedill
   if (EFNI.isDrog(fname) && !drogOpin(req)) {
     const to = require('./api/_drog.js')[fname];
     res.writeHead(302, { Location: to, 'Cache-Control': 'private, no-store', 'X-Robots-Tag': 'noindex, nofollow' });
@@ -854,7 +857,7 @@ async function handleAPI(req, res, url) {
     const cur = readJSON(CONTENT_FILE, { texts: {}, images: {}, bg: {}, html: {}, hidden: {}, order: {}, settings: {} });
     let next;
     try { next = EFNI.applyEdit(cur, body); }          // aðeins breytingar þessa eiganda (api/_efni.js)
-    catch (e) { return sendJSON(res, 400, { error: e.message, durable: false }); }
+    catch (e) { return sendJSON(res, e.code === 'OLD' ? 401 : 400, { error: e.message, durable: false }); }
     writeJSON(CONTENT_FILE, next);        // writeJSON speglar sjálfkrafa í GitHub
     // durable segir ritlinum hvort breytingin lifi endurræsingu af — annars lýgur hann „Allt vistað ✓“
     return sendJSON(res, 200, { ok: true, durable: GH_ON && !ghBlocked });

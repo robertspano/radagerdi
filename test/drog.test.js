@@ -125,16 +125,15 @@ const cookieOf = (email, exp) => 'cms_session=' + Buffer.from(email).toString('b
   }
   {
     const before = M.stored.texts['jolasedill.html']['MAIN0>H10'];
-    const body = FAKE(); delete body.texts['jolasedill.html']; delete body.html['jolasedill.html']; body.texts['matsedlar.html'].DIV0 = 'breytt';
-    const r = await call(M.content, { url: '/api/content', method: 'PUT', cookie: VIKTOR, body });
-    ok('vistun án faldrar síðu þurrkar hana ekki út', r.status === 200 && M.stored.texts['jolasedill.html']['MAIN0>H10'] === before && M.stored.html['jolasedill.html'].X === '<p>LEYNIHTML</p>');
-    ok('…en annað í vistuninni skilar sér', M.stored.texts['matsedlar.html'].DIV0 === 'breytt');
-    const body2 = FAKE(); body2.texts['jolasedill.html'] = { 'MAIN0>H10': 'NÝTT' };
-    await call(M.content, { url: '/api/content', method: 'PUT', cookie: VIKTOR, body: body2 });
+    const r = await call(M.content, { url: '/api/content', method: 'PUT', cookie: VIKTOR, body: { v: 2, page: 'matsedlar.html', set: { texts: { DIV0: 'breytt' } } } });
+    ok('vistun á annarri síðu snertir ekki földu síðuna', r.status === 200 && M.stored.texts['jolasedill.html']['MAIN0>H10'] === before && M.stored.html['jolasedill.html'].X === '<p>LEYNIHTML</p>');
+    ok('…en breytingin sjálf skilar sér', M.stored.texts['matsedlar.html'].DIV0 === 'breytt');
+    await call(M.content, { url: '/api/content', method: 'PUT', cookie: VIKTOR, body: { v: 2, page: 'jolasedill.html', set: { texts: { 'MAIN0>H10': 'NÝTT' } } } });
     ok('breyting á faldri síðu vistast', M.stored.texts['jolasedill.html']['MAIN0>H10'] === 'NÝTT');
-    const body3 = FAKE(); body3.texts['jolasedill.html'] = {};
-    await call(M.content, { url: '/api/content', method: 'PUT', cookie: VIKTOR, body: body3 });
-    ok('og það má afturkalla allt á henni (tómt sent = tómt vistað)', Object.keys(M.stored.texts['jolasedill.html']).length === 0);
+    await call(M.content, { url: '/api/content', method: 'PUT', cookie: VIKTOR, body: { v: 2, page: 'jolasedill.html', del: { texts: ['MAIN0>H10'] } } });
+    ok('og það má afturkalla á henni', !('MAIN0>H10' in M.stored.texts['jolasedill.html']));
+    const old = await call(M.content, { url: '/api/content', method: 'PUT', cookie: VIKTOR, body: FAKE() });
+    ok('gamla sniðið (heill vefur) → 401, ekkert skrifað', old.status === 401 && M.stored.texts['matsedlar.html'].DIV0 === 'breytt');
     const r4 = await call(M.content, { url: '/api/content', method: 'PUT', body: FAKE() });
     ok('gestur getur ekki vistað', r4.status === 401);
   }

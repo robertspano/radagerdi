@@ -11,14 +11,16 @@
  *     del: { hidden: ['DIV1>P2'] } }                      — gildi sem hann fjarlægði
  * og þjónninn beitir því á nýjasta efnið. Annað helst óhreyft.
  *
- * Eldri sendingar (heilar fötur, án v) eru enn teknar gildar — flipi sem var opinn
- * þegar þessi útgáfa fór í loftið sendir þær þar til hann er endurhlaðinn.
+ * Eldri sendingum (heilar fötur, án v) er HAFNAÐ (code 'OLD' → 401). Ritilsflipi sem var
+ * opinn þegar þessi útgáfa fór í loftið myndi annars setja allan vefinn aftur í það horf
+ * sem hann var í þegar flipinn opnaðist. Við 401 geymir gamli ritillinn vinnuna og biður um
+ * innskráningu; þegar síðan er opnuð aftur býður nýi ritillinn þá vinnu fyrir þá síðu eina.
  */
 'use strict';
 const DROG = require('./_drog');
 
 const BUCKETS = ['texts', 'images', 'bg', 'html', 'hidden', 'order', 'style'];
-const LEGACY_BUCKETS = [...BUCKETS, 'settings'];
+const ALL_BUCKETS = [...BUCKETS, 'settings'];
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 const isDrog = (p) => has(DROG, p);
 const isObj = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -32,7 +34,7 @@ function bad(msg) { const e = new Error(msg); e.code = 'BAD'; return e; }
 // Efni faldra síðna (api/_drog.js) er aðeins fyrir innskráða — annars mætti lesa textann.
 function withoutDrafts(c) {
   const out = Object.assign({}, c);
-  for (const k of LEGACY_BUCKETS) {
+  for (const k of ALL_BUCKETS) {
     if (!isObj(out[k])) continue;
     out[k] = Object.assign({}, out[k]);
     for (const p of Object.keys(out[k])) if (isDrog(p)) delete out[k][p];
@@ -45,35 +47,22 @@ function withoutDrafts(c) {
  * annar vistaði á sama tíma, og þá verður útkoman að reiknast upp á nýtt. */
 function applyEdit(curIn, body) {
   if (!isObj(body)) throw bad('Ógild sending');
+  if (body.v !== 2) { const e = new Error('Ritillinn var uppfærður — opnaðu síðuna aftur. Breytingarnar þínar eru geymdar.'); e.code = 'OLD'; throw e; }
   const cur = Object.assign({}, curIn);
-
-  if (body.v === 2) {
-    const page = body.page;
-    if (!okPage(page)) throw bad('Ógilt síðunafn');
-    const set = isObj(body.set) ? body.set : {}, del = isObj(body.del) ? body.del : {};
-    for (const k of Object.keys(set)) if (!BUCKETS.includes(k) || !isObj(set[k])) throw bad('Ógild fata: ' + k);
-    for (const k of Object.keys(del)) if (!BUCKETS.includes(k) || !Array.isArray(del[k])) throw bad('Ógild fata: ' + k);
-    for (const k of BUCKETS) {
-      const s = set[k] || {}, d = del[k] || [];
-      if (!Object.keys(s).length && !d.length) continue;
-      const bucket = Object.assign({}, isObj(cur[k]) ? cur[k] : {});
-      const slice = Object.assign({}, isObj(bucket[page]) ? bucket[page] : {});
-      for (const key of d) { if (!okKey(key)) throw bad('Ógildur lykill'); delete slice[key]; }
-      for (const key of Object.keys(s)) { if (!okKey(key)) throw bad('Ógildur lykill'); slice[key] = s[key]; }
-      bucket[page] = slice;
-      cur[k] = bucket;
-    }
-    return cur;
-  }
-
-  // Eldri sending: heilar fötur. Efni faldrar síðu sem vantar í hana er látið standa
-  // (ritill sem fékk efnið án þess má ekki þurrka það út).
-  for (const k of LEGACY_BUCKETS) {
-    if (!isObj(body[k])) continue;
-    const next = Object.assign({}, body[k]);
-    const keep = isObj(cur[k]) ? cur[k] : {};
-    for (const p of Object.keys(keep)) if (isDrog(p) && !has(body[k], p)) next[p] = keep[p];
-    cur[k] = next;
+  const page = body.page;
+  if (!okPage(page)) throw bad('Ógilt síðunafn');
+  const set = isObj(body.set) ? body.set : {}, del = isObj(body.del) ? body.del : {};
+  for (const k of Object.keys(set)) if (!BUCKETS.includes(k) || !isObj(set[k])) throw bad('Ógild fata: ' + k);
+  for (const k of Object.keys(del)) if (!BUCKETS.includes(k) || !Array.isArray(del[k])) throw bad('Ógild fata: ' + k);
+  for (const k of BUCKETS) {
+    const s = set[k] || {}, d = del[k] || [];
+    if (!Object.keys(s).length && !d.length) continue;
+    const bucket = Object.assign({}, isObj(cur[k]) ? cur[k] : {});
+    const slice = Object.assign({}, isObj(bucket[page]) ? bucket[page] : {});
+    for (const key of d) { if (!okKey(key)) throw bad('Ógildur lykill'); delete slice[key]; }
+    for (const key of Object.keys(s)) { if (!okKey(key)) throw bad('Ógildur lykill'); slice[key] = s[key]; }
+    bucket[page] = slice;
+    cur[k] = bucket;
   }
   return cur;
 }

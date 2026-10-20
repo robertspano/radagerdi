@@ -74,15 +74,10 @@ ok('constructor í del', throwsBad(() => E.applyEdit(START(), { v: 2, page: 'hop
 ok('ekki hlutur', throwsBad(() => E.applyEdit(START(), 'texti')));
 ok('ekkert mengaðist', ({}).x === undefined);
 
-console.log('\neldri sending (heilar fötur, flipi frá því fyrir uppfærsluna)');
+console.log('\neldri sending (heilar fötur, flipi frá því fyrir uppfærsluna) er hafnað');
 {
-  const cur = START();
-  const body = { texts: { 'matsedlar.html': { M: 'gamalt snið' } } };   // jólasíðuna vantar í sendinguna
-  const bodyBefore = clone(body);
-  const out = E.applyEdit(cur, body);
-  ok('tekið gilt', out.texts['matsedlar.html'].M === 'gamalt snið');
-  ok('efni faldrar síðu sem vantaði helst', out.texts['jolasedill.html'].A === 'a0');
-  ok('sendingin er óbreytt (ítrekun reiknast á fersku eintaki)', JSON.stringify(body) === JSON.stringify(bodyBefore));
+  let code = null; try { E.applyEdit(START(), { texts: { 'matsedlar.html': { M: 'gamalt snið' } } }); } catch (e) { code = e.code; }
+  ok('gamla sniðið → OLD (gamli flipinn myndi annars setja allan vefinn aftur á bak)', code === 'OLD');
 }
 
 console.log('\n/api/content PUT með árekstri (GitHub segir 409, reynt aftur á fersku eintaki)');
@@ -109,18 +104,8 @@ console.log('\n/api/content PUT með árekstri (GitHub segir 409, reynt aftur á
   ok('breyting Gísla (sem olli árekstrinum) lifði', stored.texts['jolasedill.html'].A === 'Gísli vistaði á meðan');
   ok('breyting Viktors vistaðist', stored.texts['jolasedill.html'].B === 'Viktor');
 
-  // sama með eldra sniðinu og falda síðu sem vantar í sendinguna
-  stored = START(); attempts = 0;
-  S.update = async (name, fb, mutate) => {
-    for (let i = 0; i < 3; i++) {
-      attempts++;
-      const next = await mutate(clone(stored));
-      if (i === 0) { stored.texts['jolasedill.html'].A = 'NÝTT frá Gísla'; continue; }
-      stored = next; return { ok: true, value: next };
-    }
-  };
-  await call({ texts: { 'matsedlar.html': { M: 'gamall flipi' } } });
-  ok('eldra snið + árekstur: nýjasta útgáfa faldrar síðu stendur (ekki sú úr fyrstu tilraun)', stored.texts['jolasedill.html'].A === 'NÝTT frá Gísla');
+  const old = await call({ texts: { 'matsedlar.html': { M: 'gamall flipi' } } });
+  ok('gamall flipi → 401 (hann geymir þá vinnuna og biður um innskráningu), ekkert skrifað', old.status === 401 && stored.texts['matsedlar.html'].M === 'm0');
 
   const bad = await call({ v: 2, page: '../x', set: {} });
   ok('ógild sending → 400, ekkert skrifað', bad.status === 400);

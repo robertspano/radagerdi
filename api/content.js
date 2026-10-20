@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
     catch (e) { return S.sendJSON(res, 413, { error: 'Of stór vistun', durable: false }); }
     // Ógild sending fær skýrt svar strax, áður en nokkuð er lesið eða skrifað
     try { E.applyEdit(S.emptyContent(), body); }
-    catch (e) { return S.sendJSON(res, 400, { error: e.message, durable: false }); }
+    catch (e) { return S.sendJSON(res, e.code === 'OLD' ? 401 : 400, { error: e.message, durable: false }); }
     try {
       // Beitt á nýjasta efnið; S.update keyrir þetta aftur á ferskum gögnum ef annar vistaði á sama tíma
       await S.update('content', S.emptyContent(), (cur) => E.applyEdit(cur, body), 'CMS: efni uppfært af vefnum');
