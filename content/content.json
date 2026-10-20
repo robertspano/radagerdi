@@ -466,6 +466,11 @@
       "DIV1>DIV2>P2": {
         "margin-top": "-48px"
       }
+    },
+    "jolasedill.html": {
+      "MAIN0>SECTION0>DIV2>DL0>DIV0>DD0": {
+        "margin-top": "32px"
+      }
     }
   }
 }
