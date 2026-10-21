@@ -13,6 +13,7 @@
 
 ## Síður / Pages
 - [Forsíða / Home](https://radagerdi.is/): Ráðagerði Veitingahús við Gróttu á Seltjarnarnesi
+- [Jólaseðill / Christmas menu](https://radagerdi.is/jolasedill): Jólaseðill 2026, í boði 19. nóvember 2026 – 6. janúar 2027, 10.900 kr. — og opnunartímar yfir hátíðirnar ([English](https://radagerdi.is/en-jolasedill))
 - [Matseðill / Menu](https://radagerdi.is/matsedlar): Aðalmatseðill — Þriggja rétta (7290 kr.), eldbakaðar pizzur, pasta, aðalréttir og krakkaseðill
 - [Drykkjarseðill / Drinks](https://radagerdi.is/drykkir): Vínseðill (Cà dei Frati o.fl.), bjór, kokteilar, spritzar, óáfengt, kaffi og eftirréttir — happy hour alla daga 15–18
 - [Eftirréttir / Desserts](https://radagerdi.is/eftirrettir): Tiramisu, affogato, ostakaka, vöfflur o.fl.

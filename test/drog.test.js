@@ -16,14 +16,17 @@ process.env.RESEND_API_KEY = 're_test';
 let pass = 0, fail = 0;
 const ok = (name, cond) => { cond ? (pass++, console.log('  ✓ ' + name)) : (fail++, console.log('  ✗ ' + name)); };
 
-const DROG = require(path.join(ROOT, 'api', '_drog.js'));
+const DROG = require(path.join(ROOT, 'api', '_drog.js'));   // listinn eins og hann er í raun
+// Prófin fela jólasíðurnar sjálf (þær eru til sem skrár), svo lásinn prófist líka þegar listinn er tómur
+const PROF_DROG = { 'jolasedill.html': '/matsedlar', 'en-jolasedill.html': '/en-matsedlar' };
 const FAKE = () => ({
   texts: { 'jolasedill.html': { 'MAIN0>H10': 'LEYNITEXTI-GÍSLA' }, 'en-jolasedill.html': { 'MAIN0>H10': 'SECRET-EN' }, 'matsedlar.html': { 'DIV0': 'opinbert' } },
   images: {}, bg: {}, html: { 'jolasedill.html': { 'X': '<p>LEYNIHTML</p>' } }, hidden: {}, order: {}, style: {}, settings: {},
 });
 
 function load(env) {
-  for (const f of ['_store.js', '_drog.js', 'page.js', 'sitemap.js', 'content.js']) delete require.cache[require.resolve(path.join(ROOT, 'api', f))];
+  for (const f of ['_store.js', '_drog.js', '_efni.js', 'page.js', 'sitemap.js', 'content.js']) delete require.cache[require.resolve(path.join(ROOT, 'api', f))];
+  Object.assign(require(path.join(ROOT, 'api', '_drog.js')), PROF_DROG);
   if (env === undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV = env;
   const S = require(path.join(ROOT, 'api', '_store.js'));
   let stored = FAKE();
@@ -58,8 +61,11 @@ const cookieOf = (email, exp) => 'cms_session=' + Buffer.from(email).toString('b
   const leak = (r) => /LEYNITEXTI|SECRET-EN|LEYNIHTML|Jól í Ráðagerði|Christmas at|jolasnjor/.test(r.body);
 
   console.log('\nlistinn sjálfur');
-  ok('jolasedill.html er falin', DROG['jolasedill.html'] === '/matsedlar');
-  ok('en-jolasedill.html er falin', DROG['en-jolasedill.html'] === '/en-matsedlar');
+  ok('listinn er hlutur', DROG && typeof DROG === 'object' && !Array.isArray(DROG));
+  for (const [p, to] of Object.entries(DROG)) {
+    ok(`${p} er síða sem er til`, require('fs').existsSync(path.join(ROOT, p)) && /^[a-z0-9-]+\.html$/.test(p));
+    ok(`${p} vísar gestum á slóð á vefnum (${to})`, /^\/[a-z0-9-]*$/.test(to));
+  }
 
   console.log('\ngestur (óinnskráður) fær aldrei síðuna');
   for (const [p, to] of [['jolasedill.html', '/matsedlar'], ['en-jolasedill.html', '/en-matsedlar']]) {

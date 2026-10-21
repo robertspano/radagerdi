@@ -12,7 +12,7 @@
 'use strict';
 
 module.exports = {
-  // Róbert 19.10.2026: „ekki birta hana … svo Gísli og Viktor geta lagað textann"
-  'jolasedill.html': '/matsedlar',
-  'en-jolasedill.html': '/en-matsedlar',
+  // Engin falin síða núna. Jólasíðan (jolasedill.html, en-jolasedill.html) var hér 20.–21. okt. 2026
+  // á meðan Gísli og Viktor löguðu textann; Róbert birti hana 21. okt.
+  // Dæmi:  'jolasedill.html': '/matsedlar',
 };
