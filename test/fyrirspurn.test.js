@@ -85,6 +85,17 @@ const GOD = { fjoldi: '30', veisla: 'Stórveisla', val: 'Focaccia-samlokur: Parm
   r = await call({ body: { fjoldi: '12', nafn: 'Anna', simi: '899 1234' } });
   ok('aðeins fjöldi, nafn og sími dugar', r.status === 200 && sent[0] && sent[0].body.subject === 'Veislupöntun: 12 gestir — Anna' && !/Réttir|Veisla/.test(sent[0].body.text));
   sent = [];
+  r = await call({ body: Object.assign({}, GOD, { dagsetning: '2020-01-01' }) });
+  ok('liðin dagsetning → 400, ekkert sent', r.status === 400 && sent.length === 0 && r.json.error === 'Dagsetningin er liðin.');
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { dagsetning: new Date().toISOString().slice(0, 10) }) });
+  ok('dagurinn í dag er í lagi', r.status === 200 && sent.length === 1);
+  for (const x of ['toString', 'valueOf', '__proto__', 'constructor']) {
+    sent = [];
+    r = await call({ body: Object.assign({}, GOD, { afhending: x }) });
+    ok('afhending „' + x + '“ → svarað og sent án afhendingar (kastar ekki)', r.status === 200 && sent.length === 1 && !/Afhending/.test(sent[0].body.text));
+  }
+  sent = [];
   r = await call({ body: Object.assign({}, GOD, { dagsetning: '2026-02-31' }) });
   ok('ógild dagsetning er slepptur, ekki villa', r.status === 200 && sent[0] && !/Dagsetning/.test(sent[0].body.text));
   sent = [];
@@ -157,6 +168,7 @@ const GOD = { fjoldi: '30', veisla: 'Stórveisla', val: 'Focaccia-samlokur: Parm
   svorRod = [422, 200]; sent = [];
   r = await call({ body: GOD });
   ok('Resend hafnar svarnetfangi (422) → sent aftur án þess og tekst', r.status === 200 && sent.length === 2 && 'reply_to' in sent[0].body && !('reply_to' in sent[1].body));
+  ok('…og þá segir pósturinn ekki „svarið beint“ heldur að skrifa nýjan póst', sent[1] && !/Svarið beint|svarið beint/.test(sent[1].body.text + sent[1].body.html) && /skrifið nýjan póst á jon@example\.com eða hringið í \+354 555 1234/.test(sent[1].body.text) && /Svarið beint/.test(sent[0].body.text));
   svorRod = null;
   resendStatus = 500; sent = [];
   r = await call({ body: GOD });
@@ -173,6 +185,14 @@ const GOD = { fjoldi: '30', veisla: 'Stórveisla', val: 'Focaccia-samlokur: Parm
   ok('sent → 303 aftur á síðuna, beint á þakkirnar', r.status === 303 && r.h.location === '/veisluthjonusta?sent=1#v-takk' && sent.length === 1);
   r = await call({ body: Object.assign({}, GOD, { nafn: '' }), json: false });
   ok('villa → 303, beint á villuboðin', r.status === 303 && r.h.location === '/veisluthjonusta?villa=1#v-villa-anjs');
+
+  console.log('\ndagsþak (60 á sólarhring á tilvik): eigin skilaboð og skráð í log');
+  const villur = []; const ce = console.error; console.error = (...a) => villur.push(a.join(' '));
+  let svar429 = null;
+  for (let i = 0; i < 80 && !svar429; i++) { const x = await call({ body: GOD, headers: { 'x-forwarded-for': '198.51.' + Math.floor(i / 4) + '.' + (i % 4 + 1) } }); if (x.status === 429) svar429 = x; }
+  console.error = ce;
+  ok('dagsþakið segir að formið sé lokað í bili, ekki að gesturinn hafi sent of mikið', svar429 && /lokað í bili/.test(svar429.json.error) && !/Of margar/.test(svar429.json.error));
+  ok('dagsþakið er skráð í log', villur.some(v => /dagsþak náð/.test(v)));
 
   console.log(`\nsamtals: ${pass} í lagi, ${fail} brugðust`);
   process.exit(fail ? 1 : 0);

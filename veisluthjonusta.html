@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:optional}
-  :root{--gr:#629F67;--red:#ff3132;--bg:#fff}
+  :root{--gr:#629F67;--red:#ff3132;--bg:#fff;--gr-d:#3d7a43}   /* --gr-d: dekkri grænn fyrir smátt letur (læsileiki) */
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);font-family:'Montserrat',sans-serif;color:var(--gr)}
 
@@ -74,7 +74,7 @@
   .v-pakkar{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
   .v-pakki{border:3px solid var(--gr);border-radius:150px 150px 26px 26px;padding:60px 24px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;min-width:0;transition:background-color .2s,color .2s}
   .v-pk-nm{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(30px,8vw,38px);line-height:1.35;margin:0;hyphens:manual}
-  .v-pk-tag{font-weight:600;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;margin:8px 0 0}
+  .v-pk-tag{font-weight:600;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;margin:8px 0 0;color:var(--gr-d)}
   .v-pk-verd{margin:22px 0 0;font-size:15px;font-weight:600}
   .v-pk-verd b{display:block;font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,8.6vw,44px);letter-spacing:.03em;line-height:1.6;margin:-.15em 0 0}
   .v-pakki ul{list-style:none;margin:22px 0 26px;padding:0;width:100%}
@@ -85,7 +85,7 @@
   .v-pk-velja:hover{background:var(--gr);color:#fff}
   .v-pk-velja:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
   /* veislan sem er valin í pöntuninni */
-  .v-pakki.valin{background:var(--gr);color:#fff}
+  .v-pakki.valin,.v-pakki.valin .v-pk-tag{background:var(--gr);color:#fff}
   .v-pakki.valin li{border-color:rgba(255,255,255,.4)}
   .v-pakki.valin .v-pk-velja{background:#fff;color:var(--gr);border-color:#fff}
   .v-pakki.valin .v-pk-velja:focus-visible{outline-color:#fff}
@@ -133,32 +133,33 @@
   .v-reitir fieldset{border:0;margin:0;padding:0;min-width:0}
   .v-merki,.v-reitir legend{display:block;font-weight:700;font-size:16px;margin:0 0 12px;padding:0;color:var(--gr)}
   .v-val{display:flex;flex-wrap:wrap;gap:10px}
-  .v-val label{position:relative}
-  .v-val input{position:absolute;opacity:0;width:1px;height:1px}
-  .v-val span{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border:2px solid var(--gr);border-radius:12px;font-weight:600;font-size:15px;color:var(--gr);background:#fff;cursor:pointer;transition:background-color .15s,color .15s,opacity .15s}
-  .v-val span:hover{background:rgba(98,159,103,.1)}
-  .v-val input:checked + span{background:var(--gr);color:#fff}
-  .v-val input:focus-visible + span{outline:3px solid var(--gr);outline-offset:3px}
-  .v-val input:disabled + span{opacity:.38;cursor:not-allowed;background:#fff}
+  .v-ch{position:relative}
+  .v-ch[hidden]{display:none}
+  .v-ch input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+  .v-ch label{display:inline-flex;align-items:center;min-height:44px;padding:6px 20px;line-height:1.3;border:2px solid var(--gr);border-radius:12px;font-weight:600;font-size:15px;color:var(--gr);background:#fff;cursor:pointer;transition:background-color .15s,color .15s,opacity .15s}
+  .v-ch label:hover{background:rgba(98,159,103,.1)}
+  .v-ch input:checked + label{background:var(--gr);color:#fff}
+  .v-ch input:focus-visible + label{outline:3px solid var(--gr);outline-offset:3px}
+  .v-ch input:disabled + label{opacity:.38;cursor:not-allowed;background:#fff}
 
   /* réttirnir sem fylgja völdu veislunni (smíðað úr matseðlinum á síðunni) */
-  .v-rettir{display:grid;gap:26px;padding:26px 20px;border-radius:20px;background:rgba(98,159,103,.08)}
-  .v-rettir .v-tal{font-weight:600;opacity:.7;white-space:nowrap}
-  .v-undir{font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin:16px 0 8px;opacity:.8}
+  .v-rettir{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;padding:26px 20px;border-radius:20px;background:rgba(98,159,103,.08)}
+  .v-rettir .v-tal{font-weight:600;color:var(--gr-d);white-space:nowrap}
+  .v-undir{font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin:16px 0 8px;color:var(--gr-d)}
   .v-reitir legend + .v-undir{margin-top:0}
   .v-val-sm{gap:8px}
-  .v-val-sm span{min-height:40px;padding:0 14px;font-size:14.5px}
+  .v-val-sm .v-ch label{min-height:40px;padding:6px 14px;font-size:14.5px}
   .v-innifalid{margin:0;font-weight:700;font-size:15.5px;line-height:1.6}
   .v-innifalid::before{content:"✓  "}
-  .v-innifalid span{display:block;font-weight:500;font-size:14.5px;opacity:.85}
-  .v-flokkur-h{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:16px;margin:0 0 4px}
-  .v-flokkur-h span + span{font-weight:600;opacity:.75;white-space:nowrap}
-  .v-lina{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 0;border-top:1.5px solid rgba(98,159,103,.2)}
+  .v-innifalid span{display:block;font-weight:500;font-size:14.5px;color:var(--gr-d)}
+  .v-flokkur-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;font-weight:700;font-size:16px;margin:0 0 4px}
+  .v-flokkur-h span + span{font-weight:600;color:var(--gr-d);white-space:nowrap}
+  .v-lina{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;padding:8px 0;border-top:1.5px solid rgba(98,159,103,.2)}
   .v-flokkur-h + .v-lina{border-top:0}
-  .v-lina-nm{font-weight:600;font-size:15px;line-height:1.4;min-width:0}
+  .v-lina-nm{font-weight:600;font-size:15px;line-height:1.4;min-width:0;flex:1 1 8.5em}
   .v-lina-stor{border-top:0;padding:0}
   .v-lina-stor .v-lina-nm{font-weight:700;font-size:16px}
-  .v-magn{display:flex;align-items:center;gap:4px;flex:none}
+  .v-magn{display:flex;align-items:center;gap:4px;flex:none;margin-left:auto}
   .v-magn button{width:40px;height:40px;border-radius:12px;border:2px solid var(--gr);background:#fff;color:var(--gr);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s,color .15s}
   .v-magn button:hover{background:var(--gr);color:#fff}
   .v-magn button:focus-visible{outline:3px solid var(--gr);outline-offset:2px}
@@ -166,7 +167,7 @@
 
   /* áætlað verð: strikaði rammi Take Away-tilboðsins */
   .v-verd{border:3px dashed var(--gr);border-radius:20px;text-align:center;padding:20px 18px 22px}
-  .v-verd-merki{display:block;font-weight:700;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase}
+  .v-verd-merki{display:block;font-weight:700;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gr-d)}
   /* Windsord sest neðarlega í línuna (sjá teljarann): hærri línuhæð svo talan rekist ekki í skýringuna */
   .v-verd-tala{display:block;font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,7vw,50px);line-height:1.7;letter-spacing:.03em;margin:-.12em 0 0}
   .v-verd-skyring{display:block;font-size:15px;line-height:1.5}
@@ -177,7 +178,7 @@
   .v-reitur input:focus,.v-reitur textarea:focus{outline:none}
   .v-reitur input:focus-visible,.v-reitur textarea:focus-visible{outline:3px solid var(--gr);outline-offset:2px}
   .v-reitur [aria-invalid="true"]{border-color:#c0262a}
-  .v-hjalp{font-size:14.5px;line-height:1.6;margin:10px 0 0}
+  .v-hjalp{font-size:14.5px;line-height:1.6;margin:10px 0 0;color:var(--gr-d)}
   .v-hjalp a{color:var(--gr);font-weight:700}
   .v-gildra{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
   .v-samantekt{text-align:center;font-weight:600;font-size:16px;line-height:1.6;margin:6px 0 0}
@@ -187,7 +188,9 @@
   .v-takki:hover{background:#fff;color:var(--red)}
   .v-takki:disabled{opacity:.6;cursor:wait}
   .v-btn:focus-visible,.v-takki:focus-visible,.v-simi:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
-  .v-smatt{font-size:14.5px;margin:0;text-align:center}
+  .v-smatt{font-size:14.5px;margin:0;text-align:center;color:var(--gr-d)}
+  /* Windsord sest neðarlega í línuna: skorið að hástafahæð svo textinn sé fyrir miðju hnappsins */
+  .v-btn,.v-pk-velja,.v-takki{text-box:trim-both cap alphabetic}
   .v-svar{max-width:640px;margin:0 auto;text-align:center}
   .v-svar .v-h2{font-size:clamp(28px,4vw,44px);color:var(--gr);margin-bottom:14px}
   .v-svar p{font-size:17px;line-height:1.8;margin:0}
@@ -198,24 +201,29 @@
   #v-takk:target{display:block}
   .v-botn:has(#v-takk:target) .v-reitir{display:none}
   #v-villa-anjs{display:none}
-  #v-villa-anjs:target{display:block}
+  #v-villa-anjs:target,.v-ritill #v-villa-anjs{display:block}   /* í ritlinum sjást allir textar */
   .v-tala{max-width:880px;margin:34px auto 0;padding-top:28px;border-top:1.5px solid rgba(98,159,103,.35);text-align:center;font-size:16px;line-height:1.8}
   .v-tala a{color:var(--gr);font-weight:700;text-decoration:none;white-space:nowrap}
   .v-tala a:hover{text-decoration:underline}
 
   @media (forced-colors:active){
-    .v-val input:checked + span,.v-flyti button[aria-pressed="true"]{forced-color-adjust:none;background:Highlight;color:HighlightText;border-color:Highlight}
-    .v-val input:focus-visible + span{outline-color:Highlight}
+    .v-ch input:checked + label,.v-flyti button[aria-pressed="true"]{forced-color-adjust:none;background:Highlight;color:HighlightText;border-color:Highlight}
+    .v-ch input:focus-visible + label{outline-color:Highlight}
   }
   @media (max-width:420px){
     .v-btn{width:100%;padding:0 18px;font-size:clamp(16px,5vw,19px)}
     .v-takki{padding:14px 16px;font-size:clamp(16px,5vw,25px);letter-spacing:.08em;text-indent:.08em}
     .v-rettir{padding:22px 14px}
   }
-  @media (max-width:360px){
+  @media (max-width:380px){
     .v-flyti{gap:6px}.v-flyti button{min-width:0;padding:0 9px;height:38px}
+  }
+  @media (max-width:360px){
     .v-magn button{width:36px;height:36px}
     .v-magn output{min-width:3.2em}
+    .card{padding-left:16px;padding-right:16px}
+    .card h2{font-size:27px}
+    .ti-head{font-size:19.5px}
   }
   @media (min-width:700px){
     .v-form{border-radius:190px 190px 26px 26px}
@@ -239,6 +247,7 @@
   }
   @media (min-width:1000px){
     .v-hero{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:72px;padding:72px 0 88px}
+    .v-hero .v-h1{font-size:clamp(40px,7.4vw,84px)}   /* „RÁÐAGERÐI“ kemst í dálkinn frá 1000px */
     .v-boginn{max-width:520px;justify-self:end;width:100%}
     .v-boginn img{aspect-ratio:4/5;border-radius:50% 50% 26px 26px / 40% 40% 26px 26px}
   }
@@ -342,7 +351,7 @@
       <h2 class="v-h2" id="veislur-h">Veislurnar</h2>
       <ul class="v-pakkar">
         <li class="v-pakki" data-pakki="Stórveisla" data-a="mann">
-          <h3 class="v-pk-nm">Stórveisla</h3>
+          <h3 class="v-pk-nm" id="pk-stor">Stórveisla</h3>
           <p class="v-pk-tag">Full máltíð</p>
           <p class="v-pk-verd"><b>8.490 kr</b> á mann</p>
           <ul>
@@ -352,10 +361,10 @@
             <li data-ur="bitar" data-allt="">Allar tegundir af litlum bitum</li>
             <li data-ur="eftirrettir">Veldu 1 eftirrétt</li>
           </ul>
-          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Stórveisla">Velja</a>
+          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Stórveisla" aria-describedby="pk-stor">Velja</a>
         </li>
         <li class="v-pakki" data-pakki="Smáveisla" data-a="mann">
-          <h3 class="v-pk-nm">Smáveisla</h3>
+          <h3 class="v-pk-nm" id="pk-sma">Smáveisla</h3>
           <p class="v-pk-tag">Létt máltíð</p>
           <p class="v-pk-verd"><b>3.990 kr</b> á mann</p>
           <ul>
@@ -363,10 +372,10 @@
             <li data-ur="pinnar">Veldu 2 pinna</li>
             <li data-ur="bitar">Veldu 2 litla bita</li>
           </ul>
-          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Smáveisla">Velja</a>
+          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Smáveisla" aria-describedby="pk-sma">Velja</a>
         </li>
         <li class="v-pakki" data-pakki="Lasagnaveisla" data-a="stk" data-mann="10" data-eining="lasagna|lasagna" data-magn="Hversu mörg lasagna?">
-          <h3 class="v-pk-nm">Lasagna&shy;veisla</h3>
+          <h3 class="v-pk-nm" id="pk-las">Lasagna&shy;veisla</h3>
           <p class="v-pk-tag">Tilbúið í ofninn</p>
           <p class="v-pk-verd"><b>29.900 kr</b> u.þ.b. 3.000 kr á mann</p>
           <ul>
@@ -374,18 +383,18 @@
             <li>Hvítlauksbrauð</li>
             <li>Blandað salat</li>
           </ul>
-          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Lasagnaveisla">Velja</a>
+          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Lasagnaveisla" aria-describedby="pk-las">Velja</a>
         </li>
         <li class="v-pakki" data-pakki="Bakki" data-a="stk" data-eining="bakki|bakkar" data-magn="Hversu marga bakka?">
-          <h3 class="v-pk-nm">Bakki</h3>
+          <h3 class="v-pk-nm" id="pk-bak">Bakki</h3>
           <p class="v-pk-tag">24 snittur</p>
           <p class="v-pk-verd"><b>15.900 kr</b> bakkinn</p>
           <ul>
             <li>Samlokur eða bruschettur</li>
-            <li data-ur="samlokur bruschettur">Veldu 1 eða 2 tegundir</li>
-            <li>Ein tegund × 24 eða tvær × 12</li>
+            <li data-ur="samlokur bruschettur" data-hver="">Veldu 1 eða 2 tegundir á hvern bakka</li>
+            <li>Ein tegund&nbsp;×&nbsp;24 eða tvær&nbsp;×&nbsp;12</li>
           </ul>
-          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Bakki">Velja</a>
+          <a class="v-pk-velja" href="#fyrirspurn" data-velja-veislu="Bakki" aria-describedby="pk-bak">Velja</a>
         </li>
       </ul>
     </section>
@@ -478,27 +487,27 @@
           <fieldset>
             <legend>Hvaða veisla?</legend>
             <div class="v-val">
-              <label><input type="radio" name="veisla" value="Stórveisla"><span>Stórveisla</span></label>
-              <label><input type="radio" name="veisla" value="Smáveisla"><span>Smáveisla</span></label>
-              <label><input type="radio" name="veisla" value="Lasagnaveisla"><span>Lasagnaveisla</span></label>
-              <label><input type="radio" name="veisla" value="Bakki"><span>Bakkar</span></label>
-              <label><input type="radio" name="veisla" value="Eigin veisla"><span>Eigin veisla</span></label>
+              <div class="v-ch"><input type="radio" name="veisla" value="Stórveisla" id="vv-stor"><label for="vv-stor">Stórveisla</label></div>
+              <div class="v-ch"><input type="radio" name="veisla" value="Smáveisla" id="vv-sma"><label for="vv-sma">Smáveisla</label></div>
+              <div class="v-ch"><input type="radio" name="veisla" value="Lasagnaveisla" id="vv-las"><label for="vv-las">Lasagnaveisla</label></div>
+              <div class="v-ch"><input type="radio" name="veisla" value="Bakki" id="vv-bak"><label for="vv-bak">Bakkar</label></div>
+              <div class="v-ch"><input type="radio" name="veisla" value="Eigin veisla" id="vv-eigin"><label for="vv-eigin">Eigin veisla</label></div>
             </div>
           </fieldset>
 
           <div class="v-rettir" id="v-rettir" hidden></div>
 
           <div class="v-verd" id="v-verd" hidden>
-            <span class="v-verd-merki">Áætlað verð</span>
-            <b class="v-verd-tala" id="v-verd-tala"></b>
-            <span class="v-verd-skyring" id="v-verd-skyring"></span>
+            <div class="v-verd-merki">Áætlað verð</div>
+            <div class="v-verd-tala" id="v-verd-tala"></div>
+            <div class="v-verd-skyring" id="v-verd-skyring"></div>
           </div>
 
           <fieldset>
             <legend>Sótt eða sent?</legend>
             <div class="v-val">
-              <label><input type="radio" name="afhending" value="Sótt"><span>Sækja í Ráðagerði</span></label>
-              <label><input type="radio" name="afhending" value="Sent"><span>Fá sent</span></label>
+              <div class="v-ch"><input type="radio" name="afhending" value="Sótt" id="va-sott"><label for="va-sott">Sækja í Ráðagerði</label></div>
+              <div class="v-ch"><input type="radio" name="afhending" value="Sent" id="va-sent"><label for="va-sent">Fá sent</label></div>
             </div>
           </fieldset>
           <div class="v-reitur" id="v-heimilisfang-reitur">
@@ -544,7 +553,7 @@
 
           <p class="v-samantekt" id="v-samantekt" aria-live="polite"></p>
           <div class="v-senda">
-            <p class="v-villa" id="v-villa-anjs">Pöntunin fór ekki. Athugið að fjöldi, nafn og sími eða netfang séu útfyllt — eða hringið í <a href="tel:+3545461700">546-1700</a>.</p>
+            <p class="v-villa" id="v-villa-anjs">Ekki tókst að senda pöntunina. Athugið að fjöldi gesta, nafn og sími eða netfang séu rétt útfyllt, heimilisfang ef á að senda og að dagsetningin sé ekki liðin — eða hringið í <a href="tel:+3545461700">546-1700</a>.</p>
             <p class="v-villa" id="v-villa" role="alert" hidden></p>
             <button class="v-takki" type="submit">Senda pöntun</button>
             <p class="v-smatt">Pöntunin fer beint til okkar og við höfum samband til að staðfesta hana.</p>
@@ -591,7 +600,7 @@
       <a href="/brons">Bröns</a>
       <a href="/hopar">Hópar</a>
     </div>
-    <a href="#" class="rg-menu-off" aria-disabled="true" tabindex="-1" onclick="return false">Veisluþjónusta<span class="tag">(Væntanleg)</span></a>
+    <a href="/veisluthjonusta" aria-current="page">Veisluþjónusta</a>
     <div class="sep"></div>
     <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Bóka borð</a>
     <a href="https://bookings.dineout.is/radagerdi/order?lng=is" target="_blank">Gjafakort</a>
@@ -605,8 +614,12 @@
 <script>
 /* Veislupöntun: teljarinn, val á veislu og réttum, áætlað verð og sendingin (api/fyrirspurn.js).
    Réttir og verð eru lesin af síðunni sjálfri (veisluspjöldunum og matseðlinum) þegar gesturinn
-   velur, svo það sem eigandinn breytir í ritlinum gildir líka hér. Hámarkið í hverju vali
-   („Veldu 2 tegundir …“) er stærsta talan í línunni.
+   velur, svo það sem eigandinn breytir í ritlinum gildir líka hér — og það sem hann eyðir (felur)
+   hverfur líka úr pöntuninni. Hámarkið í hverju vali („Veldu 2 tegundir …“) er stærsta talan í
+   línunni, í tölustöfum eða orðum („tvo“, „þrjár“).
+   Ritillinn getur skipt út heilum textabútum þegar efni eigandans er sett inn, svo hér er aldrei
+   treyst á að sama eintak sé til áfram: allt er sótt eftir id þegar á þarf að halda og hlustað er á
+   formið og síðuna sjálfa.
    Án JavaScript sendist formið samt — þjónninn vísar þá aftur á #v-takk eða #v-villa-anjs. */
 (function () {
   var f = document.getElementById('fyrirspurn'); if (!f) return;
@@ -614,17 +627,27 @@
   // Í ritlinum (?cms=1) er formið aðeins texti sem eigandinn breytir — ekkert er sent og engu breytt
   function ritill() { return document.body.classList.contains('cms-on') || /[?&]cms=1/.test(location.search); }
   var $ = function (id) { return document.getElementById(id); };
-  var n = $('v-fjoldi'), sam = $('v-samantekt'), villa = $('v-villa'), fv = $('v-fjoldi-villa'), gestirMerki = $('v-gestir');
-  var flyti = f.querySelectorAll('.v-flyti button'), dags = $('v-dags'), klukkan = $('v-klukkan');
-  var rettir = $('v-rettir'), verd = $('v-verd'), verdTala = $('v-verd-tala'), verdSkyring = $('v-verd-skyring');
-  var heimR = $('v-heimilisfang-reitur'), heim = $('v-heimilisfang');
-  var EIGIN = 'Eigin veisla';
-  var d0 = new Date(); dags.min = d0.getFullYear() + '-' + String(d0.getMonth() + 1).padStart(2, '0') + '-' + String(d0.getDate()).padStart(2, '0');
+  var n = $('v-fjoldi'), EIGIN = 'Eigin veisla';
+  var pad = function (x) { return String(x).padStart(2, '0'); };
+  var d0 = new Date(), IDAG = d0.getFullYear() + '-' + pad(d0.getMonth() + 1) + '-' + pad(d0.getDate());
+  $('v-dags').min = IDAG;
   var MAN = ['janúar','febrúar','mars','apríl','maí','júní','júlí','ágúst','september','október','nóvember','desember'];
   var DAG = ['sunnudagur','mánudagur','þriðjudagur','miðvikudagur','fimmtudagur','föstudagur','laugardagur'];
+  var ORD = { einn: 1, eina: 1, eitt: 1, einni: 1, einum: 1, tvo: 2, 'tvær': 2, tveir: 2, tveimur: 2, 'þrjá': 3, 'þrjár': 3, 'þrír': 3, 'þremur': 3,
+    'fjóra': 4, 'fjórar': 4, 'fjórir': 4, 'fjórum': 4, fimm: 5, sex: 6, 'sjö': 7, 'átta': 8, 'níu': 9, 'tíu': 10 };
   var eintala = function (v) { return v % 10 === 1 && v % 100 !== 11; };
   var kr = function (x) { return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' kr'; };
-  var tala = function (s) { return parseInt(String(s || '').replace(/\D/g, ''), 10) || 0; };   // „8.490 kr“ → 8490
+  // fyrsta talan í texta: „8.490 kr“ → 8490, „790 kr / stk, lágmark 12 stk“ → 790
+  var tala = function (s) { var m = String(s || '').match(/\d[\d.]*/); return m ? parseInt(m[0].replace(/\./g, ''), 10) || 0 : 0; };
+  // stærsta talan í línu: „Veldu 1 eða 2 tegundir“ → 2, „Veldu tvo pinna“ → 2, engin tala → 0
+  function hamark(t) {
+    var tolur = (t.match(/\d+/g) || []).map(Number);
+    (t.toLowerCase().match(/[a-záðéíóúýþæö]+/g) || []).forEach(function (o) { if (ORD[o]) tolur.push(ORD[o]); });
+    return tolur.length ? Math.max.apply(null, tolur) : 0;
+  }
+  // Það sem ritillinn hefur falið (eytt) er ekki teiknað og telst ekki með
+  var synilegt = function (e) { return !!(e && e.getClientRects().length); };
+  var uid = 0;
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
   function fjoldi() { var v = parseInt(n.value, 10); return v > 0 ? Math.min(v, 500) : 0; }
   function setja(v) { n.value = v ? Math.max(1, Math.min(500, v)) : ''; uppfaera(); }
@@ -637,35 +660,50 @@
   function flokkar() {
     var out = {};
     document.querySelectorAll('.card[data-flokkur]').forEach(function (c) {
+      if (!synilegt(c)) return;
       var h = c.querySelector('h2'), v = c.querySelector('.vnote');
       out[c.dataset.flokkur] = {
         nafn: h ? h.textContent.trim() : c.dataset.flokkur,
         verd: v ? tala(v.textContent) : 0,
         eigin: c.dataset.eigin !== 'nei',
-        rettir: [].map.call(c.querySelectorAll(':scope > .ti .ti-nm'), function (x) { return x.textContent.trim(); }).filter(Boolean)
+        rettir: [].filter.call(c.querySelectorAll(':scope > .ti'), synilegt)
+          .map(function (ti) { var x = ti.querySelector('.ti-nm'); return x ? x.textContent.trim() : ''; }).filter(Boolean)
       };
     });
     return out;
   }
   function pakki(nafn) {
-    var c = document.querySelector('.v-pakki[data-pakki="' + nafn + '"]'); if (!c) return null;
+    var c = document.querySelector('.v-pakki[data-pakki="' + nafn + '"]'); if (!synilegt(c)) return null;
     var b = c.querySelector('.v-pk-verd b');
     return {
       verd: b ? tala(b.textContent) : 0, a: c.dataset.a, mann: +c.dataset.mann || 0,
       eining: (c.dataset.eining || '').split('|'), magnTexti: c.dataset.magn || 'Fjöldi',
-      hopar: [].map.call(c.querySelectorAll('li[data-ur]'), function (li) {
-        var t = li.textContent.trim(), tolur = (t.match(/\d+/g) || []).map(Number);
-        return { texti: t, ur: li.dataset.ur.split(' '), max: li.hasAttribute('data-allt') ? 0 : (tolur.length ? Math.max.apply(null, tolur) : 1) };
+      hopar: [].filter.call(c.querySelectorAll('li[data-ur]'), synilegt).map(function (li) {
+        var t = li.textContent.trim(), m = hamark(t);
+        // „Allar tegundir …“ (data-allt) er innifalið — nema eigandinn hafi breytt línunni í val með tölu
+        return { texti: t, ur: li.dataset.ur.split(' '), max: m || (li.hasAttribute('data-allt') ? 0 : 1), hver: li.hasAttribute('data-hver') };
       })
     };
+  }
+  // Veisla sem eigandinn hefur falið (eða Eigin veisla án rétta) er ekki í boði í pöntuninni
+  function veislurIBodi() {
+    var F = null;
+    f.querySelectorAll('input[name="veisla"]').forEach(function (r) {
+      var ch = r.closest('.v-ch'); if (!ch) return;
+      var opin;
+      if (r.value === EIGIN) { F = F || flokkar(); opin = Object.keys(F).some(function (k) { return F[k].eigin && F[k].rettir.length; }); }
+      else { var c = document.querySelector('.v-pakki[data-pakki="' + r.value + '"]'); opin = !c || synilegt(c); }
+      ch.hidden = !opin && !ritill();
+      if (ch.hidden && r.checked) r.checked = false;
+    });
   }
 
   // Val gestsins í hverri veislu fyrir sig, svo það týnist ekki þótt skipt sé á milli
   var stada = {};
   function st(v) { return stada[v] || (stada[v] = { val: {}, magn: {}, fjoldi: 0 }); }
-  // Lasagna og bakkar: fjöldinn fylgir gestunum (eitt lasagna á hverja 10) þar til gesturinn breytir honum sjálfur
+  // Lasagna: fjöldinn fylgir gestunum (eitt á hverja 10) þar til gesturinn breytir honum sjálfur
   function pakkaMagn(v, P) { var s = st(v); return s.fjoldi || (P.mann && fjoldi() ? Math.ceil(fjoldi() / P.mann) : 1); }
-  var magnUt = null;
+  var endurmerkja = [];                      // hámörk sem fara eftir fjöldanum („á hvern bakka“)
 
   // − tala +   (breyta(+1 / −1) skilar nýja gildinu)
   function stillir(nafn, upphaf, breyta, synd) {
@@ -678,10 +716,19 @@
     w.appendChild(minus); w.appendChild(ut); w.appendChild(plus);
     return w;
   }
+  function kassi(texti, checked, vidBreytingu) {     // valhnappur í sama útliti og hinir
+    var w = el('div', 'v-ch'), inp = el('input'), lab = el('label', null, texti), id = 'v-r' + (++uid);
+    inp.type = 'checkbox'; inp.id = id; inp.checked = checked; lab.htmlFor = id;
+    inp.addEventListener('change', function () { vidBreytingu(inp); });
+    w.appendChild(inp); w.appendChild(lab);
+    return { w: w, inp: inp };
+  }
 
   function teikna() {
+    var rettir = $('v-rettir'); if (!rettir) return;
+    veislurIBodi();
     var v = gildi('veisla');
-    rettir.textContent = ''; magnUt = null;
+    rettir.textContent = ''; endurmerkja = [];
     document.querySelectorAll('.v-pakki').forEach(function (c) { c.classList.toggle('valin', !!v && c.dataset.pakki === v); });
     if (!v || ritill()) { rettir.hidden = true; return; }
     var F = flokkar(), s = st(v);
@@ -689,13 +736,14 @@
       var skref = tala($('v-lagmark') && $('v-lagmark').textContent) || 12;
       Object.keys(F).forEach(function (k) {
         var c = F[k]; if (!c.eigin || !c.rettir.length) return;
-        var hop = el('div', 'v-hopur'), h = el('p', 'v-flokkur-h');
-        h.appendChild(el('span', null, c.nafn)); h.appendChild(el('span', null, kr(c.verd) + ' / stk'));
+        var hop = el('div', 'v-hopur'), h = el('p', 'v-flokkur-h'), hid = 'v-h' + (++uid), hn = el('span', null, c.nafn);
+        hn.id = hid; h.appendChild(hn); h.appendChild(el('span', null, kr(c.verd) + ' / stk'));
+        hop.setAttribute('role', 'group'); hop.setAttribute('aria-labelledby', hid);
         hop.appendChild(h);
         c.rettir.forEach(function (r) {
           var key = k + '|' + r, lina = el('div', 'v-lina');
           lina.appendChild(el('span', 'v-lina-nm', r));
-          lina.appendChild(stillir(r, s.magn[key] || 0, function (d) {
+          lina.appendChild(stillir(r + ' (' + c.nafn.toLowerCase() + ')', s.magn[key] || 0, function (d) {
             s.magn[key] = Math.max(0, (s.magn[key] || 0) + d * skref); return s.magn[key];
           }, function (q) { return q ? q + ' stk' : '0'; }));
           hop.appendChild(lina);
@@ -708,61 +756,69 @@
         var lina = el('div', 'v-lina v-lina-stor');
         lina.appendChild(el('span', 'v-lina-nm', P.magnTexti));
         lina.appendChild(stillir(P.magnTexti, pakkaMagn(v, P), function (d) { s.fjoldi = Math.max(1, pakkaMagn(v, P) + d); return s.fjoldi; }, String));
-        magnUt = lina.querySelector('output');
+        lina.querySelector('output').id = 'v-pakkamagn';
         rettir.appendChild(lina);
       }
       P.hopar.forEach(function (h, i) {
+        var dalkar = h.ur.filter(function (u) { return F[u] && F[u].rettir.length; });
+        if (!dalkar.length) return;            // allir réttir flokksins faldir: ekkert að velja
         if (!h.max) {                          // „Allar tegundir af litlum bitum“: ekkert að velja
           var p = el('p', 'v-innifalid', h.texti), nofn = [];
-          h.ur.forEach(function (u) { if (F[u]) nofn = nofn.concat(F[u].rettir); });
-          if (nofn.length) p.appendChild(el('span', null, nofn.join(' · ')));
+          dalkar.forEach(function (u) { nofn = nofn.concat(F[u].rettir); });
+          p.appendChild(el('span', null, nofn.join(' · ')));
           rettir.appendChild(p); return;
         }
         var fs = el('fieldset', 'v-hopur'), lg = el('legend', null, h.texti + ' '), tal = el('span', 'v-tal'), kassar = [], til = [];
         lg.appendChild(tal); fs.appendChild(lg);
-        h.ur.forEach(function (u) { if (F[u]) F[u].rettir.forEach(function (r) { til.push(u + '|' + r); }); });
-        var valin = s.val[i] = (s.val[i] || []).filter(function (k) { return til.indexOf(k) >= 0; }).slice(0, h.max);
+        dalkar.forEach(function (u) { F[u].rettir.forEach(function (r) { til.push(u + '|' + r); }); });
+        var valin = s.val[i] = (s.val[i] || []).filter(function (k) { return til.indexOf(k) >= 0; });
+        var maxNu = function () { return h.max * (h.hver && P.a === 'stk' ? pakkaMagn(v, P) : 1); };
         function merkja() {
-          tal.textContent = '(' + valin.length + ' af ' + h.max + ')';
-          kassar.forEach(function (x) { x.disabled = !x.checked && valin.length >= h.max; });
+          var mx = maxNu();
+          while (valin.length > mx) { var burt = valin.pop(); kassar.forEach(function (x) { if (x.key === burt) x.inp.checked = false; }); }
+          tal.textContent = '(' + valin.length + ' af ' + mx + ')';
+          kassar.forEach(function (x) { x.inp.disabled = !x.inp.checked && valin.length >= mx; });
         }
-        h.ur.forEach(function (u) {
-          var c = F[u]; if (!c) return;
-          if (h.ur.length > 1) fs.appendChild(el('p', 'v-undir', c.nafn));
-          var box = el('div', 'v-val v-val-sm');
+        dalkar.forEach(function (u) {
+          var c = F[u], box = el('div', 'v-val v-val-sm');
+          if (dalkar.length > 1) {             // sami réttur getur verið bæði samloka og bruschetta
+            var und = el('p', 'v-undir', c.nafn), uid2 = 'v-u' + (++uid); und.id = uid2; fs.appendChild(und);
+            box.setAttribute('role', 'group'); box.setAttribute('aria-labelledby', uid2);
+          }
           c.rettir.forEach(function (r) {
-            var key = u + '|' + r, lab = el('label'), inp = el('input');
-            inp.type = 'checkbox'; inp.checked = valin.indexOf(key) >= 0;
-            inp.addEventListener('change', function () {
+            var key = u + '|' + r;
+            var k2 = kassi(r, valin.indexOf(key) >= 0, function (inp) {
               var j = valin.indexOf(key);
               if (inp.checked && j < 0) valin.push(key); else if (!inp.checked && j >= 0) valin.splice(j, 1);
               merkja(); uppfaera();
             });
-            lab.appendChild(inp); lab.appendChild(el('span', null, r)); box.appendChild(lab); kassar.push(inp);
+            k2.key = key; kassar.push(k2); box.appendChild(k2.w);
           });
           fs.appendChild(box);
         });
-        merkja(); rettir.appendChild(fs);
+        merkja(); endurmerkja.push(merkja); rettir.appendChild(fs);
       });
     }
     rettir.hidden = !rettir.firstChild;
   }
 
   function reikna() {
+    var verd = $('v-verd'), vt = $('v-verd-tala'), vs = $('v-verd-skyring'); if (!verd) return;
     if (ritill()) { verd.hidden = false; return; }      // eigandinn sér textana til að breyta þeim
     var v = gildi('veisla'), g = fjoldi(), t = 0, sk = '';
     if (v === EIGIN) {
       var F = flokkar(), s = st(v), bitar = 0;
-      Object.keys(s.magn).forEach(function (k) { var q = s.magn[k], c = F[k.split('|')[0]]; if (q && c) { t += q * c.verd; bitar += q; } });
+      Object.keys(s.magn).forEach(function (k) { var q = s.magn[k], c = F[k.split('|')[0]]; if (q && c && c.rettir.indexOf(k.split('|')[1]) >= 0) { t += q * c.verd; bitar += q; } });
       if (bitar) sk = bitar + ' bitar';
     } else if (v) {
       var P = pakki(v);
-      if (P && P.a === 'stk') { var q = pakkaMagn(v, P); t = q * P.verd; sk = q + ' × ' + kr(P.verd); if (magnUt) magnUt.textContent = q; }
+      if (P && P.a === 'stk') { var q = pakkaMagn(v, P); t = q * P.verd; sk = q + ' × ' + kr(P.verd); if ($('v-pakkamagn')) $('v-pakkamagn').textContent = q; }
       else if (P && g) { t = g * P.verd; sk = g + ' × ' + kr(P.verd); }
     }
+    endurmerkja.forEach(function (m) { m(); });
     verd.hidden = !t;
-    verdTala.textContent = t ? kr(t) : '';
-    verdSkyring.textContent = sk ? sk + ', auk boxagjalds' : '';
+    if (vt) vt.textContent = t ? kr(t) : '';
+    if (vs) vs.textContent = sk ? sk + ', auk boxagjalds' : '';
   }
 
   // Það sem gesturinn valdi, í línum sem fara í póstinn til okkar
@@ -771,84 +827,96 @@
     var F = flokkar(), L = [];
     var heiti = function (u) { return (F[u] ? F[u].nafn : u).toLowerCase(); };
     if (v === EIGIN) {
-      Object.keys(s.magn).forEach(function (k) { var p = k.split('|'); if (s.magn[k]) L.push(p[1] + ' (' + heiti(p[0]) + '): ' + s.magn[k] + ' stk'); });
+      Object.keys(s.magn).forEach(function (k) { var p = k.split('|'); if (s.magn[k] && F[p[0]] && F[p[0]].rettir.indexOf(p[1]) >= 0) L.push(p[1] + ' (' + heiti(p[0]) + '): ' + s.magn[k] + ' stk'); });
       return L.join('\n');
     }
     var P = pakki(v); if (!P) return '';
     if (P.a === 'stk') { var q = pakkaMagn(v, P); L.push(q + ' ' + (q === 1 ? P.eining[0] : (P.eining[1] || P.eining[0]))); }
     P.hopar.forEach(function (h, i) {
+      var dalkar = h.ur.filter(function (u) { return F[u] && F[u].rettir.length; });
+      if (!dalkar.length) return;
       if (!h.max) { L.push(h.texti); return; }
-      var val = s.val[i] || [];
-      var nofn = val.map(function (k) { var p = k.split('|'); return h.ur.length > 1 ? p[1] + ' (' + heiti(p[0]) + ')' : p[1]; });
-      var hv = h.ur.map(function (u) { return F[u] ? F[u].nafn : u; }).join(' / ');
-      L.push(hv + ': ' + (nofn.length ? nofn.join(', ') : 'ekkert valið') + (nofn.length && nofn.length < h.max ? ' (' + nofn.length + ' af ' + h.max + ')' : ''));
+      var mx = h.max * (h.hver && P.a === 'stk' ? pakkaMagn(v, P) : 1);
+      var nofn = (s.val[i] || []).map(function (k) { var p = k.split('|'); return dalkar.length > 1 ? p[1] + ' (' + heiti(p[0]) + ')' : p[1]; });
+      var hv = dalkar.map(function (u) { return F[u].nafn; }).join(' / ');
+      L.push(hv + ': ' + (nofn.length ? nofn.join(', ') : 'ekkert valið') + (nofn.length && nofn.length < mx ? ' (' + nofn.length + ' af ' + mx + ')' : ''));
     });
     return L.join('\n');
   }
 
   function uppfaera() {
-    var v = fjoldi();
-    flyti.forEach(function (b) { b.setAttribute('aria-pressed', String(hnappTala(b) === v)); });
-    gestirMerki.textContent = v && eintala(v) ? 'gestur' : 'gestir';
-    if (v) { fv.hidden = true; n.removeAttribute('aria-invalid'); n.setAttribute('aria-describedby', 'v-gestir'); }
+    var v = fjoldi(), gm = $('v-gestir'), fv = $('v-fjoldi-villa'), sam = $('v-samantekt'), hr = $('v-heimilisfang-reitur');
+    f.querySelectorAll('.v-flyti button').forEach(function (b) { b.setAttribute('aria-pressed', String(hnappTala(b) === v)); });
+    // eintala/fleirtala — nema eigandinn hafi skrifað annað orð („manns“) í ritlinum
+    if (gm && /^gest(ur|ir)$/i.test(gm.textContent.trim())) gm.textContent = v && eintala(v) ? 'gestur' : 'gestir';
+    if (v && !ritill()) { if (fv) fv.hidden = true; n.removeAttribute('aria-invalid'); n.setAttribute('aria-describedby', 'v-gestir'); }
     var af = gildi('afhending');
-    heimR.hidden = !ritill() && af !== 'Sent';
+    if (hr) hr.hidden = !ritill() && af !== 'Sent';
     reikna();
     var bitar = [];
     if (v) bitar.push(v + (eintala(v) ? ' gestur' : ' gestir'));
     var ve = valid('veisla'); if (ve) bitar.push(ve);
     if (af) bitar.push(af === 'Sent' ? 'sent' : 'sótt');
-    var dg = '';
-    if (dags.value) { var d = new Date(dags.value + 'T12:00:00'); if (!isNaN(d)) dg = DAG[d.getDay()] + ' ' + d.getDate() + '. ' + MAN[d.getMonth()]; }
-    if (klukkan.value) dg += (dg ? ' ' : '') + 'kl. ' + klukkan.value;
+    var dg = '', dags = $('v-dags'), kl = $('v-klukkan');
+    if (dags && dags.value) { var d = new Date(dags.value + 'T12:00:00'); if (!isNaN(d)) dg = DAG[d.getDay()] + ' ' + d.getDate() + '. ' + MAN[d.getMonth()]; }
+    if (kl && kl.value) dg += (dg ? ' ' : '') + 'kl. ' + kl.value;
     if (dg) bitar.push(dg);
     var txt = bitar.join(' · ');
-    if (sam.textContent !== txt) sam.textContent = txt;    // annars les skjálesari hana upp aftur við hvern staf
+    if (sam && sam.textContent !== txt) sam.textContent = txt;    // annars les skjálesari hana upp aftur við hvern staf
   }
 
-  f.querySelectorAll('.v-hring').forEach(function (b) {
-    b.addEventListener('click', function () { if (ritill()) return; var v = fjoldi(); setja(v ? v + (+b.dataset.skref) : 10); });
+  // ---- atburðir: hlustað á formið og síðuna, ekki á einstaka hnappa ----
+  f.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.v-hring, .v-flyti button'); if (!b || ritill()) return;
+    if (b.classList.contains('v-hring')) { var v = fjoldi(), d = +b.dataset.skref; setja(v ? Math.max(1, v + d) : 10); }
+    else setja(hnappTala(b));
   });
-  flyti.forEach(function (b) { b.addEventListener('click', function () { if (ritill()) return; setja(hnappTala(b)); }); });
-  [n, dags, klukkan].concat([].slice.call(f.querySelectorAll('input[type=radio]'))).forEach(function (x) { x.addEventListener('input', uppfaera); x.addEventListener('change', uppfaera); });
-  f.querySelectorAll('input[name="veisla"]').forEach(function (r) { r.addEventListener('change', function () { teikna(); uppfaera(); }); });
-  n.addEventListener('change', function () { if (n.value) setja(fjoldi()); });
+  function vidBreytingu(e) {
+    var t = e.target; if (!t || !t.name) return;          // réttavalið sér um sig sjálft
+    if (t.closest('.v-reitur')) t.removeAttribute('aria-invalid');
+    if (t.name === 'veisla' && e.type === 'change') teikna();
+    if (t === n && e.type === 'change' && n.value) { setja(fjoldi()); return; }
+    uppfaera();
+  }
+  f.addEventListener('input', vidBreytingu); f.addEventListener('change', vidBreytingu);
   n.addEventListener('keydown', function (e) {               // Enter í fjöldanum fer í næsta skref, sendir ekki
-    if (e.key === 'Enter') { e.preventDefault(); (f.querySelector('input[name="veisla"]:checked') || f.querySelector('input[name="veisla"]')).focus(); }
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    var r = f.querySelector('input[name="veisla"]:checked') || [].filter.call(f.querySelectorAll('input[name="veisla"]'), function (x) { return !x.closest('.v-ch').hidden; })[0];
+    if (r) r.focus();
   });
-  f.querySelectorAll('.v-reitur input, .v-reitur textarea').forEach(function (x) { x.addEventListener('input', function () { x.removeAttribute('aria-invalid'); }); });
-
-  // „Velja“ á veisluspjaldi: veislan er valin í pöntuninni og farið þangað
-  document.querySelectorAll('[data-velja-veislu]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      if (ritill()) return;
-      var r = f.querySelector('input[name="veisla"][value="' + a.dataset.veljaVeislu + '"]'); if (!r) return;
-      e.preventDefault();
-      if (!r.checked) { r.checked = true; teikna(); uppfaera(); }
-      var mjukt = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-      f.scrollIntoView({ behavior: mjukt ? 'smooth' : 'auto', block: 'start' });
-      (fjoldi() ? r : n).focus({ preventScroll: true });
-    });
+  // „Velja“ á veisluspjaldi og „Setja saman veislu“: veislan er valin í pöntuninni og farið þangað
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-velja-veislu]'); if (!a || ritill()) return;
+    var r = f.querySelector('input[name="veisla"][value="' + a.dataset.veljaVeislu + '"]'); if (!r || r.closest('.v-ch').hidden) return;
+    e.preventDefault();
+    if (!r.checked) { r.checked = true; teikna(); uppfaera(); }
+    var mjukt = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    f.scrollIntoView({ behavior: mjukt ? 'smooth' : 'auto', block: 'start' });
+    (fjoldi() ? r : n).focus({ preventScroll: true });
   });
 
-  function synaVillu(t, el) {
-    villa.textContent = t; villa.hidden = false;
-    if (el) { el.setAttribute('aria-invalid', 'true'); el.focus(); }
+  function synaVillu(t, reitur) {
+    var villa = $('v-villa'); villa.textContent = t; villa.hidden = false;
+    if (reitur) { reitur.setAttribute('aria-invalid', 'true'); reitur.focus(); }
   }
-  var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Heimilisfang vantar.': 'v-heimilisfang', 'Nafn vantar.': 'v-nafn', 'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
+  var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Heimilisfang vantar.': 'v-heimilisfang', 'Dagsetningin er liðin.': 'v-dags', 'Nafn vantar.': 'v-nafn',
+    'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     if (ritill()) return;                     // í ritlinum er smellur á hnappinn „breyta textanum“, ekki „senda“
-    villa.hidden = true;
+    var villa = $('v-villa'); villa.hidden = true;
     var g = {}; new FormData(f).forEach(function (v, k) { g[k] = typeof v === 'string' ? v.trim() : v; });
     if (!fjoldi()) {                          // villan birtist við teljarann, þar sem gesturinn er
-      fv.hidden = false; n.setAttribute('aria-invalid', 'true'); n.setAttribute('aria-describedby', 'v-gestir v-fjoldi-villa'); n.focus(); return;
+      var fv = $('v-fjoldi-villa'); fv.hidden = false; n.setAttribute('aria-invalid', 'true'); n.setAttribute('aria-describedby', 'v-gestir v-fjoldi-villa'); n.focus(); return;
     }
     g.fjoldi = String(fjoldi()); g.veisla = gildi('veisla'); g.afhending = gildi('afhending');
     g.val = valTexti();
-    g.aaetlad = verd.hidden ? '' : verdTala.textContent + (verdSkyring.textContent ? ' (' + verdSkyring.textContent + ')' : '');
+    var verd = $('v-verd');
+    g.aaetlad = verd.hidden ? '' : $('v-verd-tala').textContent + ($('v-verd-skyring').textContent ? ' (' + $('v-verd-skyring').textContent + ')' : '');
     if (g.afhending !== 'Sent') delete g.heimilisfang;
-    if (g.afhending === 'Sent' && !g.heimilisfang) return synaVillu('Skrifið heimilisfangið sem á að senda á.', heim);
+    if (g.afhending === 'Sent' && !g.heimilisfang) return synaVillu('Skrifið heimilisfangið sem á að senda á.', $('v-heimilisfang'));
+    if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
     if (!g.nafn) return synaVillu('Skrifið nafnið ykkar.', $('v-nafn'));
     if (!g.netfang && !g.simi) return synaVillu('Skrifið síma eða netfang svo við getum svarað.', $('v-simi'));
     if (g.simi && (g.simi.match(/\d/g) || []).length < 7) return synaVillu('Símanúmerið virðist ekki rétt.', $('v-simi'));
@@ -869,9 +937,16 @@
         villa.hidden = false;
       });
   });
+
+  // Í ritlinum sjást líka textar sem gesturinn sér bara stundum (þakkir og villuboð), svo hægt sé að breyta þeim
+  if (ritill()) { $('v-takk').hidden = false; $('v-fjoldi-villa').hidden = false; f.classList.add('v-ritill'); }
   if (/[?&]sent=1/.test(location.search)) { $('v-reitir').hidden = true; $('v-takk').hidden = false; }
-  teikna();                                   // vafrinn getur munað valda veislu þegar farið er til baka
-  uppfaera();
+  // Teiknað aftur þegar efni eigandans er komið inn (DOMContentLoaded) og þegar vafrinn hefur sett
+  // inn það sem gesturinn hafði valið áður en hann fór af síðunni og kom aftur (pageshow)
+  function endurnyja() { teikna(); uppfaera(); }
+  endurnyja();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', endurnyja);
+  window.addEventListener('pageshow', endurnyja);
 })();
 </script>
 </body>

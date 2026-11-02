@@ -257,14 +257,16 @@ async function isAuthed(req) { return !!sessionEmail(req); }
  * Talið er á netfangið HVORT SEM ÞAÐ ER Á LISTANUM EÐA EKKI — annars mætti lesa út úr
  * því hverjir eiga aðgang að ritlinum.
  */
-const hits = new Map();
+const hits = new Map();   // lykill → { w: gluggi í ms, t: tímastimplar innan gluggans }
 function overLimit(key, max, windowMs) {
   const now = Date.now();
-  const list = (hits.get(key) || []).filter(t => now - t < windowMs);
-  if (list.length >= max) { hits.set(key, list); return true; }
+  const h = hits.get(key), list = (h ? h.t : []).filter(t => now - t < windowMs);
+  if (list.length >= max) { hits.set(key, { w: windowMs, t: list }); return true; }
   list.push(now);
-  hits.set(key, list);
-  if (hits.size > 500) for (const k of hits.keys()) { if (!hits.get(k).length) hits.delete(k); }
+  hits.set(key, { w: windowMs, t: list });
+  // Lyklar sem hafa ekki sést innan síns glugga eru fjarlægðir — annars stækkar taflan með
+  // hverri nýrri IP-tölu og hver beiðni færi í gegnum hana alla
+  if (hits.size > 500) for (const [k, v] of hits) { if (!v.t.length || now - v.t[v.t.length - 1] >= v.w) hits.delete(k); }
   return false;
 }
 const LIMITS = { email: [3, 900000], ip: [10, 900000] };   // 15 mínútna gluggi

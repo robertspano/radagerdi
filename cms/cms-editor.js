@@ -377,6 +377,8 @@
     showStyleBar(leaf);
   }
   function onKey(e) {
+    // Hnappur gleypir bilslátt (hann „smellir“ á sig) svo ekki var hægt að skrifa bil í texta á hnappi
+    if (e.key === ' ' && activeEl && activeEl.tagName === 'BUTTON') { e.preventDefault(); document.execCommand('insertText', false, ' '); }
     if (e.key === 'Enter' && !e.shiftKey && activeEl && activeEl.tagName !== 'DIV') { e.preventDefault(); activeEl.blur(); }
     if (e.key === 'Escape') { activeEl.innerHTML = activeOrig; activeEl.blur(); }
   }
@@ -1177,7 +1179,9 @@
     let item;
     const last = [...list.querySelectorAll(itemSel)].filter(e => e.hasAttribute('data-cms-item')).pop();
     if (type === 'ti') {
-      item = el('div', 'ti', '<div class="ti-head"><span class="ti-nm">Nýr réttur</span><span class="ti-pr"><b class="ti-new">0 kr</b></span></div>\n            <p class="ti-desc">Lýsing á réttinum</p>');
+      // Verð á hvern rétt aðeins ef spjaldið hefur það (á veisluþjónustunni er eitt verð á flokkinn)
+      const verd = !last || !!last.querySelector('.ti-pr');
+      item = el('div', 'ti', '<div class="ti-head"><span class="ti-nm">Nýr réttur</span>' + (verd ? '<span class="ti-pr"><b class="ti-new">0 kr</b></span>' : '') + '</div>\n            <p class="ti-desc">Lýsing á réttinum</p>');
     } else if (type === 'rn') {
       item = el('div', '', '<p class="rn">Nýr réttur 0 kr.</p><p class="rd">Lýsing á réttinum</p>');
     } else {

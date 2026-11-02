@@ -50,24 +50,27 @@ function fraVefnum(req) {
   return !S.IS_PROD && !!self && h === self;
 }
 
+// „2026-12-12“ → { iso, texti: „laugardagur 12. desember 2026“ }; ógild dagsetning → tómt
 function dagsetning(v) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(line(v, 10));
-  if (!m) return '';
+  if (!m) return { iso: '', texti: '' };
   const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12));
-  if (isNaN(d) || d.getUTCMonth() !== +m[2] - 1) return '';
-  return DAG[d.getUTCDay()] + ' ' + d.getUTCDate() + '. ' + MAN[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+  if (isNaN(d) || d.getUTCMonth() !== +m[2] - 1) return { iso: '', texti: '' };
+  return { iso: m[0], texti: DAG[d.getUTCDay()] + ' ' + d.getUTCDate() + '. ' + MAN[d.getUTCMonth()] + ' ' + d.getUTCFullYear() };
 }
 
 function lesa(body) {
   const fjoldi = parseInt(line(body.fjoldi, 5), 10);
+  const afh = line(body.afhending, 10), dags = dagsetning(body.dagsetning);
   return {
     fjoldi: fjoldi >= 1 && fjoldi <= 500 ? fjoldi : 0,
     veisla: line(body.veisla, 60),
     val: txt(body.val, 3000),                 // réttirnir sem gesturinn valdi, ein lína á hvert val
     aaetlad: line(body.aaetlad, 120),         // áætlað verð eins og síðan sýndi það
-    afhending: { 'Sótt': 'Sótt', 'Sent': 'Sent' }[line(body.afhending, 10)] || '',
+    afhending: afh === 'Sótt' || afh === 'Sent' ? afh : '',
     heimilisfang: line(body.heimilisfang, 200),
-    dagsetning: dagsetning(body.dagsetning),
+    dagsetning: dags.texti,
+    dagIso: dags.iso,
     klukkan: /^([01]\d|2[0-3]):[0-5]\d$/.test(line(body.klukkan, 5)) ? line(body.klukkan, 5) : '',
     oskir: txt(body.oskir, 3000),
     nafn: line(body.nafn, 100),
@@ -80,6 +83,8 @@ function lesa(body) {
 function athuga(g) {
   if (!g.fjoldi) return 'Veljið fjölda gesta.';
   if (g.afhending === 'Sent' && !g.heimilisfang) return 'Heimilisfang vantar.';
+  // Ísland er á UTC allt árið, svo dagurinn í dag er sá sami hér og á Íslandi
+  if (g.dagIso && g.dagIso < new Date().toISOString().slice(0, 10)) return 'Dagsetningin er liðin.';
   if (!g.nafn) return 'Nafn vantar.';
   if (!g.netfang && !g.simi) return 'Netfang eða símanúmer vantar svo hægt sé að svara.';
   if (g.netfang && !/^[^\s@<>,;]+@[^\s@<>,;.]+(\.[^\s@<>,;.]+)+$/.test(g.netfang)) return 'Netfangið virðist ekki rétt.';
@@ -88,7 +93,8 @@ function athuga(g) {
   return null;
 }
 
-function postur(g) {
+// svar: false þegar Resend hafnaði netfangi gestsins sem svarnetfangi — þá dugar ekki að ýta á „Svara“
+function postur(g, svar = true) {
   const gestir = g.fjoldi + (g.fjoldi % 10 === 1 && g.fjoldi % 100 !== 11 ? ' gestur' : ' gestir');
   const hvenaer = [g.dagsetning, g.klukkan && 'kl. ' + g.klukkan].filter(Boolean).join(' ');
   const afhending = g.afhending === 'Sent' ? 'Sent á ' + (g.heimilisfang || '?') : g.afhending === 'Sótt' ? 'Sótt í Ráðagerði' : '';
@@ -99,14 +105,14 @@ function postur(g) {
   ].filter((r) => r[1]);
   const blokk = (heiti, v) => '<p style="margin:18px 0 4px;color:#629F67;font-weight:bold">' + heiti + '</p><p style="margin:0;white-space:pre-wrap">' + esc(v) + '</p>';
   const text = rows.map((r) => r[0] + ': ' + r[1]).join('\n') + (g.val ? '\n\nRéttir:\n' + g.val : '') + (g.oskir ? '\n\nÓskir:\n' + g.oskir : '') +
-    '\n\n— Sent af ' + (S.IS_PROD ? 'radagerdi.is/veisluthjonusta' : 'forskoðun vefsins (prófun, ekki radagerdi.is)') + (g.netfang ? '. Svarið beint á þennan póst til að svara ' + g.nafn + '.' : '.');
+    '\n\n— Sent af ' + (S.IS_PROD ? 'radagerdi.is/veisluthjonusta' : 'forskoðun vefsins (prófun, ekki radagerdi.is)') + (g.netfang ? (svar ? '. Svarið beint á þennan póst til að svara ' + g.nafn + '.' : '. Ekki er hægt að svara þessum pósti beint: skrifið nýjan póst á ' + g.netfang + (g.simi ? ' eða hringið í ' + g.simi : '') + '.') : '.');
   const html = '<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#2c3a2d">' +
     '<h2 style="color:#629F67;margin:0 0 14px">Veislupöntun</h2>' +
     '<table cellpadding="6" style="border-collapse:collapse">' +
     rows.map((r) => '<tr><td style="color:#629F67;font-weight:bold;padding-right:18px">' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td></tr>').join('') +
     '</table>' +
     (g.val ? blokk('Réttir', g.val) : '') + (g.oskir ? blokk('Óskir', g.oskir) : '') +
-    '<p style="margin:22px 0 0;color:#7a8a7b;font-size:13px">Sent af ' + (S.IS_PROD ? 'radagerdi.is/veisluthjonusta' : 'forskoðun vefsins (prófun, ekki radagerdi.is)') + (g.netfang ? ' · svarið beint á þennan póst til að svara ' + esc(g.nafn) : '') + '</p></div>';
+    '<p style="margin:22px 0 0;color:#7a8a7b;font-size:13px">Sent af ' + (S.IS_PROD ? 'radagerdi.is/veisluthjonusta' : 'forskoðun vefsins (prófun, ekki radagerdi.is)') + (g.netfang ? (svar ? ' · svarið beint á þennan póst til að svara ' + esc(g.nafn) : ' · ekki er hægt að svara þessum pósti beint: skrifið nýjan póst á ' + esc(g.netfang) + (g.simi ? ' eða hringið í ' + esc(g.simi) : '')) : '') + '</p></div>';
   return { subject: subject.slice(0, 200), text, html };
 }
 
@@ -147,23 +153,27 @@ module.exports = async (req, res) => {
   const villa = athuga(g);
   if (villa) return svara(req, res, 400, { ok: false, error: villa });
 
-  if (S.overLimit('fyrirspurn:' + ipLykill(clientIp(req)), ...LIMIT) || S.overLimit('fyrirspurn:dagur', ...DAGUR)) {
+  if (S.overLimit('fyrirspurn:' + ipLykill(clientIp(req)), ...LIMIT)) {
     return svara(req, res, 429, { ok: false, error: 'Of margar pantanir í röð — hringið í 546-1700 eða sendið póst á radagerdi@radagerdi170.is' });
+  }
+  if (S.overLimit('fyrirspurn:dagur', ...DAGUR)) {
+    // Þakið á öllu tilvikinu, ekki gestinum að kenna — og sést í loggum Vercel
+    console.error('fyrirspurn: dagsþak náð (' + DAGUR[0] + ' á sólarhring) — pöntunum hafnað');
+    return svara(req, res, 429, { ok: false, error: 'Pöntunarformið er lokað í bili — hringið í 546-1700 eða sendið póst á radagerdi@radagerdi170.is' });
   }
   const key = process.env.RESEND_API_KEY;
   if (!key) return svara(req, res, 503, { ok: false, error: 'Pantanir eru ekki uppsettar hér' });
 
-  const p = postur(g);
-  const msg = Object.assign({ from: FROM, to: [TO], subject: p.subject, text: p.text, html: p.html }, g.netfang ? { reply_to: g.netfang } : {});
   const post = (m) => fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
     body: JSON.stringify(m),
   });
+  const skeyti = (svar) => { const p = postur(g, svar); return Object.assign({ from: FROM, to: [TO], subject: p.subject, text: p.text, html: p.html }, svar && g.netfang ? { reply_to: g.netfang } : {}); };
   try {
-    let r = await post(msg);
+    let r = await post(skeyti(true));
     // Hafni Resend svarnetfanginu er pöntunin samt send — netfangið stendur þá í meginmálinu
-    if (r.status === 422 && msg.reply_to) { delete msg.reply_to; r = await post(msg); }
+    if (r.status === 422 && g.netfang) r = await post(skeyti(false));
     if (!r.ok) throw new Error('Resend ' + r.status + ': ' + (await r.text()).slice(0, 200));
   } catch (e) {
     console.error('fyrirspurn failed:', e.message);
