@@ -712,6 +712,8 @@ function serveFile(req, res, full) {
 // ---------- API ----------
 async function handleAPI(req, res, url) {
   const p = url.pathname;
+  // Veislufyrirspurn: sama kóði og á Vercel. Án RESEND_API_KEY (venjulega staðbundið) fer enginn póstur.
+  if (p === '/api/fyrirspurn') return require('./api/fyrirspurn')(req, res);
   // public read
   if (p === '/api/content' && req.method === 'GET') {
     const c = readJSON(CONTENT_FILE, {});
