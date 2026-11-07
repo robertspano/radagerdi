@@ -33,7 +33,7 @@
       "DIV1>DIV2>P1": "ANY PIZZA ON THE MENU",
       "DIV1>DIV2>P2": "Only applies for take away and not if eaten on the premises",
       "DIV1>DIV2>P3": "(take away discount does not apply to the lunch offer)<br><br>",
-      "DIV1>DIV0>P0": "10% off all pick up orders"
+      "DIV1>DIV0>P0": "10% off all pick up orders<br>(Not inclunding offers or childrens meals)"
     },
     "en-barnamatsedill.html": {},
     "en-hopar.html": {
