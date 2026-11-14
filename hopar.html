@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hópar · Ráðagerði</title>
-<meta name="description" content="Hópamatseðlar Ráðagerðis fyrir hópa fleiri en 10 manns — Brot af því besta: tveir valkostir (6.900/9.900 kr.), hópabröns og barnamatseðill.">
+<meta name="description" content="Hópaseðlar Ráðagerðis fyrir hópa fleiri en 10 manns: í hádeginu, á kvöldin og í bröns. Skoðið seðlana og sendið okkur bókunarbeiðni.">
 <meta property="og:title" content="Hópar · Ráðagerði">
-<meta property="og:description" content="Hópamatseðlar Ráðagerðis — Brot af því besta: tveir valkostir, hópabröns og barnamatseðill.">
+<meta property="og:description" content="Hópaseðlar Ráðagerðis fyrir hópa fleiri en 10 manns: í hádeginu, á kvöldin og í bröns.">
 <link rel="canonical" href="https://radagerdi.is/hopar">
 <link rel="alternate" hreflang="is" href="https://radagerdi.is/hopar">
 <link rel="alternate" hreflang="en" href="https://radagerdi.is/en-hopar">
@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   @font-face{font-family:'Windsord';src:url('fonts/6353a2db71b74a4eaef13f21_WindsorD.otf') format('opentype');font-display:optional}
-  :root{--gr:#629F67;--red:#ff3132;--bg:#fff}
+  :root{--gr:#629F67;--red:#ff3132;--bg:#fff;--gr-d:#3d7a43}   /* --gr-d: dekkri grænn fyrir smátt letur (læsileiki) */
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);font-family:'Montserrat',sans-serif;color:var(--gr)}
 
@@ -41,36 +41,228 @@
 
   .wrap{max-width:1920px;margin:0 auto;padding:0 clamp(20px,3.2vw,62px)}
 
-  /* green info box */
-  .gbox{border:3px solid var(--gr);border-radius:190px 190px 26px 26px;overflow:hidden;margin-top:52px}
-  .gbox-top{background:var(--gr);color:#fff;text-align:center;padding:44px 40px 40px}
-  .gbox-top h1{font-family:'Windsord',serif;font-weight:400;font-size:clamp(23px,2.35vw,44px);letter-spacing:.04em;margin:0;text-transform:uppercase;line-height:1.45}
-  .gbox-top h1 .line2{display:inline-block;margin-top:18px;border-bottom:3px solid #fff;padding-bottom:5px}
-  .gbox-bot{background:#fff;text-align:center;padding:62px 40px 66px}
-  .gbox-bot p{font-size:clamp(16px,1.5vw,21px);line-height:2;margin:0 auto;max-width:1400px}
+  /* ===== HÓPAR =====
+     Sama útlit og veisluþjónustan (veisluthjonusta.html): bogar, græn matseðlaspjöld og
+     „Hvað verðið þið mörg?“. Bókunarbeiðnin fer beint til okkar (api/hopur.js); við bókum
+     hópinn inn ef borð er laust. */
+  .v-main{max-width:1320px;margin:0 auto;padding:0 clamp(20px,3.2vw,48px)}
+  .v-h1,.v-h2{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;letter-spacing:.04em;margin:0;text-wrap:balance}
 
-  /* three menu columns */
-  .mcols{display:grid;grid-template-columns:repeat(3,1fr);gap:60px;margin:84px 0 74px;text-align:center}
-  .mcols .lbl{font-size:clamp(16px,1.5vw,21px);font-weight:700;margin:0 0 46px}
-  .mbtn{display:flex;align-items:center;justify-content:center;border:2px solid var(--red);border-radius:22px;min-height:170px;
-    background:var(--red);color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(28px,2.6vw,40px);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;
-    transition:background-color .15s,color .15s;margin:0 4px}
-  .mbtn:hover{background:#fff;color:var(--red)}
+  .v-hero{display:grid;grid-template-columns:minmax(0,1fr);gap:36px;align-items:center;padding:48px 0 64px}
+  .v-hero .v-h1{font-size:clamp(40px,10vw,84px);line-height:1.08;color:var(--gr)}
+  .v-lead{font-size:clamp(17px,1.5vw,20px);line-height:1.8;margin:clamp(28px,2.6vw,40px) 0 0;max-width:30em}
+  .v-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;margin-top:30px}
+  .v-btn{display:inline-flex;align-items:center;justify-content:center;padding:0 34px;min-height:64px;border:2px solid var(--gr);border-radius:16px;color:var(--gr);background:#fff;white-space:nowrap;
+    font-family:'Windsord',serif;font-size:clamp(19px,1.6vw,23px);letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;text-decoration:none;transition:background-color .15s,color .15s}
+  .v-btn:hover{background:var(--gr);color:#fff}
+  .v-simi{color:var(--gr);font-weight:600;font-size:16px;text-decoration:none}
+  .v-simi:hover{text-decoration:underline}
+  .v-boginn{margin:0}
+  /* sporbaugshorn: hringhorn (999px) leggjast saman og vafrinn minnkar þá öll hornin, líka þau neðri */
+  .v-boginn img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:50% 60%;border-radius:50% 50% 26px 26px / 50% 50% 26px 26px}
 
-  .mbtn{position:relative}
-  .mbtn.soon{pointer-events:none;opacity:.55}
-  .soon-tag{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-family:'Montserrat',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-indent:0;padding:5px 14px;border-radius:99px;white-space:nowrap}
-  .guidebox{text-align:center;margin:64px 0 110px}
-  .guidebox .glbl{font-size:clamp(16px,1.5vw,21px);font-weight:700;margin:0 0 30px}
-  .guidebox .mbtn{display:inline-flex;min-height:0;padding:26px 52px;font-size:clamp(22px,2.1vw,32px);letter-spacing:.18em;text-indent:.18em}
+  /* kaflar */
+  .v-kafli{padding:12px 0 80px;scroll-margin-top:16px}
+  .v-kafli > .v-h2{font-size:clamp(32px,5.6vw,58px);line-height:1.15;text-align:center;color:var(--gr)}
+  .v-inngangur{text-align:center;font-size:17px;line-height:1.7;margin:16px auto 0;max-width:36em}
+  .v-inngangur + .v-inngangur{margin-top:4px}
+  .v-inngangur b{font-weight:700}
 
-  .introp{text-align:center;max-width:1000px;margin:64px auto -4px;font-size:clamp(15px,1.4vw,19px);line-height:1.9;color:var(--gr);padding:0 6px}
-  .redcols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:30px 0 0;align-items:stretch}
-  .redbox{border:3px solid var(--red);color:var(--red);text-align:center;padding:44px 30px}
-  .rbt{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(22px,2vw,32px);letter-spacing:.06em;margin:0 0 6px;border-bottom:2px solid var(--red);display:inline-block;padding-bottom:6px}
-  .redbox .rn{font-family:'Windsord',serif;text-transform:uppercase;font-size:clamp(19px,1.7vw,27px);letter-spacing:.03em;margin:30px 0 12px}
-  .redbox .rd{font-family:'Montserrat',sans-serif;font-size:16px;line-height:1.8;margin:0}
-  @media(max-width:900px){.redcols{grid-template-columns:1fr;gap:16px;margin-top:20px}.redbox{padding:34px 20px}}
+  /* veislurnar: fjórir bogar */
+  .v-pakkar{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+  .v-pakki{border:3px solid var(--gr);border-radius:150px 150px 26px 26px;padding:60px 24px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;min-width:0;transition:background-color .2s,color .2s}
+  .v-pk-nm{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(30px,8vw,38px);line-height:1.35;margin:0;hyphens:manual}
+  .v-pk-tag{font-weight:600;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;margin:8px 0 0;color:var(--gr-d)}
+  .v-pk-verd{margin:22px 0 0;font-size:15px;font-weight:600}
+  .v-pk-verd b{display:block;font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,8.6vw,44px);letter-spacing:.03em;line-height:1.6;margin:-.15em 0 0}
+  .v-pakki ul{list-style:none;margin:22px 0 26px;padding:0;width:100%}
+  .v-pakki li{padding:11px 4px;border-top:1.5px solid rgba(98,159,103,.3);font-size:15.5px;line-height:1.5}
+  .v-pakki li:last-child{border-bottom:1.5px solid rgba(98,159,103,.3)}
+  .v-pk-velja{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 34px;border:2px solid var(--gr);border-radius:14px;color:var(--gr);background:#fff;text-decoration:none;
+    font-family:'Windsord',serif;font-size:19px;letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;transition:background-color .15s,color .15s}
+  .v-pk-velja:hover{background:var(--gr);color:#fff}
+  .v-pk-velja:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
+  /* veislan sem er valin í pöntuninni */
+  .v-pakki.valin,.v-pakki.valin .v-pk-tag{background:var(--gr);color:#fff}
+  .v-pakki.valin li{border-color:rgba(255,255,255,.4)}
+  .v-pakki.valin .v-pk-velja{background:#fff;color:var(--gr);border-color:#fff}
+  .v-pakki.valin .v-pk-velja:focus-visible{outline-color:#fff}
+
+  /* matseðillinn: sömu spjöld og á Take Away (.card > .ti) */
+  .cols{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;margin-top:40px;align-items:start}
+  .col{display:flex;flex-direction:column;gap:26px;min-width:0}
+  .card{border:4px solid var(--gr);background:var(--gr);color:#fff;border-radius:26px;padding:32px 22px 24px;min-width:0}
+  .card h2{font-family:'Windsord',serif;font-weight:400;font-size:clamp(30px,3.2vw,46px);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin:0;line-height:1.25}
+  .card .vnote{text-align:center;font-family:'Windsord',serif;text-transform:uppercase;letter-spacing:.03em;font-weight:400;font-size:clamp(19px,1.6vw,24px);line-height:1.3;margin:6px 0 28px}
+  .ti{margin-bottom:26px}
+  .ti:last-child{margin-bottom:4px}
+  .ti-head{font-family:'Windsord',serif;font-size:clamp(21px,1.9vw,27px);letter-spacing:.03em;text-transform:uppercase;line-height:1.35;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+  .ti-head .ti-nm{flex:1;min-width:0}
+  .ti-desc{font-size:16.5px;line-height:1.7;margin:8px 0 0}
+  .ti-note{font-size:16px;font-weight:700;margin:8px 0 0}
+
+  /* pöntunin: sami bogi og græni kassinn á hinum síðunum */
+  .v-form{border:3px solid var(--gr);border-radius:110px 110px 26px 26px;overflow:hidden;scroll-margin-top:16px;background:var(--gr);margin-bottom:96px}
+  .v-topp{background:var(--gr);color:#fff;text-align:center;padding:52px 20px 40px}
+  .v-topp .v-h2{font-size:clamp(26px,5.6vw,52px);line-height:1.2}
+  .v-teljari{display:flex;align-items:flex-end;justify-content:center;gap:clamp(14px,4vw,40px);margin:26px 0 6px}
+  .v-hring{width:58px;height:58px;flex:none;border-radius:16px;border:2px solid #fff;background:transparent;color:#fff;font-size:30px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s,color .15s;
+    margin-bottom:calc(clamp(64px,13vw,104px) * .37 - 27px)}
+  .v-hring:hover{background:#fff;color:var(--gr)}
+  /* Windsord hefur óvenju djúpa grunnlínu: með lægri línuhæð skerast tölurnar að neðan */
+  .v-fjoldi{width:3.2ch;background:transparent;border:0;border-bottom:2px solid rgba(255,255,255,.45);color:#fff;text-align:center;border-radius:0;
+    font-family:'Windsord',serif;font-size:clamp(64px,13vw,104px);line-height:1.5;margin-top:-.42em;padding:0;-moz-appearance:textfield;appearance:textfield}
+  .v-fjoldi::-webkit-outer-spin-button,.v-fjoldi::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .v-fjoldi::placeholder{color:rgba(255,255,255,.7)}
+  .v-fjoldi:focus{outline:none;border-bottom-color:#fff}
+  .v-fjoldi:focus-visible{outline:3px solid #fff;outline-offset:6px;border-radius:8px}
+  .v-gestir{font-size:15px;font-weight:600;letter-spacing:.06em;margin:4px 0 0}
+  .v-flyti{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
+  .v-flyti button{min-width:52px;height:40px;padding:0 12px;border-radius:12px;border:2px solid rgba(255,255,255,.85);background:transparent;color:#fff;font:600 15px 'Montserrat',sans-serif;cursor:pointer;transition:background-color .15s,color .15s}
+  .v-flyti button:hover,.v-flyti button[aria-pressed="true"]{background:#fff;color:var(--gr)}
+  .v-topp :is(.v-hring,.v-flyti button):focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .v-villa-topp{color:#fff;font-weight:700;margin:16px 0 0}
+  .v-villa-topp[hidden]{display:none}
+
+  .v-botn{background:#fff;padding:44px 20px 48px}
+  .v-reitir{max-width:880px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:30px}
+  .v-reitir[hidden],.v-svar[hidden],.v-verd[hidden],.v-reitur[hidden]{display:none}
+  .v-reitir fieldset{border:0;margin:0;padding:0;min-width:0}
+  .v-merki,.v-reitir legend{display:block;font-weight:700;font-size:16px;margin:0 0 12px;padding:0;color:var(--gr)}
+  .v-val{display:flex;flex-wrap:wrap;gap:10px}
+  .v-ch{position:relative}
+  .v-ch[hidden]{display:none}
+  .v-ch input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+  .v-ch label{display:inline-flex;align-items:center;min-height:44px;padding:6px 20px;line-height:1.3;border:2px solid var(--gr);border-radius:12px;font-weight:600;font-size:15px;color:var(--gr);background:#fff;cursor:pointer;transition:background-color .15s,color .15s,opacity .15s}
+  .v-ch label:hover{background:rgba(98,159,103,.1)}
+  .v-ch input:checked + label{background:var(--gr);color:#fff}
+  .v-ch input:focus-visible + label{outline:3px solid var(--gr);outline-offset:3px}
+  .v-ch input:disabled + label{opacity:.38;cursor:not-allowed;background:#fff}
+
+  /* réttirnir sem fylgja völdu veislunni (smíðað úr matseðlinum á síðunni) */
+
+  /* áætlað verð: strikaði rammi Take Away-tilboðsins */
+  .v-verd{border:3px dashed var(--gr);border-radius:20px;text-align:center;padding:20px 18px 22px}
+  .v-verd-merki{display:block;font-weight:700;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gr-d)}
+  /* Windsord sest neðarlega í línuna (sjá teljarann): hærri línuhæð svo talan rekist ekki í skýringuna */
+  .v-verd-tala{display:block;font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,7vw,50px);line-height:1.7;letter-spacing:.03em;margin:-.12em 0 0}
+  .v-verd-skyring{display:block;font-size:15px;line-height:1.5}
+
+  .v-tvo{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+  .v-reitur input,.v-reitur textarea{width:100%;font:500 16px/1.5 'Montserrat',sans-serif;color:#2c3a2d;background:#fff;border:2px solid var(--gr);border-radius:14px;padding:12px 16px;min-height:52px}
+  .v-reitur textarea{min-height:128px;resize:vertical}
+  .v-reitur input:focus,.v-reitur textarea:focus{outline:none}
+  .v-reitur input:focus-visible,.v-reitur textarea:focus-visible{outline:3px solid var(--gr);outline-offset:2px}
+  .v-reitur [aria-invalid="true"]{border-color:#c0262a}
+  .v-hjalp{font-size:14.5px;line-height:1.6;margin:10px 0 0;color:var(--gr-d)}
+  .v-hjalp a{color:var(--gr);font-weight:700}
+  .v-gildra{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .v-samantekt{text-align:center;font-weight:600;font-size:16px;line-height:1.6;margin:6px 0 0}
+  .v-samantekt:empty{display:none}
+  .v-senda{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .v-takki{min-height:66px;padding:14px 44px;border:2px solid var(--red);border-radius:16px;background:var(--red);color:#fff;font-family:'Windsord',serif;font-size:clamp(19px,5vw,25px);letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;white-space:nowrap;line-height:1.3;cursor:pointer;transition:background-color .15s,color .15s;width:100%;max-width:420px}
+  .v-takki:hover{background:#fff;color:var(--red)}
+  .v-takki:disabled{opacity:.6;cursor:wait}
+  .v-btn:focus-visible,.v-takki:focus-visible,.v-simi:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
+  .v-smatt{font-size:14.5px;margin:0;text-align:center;color:var(--gr-d)}
+  /* Windsord sest neðarlega í línuna: skorið að hástafahæð svo textinn sé fyrir miðju hnappsins */
+  .v-btn,.v-pk-velja,.v-takki{text-box:trim-both cap alphabetic}
+  .v-svar{max-width:640px;margin:0 auto;text-align:center}
+  .v-svar .v-h2{font-size:clamp(28px,4vw,44px);color:var(--gr);margin-bottom:14px}
+  .v-svar p{font-size:17px;line-height:1.8;margin:0}
+  .v-villa{color:#c0262a;font-weight:600;text-align:center;margin:0}
+  .v-villa a{color:inherit}
+  .v-villa[hidden]{display:none}
+  /* án JavaScript: svar þjónsins vísar á #v-takk eða #v-villa-anjs og þetta birtir það */
+  #v-takk:target{display:block}
+  .v-botn:has(#v-takk:target) .v-reitir{display:none}
+  #v-villa-anjs{display:none}
+  #v-villa-anjs:target,.v-ritill #v-villa-anjs{display:block}   /* í ritlinum sjást allir textar */
+  .v-tala{max-width:880px;margin:34px auto 0;padding-top:28px;border-top:1.5px solid rgba(98,159,103,.35);text-align:center;font-size:16px;line-height:1.8}
+  .v-tala a{color:var(--gr);font-weight:700;text-decoration:none;white-space:nowrap}
+  .v-tala a:hover{text-decoration:underline}
+
+  @media (forced-colors:active){
+    .v-ch input:checked + label,.v-flyti button[aria-pressed="true"]{forced-color-adjust:none;background:Highlight;color:HighlightText;border-color:Highlight}
+    .v-ch input:focus-visible + label{outline-color:Highlight}
+  }
+  @media (max-width:420px){
+    .v-btn{width:100%;padding:0 18px;font-size:clamp(16px,5vw,19px)}
+    .v-takki{padding:14px 16px;font-size:clamp(16px,5vw,25px);letter-spacing:.08em;text-indent:.08em}
+  }
+  @media (max-width:380px){
+    .v-flyti{gap:6px}.v-flyti button{min-width:0;padding:0 9px;height:38px}
+  }
+  @media (max-width:360px){
+    .card{padding-left:16px;padding-right:16px}
+    .card h2{font-size:27px}
+    .ti-head{font-size:19.5px}
+  }
+  @media (min-width:700px){
+    .v-form{border-radius:190px 190px 26px 26px}
+    .v-topp{padding:64px 40px 48px}
+    .v-botn{padding:56px 48px 60px}
+    .v-tvo{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .v-flyti{gap:10px}.v-flyti button{min-width:58px;padding:0 16px}
+    .v-pk-nm{font-size:clamp(28px,3.4vw,38px)}
+    .v-pk-verd b{font-size:clamp(34px,3.6vw,44px)}
+    .card{padding:34px 34px 30px}
+  }
+  @media (min-width:700px) and (max-width:999px){
+    .v-hero{grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:40px;padding:56px 0 72px}
+    .v-hero .v-h1{font-size:clamp(40px,6.6vw,84px)}
+    .v-boginn img{aspect-ratio:4/5;border-radius:50% 50% 26px 26px / 40% 40% 26px 26px}
+  }
+  @media (min-width:900px){
+    .cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (min-width:1000px){
+    .v-hero{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:72px;padding:72px 0 88px}
+    .v-hero .v-h1{font-size:clamp(40px,7.4vw,84px)}   /* „RÁÐAGERÐI“ kemst í dálkinn frá 1000px */
+    .v-boginn{max-width:520px;justify-self:end;width:100%}
+    .v-boginn img{aspect-ratio:4/5;border-radius:50% 50% 26px 26px / 40% 40% 26px 26px}
+  }
+
+
+  /* ===== HÓPAR — það sem bætist við veisluþjónustuútlitið =====
+     Seðlarnir þrír eru á flipum (hádegi, kvöld, bröns) og bogarnir efst velja flipann. Í ritlinum
+     (?cms=1) sjást allir seðlar í einu svo hægt sé að breyta þeim öllum. */
+  .v-pakkar{grid-template-columns:minmax(0,1fr)}
+  .v-pk-verd{line-height:1.5}
+  .h-flipar{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:34px 0 0}
+  .h-flipar[hidden]{display:none}
+  .h-flipar button{min-height:52px;min-width:130px;padding:0 26px;border:2px solid var(--gr);border-radius:14px;background:#fff;color:var(--gr);cursor:pointer;
+    font-family:'Windsord',serif;font-size:19px;letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;transition:background-color .15s,color .15s;text-box:trim-both cap alphabetic}
+  .h-flipar button:hover{background:rgba(98,159,103,.1)}
+  .h-flipar button[aria-selected="true"]{background:var(--gr);color:#fff}
+  .h-flipar button:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
+  .h-flipi{margin-top:30px}
+  .h-flipi[hidden]{display:none}
+  .h-ritill .h-flipi[hidden]{display:block}   /* í ritlinum sjást allir seðlar */
+  .h-ritill .h-flipar[hidden]{display:flex}
+  .h-inn{text-align:center;font-size:17px;line-height:1.75;max-width:40em;margin:0 auto}
+  .h-flipi .cols{margin-top:30px}
+  .h-flipi .cols.h-einn{grid-template-columns:minmax(0,1fr);max-width:720px;margin-left:auto;margin-right:auto}
+  .ti-head .ti-pr{white-space:nowrap;flex-shrink:0}
+  .ti-new{font-weight:700;white-space:nowrap}
+  .h-boka{text-align:center;margin-top:40px}
+
+  /* bókunin */
+  .h-faerri{color:#fff;font-weight:600;font-size:15px;line-height:1.6;margin:16px auto 0;max-width:30em}
+  .h-faerri[hidden]{display:none}
+  .h-faerri a{color:#fff;font-weight:700}
+  .h-sedlar[hidden]{display:none}
+  .h-brons-ath{margin:0;font-weight:600;font-size:15.5px;line-height:1.6}
+  .h-dags-ath{margin:10px 0 0;font-size:14.5px;line-height:1.6;font-weight:600;color:#a4561a}
+  .h-dags-ath[hidden]{display:none}
+  @media (min-width:900px){
+    .v-pakkar{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+    .h-flipi .cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:420px){
+    .h-flipar button{min-width:0;flex:1 1 0;padding:0 10px;font-size:16px;letter-spacing:.06em;text-indent:.06em}
+  }
+
   /* footer */
   .rg2-footer{background:var(--gr);padding:58px 7vw 68px;display:grid;grid-template-columns:1fr auto 1fr;gap:40px;align-items:start}
   .rg2-logo{justify-self:center;align-self:stretch;display:flex;align-items:center}
@@ -123,7 +315,7 @@
      fengu aðra hæð þegar letrið var ekki komið — og efnið hoppaði til. Fest hér á
      sama gildi og letrið gefur, svo útlitið er það sama hvort sem letrið nær að
      hlaðast eða ekki. :where() heldur vægi 0, svo allar aðrar reglur ráða áfram. */
-  :where(.bar .brand,.mbtn,.rbt,.redbox .rn,.rg2-book){line-height:2.355}  /* rg-linehold */
+  :where(.bar .brand,.rg2-book){line-height:2.355}  /* rg-linehold */
 </style>
 <style id="rg-bar-mobile">
   /* sími: haus sem passar — merkið í miðju með bili við tengla og tákn */
@@ -153,31 +345,241 @@
     </div>
   </div>
 
-  <div class="wrap">
-    <div class="gbox">
-      <div class="gbox-top">
-        <h1>Hópamatseðlar miðast við hópa sem telja fleiri en<br><span class="line2">10 manns</span></h1>
+  <main class="v-main" id="h-main">
+    <section class="v-hero">
+      <div>
+        <h1 class="v-h1">Hópar í Ráðagerði</h1>
+        <p class="v-lead">Fyrir hópa sem telja fleiri en 10 manns bjóðum við upp á hópaseðla í hádeginu, á kvöldin og í bröns. Segið okkur hvað þið verðið mörg og hvenær, og við bókum ykkur inn ef það er laust borð.</p>
+        <div class="v-cta">
+          <a class="v-btn" href="#bokun">Bóka hóp</a>
+          <a class="v-simi" href="tel:+3545461700">eða hringið í 546-1700</a>
+        </div>
       </div>
-      <div class="gbox-bot">
-        <p>Hringið eða sendið okkur tölvupóst varðandi <b>fjölda gesta, dagsetningu, tíma og hvaða hópaseðill</b> hentar ykkar hóp. Við bókum ykkur þá inn að því gefnu að það sé laust borð</p>
-      </div>
-    </div>
+      <figure class="v-boginn"><img src="assets/hopar-pizzur.webp" width="1000" height="1250" alt="Pizzur á borði í Ráðagerði, séð ofan frá" fetchpriority="high"/></figure>
+    </section>
 
-        <div class="mcols">
-      <div>
-        <p class="lbl">Virka daga frá 11:30-16:00</p>
-        <a class="mbtn" href="/hoparhadegi">Hádegi</a>
+    <!-- Bogarnir þrír velja flipann í seðlunum hér fyrir neðan (data-flipi) -->
+    <section class="v-kafli" id="hopasedlar" aria-labelledby="hopasedlar-h">
+      <h2 class="v-h2" id="hopasedlar-h">Hópaseðlarnir</h2>
+      <ul class="v-pakkar">
+        <li class="v-pakki" data-flipi="hadegi">
+          <h3 class="v-pk-nm" id="pk-hadegi">Hádegi</h3>
+          <p class="v-pk-tag">Virka daga 11:30–16:00</p>
+          <p class="v-pk-verd">frá <b>2.990 kr</b> á mann</p>
+          <ul>
+            <li>Valkostur 1 · súpa og samloka</li>
+            <li>Valkostur 2 · forréttur, aðalréttur og kaffi</li>
+            <li>Kvöldseðlarnir eru líka í boði</li>
+          </ul>
+          <a class="v-pk-velja" href="#sedlar" data-flipi="hadegi" aria-describedby="pk-hadegi">Sjá seðilinn</a>
+        </li>
+        <li class="v-pakki" data-flipi="kvold">
+          <h3 class="v-pk-nm" id="pk-kvold">Kvöld</h3>
+          <p class="v-pk-tag">Alla daga frá kl. 16:00</p>
+          <p class="v-pk-verd">frá <b>6.900 kr</b> á mann</p>
+          <ul>
+            <li>Valkostur 1 · fjórir réttir</li>
+            <li>Valkostur 2 · sex réttir</li>
+            <li>Borið fram til að deila</li>
+          </ul>
+          <a class="v-pk-velja" href="#sedlar" data-flipi="kvold" aria-describedby="pk-kvold">Sjá seðilinn</a>
+        </li>
+        <li class="v-pakki" data-flipi="brons">
+          <h3 class="v-pk-nm" id="pk-brons">Bröns</h3>
+          <p class="v-pk-tag">Helgar 11:00–15:30</p>
+          <p class="v-pk-verd">frá <b>3.390 kr</b> á rétt</p>
+          <ul>
+            <li>Hver gestur velur sér einn rétt</li>
+            <li>Shakshuka, bröns platti eða bröns pizza</li>
+            <li>Barnapizza 1.990 kr</li>
+          </ul>
+          <a class="v-pk-velja" href="#sedlar" data-flipi="brons" aria-describedby="pk-brons">Sjá seðilinn</a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Seðlarnir: .card[data-sedill] > .ti (sama og á Take Away, svo ritillinn getur bætt við og
+         tekið út rétti). Bókunin les nafnið (h2) og verðið (.vnote) af spjöldunum. Á hádegisflipanum
+         eru kvöldseðlarnir líka í boði (data-lika). Án JavaScript sjást allir seðlarnir í röð. -->
+    <section class="v-kafli" id="sedlar" aria-labelledby="sedlar-h">
+      <h2 class="v-h2" id="sedlar-h">Seðlarnir</h2>
+      <p class="v-inngangur">Athugið að börn eldri en 12 ára teljast til fjölda gesta.</p>
+      <div class="h-flipar" role="tablist" aria-label="Hvenær" hidden>
+        <button type="button" role="tab" id="fl-hadegi" aria-controls="sedill-hadegi" data-flipi="hadegi">Hádegi</button>
+        <button type="button" role="tab" id="fl-kvold" aria-controls="sedill-kvold" data-flipi="kvold">Kvöld</button>
+        <button type="button" role="tab" id="fl-brons" aria-controls="sedill-brons" data-flipi="brons">Bröns</button>
       </div>
-      <div>
-        <p class="lbl">Alla daga frá kl 16:00</p>
-        <a class="mbtn" href="/hoparkvold">Kvöld</a>
+
+      <div class="h-flipi" id="sedill-hadegi" role="tabpanel" aria-labelledby="fl-hadegi" data-flipi="hadegi" data-timi="Hádegi" data-lika="kvold">
+        <p class="h-inn">Alla virka daga frá 11:30–16:00. Við bjóðum upp á tvenna valkosti, og einnig er hægt að panta kvöldseðlana í hádeginu.</p>
+        <div class="cols">
+          <div class="card" data-sedill="">
+            <h2>Valkostur 1</h2>
+            <p class="vnote">2.990 kr á mann</p>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Tómat-basil súpa</span></div>
+              <p class="ti-desc">Rjómalöguð tómat-basil súpa.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Focaccia-samloka</span></div>
+              <p class="ti-desc">Eldbökuð focaccia-samloka með hráskinku, klettasalati, burrata stracciatella, pistasíupestói, tómötum, rauðlauk og blönduðum ólífum.</p></div>
+          </div>
+          <div class="card" data-sedill="">
+            <h2>Valkostur 2</h2>
+            <p class="vnote">4.990 kr á mann</p>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Forréttur</span></div>
+              <p class="ti-desc">Rjómalöguð tómat-basil súpa.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Aðalréttur að eigin vali</span></div>
+              <p class="ti-desc">Mascarpone kjötbollur, Ráðagerðis bacalao eða trufflu pasta.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Kaffi eða te</span></div>
+              <p class="ti-desc">Uppáhellt kaffi eða te eftir matinn.</p></div>
+          </div>
+        </div>
       </div>
-      <div>
-        <p class="lbl">Helgar frá 11:00-15:30</p>
-        <a class="mbtn" href="/hoparbrons">Bröns</a>
+
+      <div class="h-flipi" id="sedill-kvold" role="tabpanel" aria-labelledby="fl-kvold" data-flipi="kvold" data-timi="Kvöld">
+        <p class="h-inn">Alla daga frá kl. 16:00. Seðlarnir eru brot af því besta sem við höfum upp á að bjóða og réttirnir eru bornir fram til að deila.</p>
+        <div class="cols">
+          <div class="card" data-sedill="">
+            <h2>Valkostur 1</h2>
+            <p class="vnote">6.900 kr á mann</p>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Burrata</span></div>
+              <p class="ti-desc">Ítalskur burrata ostur, ferskir og hálfþurrkaðir kirsuberjatómatar, grænkálsflögur og svart-hvítlauksdressing, borið fram með stökku brauði.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Arancini</span></div>
+              <p class="ti-desc">Stökkar sveppa risotto kúlur fylltar með mozzarella osti, bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Pizzur</span></div>
+              <p class="ti-desc">Pizzur af matseðli til að deila.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span></div>
+              <p class="ti-desc">Tiramisu að hætti hússins.</p></div>
+          </div>
+          <div class="card" data-sedill="">
+            <h2>Valkostur 2</h2>
+            <p class="vnote">9.900 kr á mann</p>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Burrata</span></div>
+              <p class="ti-desc">Ítalskur burrata ostur, ferskir og hálfþurrkaðir kirsuberjatómatar, grænkálsflögur og svart-hvítlauksdressing, borið fram með stökku brauði.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Arancini</span></div>
+              <p class="ti-desc">Stökkar sveppa risotto kúlur fylltar með mozzarella osti, bornar fram með heimagerðri marinarasósu, steiktum kastaníusveppum, toppað með gremolata og parmesan osti.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Hvítlauksrækjur</span></div>
+              <p class="ti-desc">Tígrisrækjur í smjöri með hvítlauk og chili, borið fram með eldbökuðu brauði.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Mascarpone kjötbollur</span></div>
+              <p class="ti-desc">Eldbakaðar kjötbollur með mascarpone sveppasósu, steiktum sveppum, kartöflum, rauðlauk, gremolata, parmesan og spínati. Borið fram með eldbökuðu brauði.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Pizzur</span></div>
+              <p class="ti-desc">Pizzur af matseðli til að deila.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span></div>
+              <p class="ti-desc">Tiramisu að hætti hússins.</p></div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+
+      <div class="h-flipi" id="sedill-brons" role="tabpanel" aria-labelledby="fl-brons" data-flipi="brons" data-timi="Bröns">
+        <p class="h-inn">Allar helgar frá 11:00–15:30. Fyrir hópa bjóðum við upp á smækkaðan matseðil, svo eldhúsið ráði við álagið og enginn bíði lengi eftir matnum. Hver gestur velur sér einn rétt.</p>
+        <div class="cols h-einn">
+          <div class="card">
+            <h2>Bröns</h2>
+            <p class="vnote">Hver gestur velur einn rétt</p>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Shakshuka</span><span class="ti-pr"><b class="ti-new">3.390 kr</b></span></div>
+              <p class="ti-desc">Tvö spæld egg í þykkri sósu úr papriku, tómötum, lauk og hvítlauk, toppað með feta osti og steinselju, borið fram með eldbökuðu brauði.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Bröns platti</span><span class="ti-pr"><b class="ti-new">3.590 kr</b></span></div>
+              <p class="ti-desc">Tvö spæld egg, beikon, avocado, ferskt tómatsalsa, gullauga smælki með jógúrtsósu og salat. Borið fram með eldbökuðu brauði.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Bröns pizza</span><span class="ti-pr"><b class="ti-new">3.590 kr</b></span></div>
+              <p class="ti-desc">Mascarpone, ostur, beikon, kartöflur, gremolata, parmesan, eggjarauður og spælt egg.</p></div>
+            <div class="ti"><div class="ti-head"><span class="ti-nm">Barnapizza</span><span class="ti-pr"><b class="ti-new">1.990 kr</b></span></div>
+              <p class="ti-desc">9” pizza með einni áleggstegund.</p></div>
+          </div>
+        </div>
+      </div>
+      <p class="h-boka"><a class="v-btn" href="#bokun" data-boka="">Bóka hóp</a></p>
+    </section>
+
+    <form class="v-form" id="bokun" action="/api/hopur" method="post">
+      <div class="v-topp">
+        <h2 class="v-h2" id="v-fjoldi-h">Hvað verðið þið mörg?</h2>
+        <div class="v-teljari">
+          <button type="button" class="v-hring" data-skref="-1" aria-label="Fækka gestum">−</button>
+          <input class="v-fjoldi" id="v-fjoldi" name="fjoldi" type="number" inputmode="numeric" min="1" max="500" placeholder="–" required aria-labelledby="v-fjoldi-h" aria-describedby="v-gestir">
+          <button type="button" class="v-hring" data-skref="1" aria-label="Fjölga gestum">+</button>
+        </div>
+        <p class="v-gestir" id="v-gestir">gestir</p>
+        <div class="v-flyti" role="group" aria-label="Algengur fjöldi">
+          <button type="button" data-fjoldi="12">12</button><button type="button" data-fjoldi="15">15</button><button type="button" data-fjoldi="20">20</button><button type="button" data-fjoldi="30">30</button><button type="button" data-fjoldi="40">40</button>
+        </div>
+        <p class="v-villa-topp" id="v-fjoldi-villa" hidden>Veljið fjölda gesta.</p>
+        <p class="h-faerri" id="h-faerri" hidden>Hópaseðlarnir eru fyrir fleiri en 10 manns. Minni hópar geta bókað borð á <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Dineout</a>.</p>
+      </div>
+
+      <div class="v-botn">
+        <div class="v-reitir" id="v-reitir">
+          <fieldset>
+            <legend>Hvenær?</legend>
+            <div class="v-val">
+              <div class="v-ch"><input type="radio" name="timi" value="Hádegi" id="ht-hadegi"><label for="ht-hadegi">Hádegi</label></div>
+              <div class="v-ch"><input type="radio" name="timi" value="Kvöld" id="ht-kvold"><label for="ht-kvold">Kvöld</label></div>
+              <div class="v-ch"><input type="radio" name="timi" value="Bröns" id="ht-brons"><label for="ht-brons">Bröns</label></div>
+            </div>
+          </fieldset>
+
+          <div class="h-sedlar" id="h-sedlar" hidden></div>
+
+          <div class="v-verd" id="v-verd" hidden>
+            <div class="v-verd-merki">Áætlað verð</div>
+            <div class="v-verd-tala" id="v-verd-tala"></div>
+            <div class="v-verd-skyring" id="v-verd-skyring"></div>
+          </div>
+
+          <div>
+            <div class="v-tvo">
+              <div class="v-reitur">
+                <label class="v-merki" for="v-dags">Dagsetning</label>
+                <input id="v-dags" name="dagsetning" type="date" aria-describedby="h-dags-ath">
+              </div>
+              <div class="v-reitur">
+                <label class="v-merki" for="v-klukkan">Klukkan hvað?</label>
+                <input id="v-klukkan" name="klukkan" type="time" step="900">
+              </div>
+            </div>
+            <p class="h-dags-ath" id="h-dags-ath" role="status" hidden></p>
+          </div>
+
+          <div class="v-reitur">
+            <label class="v-merki" for="v-oskir">Óskir</label>
+            <textarea id="v-oskir" name="oskir" maxlength="3000" aria-describedby="v-oskir-hjalp"></textarea>
+            <p class="v-hjalp" id="v-oskir-hjalp">Tilefni, ofnæmi eða annað sem gott er fyrir okkur að vita.</p>
+          </div>
+
+          <div>
+            <div class="v-tvo">
+              <div class="v-reitur">
+                <label class="v-merki" for="v-nafn">Nafn</label>
+                <input id="v-nafn" name="nafn" type="text" autocomplete="name" maxlength="100" required>
+              </div>
+              <div class="v-reitur">
+                <label class="v-merki" for="v-simi">Sími</label>
+                <input id="v-simi" name="simi" type="tel" autocomplete="tel" maxlength="30" aria-describedby="v-samband-hjalp">
+              </div>
+            </div>
+            <div class="v-reitur" style="margin-top:22px">
+              <label class="v-merki" for="v-netfang">Netfang</label>
+              <input id="v-netfang" name="netfang" type="email" autocomplete="email" maxlength="200" aria-describedby="v-samband-hjalp">
+            </div>
+            <p class="v-hjalp" id="v-samband-hjalp">Sími eða netfang — annað hvort dugar.</p>
+          </div>
+          <div class="v-gildra" aria-hidden="true"><label for="v-vefsida">Vefsíða</label><input id="v-vefsida" name="vefsida" type="text" tabindex="-1" autocomplete="off"></div>
+
+          <p class="v-samantekt" id="v-samantekt" aria-live="polite"></p>
+          <div class="v-senda">
+            <p class="v-villa" id="v-villa-anjs">Ekki tókst að senda beiðnina. Athugið að fjöldi gesta, nafn og sími eða netfang séu rétt útfyllt og að dagsetningin sé ekki liðin — eða hringið í <a href="tel:+3545461700">546-1700</a>.</p>
+            <p class="v-villa" id="v-villa" role="alert" hidden></p>
+            <button class="v-takki" type="submit">Senda beiðni</button>
+            <p class="v-smatt">Beiðnin fer beint til okkar. Við bókum ykkur inn ef borð er laust og staðfestum það við ykkur.</p>
+          </div>
+        </div>
+
+        <div class="v-svar" id="v-takk" hidden tabindex="-1">
+          <h2 class="v-h2">Takk fyrir!</h2>
+          <p>Beiðnin er komin til okkar. Við höfum samband og staðfestum bókunina ef borð er laust.</p>
+        </div>
+
+        <p class="v-tala">Viljið þið frekar tala við okkur? Hringið í <a href="tel:+3545461700">546-1700</a> eða sendið póst á <a href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a>.</p>
+      </div>
+    </form>
+  </main>
 
   <footer class="rg2-footer">
     <div>
@@ -220,5 +622,247 @@
     <a href="/hafa-samband">Hafa samband</a>
     <a href="/en-hopar">English</a>
 </div>
+<script>
+/* Hópar: flipar seðlanna, bogarnir sem velja flipa, og bókunarbeiðnin (api/hopur.js).
+   Einn „tími“ ræður öllu: flipinn sem sést, boginn sem er grænn og „Hvenær?“ í bókuninni fylgjast að.
+   Seðlarnir í bókuninni eru lesnir af spjöldunum á síðunni (.card[data-sedill]: nafnið í h2, verðið
+   í .vnote), svo það sem eigandinn breytir eða eyðir í ritlinum gildir líka hér.
+   Ritillinn getur skipt út heilum textabútum þegar efni eigandans er sett inn, svo allt er sótt
+   eftir id þegar á þarf að halda og hlustað er á formið og síðuna sjálfa (eins og á veisluþjónustunni).
+   Án JavaScript sjást allir seðlarnir í röð og formið sendist samt — þjónninn vísar á #v-takk eða #v-villa-anjs. */
+(function () {
+  var f = document.getElementById('bokun'); if (!f) return;
+  f.noValidate = true;                       // okkar eigin villuboð; án JS sér vafrinn um það
+  // Í ritlinum (?cms=1) er síðan aðeins texti sem eigandinn breytir — ekkert er sent og engu breytt
+  function ritill() { return document.body.classList.contains('cms-on') || /[?&]cms=1/.test(location.search); }
+  var $ = function (id) { return document.getElementById(id); };
+  var n = $('v-fjoldi');
+  var TIMI = { hadegi: 'Hádegi', kvold: 'Kvöld', brons: 'Bröns' }, FLIPI = { 'Hádegi': 'hadegi', 'Kvöld': 'kvold', 'Bröns': 'brons' };
+  var pad = function (x) { return String(x).padStart(2, '0'); };
+  var d0 = new Date(), IDAG = d0.getFullYear() + '-' + pad(d0.getMonth() + 1) + '-' + pad(d0.getDate());
+  $('v-dags').min = IDAG;
+  var MAN = ['janúar','febrúar','mars','apríl','maí','júní','júlí','ágúst','september','október','nóvember','desember'];
+  var DAG = ['sunnudagur','mánudagur','þriðjudagur','miðvikudagur','fimmtudagur','föstudagur','laugardagur'];
+  var eintala = function (v) { return v % 10 === 1 && v % 100 !== 11; };
+  var kr = function (x) { return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' kr'; };
+  // fyrsta talan í texta: „6.900 kr á mann“ → 6900
+  var tala = function (s) { var m = String(s || '').match(/\d[\d.]*/); return m ? parseInt(m[0].replace(/\./g, ''), 10) || 0 : 0; };
+  var synilegt = function (e) { return !!(e && e.getClientRects().length); };   // það sem ritillinn hefur falið telst ekki með
+  var uid = 0;
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function fjoldi() { var v = parseInt(n.value, 10); return v > 0 ? Math.min(v, 500) : 0; }
+  function setja(v) { n.value = v ? Math.max(1, Math.min(500, v)) : ''; uppfaera(); }
+  // Textinn sem gesturinn sér (eigandinn getur breytt honum í ritlinum), ekki fasta gildið í kóðanum
+  function hnappTala(b) { return parseInt(b.textContent, 10) || +b.dataset.fjoldi; }
+  function gildi(nafn) { var x = f.querySelector('input[name="' + nafn + '"]:checked'); return x ? x.value : ''; }
+  function valid(nafn) { var x = f.querySelector('input[name="' + nafn + '"]:checked'); return x ? ((x.nextElementSibling && x.nextElementSibling.textContent.trim()) || x.value) : ''; }
+
+  // ---- flipar og bogar ----
+  var flipiNu = '';
+  function syna(fl) {
+    if (!TIMI[fl]) return;
+    flipiNu = fl;
+    document.querySelectorAll('.h-flipar [role="tab"]').forEach(function (b) {
+      var a = b.dataset.flipi === fl; b.setAttribute('aria-selected', String(a)); b.tabIndex = a ? 0 : -1;
+    });
+    document.querySelectorAll('.h-flipi').forEach(function (p) { p.hidden = p.dataset.flipi !== fl; });
+    document.querySelectorAll('.v-pakki[data-flipi]').forEach(function (c) { c.classList.toggle('valin', c.dataset.flipi === fl); });
+  }
+  // Tíminn í bókuninni fylgir flipanum (og öfugt), svo það sem gesturinn skoðar er það sem hann bókar
+  function veljaTima(fl) {
+    var r = f.querySelector('input[name="timi"][value="' + TIMI[fl] + '"]');
+    if (r && !r.checked) { r.checked = true; teikna(); uppfaera(); }
+  }
+
+  // ---- seðlarnir í boði fyrir valinn tíma, lesnir af spjöldunum ----
+  function sedlar(timi) {
+    var p = document.querySelector('.h-flipi[data-timi="' + timi + '"]'); if (!p) return [];
+    var out = [], flipar = [p].concat((p.dataset.lika || '').split(' ').filter(Boolean).map(function (k) { return document.querySelector('.h-flipi[data-flipi="' + k + '"]'); }).filter(Boolean));
+    flipar.forEach(function (fp, i) {
+      // Flipi sem er ekki sýndur er falinn (hidden), svo þar er spurt beint hvort ritillinn hafi
+      // eytt spjaldinu (display:none í style); á sýnda flipanum dugar að spyrja hvort það sjáist
+      fp.querySelectorAll('.card[data-sedill]').forEach(function (c) {
+        if (c.closest('[style*="display: none"]') || (!fp.hidden && !synilegt(c))) return;
+        var h = c.querySelector('h2'), v = c.querySelector('.vnote'), nafn = h ? h.textContent.trim() : '', verdT = v ? v.textContent.trim() : '';
+        if (!nafn) return;
+        var hvadan = i ? fp.dataset.timi + ' · ' : '';
+        out.push({ merki: hvadan + nafn + (tala(verdT) ? ' · ' + kr(tala(verdT)) : ''), gildi: fp.dataset.timi + ' · ' + nafn + (verdT ? ' · ' + verdT : ''), verd: tala(verdT) });
+      });
+    });
+    return out;
+  }
+  var valinn = {};                           // valinn seðill fyrir hvern tíma
+  function teikna() {
+    var box = $('h-sedlar'); if (!box) return;
+    var t = gildi('timi');
+    box.textContent = '';
+    if (!t || ritill()) { box.hidden = true; return; }
+    var S = sedlar(t);
+    if (!S.length) {                         // bröns: hver gestur velur sinn rétt
+      var bp = document.querySelector('.h-flipi[data-timi="' + t + '"] .card .vnote');
+      box.appendChild(el('p', 'h-brons-ath', (bp && bp.textContent.trim() ? bp.textContent.trim() : 'Hver gestur velur sinn rétt') + ' af seðlinum hér að ofan.'));
+      box.hidden = false; return;
+    }
+    if (valinn[t] && !S.some(function (s) { return s.gildi === valinn[t]; })) delete valinn[t];
+    var fs = el('fieldset'), lg = el('legend', null, 'Hvaða seðill?'), w = el('div', 'v-val');
+    fs.appendChild(lg);
+    S.forEach(function (s) {
+      var ch = el('div', 'v-ch'), inp = el('input'), lab = el('label', null, s.merki), id = 'hs-' + (++uid);
+      inp.type = 'radio'; inp.name = 'sedill'; inp.value = s.gildi; inp.id = id; inp.checked = valinn[t] === s.gildi; inp.dataset.verd = s.verd; lab.htmlFor = id;
+      ch.appendChild(inp); ch.appendChild(lab); w.appendChild(ch);
+    });
+    fs.appendChild(w); box.appendChild(fs); box.hidden = false;
+  }
+
+  function reikna() {
+    var verd = $('v-verd'), vt = $('v-verd-tala'), vs = $('v-verd-skyring'); if (!verd) return;
+    if (ritill()) { verd.hidden = false; return; }      // eigandinn sér textana til að breyta þeim
+    var s = f.querySelector('input[name="sedill"]:checked'), g = fjoldi(), p = s ? +s.dataset.verd : 0;
+    verd.hidden = !(g && p);
+    if (vt) vt.textContent = g && p ? kr(g * p) : '';
+    if (vs) vs.textContent = g && p ? g + ' × ' + kr(p) : '';
+  }
+
+  function uppfaera() {
+    var v = fjoldi(), gm = $('v-gestir'), fv = $('v-fjoldi-villa'), sam = $('v-samantekt'), fae = $('h-faerri'), ath = $('h-dags-ath');
+    f.querySelectorAll('.v-flyti button').forEach(function (b) { b.setAttribute('aria-pressed', String(hnappTala(b) === v)); });
+    // eintala/fleirtala — nema eigandinn hafi skrifað annað orð í ritlinum
+    if (gm && /^gest(ur|ir)$/i.test(gm.textContent.trim())) gm.textContent = v && eintala(v) ? 'gestur' : 'gestir';
+    if (!ritill()) {
+      if (v && fv) { fv.hidden = true; n.removeAttribute('aria-invalid'); n.setAttribute('aria-describedby', 'v-gestir'); }
+      if (fae) fae.hidden = !(v && v <= 10);
+    }
+    reikna();
+    var t = gildi('timi'), dags = $('v-dags'), kl = $('v-klukkan'), d = dags && dags.value ? new Date(dags.value + 'T12:00:00') : null;
+    if (d && isNaN(d)) d = null;
+    // Hádegisseðlar eru virka daga og bröns um helgar — gesturinn er látinn vita, en beiðnin fer samt
+    if (ath && !ritill()) {
+      var helgi = d && (d.getDay() === 0 || d.getDay() === 6), at = '';
+      if (d && t === 'Hádegi' && helgi) at = 'Athugið: hádegisseðlarnir eru virka daga. Um helgar er bröns.';
+      else if (d && t === 'Bröns' && !helgi) at = 'Athugið: bröns er um helgar, laugardaga og sunnudaga.';
+      if (ath.textContent !== at) ath.textContent = at;
+      ath.hidden = !at;
+    }
+    var bitar = [];
+    if (v) bitar.push(v + (eintala(v) ? ' gestur' : ' gestir'));
+    if (t) bitar.push(valid('timi'));
+    var s = f.querySelector('input[name="sedill"]:checked');
+    if (s) bitar.push(s.nextElementSibling.textContent.replace(/ · [\d.]+ kr$/, ''));
+    var dg = d ? DAG[d.getDay()] + ' ' + d.getDate() + '. ' + MAN[d.getMonth()] : '';
+    if (kl && kl.value) dg += (dg ? ' ' : '') + 'kl. ' + kl.value;
+    if (dg) bitar.push(dg);
+    var txt = bitar.join(' · ');
+    if (sam && sam.textContent !== txt) sam.textContent = txt;    // annars les skjálesari hana upp aftur við hvern staf
+  }
+
+  // ---- atburðir: hlustað á formið og síðuna, ekki á einstaka hnappa ----
+  f.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.v-hring, .v-flyti button'); if (!b || ritill()) return;
+    if (b.classList.contains('v-hring')) { var v = fjoldi(), d = +b.dataset.skref; setja(v ? Math.max(1, v + d) : 12); }
+    else setja(hnappTala(b));
+  });
+  function vidBreytingu(e) {
+    var t = e.target; if (!t || !t.name) return;
+    if (t.closest('.v-reitur')) t.removeAttribute('aria-invalid');
+    if (t.name === 'timi' && e.type === 'change') { teikna(); if (FLIPI[t.value]) syna(FLIPI[t.value]); }
+    if (t.name === 'sedill' && e.type === 'change') valinn[gildi('timi')] = t.value;
+    if (t === n && e.type === 'change' && n.value) { setja(fjoldi()); return; }
+    uppfaera();
+  }
+  f.addEventListener('input', vidBreytingu); f.addEventListener('change', vidBreytingu);
+  n.addEventListener('keydown', function (e) {               // Enter í fjöldanum fer í næsta skref, sendir ekki
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    var r = f.querySelector('input[name="timi"]:checked') || f.querySelector('input[name="timi"]'); if (r) r.focus();
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest || ritill()) return;
+    var tab = e.target.closest('.h-flipar [role="tab"]');
+    if (tab) { syna(tab.dataset.flipi); veljaTima(tab.dataset.flipi); return; }
+    var a = e.target.closest('a[data-flipi]');            // „Sjá seðilinn“ á boga
+    if (a) {
+      e.preventDefault(); syna(a.dataset.flipi); veljaTima(a.dataset.flipi);
+      var mjukt = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+      $('sedlar').scrollIntoView({ behavior: mjukt ? 'smooth' : 'auto', block: 'start' });
+      var tb = $('fl-' + a.dataset.flipi); if (tb) tb.focus({ preventScroll: true });
+      return;
+    }
+    var bk = e.target.closest('a[data-boka]');            // „Bóka hóp“ undir seðlunum
+    if (bk) {
+      e.preventDefault(); if (flipiNu) veljaTima(flipiNu);
+      var mj = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+      f.scrollIntoView({ behavior: mj ? 'smooth' : 'auto', block: 'start' });
+      n.focus({ preventScroll: true });
+    }
+  });
+  // Örvatakkar á milli flipa (eins og flipar eiga að virka)
+  document.addEventListener('keydown', function (e) {
+    var tab = e.target.closest && e.target.closest('.h-flipar [role="tab"]'); if (!tab || ritill()) return;
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
+    var allir = [].slice.call(document.querySelectorAll('.h-flipar [role="tab"]')), i = allir.indexOf(tab);
+    i = e.key === 'Home' ? 0 : e.key === 'End' ? allir.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + allir.length) % allir.length;
+    e.preventDefault(); allir[i].focus(); syna(allir[i].dataset.flipi); veljaTima(allir[i].dataset.flipi);
+  });
+
+  function synaVillu(t, reitur) {
+    var villa = $('v-villa'); villa.textContent = t; villa.hidden = false;
+    if (reitur) { reitur.setAttribute('aria-invalid', 'true'); reitur.focus(); }
+  }
+  var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Dagsetningin er liðin.': 'v-dags', 'Nafn vantar.': 'v-nafn',
+    'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (ritill()) return;                     // í ritlinum er smellur á hnappinn „breyta textanum“, ekki „senda“
+    var villa = $('v-villa'); villa.hidden = true;
+    var g = {}; new FormData(f).forEach(function (v, k) { g[k] = typeof v === 'string' ? v.trim() : v; });
+    if (!fjoldi()) {                          // villan birtist við teljarann, þar sem gesturinn er
+      var fv = $('v-fjoldi-villa'); fv.hidden = false; n.setAttribute('aria-invalid', 'true'); n.setAttribute('aria-describedby', 'v-gestir v-fjoldi-villa'); n.focus(); return;
+    }
+    g.fjoldi = String(fjoldi()); g.timi = gildi('timi'); g.sedill = gildi('sedill');
+    var verd = $('v-verd');
+    g.aaetlad = verd.hidden ? '' : $('v-verd-tala').textContent + ($('v-verd-skyring').textContent ? ' (' + $('v-verd-skyring').textContent + ')' : '');
+    if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
+    if (!g.nafn) return synaVillu('Skrifið nafnið ykkar.', $('v-nafn'));
+    if (!g.netfang && !g.simi) return synaVillu('Skrifið síma eða netfang svo við getum svarað.', $('v-simi'));
+    if (g.simi && (g.simi.match(/\d/g) || []).length < 7) return synaVillu('Símanúmerið virðist ekki rétt.', $('v-simi'));
+    if (g.netfang && !/^[^\s@<>,;]+@[^\s@<>,;.]+(\.[^\s@<>,;.]+)+$/.test(g.netfang)) return synaVillu('Netfangið virðist ekki rétt.', $('v-netfang'));
+    var takki = f.querySelector('.v-takki'), merki = takki.textContent; takki.disabled = true; takki.textContent = 'Sendi…';
+    fetch('/api/hopur', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(g) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) { var er = new Error(j.error || r.status); er.status = r.status; er.svar = j.error; throw er; } }); })
+      .then(function () {
+        $('v-reitir').hidden = true;
+        var takk = $('v-takk'); takk.hidden = false; takk.focus();
+      })
+      .catch(function (er) {
+        takki.disabled = false; takki.textContent = merki;
+        if (er && (er.status === 400 || er.status === 429) && er.svar) {   // þjónninn segir hvað er að
+          var id = SVIDUR[er.svar]; return synaVillu(er.svar, id ? $(id) : null);
+        }
+        villa.innerHTML = 'Ekki tókst að senda beiðnina. Hringið í <a href="tel:+3545461700">546-1700</a> eða sendið póst á <a href="mailto:radagerdi@radagerdi170.is">radagerdi@radagerdi170.is</a>.';
+        villa.hidden = false;
+      });
+  });
+
+  // Í ritlinum sjást allir seðlar og líka textar sem gesturinn sér bara stundum, svo hægt sé að breyta þeim
+  if (ritill()) {
+    $('h-main').classList.add('h-ritill'); f.classList.add('v-ritill');
+    ['v-takk', 'v-fjoldi-villa', 'h-faerri'].forEach(function (id) { var x = $(id); if (x) x.hidden = false; });
+  }
+  if (/[?&]sent=1/.test(location.search)) { $('v-reitir').hidden = true; $('v-takk').hidden = false; }
+  // Teiknað aftur þegar efni eigandans er komið inn (DOMContentLoaded) og þegar vafrinn hefur sett
+  // inn það sem gesturinn hafði valið áður en hann fór af síðunni og kom aftur (pageshow)
+  function endurnyja() {
+    if (!ritill()) {
+      var fl = document.querySelector('.h-flipar'); if (fl) fl.hidden = false;
+      var t = gildi('timi'), h = (location.hash || '').replace('#sedill-', '');
+      syna(FLIPI[t] || (TIMI[h] ? h : '') || flipiNu || 'kvold');
+    }
+    teikna(); uppfaera();
+  }
+  endurnyja();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', endurnyja);
+  window.addEventListener('pageshow', endurnyja);
+})();
+</script>
 </body>
 </html>
