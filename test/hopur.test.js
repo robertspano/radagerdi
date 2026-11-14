@@ -51,8 +51,37 @@ const GOD = { fjoldi: '14', timi: 'Kvöld', sedill: 'Kvöld · Valkostur 2 · 9.
   r = await call({ body: Object.assign({}, GOD, { timi: 'Bröns', dagsetning: '2026-12-11' }) });
   ok('bröns á föstudegi → sent, merkt', r.status === 200 && sent[0] && /Athugið: Bröns er um helgar/.test(sent[0].body.text));
   sent = [];
-  r = await call({ body: Object.assign({}, GOD, { timi: 'Bröns', dagsetning: '2026-12-13' }) });
-  ok('bröns á sunnudegi → engin athugasemd', r.status === 200 && sent[0] && !/Athugið/.test(sent[0].body.text));
+  r = await call({ body: Object.assign({}, GOD, { timi: 'Bröns', dagsetning: '2026-12-13', klukkan: '12:00' }) });
+  ok('bröns á sunnudegi kl. 12:00 → engin athugasemd', r.status === 200 && sent[0] && !/Athugið/.test(sent[0].body.text));
+
+  console.log('\nklukkan passar ekki við seðilinn: beiðnin fer, með athugasemd');
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { timi: 'Hádegi', dagsetning: '2026-12-10', klukkan: '19:00' }) });
+  ok('hádegi kl. 19:00 → merkt', r.status === 200 && sent[0] && /Athugið: Hádegisseðlarnir eru frá 11:30 til 16:00\./.test(sent[0].body.text));
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { timi: 'Kvöld', klukkan: '12:00' }) });
+  ok('kvöld kl. 12:00 → merkt', r.status === 200 && sent[0] && /Athugið: Kvöldseðlarnir eru frá kl\. 16:00\./.test(sent[0].body.text));
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { timi: 'Bröns', dagsetning: '2026-12-11', klukkan: '18:00' }) });
+  ok('bröns á föstudegi kl. 18:00 → báðar athugasemdir', r.status === 200 && sent[0] && /Bröns er um helgar[^\n]*Bröns er frá 11:00 til 15:30\./.test(sent[0].body.text));
+
+  console.log('\nóvenjuleg gildi');
+  sent = [];
+  r = await call({ body: { fjoldi: '14', nafn: { toString: 1 }, simi: '8991234' } });
+  ok('hlutur í stað texta ({"toString":1}) → 400, kastar ekki', r.status === 400 && r.json && r.json.error === 'Nafn vantar.' && sent.length === 0);
+  sent = [];
+  r = await call({ body: { fjoldi: { valueOf: 1 }, nafn: 'Anna', simi: '8991234' } });
+  ok('hlutur í fjölda → 400', r.status === 400 && r.json && r.json.error === 'Veljið fjölda gesta.');
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { nafn: '\u202e\u2066\u2069\u061c' }) });
+  ok('ósýnilegt nafn úr stefnustöfum (U+2066–2069, U+061C) → „Nafn vantar.“', r.status === 400 && r.json && r.json.error === 'Nafn vantar.');
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { simi: '\u2067899 1234\u2069' }) });
+  ok('stefnustafir teknir úr síma', r.status === 200 && sent[0] && /Sími: 899 1234\n/.test(sent[0].body.text));
+  const key = process.env.RESEND_API_KEY; delete process.env.RESEND_API_KEY;
+  r = await call({ body: GOD });
+  ok('enginn lykill → 503 „Bókunarbeiðnir eru ekki uppsettar hér“', r.status === 503 && r.json.error === 'Bókunarbeiðnir eru ekki uppsettar hér');
+  process.env.RESEND_API_KEY = key;
 
   console.log('\nreitir');
   for (const [lbl, patch, villa] of [['enginn fjöldi', { fjoldi: '' }, 'Veljið fjölda gesta.'], ['liðin dagsetning', { dagsetning: '2020-01-01' }, 'Dagsetningin er liðin.'],

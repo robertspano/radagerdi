@@ -1193,7 +1193,8 @@
     if (addBtn) list.insertBefore(item, addBtn); else list.appendChild(item);
     addItemCtls(item, list, region, type);
     savePane(region);
-    const h = item.querySelector('.ti-head, .rn, .h3'); if (h) startEdit(h);
+    // Nafnið sjálft, ekki allur hausinn: annars hverfur verðið þegar skrifað er yfir og Enter bætir við línu
+    const h = item.querySelector('.ti-nm, .rn, .h3') || item.querySelector('.ti-head'); if (h) startEdit(h);
   }
   function discount(item, region, type) {
     if (type === 'ti') {

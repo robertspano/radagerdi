@@ -83,7 +83,8 @@
   .v-pk-velja:hover{background:var(--gr);color:#fff}
   .v-pk-velja:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
   /* veislan sem er valin í pöntuninni */
-  .v-pakki.valin,.v-pakki.valin .v-pk-tag{background:var(--gr);color:#fff}
+  .v-pakki.valin{background:var(--gr-d);border-color:var(--gr-d);color:#fff}   /* dekkri grænn: hvíta smáletrið læsilegt */
+  .v-pakki.valin .v-pk-tag{color:#fff}
   .v-pakki.valin li{border-color:rgba(255,255,255,.4)}
   .v-pakki.valin .v-pk-velja{background:#fff;color:var(--gr);border-color:#fff}
   .v-pakki.valin .v-pk-velja:focus-visible{outline-color:#fff}
@@ -241,6 +242,11 @@
   .h-ritill .h-flipi[hidden]{display:block}   /* í ritlinum sjást allir seðlar */
   .h-ritill .h-flipar[hidden]{display:flex}
   .h-inn{text-align:center;font-size:17px;line-height:1.75;max-width:40em;margin:0 auto}
+  /* heiti hvers seðils: sést án JavaScript og í ritlinum; með flipum segir flipinn það sama */
+  .h-flipi-h{font-family:'Windsord',serif;font-weight:400;text-transform:uppercase;letter-spacing:.05em;text-align:center;font-size:clamp(26px,3.4vw,38px);line-height:1.3;margin:0 0 10px}
+  .h-virk .h-flipi-h{display:none}
+  .h-flipi + .h-flipi{margin-top:56px}
+  .h-virk .h-flipi + .h-flipi{margin-top:30px}
   .h-flipi .cols{margin-top:30px}
   .h-flipi .cols.h-einn{grid-template-columns:minmax(0,1fr);max-width:720px;margin-left:auto;margin-right:auto}
   .ti-head .ti-pr{white-space:nowrap;flex-shrink:0}
@@ -253,6 +259,7 @@
   .h-faerri a{color:#fff;font-weight:700}
   .h-sedlar[hidden]{display:none}
   .h-brons-ath{margin:0;font-weight:600;font-size:15.5px;line-height:1.6}
+  .h-brons-ath[hidden]{display:none}
   .h-dags-ath{margin:10px 0 0;font-size:14.5px;line-height:1.6;font-weight:600;color:#a4561a}
   .h-dags-ath[hidden]{display:none}
   @media (min-width:900px){
@@ -411,6 +418,7 @@
       </div>
 
       <div class="h-flipi" id="sedill-hadegi" role="tabpanel" aria-labelledby="fl-hadegi" data-flipi="hadegi" data-timi="Hádegi" data-lika="kvold">
+        <h3 class="h-flipi-h">Hádegi</h3>
         <p class="h-inn">Alla virka daga frá 11:30–16:00. Við bjóðum upp á tvenna valkosti, og einnig er hægt að panta kvöldseðlana í hádeginu.</p>
         <div class="cols">
           <div class="card" data-sedill="">
@@ -435,6 +443,7 @@
       </div>
 
       <div class="h-flipi" id="sedill-kvold" role="tabpanel" aria-labelledby="fl-kvold" data-flipi="kvold" data-timi="Kvöld">
+        <h3 class="h-flipi-h">Kvöld</h3>
         <p class="h-inn">Alla daga frá kl. 16:00. Seðlarnir eru brot af því besta sem við höfum upp á að bjóða og réttirnir eru bornir fram til að deila.</p>
         <div class="cols">
           <div class="card" data-sedill="">
@@ -469,6 +478,7 @@
       </div>
 
       <div class="h-flipi" id="sedill-brons" role="tabpanel" aria-labelledby="fl-brons" data-flipi="brons" data-timi="Bröns">
+        <h3 class="h-flipi-h">Bröns</h3>
         <p class="h-inn">Allar helgar frá 11:00–15:30. Fyrir hópa bjóðum við upp á smækkaðan matseðil, svo eldhúsið ráði við álagið og enginn bíði lengi eftir matnum. Hver gestur velur sér einn rétt.</p>
         <div class="cols h-einn">
           <div class="card">
@@ -516,6 +526,8 @@
           </fieldset>
 
           <div class="h-sedlar" id="h-sedlar" hidden></div>
+          <p class="h-brons-ath" id="h-brons-ath" hidden>Hver gestur velur sér einn rétt af bröns-seðlinum.</p>
+          <noscript><p class="v-hjalp">Takið fram í óskunum hvaða hópaseðil þið viljið.</p></noscript>
 
           <div class="v-verd" id="v-verd" hidden>
             <div class="v-verd-merki">Áætlað verð</div>
@@ -531,7 +543,7 @@
               </div>
               <div class="v-reitur">
                 <label class="v-merki" for="v-klukkan">Klukkan hvað?</label>
-                <input id="v-klukkan" name="klukkan" type="time" step="900">
+                <input id="v-klukkan" name="klukkan" type="time" step="900" aria-describedby="h-dags-ath">
               </div>
             </div>
             <p class="h-dags-ath" id="h-dags-ath" role="status" hidden></p>
@@ -623,8 +635,10 @@
     <a href="/en-hopar">English</a>
 </div>
 <script>
-/* Hópar: flipar seðlanna, bogarnir sem velja flipa, og bókunarbeiðnin (api/hopur.js).
-   Einn „tími“ ræður öllu: flipinn sem sést, boginn sem er grænn og „Hvenær?“ í bókuninni fylgjast að.
+/* Hópar: flipar seðlanna, bogarnir sem opna flipa, og bókunarbeiðnin (api/hopur.js).
+   Flipar og bogar sýna aðeins seðil — að skoða kvöldseðilinn breytir ekki hádegisbókun. „Hvenær?“ í
+   bókuninni ræður hvaða bogi er grænn, og flipinn fylgir því sem þar er valið. „Bóka hóp“ undir
+   seðlunum velur þann tíma sem verið er að skoða.
    Seðlarnir í bókuninni eru lesnir af spjöldunum á síðunni (.card[data-sedill]: nafnið í h2, verðið
    í .vnote), svo það sem eigandinn breytir eða eyðir í ritlinum gildir líka hér.
    Ritillinn getur skipt út heilum textabútum þegar efni eigandans er sett inn, svo allt er sótt
@@ -645,8 +659,8 @@
   var DAG = ['sunnudagur','mánudagur','þriðjudagur','miðvikudagur','fimmtudagur','föstudagur','laugardagur'];
   var eintala = function (v) { return v % 10 === 1 && v % 100 !== 11; };
   var kr = function (x) { return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' kr'; };
-  // fyrsta talan í texta: „6.900 kr á mann“ → 6900
-  var tala = function (s) { var m = String(s || '').match(/\d[\d.]*/); return m ? parseInt(m[0].replace(/\./g, ''), 10) || 0 : 0; };
+  // verðið í texta: talan á undan „kr“ („4 réttir · 6.900 kr á mann“ → 6900), annars fyrsta talan
+  var tala = function (s) { var t = String(s || ''), m = t.match(/(\d[\d.]*)\s*kr/i) || t.match(/(\d[\d.]*)/); return m ? parseInt(m[1].replace(/\./g, ''), 10) || 0 : 0; };
   var synilegt = function (e) { return !!(e && e.getClientRects().length); };   // það sem ritillinn hefur falið telst ekki með
   var uid = 0;
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
@@ -666,9 +680,8 @@
       var a = b.dataset.flipi === fl; b.setAttribute('aria-selected', String(a)); b.tabIndex = a ? 0 : -1;
     });
     document.querySelectorAll('.h-flipi').forEach(function (p) { p.hidden = p.dataset.flipi !== fl; });
-    document.querySelectorAll('.v-pakki[data-flipi]').forEach(function (c) { c.classList.toggle('valin', c.dataset.flipi === fl); });
   }
-  // Tíminn í bókuninni fylgir flipanum (og öfugt), svo það sem gesturinn skoðar er það sem hann bókar
+  // „Bóka hóp“ undir seðlunum: tíminn sem verið er að skoða verður tíminn í bókuninni
   function veljaTima(fl) {
     var r = f.querySelector('input[name="timi"][value="' + TIMI[fl] + '"]');
     if (r && !r.checked) { r.checked = true; teikna(); uppfaera(); }
@@ -691,18 +704,20 @@
     });
     return out;
   }
-  var valinn = {};                           // valinn seðill fyrir hvern tíma
+  // Valinn seðill fyrir hvern tíma. Geymdur í sögu vafrans líka, því valhnapparnir eru smíðaðir hér
+  // og vafrinn getur ekki sett þá inn aftur þegar farið er til baka á síðuna
+  var valinn = {};
+  function geyma() { try { history.replaceState(Object.assign({}, history.state, { hoparValinn: valinn }), ''); } catch (er) {} }
   function teikna() {
-    var box = $('h-sedlar'); if (!box) return;
+    var box = $('h-sedlar'), ba = $('h-brons-ath'); if (!box) return;
     var t = gildi('timi');
     box.textContent = '';
-    if (!t || ritill()) { box.hidden = true; return; }
-    var S = sedlar(t);
-    if (!S.length) {                         // bröns: hver gestur velur sinn rétt
-      var bp = document.querySelector('.h-flipi[data-timi="' + t + '"] .card .vnote');
-      box.appendChild(el('p', 'h-brons-ath', (bp && bp.textContent.trim() ? bp.textContent.trim() : 'Hver gestur velur sinn rétt') + ' af seðlinum hér að ofan.'));
-      box.hidden = false; return;
-    }
+    if (ritill()) { box.hidden = true; if (ba) ba.hidden = false; return; }
+    var p = t && document.querySelector('.h-flipi[data-timi="' + t + '"]');
+    // Bröns hefur engan hópaseðil: hver gestur velur sinn rétt (textinn er í #h-brons-ath, ritillinn breytir honum)
+    if (ba) ba.hidden = !(p && !p.querySelector('.card[data-sedill]'));
+    var S = t ? sedlar(t) : [];
+    if (!S.length) { box.hidden = true; return; }   // líka ef eigandinn hefur eytt öllum seðlum tímans
     if (valinn[t] && !S.some(function (s) { return s.gildi === valinn[t]; })) delete valinn[t];
     var fs = el('fieldset'), lg = el('legend', null, 'Hvaða seðill?'), w = el('div', 'v-val');
     fs.appendChild(lg);
@@ -735,11 +750,18 @@
     reikna();
     var t = gildi('timi'), dags = $('v-dags'), kl = $('v-klukkan'), d = dags && dags.value ? new Date(dags.value + 'T12:00:00') : null;
     if (d && isNaN(d)) d = null;
-    // Hádegisseðlar eru virka daga og bröns um helgar — gesturinn er látinn vita, en beiðnin fer samt
+    // Boginn sem er grænn er sá tími sem er valinn í bókuninni (ekki sá sem verið er að skoða)
+    document.querySelectorAll('.v-pakki[data-flipi]').forEach(function (c) { c.classList.toggle('valin', c.dataset.flipi === FLIPI[t]); });
+    // Hádegisseðlar eru virka daga 11:30–16:00, kvöldseðlar frá 16:00 og bröns um helgar 11:00–15:30 —
+    // gesturinn er látinn vita ef dagur eða klukka passar ekki, en beiðnin fer samt
     if (ath && !ritill()) {
-      var helgi = d && (d.getDay() === 0 || d.getDay() === 6), at = '';
-      if (d && t === 'Hádegi' && helgi) at = 'Athugið: hádegisseðlarnir eru virka daga. Um helgar er bröns.';
-      else if (d && t === 'Bröns' && !helgi) at = 'Athugið: bröns er um helgar, laugardaga og sunnudaga.';
+      var helgi = d && (d.getDay() === 0 || d.getDay() === 6), k = kl && kl.value, a = [];
+      if (d && t === 'Hádegi' && helgi) a.push('hádegisseðlarnir eru virka daga, um helgar er bröns');
+      if (d && t === 'Bröns' && !helgi) a.push('bröns er um helgar, laugardaga og sunnudaga');
+      if (k && t === 'Hádegi' && (k < '11:30' || k > '16:00')) a.push('hádegisseðlarnir eru frá 11:30 til 16:00');
+      if (k && t === 'Kvöld' && k < '16:00') a.push('kvöldseðlarnir eru frá kl. 16:00');
+      if (k && t === 'Bröns' && (k < '11:00' || k > '15:30')) a.push('bröns er frá 11:00 til 15:30');
+      var at = a.length ? 'Athugið: ' + a.join('; ') + '.' : '';
       if (ath.textContent !== at) ath.textContent = at;
       ath.hidden = !at;
     }
@@ -764,8 +786,16 @@
   function vidBreytingu(e) {
     var t = e.target; if (!t || !t.name) return;
     if (t.closest('.v-reitur')) t.removeAttribute('aria-invalid');
-    if (t.name === 'timi' && e.type === 'change') { teikna(); if (FLIPI[t.value]) syna(FLIPI[t.value]); }
-    if (t.name === 'sedill' && e.type === 'change') valinn[gildi('timi')] = t.value;
+    // sími eða netfang dugar: þegar annað er skrifað er hvorugt lengur merkt rangt
+    if (t.name === 'simi' || t.name === 'netfang') ['v-simi', 'v-netfang'].forEach(function (id) { $(id).removeAttribute('aria-invalid'); });
+    if (t.name === 'timi' && e.type === 'change') {
+      // Flipinn fyrir ofan formið skiptir um seðil og breytir hæð síðunnar: smellta valið er haldið
+      // kyrru á skjánum, annars hoppar síðan og seðlavalið hverfur upp úr skjánum í síma
+      var lab = t.nextElementSibling, y0 = lab ? lab.getBoundingClientRect().top : 0;
+      teikna(); if (FLIPI[t.value]) syna(FLIPI[t.value]);
+      if (lab) window.scrollBy(0, lab.getBoundingClientRect().top - y0);
+    }
+    if (t.name === 'sedill' && e.type === 'change') { valinn[gildi('timi')] = t.value; geyma(); }
     if (t === n && e.type === 'change' && n.value) { setja(fjoldi()); return; }
     uppfaera();
   }
@@ -778,10 +808,10 @@
   document.addEventListener('click', function (e) {
     if (!e.target.closest || ritill()) return;
     var tab = e.target.closest('.h-flipar [role="tab"]');
-    if (tab) { syna(tab.dataset.flipi); veljaTima(tab.dataset.flipi); return; }
+    if (tab) { syna(tab.dataset.flipi); return; }
     var a = e.target.closest('a[data-flipi]');            // „Sjá seðilinn“ á boga
     if (a) {
-      e.preventDefault(); syna(a.dataset.flipi); veljaTima(a.dataset.flipi);
+      e.preventDefault(); syna(a.dataset.flipi);
       var mjukt = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
       $('sedlar').scrollIntoView({ behavior: mjukt ? 'smooth' : 'auto', block: 'start' });
       var tb = $('fl-' + a.dataset.flipi); if (tb) tb.focus({ preventScroll: true });
@@ -801,7 +831,7 @@
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'Home' && e.key !== 'End') return;
     var allir = [].slice.call(document.querySelectorAll('.h-flipar [role="tab"]')), i = allir.indexOf(tab);
     i = e.key === 'Home' ? 0 : e.key === 'End' ? allir.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + allir.length) % allir.length;
-    e.preventDefault(); allir[i].focus(); syna(allir[i].dataset.flipi); veljaTima(allir[i].dataset.flipi);
+    e.preventDefault(); allir[i].focus(); syna(allir[i].dataset.flipi);
   });
 
   function synaVillu(t, reitur) {
@@ -814,6 +844,7 @@
     e.preventDefault();
     if (ritill()) return;                     // í ritlinum er smellur á hnappinn „breyta textanum“, ekki „senda“
     var villa = $('v-villa'); villa.hidden = true;
+    f.querySelectorAll('[aria-invalid="true"]').forEach(function (x) { x.removeAttribute('aria-invalid'); });
     var g = {}; new FormData(f).forEach(function (v, k) { g[k] = typeof v === 'string' ? v.trim() : v; });
     if (!fjoldi()) {                          // villan birtist við teljarann, þar sem gesturinn er
       var fv = $('v-fjoldi-villa'); fv.hidden = false; n.setAttribute('aria-invalid', 'true'); n.setAttribute('aria-describedby', 'v-gestir v-fjoldi-villa'); n.focus(); return;
@@ -846,14 +877,16 @@
   // Í ritlinum sjást allir seðlar og líka textar sem gesturinn sér bara stundum, svo hægt sé að breyta þeim
   if (ritill()) {
     $('h-main').classList.add('h-ritill'); f.classList.add('v-ritill');
-    ['v-takk', 'v-fjoldi-villa', 'h-faerri'].forEach(function (id) { var x = $(id); if (x) x.hidden = false; });
+    ['v-takk', 'v-fjoldi-villa', 'h-faerri', 'h-brons-ath'].forEach(function (id) { var x = $(id); if (x) x.hidden = false; });
   }
   if (/[?&]sent=1/.test(location.search)) { $('v-reitir').hidden = true; $('v-takk').hidden = false; }
   // Teiknað aftur þegar efni eigandans er komið inn (DOMContentLoaded) og þegar vafrinn hefur sett
   // inn það sem gesturinn hafði valið áður en hann fór af síðunni og kom aftur (pageshow)
   function endurnyja() {
+    try { var hv = history.state && history.state.hoparValinn; if (hv) Object.keys(hv).forEach(function (k) { if (!valinn[k]) valinn[k] = hv[k]; }); } catch (er) {}
     if (!ritill()) {
       var fl = document.querySelector('.h-flipar'); if (fl) fl.hidden = false;
+      $('h-main').classList.add('h-virk');
       var t = gildi('timi'), h = (location.hash || '').replace('#sedill-', '');
       syna(FLIPI[t] || (TIMI[h] ? h : '') || flipiNu || 'kvold');
     }

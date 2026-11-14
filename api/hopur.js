@@ -11,7 +11,7 @@ const TIMAR = ['Hádegi', 'Kvöld', 'Bröns'];
 
 module.exports = P.bua({
   sida: '/hopar', takk: 'v-takk', villa: 'v-villa-anjs',
-  ord: { nefn: 'beiðni', eint: 'beiðnina', ft: 'beiðnir', titill: 'Bókunarformið', log: 'hopur' },
+  ord: { nefn: 'beiðni', eint: 'beiðnina', ft: 'beiðnir', thgf: 'beiðnum', titill: 'Bókunarformið', uppsett: 'Bókunarbeiðnir eru ekki uppsettar hér', log: 'hopur' },
 
   lesa(body) {
     return Object.assign(P.grunnur(body), {
@@ -28,10 +28,15 @@ module.exports = P.bua({
 
   skeyti(g) {
     const hvenaer = [g.dagsetning, g.klukkan && 'kl. ' + g.klukkan].filter(Boolean).join(' ');
-    // Síðan varar gestinn við, en beiðnin fer samt — starfsfólkið sér það hér
-    const helgi = g.vikudagur === 0 || g.vikudagur === 6;
-    const athugid = g.timi === 'Hádegi' && helgi ? 'Hádegisseðlarnir eru virka daga, en dagurinn er um helgi.'
-      : g.timi === 'Bröns' && g.vikudagur > 0 && !helgi ? 'Bröns er um helgar, en dagurinn er virkur dagur.' : '';
+    // Síðan varar gestinn við ef dagur eða klukka passar ekki við seðilinn, en beiðnin fer samt —
+    // starfsfólkið sér það hér. Hádegi: virka daga 11:30–16:00; kvöld: frá 16:00; bröns: helgar 11:00–15:30.
+    const helgi = g.vikudagur === 0 || g.vikudagur === 6, kl = g.klukkan, a = [];
+    if (g.timi === 'Hádegi' && helgi) a.push('Hádegisseðlarnir eru virka daga, en dagurinn er um helgi.');
+    if (g.timi === 'Bröns' && g.vikudagur > 0 && !helgi) a.push('Bröns er um helgar, en dagurinn er virkur dagur.');
+    if (kl && g.timi === 'Hádegi' && (kl < '11:30' || kl > '16:00')) a.push('Hádegisseðlarnir eru frá 11:30 til 16:00.');
+    if (kl && g.timi === 'Kvöld' && kl < '16:00') a.push('Kvöldseðlarnir eru frá kl. 16:00.');
+    if (kl && g.timi === 'Bröns' && (kl < '11:00' || kl > '15:30')) a.push('Bröns er frá 11:00 til 15:30.');
+    const athugid = a.join(' ');
     return {
       fyrirsogn: 'Hópabókun', slod: 'radagerdi.is/hopar',
       efni: [P.gestir(g.fjoldi), g.timi, hvenaer],

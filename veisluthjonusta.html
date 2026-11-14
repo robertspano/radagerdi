@@ -85,7 +85,8 @@
   .v-pk-velja:hover{background:var(--gr);color:#fff}
   .v-pk-velja:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
   /* veislan sem er valin í pöntuninni */
-  .v-pakki.valin,.v-pakki.valin .v-pk-tag{background:var(--gr);color:#fff}
+  .v-pakki.valin{background:var(--gr-d);border-color:var(--gr-d);color:#fff}   /* dekkri grænn: hvíta smáletrið læsilegt */
+  .v-pakki.valin .v-pk-tag{color:#fff}
   .v-pakki.valin li{border-color:rgba(255,255,255,.4)}
   .v-pakki.valin .v-pk-velja{background:#fff;color:var(--gr);border-color:#fff}
   .v-pakki.valin .v-pk-velja:focus-visible{outline-color:#fff}
@@ -637,8 +638,8 @@
     'fjóra': 4, 'fjórar': 4, 'fjórir': 4, 'fjórum': 4, fimm: 5, sex: 6, 'sjö': 7, 'átta': 8, 'níu': 9, 'tíu': 10 };
   var eintala = function (v) { return v % 10 === 1 && v % 100 !== 11; };
   var kr = function (x) { return String(x).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' kr'; };
-  // fyrsta talan í texta: „8.490 kr“ → 8490, „790 kr / stk, lágmark 12 stk“ → 790
-  var tala = function (s) { var m = String(s || '').match(/\d[\d.]*/); return m ? parseInt(m[0].replace(/\./g, ''), 10) || 0 : 0; };
+  // talan á undan „kr“ („4 réttir · 8.490 kr“ → 8490, „790 kr / stk, lágmark 12 stk“ → 790), annars fyrsta talan („12 stk“ → 12)
+  var tala = function (s) { var t = String(s || ''), m = t.match(/(\d[\d.]*)\s*kr/i) || t.match(/(\d[\d.]*)/); return m ? parseInt(m[1].replace(/\./g, ''), 10) || 0 : 0; };
   // stærsta talan í línu: „Veldu 1 eða 2 tegundir“ → 2, „Veldu tvo pinna“ → 2, engin tala → 0
   function hamark(t) {
     var tolur = (t.match(/\d+/g) || []).map(Number);
@@ -874,6 +875,8 @@
   function vidBreytingu(e) {
     var t = e.target; if (!t || !t.name) return;          // réttavalið sér um sig sjálft
     if (t.closest('.v-reitur')) t.removeAttribute('aria-invalid');
+    // sími eða netfang dugar: þegar annað er skrifað er hvorugt lengur merkt rangt
+    if (t.name === 'simi' || t.name === 'netfang') ['v-simi', 'v-netfang'].forEach(function (id) { $(id).removeAttribute('aria-invalid'); });
     if (t.name === 'veisla' && e.type === 'change') teikna();
     if (t === n && e.type === 'change' && n.value) { setja(fjoldi()); return; }
     uppfaera();
@@ -906,6 +909,7 @@
     e.preventDefault();
     if (ritill()) return;                     // í ritlinum er smellur á hnappinn „breyta textanum“, ekki „senda“
     var villa = $('v-villa'); villa.hidden = true;
+    f.querySelectorAll('[aria-invalid="true"]').forEach(function (x) { x.removeAttribute('aria-invalid'); });
     var g = {}; new FormData(f).forEach(function (v, k) { g[k] = typeof v === 'string' ? v.trim() : v; });
     if (!fjoldi()) {                          // villan birtist við teljarann, þar sem gesturinn er
       var fv = $('v-fjoldi-villa'); fv.hidden = false; n.setAttribute('aria-invalid', 'true'); n.setAttribute('aria-describedby', 'v-gestir v-fjoldi-villa'); n.focus(); return;

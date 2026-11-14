@@ -176,7 +176,7 @@ const GOD = { fjoldi: '30', veisla: 'Stórveisla', val: 'Focaccia-samlokur: Parm
   resendStatus = 200;
   const key = process.env.RESEND_API_KEY; delete process.env.RESEND_API_KEY; sent = [];
   r = await call({ body: GOD });
-  ok('enginn lykill (localhost) → 503, ekkert sent', r.status === 503 && sent.length === 0);
+  ok('enginn lykill (localhost) → 503, ekkert sent', r.status === 503 && sent.length === 0 && r.json.error === 'Pantanir eru ekki uppsettar hér');
   process.env.RESEND_API_KEY = key;
 
   console.log('\nán JavaScript (venjulegt form)');
@@ -192,7 +192,7 @@ const GOD = { fjoldi: '30', veisla: 'Stórveisla', val: 'Focaccia-samlokur: Parm
   for (let i = 0; i < 80 && !svar429; i++) { const x = await call({ body: GOD, headers: { 'x-forwarded-for': '198.51.' + Math.floor(i / 4) + '.' + (i % 4 + 1) } }); if (x.status === 429) svar429 = x; }
   console.error = ce;
   ok('dagsþakið segir að formið sé lokað í bili, ekki að gesturinn hafi sent of mikið', svar429 && /lokað í bili/.test(svar429.json.error) && !/Of margar/.test(svar429.json.error));
-  ok('dagsþakið er skráð í log', villur.some(v => /dagsþak náð/.test(v)));
+  ok('dagsþakið er skráð í log', villur.some(v => v === 'fyrirspurn: dagsþak náð (60 á sólarhring) — pöntunum hafnað'));
 
   console.log(`\nsamtals: ${pass} í lagi, ${fail} brugðust`);
   process.exit(fail ? 1 : 0);

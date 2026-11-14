@@ -9,7 +9,7 @@ const P = require('./_pontun');
 
 module.exports = P.bua({
   sida: '/veisluthjonusta', takk: 'v-takk', villa: 'v-villa-anjs',
-  ord: { nefn: 'pöntun', eint: 'pöntunina', ft: 'pantanir', titill: 'Pöntunarformið', log: 'fyrirspurn' },
+  ord: { nefn: 'pöntun', eint: 'pöntunina', ft: 'pantanir', thgf: 'pöntunum', titill: 'Pöntunarformið', uppsett: 'Pantanir eru ekki uppsettar hér', log: 'fyrirspurn' },
 
   lesa(body) {
     return Object.assign(P.grunnur(body), {

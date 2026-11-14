@@ -30,9 +30,10 @@ function ipLykill(ip) {
   return h.concat(Array(Math.max(0, 8 - h.length - t.length)).fill('0'), t).slice(0, 4).map(x => (parseInt(x, 16) || 0).toString(16)).join(':') + '::/64';
 }
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const one = (v) => (Array.isArray(v) ? v[0] : v);
-const txt = (v, max) => String(one(v) == null ? '' : one(v)).replace(/\r\n?/g, '\n')
-  .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f​-‏‪-‮⁠-⁤﻿]/g, '').trim().slice(0, max);
+// Aðeins texti og tölur teljast gildi — hlutur (t.d. {"toString":1}) yrði annars að villu sem enginn grípur
+const one = (v) => { v = Array.isArray(v) ? v[0] : v; return typeof v === 'string' || typeof v === 'number' ? String(v) : ''; };
+const txt = (v, max) => one(v).replace(/\r\n?/g, '\n')
+  .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f\u061c\u200b-\u200f\u202a-\u202e\u2060-\u2069\ufeff]/g, '').trim().slice(0, max);
 const line = (v, max) => txt(v, max).replace(/\s+/g, ' ');   // ein lína (fer m.a. í efnislínu póstsins)
 const gestir = (n) => n + (n % 10 === 1 && n % 100 !== 11 ? ' gestur' : ' gestir');
 // Gildi sem verður að vera eitt af fáum leyfðum (aldrei uppfletting í hlut: „toString“ o.fl. væru þá leyfð)
@@ -117,7 +118,8 @@ async function lesaBody(req) {
 /* Smíðar slóð (handler) fyrir eitt form.
  *   sida:   síðan sem formið er á, t.d. '/hopar' — án JavaScript er vísað þangað aftur
  *   takk / villa: id-in sem síðan birtir með :target eftir sendingu án JavaScript
- *   ord:    { eint: 'pöntunina', ft: 'pantanir', titill: 'Pöntunarformið', log: 'fyrirspurn' }
+ *   ord:    orðin í svörunum, t.d. { nefn: 'pöntun', eint: 'pöntunina', ft: 'pantanir', thgf: 'pöntunum',
+ *           titill: 'Pöntunarformið', uppsett: 'Pantanir eru ekki uppsettar hér', log: 'fyrirspurn' }
  *   lesa(body) → g,  athuga(g) → villuboð eða null,  skeyti(g) → { fyrirsogn, efni, rows, blokkir, slod }
  */
 function bua({ sida, takk, villa, ord, lesa, athuga, skeyti }) {
@@ -151,11 +153,11 @@ function bua({ sida, takk, villa, ord, lesa, athuga, skeyti }) {
     }
     if (S.overLimit('fyrirspurn:dagur', ...DAGUR)) {
       // Þakið á öllu tilvikinu, ekki gestinum að kenna — og sést í loggum Vercel
-      console.error(ord.log + ': dagsþak náð (' + DAGUR[0] + ' á sólarhring) — sendingum hafnað');
+      console.error(ord.log + ': dagsþak náð (' + DAGUR[0] + ' á sólarhring) — ' + ord.thgf + ' hafnað');
       return svara(req, res, 429, { ok: false, error: ord.titill + ' er lokað í bili — hringið í 546-1700 eða sendið póst á radagerdi@radagerdi170.is' });
     }
     const key = process.env.RESEND_API_KEY;
-    if (!key) return svara(req, res, 503, { ok: false, error: ord.titill + ' er ekki uppsett hér' });
+    if (!key) return svara(req, res, 503, { ok: false, error: ord.uppsett });
 
     const post = (m) => fetch('https://api.resend.com/emails', {
       method: 'POST',
