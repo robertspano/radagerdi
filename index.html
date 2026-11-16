@@ -361,4 +361,13 @@ window.onload = function () {
     <a href="/hafa-samband">Hafa samband</a>
     <a href="/en">English</a>
 </div>
+<div id="rg-notice" role="alert" hidden><button type="button" aria-label="Loka" id="rg-notice-x">&times;</button><p>Lokað í dag vegna árshátíðar starfsmanna, opnar á morgun 17. nóvember kl. 11:30</p></div>
+<style>
+#rg-notice{position:fixed;top:112px;left:50%;transform:translateX(-50%);z-index:60;width:min(640px,calc(100vw - 32px));background:#fff;color:var(--red);border:3px solid var(--red);border-radius:22px;padding:22px 52px 22px 28px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.25);font-family:'Windsord',serif;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(17px,1.8vw,24px);line-height:1.5}
+#rg-notice p{margin:0}
+#rg-notice button{position:absolute;top:8px;right:14px;background:none;border:0;color:var(--red);font-size:30px;line-height:1;cursor:pointer;padding:4px}
+#rg-notice[hidden]{display:none}
+@media(max-width:520px){#rg-notice{top:92px;padding:18px 44px 18px 18px}}
+</style>
+<script>(function(){var n=document.getElementById('rg-notice');if(!n||Date.now()>=Date.UTC(2026,10,17,0,0,0))return;n.hidden=false;document.getElementById('rg-notice-x').onclick=function(){n.hidden=true}})()</script>
 </body></html>
