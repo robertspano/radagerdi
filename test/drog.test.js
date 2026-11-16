@@ -166,6 +166,32 @@ const cookieOf = (email, exp) => 'cms_session=' + Buffer.from(email).toString('b
     }
   }
 
+  console.log('\nraunverulegu faldu síðurnar (api/_drog.js eins og hann fer í loftið)');
+  {
+    const M2 = load('production');
+    // efni eigendanna á földu síðunum á ekki heldur að sjást gestum
+    const leyni = {}; for (const p of Object.keys(DROG)) leyni[p] = { 'MAIN0>SECTION0>DIV0>H10': 'LEYNI-' + p };
+    M2.S.readJSON = async () => Object.assign(FAKE(), { texts: Object.assign(FAKE().texts, leyni) });
+    for (const [p, to] of Object.entries(DROG)) {
+      const slod = '/' + p.slice(0, -5);
+      for (const [lbl, c] of [['gestur', ''], ['kaka utan lista', OKUNNUGUR]]) {
+        const r = await call(M2.page, { url: '/api/page?p=' + p, cookie: c });
+        ok(`${p} · ${lbl} → 302 ${to}, ekkert efni, noindex`, r.status === 302 && r.h.location === to && r.body === '' && /noindex/.test(r.h['x-robots-tag'] || '') && /private/.test(r.h['cache-control']));
+      }
+      const rc = await call(M2.page, { url: '/api/page?p=' + p + '&cms=1' });
+      ok(`${p} · gestur með ?cms=1 → innskráning sem skilar honum aftur í ritilinn`, rc.status === 302 && rc.h.location === '/admin?next=' + encodeURIComponent(slod + '?cms=1'));
+      const ri = await call(M2.page, { url: '/api/page?p=' + p, cookie: VIKTOR });
+      ok(`${p} · Viktor (innskráður) fær síðuna, merkta falda og utan Google`, ri.status === 200 && /window\.__CMS_DROG__=1/.test(ri.body) && /noindex/.test(ri.h['x-robots-tag'] || '') && /private/.test(ri.h['cache-control']) && /Veisla frá Ráðagerði|Hópar í Ráðagerði/.test(ri.body));
+      ok(`${p} · efni eigendanna fylgir síðunni fyrir Viktor`, ri.body.includes('LEYNI-' + p));
+    }
+    const sm = await call(M2.sitemap, { url: '/api/sitemap' });
+    ok('faldu síðurnar eru ekki í sitemap, en gömlu síðurnar eru þar', Object.keys(DROG).every(p => !sm.body.includes('/' + p.slice(0, -5) + '<')) && /radagerdi\.is\/hopar</.test(sm.body) && /radagerdi\.is\/veisluthjonusta</.test(sm.body));
+    const cg = await call(M2.content, { url: '/api/content' });
+    ok('efni faldu síðnanna er ekki í /api/content fyrir gesti', Object.keys(DROG).every(p => !cg.body.includes('LEYNI-' + p)));
+    const ci = await call(M2.content, { url: '/api/content', cookie: VIKTOR });
+    ok('…en innskráðir eigendur fá það', Object.keys(DROG).every(p => ci.body.includes('LEYNI-' + p)));
+  }
+
   console.log(`\nsamtals: ${pass} í lagi, ${fail} brugðust`);
   process.exit(fail ? 1 : 0);
 })();

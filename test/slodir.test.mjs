@@ -9,6 +9,7 @@
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -58,7 +59,13 @@ const stubs = files.filter(noindex);
 const pages = files.filter(f => !noindex(f));
 
 console.log('\nhver síða vísar á hreinu slóðina sína (canonical) — annars fer hún ekki í sitemap');
-for (const f of pages) ok(`${f}: canonical er https://radagerdi.is${clean(f)} (er: ${canonicalOf(f)})`, canonicalOf(f) === 'https://radagerdi.is' + clean(f));
+// Falin síða sem á að taka við af annarri (api/_drog.js: 'hopar-nytt.html' → '/hopar') vísar strax á
+// lokaslóðina sína; hún er aldrei í sitemap og gestir fá hana ekki fyrr en hún er birt.
+const DROG = createRequire(import.meta.url)('../api/_drog.js');
+for (const f of pages) {
+  const rett = Object.prototype.hasOwnProperty.call(DROG, f) ? ['https://radagerdi.is' + clean(f), 'https://radagerdi.is' + DROG[f]] : ['https://radagerdi.is' + clean(f)];
+  ok(`${f}: canonical er ${rett.join(' eða ')} (er: ${canonicalOf(f)})`, rett.includes(canonicalOf(f)));
+}
 
 console.log('hver síða: hrein slóð afhent, .html-slóð færð á hreina slóð');
 for (const f of pages) {
