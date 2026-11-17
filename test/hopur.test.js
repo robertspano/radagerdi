@@ -60,7 +60,12 @@ const GOD = { fjoldi: '14', timi: 'Kvöld', sedill: 'Kvöld · Valkostur 2 · 9.
   ok('hádegi kl. 19:00 → merkt', r.status === 200 && sent[0] && /Athugið: Hádegisseðlarnir eru frá 11:30 til 16:00\./.test(sent[0].body.text));
   sent = [];
   r = await call({ body: Object.assign({}, GOD, { timi: 'Kvöld', klukkan: '12:00' }) });
-  ok('kvöld kl. 12:00 → merkt', r.status === 200 && sent[0] && /Athugið: Kvöldseðlarnir eru frá kl\. 16:00\./.test(sent[0].body.text));
+  ok('kvöld kl. 12:00 → merkt', r.status === 200 && sent[0] && /Athugið: Kvöld er valið en klukkan er fyrir kl\. 16:00/.test(sent[0].body.text));
+
+  console.log('\nnetfang með íslenskum stöfum (vafrinn sendir punycode)');
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { netfang: 'jon@xn--rageri-pta4je.is' }) });
+  ok('í póstinum stendur jon@ráðagerði.is, svarnetfangið helst punycode', r.status === 200 && sent[0] && /Netfang: jon@ráðagerði\.is/.test(sent[0].body.text) && /jon@ráðagerði\.is/.test(sent[0].body.html) && sent[0].body.reply_to === 'jon@xn--rageri-pta4je.is');
   sent = [];
   r = await call({ body: Object.assign({}, GOD, { timi: 'Bröns', dagsetning: '2026-12-11', klukkan: '18:00' }) });
   ok('bröns á föstudegi kl. 18:00 → báðar athugasemdir', r.status === 200 && sent[0] && /Bröns er um helgar[^\n]*Bröns er frá 11:00 til 15:30\./.test(sent[0].body.text));

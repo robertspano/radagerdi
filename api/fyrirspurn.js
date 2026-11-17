@@ -34,7 +34,7 @@ module.exports = P.bua({
       fyrirsogn: 'Veislupöntun', slod: 'radagerdi.is/veisluthjonusta',
       efni: [P.gestir(g.fjoldi), g.veisla, hvenaer, g.afhending && g.afhending.toLowerCase()],
       rows: [['Fjöldi', P.gestir(g.fjoldi)], ['Veisla', g.veisla], ['Áætlað verð', g.aaetlad], ['Afhending', afhending], ['Hvenær', hvenaer],
-        ['Nafn', g.nafn], ['Sími', g.simi], ['Netfang', g.netfang]],
+        ['Nafn', g.nafn], ['Sími', g.simi], ['Netfang', g.netfangBirt]],
       blokkir: [['Réttir', g.val], ['Óskir', g.oskir]],
     };
   },

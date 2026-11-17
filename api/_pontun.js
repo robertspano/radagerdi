@@ -11,6 +11,7 @@
  */
 'use strict';
 const S = require('./_store');
+const { domainToUnicode } = require('url');
 
 const TO = process.env.FYRIRSPURN_TO || 'radagerdi@radagerdi170.is';
 const FROM = process.env.FYRIRSPURN_FROM || 'Ráðagerði · vefurinn <fyrirspurn@fyrirspurn.radagerdi.is>';
@@ -61,15 +62,24 @@ function dagsetning(v) {
 }
 
 // Það sem bæði formin spyrja um: fjöldi, dagur og klukka, óskir og hvernig á að ná í gestinn
+// Vafrinn sendir lén með íslenskum stöfum á punycode („jon@xn--rageri-pta4je.is“); svarnetfangið helst
+// þannig, en í póstinum til okkar er það sýnt eins og gesturinn skrifaði það („jon@ráðagerði.is“)
+function birta(netfang) {
+  const i = netfang.lastIndexOf('@'); if (i < 0) return netfang;
+  const lid = domainToUnicode(netfang.slice(i + 1));
+  return lid ? netfang.slice(0, i + 1) + lid : netfang;
+}
+
 function grunnur(body) {
   const fjoldi = parseInt(line(body.fjoldi, 5), 10), dags = dagsetning(body.dagsetning), kl = line(body.klukkan, 5);
+  const netfang = line(body.netfang, 200).toLowerCase();
   return {
     fjoldi: fjoldi >= 1 && fjoldi <= 500 ? fjoldi : 0,
     dagsetning: dags.texti, dagIso: dags.iso, vikudagur: dags.vikudagur,
     klukkan: /^([01]\d|2[0-3]):[0-5]\d$/.test(kl) ? kl : '',
     oskir: txt(body.oskir, 3000),
     nafn: line(body.nafn, 100),
-    netfang: line(body.netfang, 200).toLowerCase(),
+    netfang, netfangBirt: birta(netfang),
     simi: line(body.simi, 30),
     gildra: line(body.vefsida, 200),
   };
@@ -91,8 +101,8 @@ function postur({ fyrirsogn, efni, rows, blokkir, slod }, g, svar) {
   const hvadan = S.IS_PROD ? slod : 'forskoðun vefsins (prófun, ekki radagerdi.is)';
   const subject = (S.IS_PROD ? '' : 'PRÓFUN · ') + fyrirsogn + ': ' + efni.filter(Boolean).join(' · ') + ' — ' + g.nafn;
   const R = rows.filter((r) => r[1]), B = (blokkir || []).filter((b) => b[1]);
-  const svarText = g.netfang ? (svar ? '. Svarið beint á þennan póst til að svara ' + g.nafn + '.' : '. Ekki er hægt að svara þessum pósti beint: skrifið nýjan póst á ' + g.netfang + (g.simi ? ' eða hringið í ' + g.simi : '') + '.') : '.';
-  const svarHtml = g.netfang ? (svar ? ' · svarið beint á þennan póst til að svara ' + esc(g.nafn) : ' · ekki er hægt að svara þessum pósti beint: skrifið nýjan póst á ' + esc(g.netfang) + (g.simi ? ' eða hringið í ' + esc(g.simi) : '')) : '';
+  const svarText = g.netfang ? (svar ? '. Svarið beint á þennan póst til að svara ' + g.nafn + '.' : '. Ekki er hægt að svara þessum pósti beint: skrifið nýjan póst á ' + g.netfangBirt + (g.simi ? ' eða hringið í ' + g.simi : '') + '.') : '.';
+  const svarHtml = g.netfang ? (svar ? ' · svarið beint á þennan póst til að svara ' + esc(g.nafn) : ' · ekki er hægt að svara þessum pósti beint: skrifið nýjan póst á ' + esc(g.netfangBirt) + (g.simi ? ' eða hringið í ' + esc(g.simi) : '')) : '';
   const text = R.map((r) => r[0] + ': ' + r[1]).join('\n') + B.map((b) => '\n\n' + b[0] + ':\n' + b[1]).join('') + '\n\n— Sent af ' + hvadan + svarText;
   const html = '<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#2c3a2d">' +
     '<h2 style="color:#629F67;margin:0 0 14px">' + esc(fyrirsogn) + '</h2>' +

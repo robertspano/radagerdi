@@ -34,14 +34,14 @@ module.exports = P.bua({
     if (g.timi === 'Hádegi' && helgi) a.push('Hádegisseðlarnir eru virka daga, en dagurinn er um helgi.');
     if (g.timi === 'Bröns' && g.vikudagur > 0 && !helgi) a.push('Bröns er um helgar, en dagurinn er virkur dagur.');
     if (kl && g.timi === 'Hádegi' && (kl < '11:30' || kl > '16:00')) a.push('Hádegisseðlarnir eru frá 11:30 til 16:00.');
-    if (kl && g.timi === 'Kvöld' && kl < '16:00') a.push('Kvöldseðlarnir eru frá kl. 16:00.');
+    if (kl && g.timi === 'Kvöld' && kl < '16:00') a.push('Kvöld er valið en klukkan er fyrir kl. 16:00 (kvöldseðlarnir fást líka í hádeginu).');
     if (kl && g.timi === 'Bröns' && (kl < '11:00' || kl > '15:30')) a.push('Bröns er frá 11:00 til 15:30.');
     const athugid = a.join(' ');
     return {
       fyrirsogn: 'Hópabókun', slod: 'radagerdi.is/hopar',
       efni: [P.gestir(g.fjoldi), g.timi, hvenaer],
       rows: [['Fjöldi', P.gestir(g.fjoldi)], ['Hvenær', g.timi], ['Hópaseðill', g.sedill], ['Áætlað verð', g.aaetlad], ['Dagur', hvenaer], ['Athugið', athugid],
-        ['Nafn', g.nafn], ['Sími', g.simi], ['Netfang', g.netfang]],
+        ['Nafn', g.nafn], ['Sími', g.simi], ['Netfang', g.netfangBirt]],
       blokkir: [['Óskir', g.oskir]],
     };
   },

@@ -54,7 +54,7 @@
   .v-hero .v-h1{font-size:clamp(40px,10vw,84px);line-height:1.08;color:var(--gr)}
   .v-lead{font-size:clamp(17px,1.5vw,20px);line-height:1.8;margin:clamp(28px,2.6vw,40px) 0 0;max-width:30em}
   .v-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;margin-top:30px}
-  .v-btn{display:inline-flex;align-items:center;justify-content:center;padding:0 34px;min-height:64px;border:2px solid var(--gr);border-radius:16px;color:var(--gr);background:#fff;white-space:nowrap;
+  .v-btn{display:inline-block;text-align:center;padding:21px 34px;line-height:1.1;border:2px solid var(--gr);border-radius:16px;color:var(--gr);background:#fff;white-space:nowrap;
     font-family:'Windsord',serif;font-size:clamp(19px,1.6vw,23px);letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;text-decoration:none;transition:background-color .15s,color .15s}
   .v-btn:hover{background:var(--gr);color:#fff}
   .v-simi{color:var(--gr);font-weight:600;font-size:16px;text-decoration:none}
@@ -80,7 +80,7 @@
   .v-pakki ul{list-style:none;margin:22px 0 26px;padding:0;width:100%}
   .v-pakki li{padding:11px 4px;border-top:1.5px solid rgba(98,159,103,.3);font-size:15.5px;line-height:1.5}
   .v-pakki li:last-child{border-bottom:1.5px solid rgba(98,159,103,.3)}
-  .v-pk-velja{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 34px;border:2px solid var(--gr);border-radius:14px;color:var(--gr);background:#fff;text-decoration:none;
+  .v-pk-velja{margin-top:auto;display:inline-block;text-align:center;padding:17px 34px;line-height:1.1;border:2px solid var(--gr);border-radius:14px;color:var(--gr);background:#fff;text-decoration:none;
     font-family:'Windsord',serif;font-size:19px;letter-spacing:.1em;text-indent:.1em;text-transform:uppercase;transition:background-color .15s,color .15s}
   .v-pk-velja:hover{background:var(--gr);color:#fff}
   .v-pk-velja:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
@@ -115,11 +115,14 @@
   .v-hring:hover{background:#fff;color:var(--gr)}
   /* Windsord hefur óvenju djúpa grunnlínu: með lægri línuhæð skerast tölurnar að neðan */
   .v-fjoldi{width:3.2ch;background:transparent;border:0;border-bottom:2px solid rgba(255,255,255,.45);color:#fff;text-align:center;border-radius:0;
-    font-family:'Windsord',serif;font-size:clamp(64px,13vw,104px);line-height:1.5;margin-top:-.42em;padding:0;-moz-appearance:textfield;appearance:textfield}
+    font-family:'Windsord',serif;font-size:clamp(64px,13vw,104px);line-height:1.5;margin-top:-.42em;padding:0;-moz-appearance:textfield;appearance:textfield;
+    clip-path:inset(.42em 0 -8px 0)}   /* efsti hlutinn (undir fyrirsögninni) er auður: bendill og val mega ekki ná upp í hana */
   .v-fjoldi::-webkit-outer-spin-button,.v-fjoldi::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   .v-fjoldi::placeholder{color:rgba(255,255,255,.7)}
   .v-fjoldi:focus{outline:none;border-bottom-color:#fff}
-  .v-fjoldi:focus-visible{outline:3px solid #fff;outline-offset:6px;border-radius:8px}
+  .v-fjoldi:focus-visible{outline:none;box-shadow:0 2px 0 #fff}   /* rammi um háa reitinn lægi yfir fyrirsögninni */
+  .v-fjoldi:disabled{opacity:1;color:#fff}
+  .v-topp :is(.v-hring,.v-flyti button):disabled{opacity:.45;cursor:default;background:transparent;color:#fff}
   .v-gestir{font-size:15px;font-weight:600;letter-spacing:.06em;margin:4px 0 0}
   .v-flyti{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
   .v-flyti button{min-width:52px;height:40px;padding:0 12px;border-radius:12px;border:2px solid rgba(255,255,255,.85);background:transparent;color:#fff;font:600 15px 'Montserrat',sans-serif;cursor:pointer;transition:background-color .15s,color .15s}
@@ -190,7 +193,8 @@
   .v-takki:disabled{opacity:.6;cursor:wait}
   .v-btn:focus-visible,.v-takki:focus-visible,.v-simi:focus-visible{outline:3px solid var(--gr);outline-offset:3px}
   .v-smatt{font-size:14.5px;margin:0;text-align:center;color:var(--gr-d)}
-  /* Windsord sest neðarlega í línuna: skorið að hástafahæð svo textinn sé fyrir miðju hnappsins */
+  /* Windsord sest neðarlega í línuna: skorið að hástafahæð svo textinn sé fyrir miðju hnappsins
+     (text-box virkar aðeins á block-ílát, þess vegna eru hnapparnir inline-block en ekki flex) */
   .v-btn,.v-pk-velja,.v-takki{text-box:trim-both cap alphabetic}
   .v-svar{max-width:640px;margin:0 auto;text-align:center}
   .v-svar .v-h2{font-size:clamp(28px,4vw,44px);color:var(--gr);margin-bottom:14px}
@@ -212,7 +216,7 @@
     .v-ch input:focus-visible + label{outline-color:Highlight}
   }
   @media (max-width:420px){
-    .v-btn{width:100%;padding:0 18px;font-size:clamp(16px,5vw,19px)}
+    .v-btn{width:100%;padding:21px 18px;font-size:clamp(16px,5vw,19px)}
     .v-takki{padding:14px 16px;font-size:clamp(16px,5vw,25px);letter-spacing:.08em;text-indent:.08em}
     .v-rettir{padding:22px 14px}
   }
@@ -255,7 +259,7 @@
   @media (min-width:1160px){
     .v-pakkar{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
     .v-pakki{padding:58px 20px 26px}
-    .v-pk-nm{font-size:clamp(24px,2vw,30px)}   /* „Lasagnaveisla“ á að komast í eina línu */
+    .v-pk-nm{font-size:clamp(24px,2vw,27px)}   /* „Lasagnaveisla“ á að komast í eina línu, líka á breiðum skjá */
   }
 
   /* footer */
@@ -650,7 +654,10 @@
   var synilegt = function (e) { return !!(e && e.getClientRects().length); };
   var uid = 0;
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
-  function fjoldi() { var v = parseInt(n.value, 10); return v > 0 ? Math.min(v, 500) : 0; }
+  function fjoldi() {                        // valueAsNumber: „1e3“ er 1000, ekki 1
+    var v = n.valueAsNumber; if (!isFinite(v)) v = parseInt(n.value, 10); v = Math.floor(v);
+    return v > 0 ? Math.min(v, 500) : 0;
+  }
   function setja(v) { n.value = v ? Math.max(1, Math.min(500, v)) : ''; uppfaera(); }
   // Textinn sem gesturinn sér (eigandinn getur breytt honum í ritlinum), ekki fasta gildið í kóðanum
   function hnappTala(b) { return parseInt(b.textContent, 10) || +b.dataset.fjoldi; }
@@ -832,7 +839,7 @@
       return L.join('\n');
     }
     var P = pakki(v); if (!P) return '';
-    if (P.a === 'stk') { var q = pakkaMagn(v, P); L.push(q + ' ' + (q === 1 ? P.eining[0] : (P.eining[1] || P.eining[0]))); }
+    if (P.a === 'stk') { var q = pakkaMagn(v, P); L.push(q + ' ' + (eintala(q) ? P.eining[0] : (P.eining[1] || P.eining[0]))); }   // „21 bakki“
     P.hopar.forEach(function (h, i) {
       var dalkar = h.ur.filter(function (u) { return F[u] && F[u].rettir.length; });
       if (!dalkar.length) return;
@@ -875,6 +882,8 @@
   function vidBreytingu(e) {
     var t = e.target; if (!t || !t.name) return;          // réttavalið sér um sig sjálft
     if (t.closest('.v-reitur')) t.removeAttribute('aria-invalid');
+    // Sótt valið eftir villu um heimilisfang: reiturinn hverfur, svo villan á ekki lengur við
+    if (t.name === 'afhending') { var hv = $('v-villa'); if (hv && /heimilisfang/i.test(hv.textContent)) hv.hidden = true; $('v-heimilisfang').removeAttribute('aria-invalid'); }
     // sími eða netfang dugar: þegar annað er skrifað er hvorugt lengur merkt rangt
     if (t.name === 'simi' || t.name === 'netfang') ['v-simi', 'v-netfang'].forEach(function (id) { $(id).removeAttribute('aria-invalid'); });
     if (t.name === 'veisla' && e.type === 'change') teikna();
@@ -882,6 +891,9 @@
     uppfaera();
   }
   f.addEventListener('input', vidBreytingu); f.addEventListener('change', vidBreytingu);
+  n.addEventListener('wheel', function () { if (document.activeElement === n) n.blur(); }, { passive: true });
+  // Enter á valhnappi eða gátreit sendir ekki formið (vafrinn gerir það annars)
+  f.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches && e.target.matches('input[type=radio], input[type=checkbox]')) e.preventDefault(); });
   n.addEventListener('keydown', function (e) {               // Enter í fjöldanum fer í næsta skref, sendir ekki
     if (e.key !== 'Enter') return;
     e.preventDefault();
@@ -920,7 +932,9 @@
     g.aaetlad = verd.hidden ? '' : $('v-verd-tala').textContent + ($('v-verd-skyring').textContent ? ' (' + $('v-verd-skyring').textContent + ')' : '');
     if (g.afhending !== 'Sent') delete g.heimilisfang;
     if (g.afhending === 'Sent' && !g.heimilisfang) return synaVillu('Skrifið heimilisfangið sem á að senda á.', $('v-heimilisfang'));
+    if ($('v-dags').validity.badInput) return synaVillu('Klárið að skrifa dagsetninguna.', $('v-dags'));
     if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
+    if ($('v-klukkan').validity.badInput) return synaVillu('Klárið að skrifa klukkuna.', $('v-klukkan'));
     if (!g.nafn) return synaVillu('Skrifið nafnið ykkar.', $('v-nafn'));
     if (!g.netfang && !g.simi) return synaVillu('Skrifið síma eða netfang svo við getum svarað.', $('v-simi'));
     if (g.simi && (g.simi.match(/\d/g) || []).length < 7) return synaVillu('Símanúmerið virðist ekki rétt.', $('v-simi'));
@@ -931,6 +945,7 @@
       .then(function () {
         $('v-reitir').hidden = true;
         var takk = $('v-takk'); takk.hidden = false; takk.focus();
+        festa();
       })
       .catch(function (er) {
         takki.disabled = false; takki.textContent = merki;
@@ -944,7 +959,9 @@
 
   // Í ritlinum sjást líka textar sem gesturinn sér bara stundum (þakkir og villuboð), svo hægt sé að breyta þeim
   if (ritill()) { $('v-takk').hidden = false; $('v-fjoldi-villa').hidden = false; f.classList.add('v-ritill'); }
-  if (/[?&]sent=1/.test(location.search)) { $('v-reitir').hidden = true; $('v-takk').hidden = false; }
+  // Eftir sendingu: teljarinn sýnir það sem var sent og er ekki lengur virkur
+  function festa() { f.querySelectorAll('.v-teljari button, .v-teljari input, .v-flyti button').forEach(function (x) { x.disabled = true; }); }
+  if (/[?&]sent=1/.test(location.search)) { $('v-reitir').hidden = true; $('v-takk').hidden = false; festa(); }
   // Teiknað aftur þegar efni eigandans er komið inn (DOMContentLoaded) og þegar vafrinn hefur sett
   // inn það sem gesturinn hafði valið áður en hann fór af síðunni og kom aftur (pageshow)
   function endurnyja() { teikna(); uppfaera(); }

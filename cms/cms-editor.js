@@ -272,8 +272,8 @@
     // Falin síða (api/_drog.js): eigendurnir eiga að vita að gestir sjá hana ekki
     if (window.__CMS_DROG__) { const d = el('div', 'cms-drog', 'Falin síða<span class="cms-drog-l"> · gestir sjá hana ekki</span>'); d.title = 'Aðeins þeir sem eru skráðir inn í ritilinn sjá þessa síðu. Róbert birtir hana þegar hún er tilbúin.'; bar.appendChild(d); }
     bar.appendChild(el('div', 'cms-spacer'));
-    const undoBtn = btn('↶ Afturkalla', 'cms-hist cms-undo', undo); undoBtn.id = 'cms-undo'; undoBtn.title = 'Afturkalla síðustu breytingu (⌘Z)'; undoBtn.disabled = true; bar.appendChild(undoBtn);
-    const redoBtn = btn('↷ Endurtaka', 'cms-hist cms-redo', redo); redoBtn.id = 'cms-redo'; redoBtn.title = 'Endurtaka (⇧⌘Z)'; redoBtn.disabled = true; bar.appendChild(redoBtn);
+    const undoBtn = btn('↶<span class="cms-hist-l"> Afturkalla</span>', 'cms-hist cms-undo', undo); undoBtn.id = 'cms-undo'; undoBtn.title = 'Afturkalla síðustu breytingu (⌘Z)'; undoBtn.disabled = true; bar.appendChild(undoBtn);
+    const redoBtn = btn('↷<span class="cms-hist-l"> Endurtaka</span>', 'cms-hist cms-redo', redo); redoBtn.id = 'cms-redo'; redoBtn.title = 'Endurtaka (⇧⌘Z)'; redoBtn.disabled = true; bar.appendChild(redoBtn);
     const status = el('div', 'cms-status ok', 'Allt vistað ✓'); status.id = 'cms-status'; status.title = 'Breytingar vistast sjálfkrafa'; bar.appendChild(status);
     const kebab = btn('⋯', 'cms-kebab', (e) => { e.stopPropagation(); toggleKebab(kebab); }); kebab.title = 'Meira';
     bar.appendChild(kebab);
@@ -338,7 +338,19 @@
       const a = e.target.closest('a');
       if (a) {
         const kind = linkKind(a);
-        if (kind === 'tab' || kind === 'inpage') return; // let the tab switch / hamburger happen
+        if (kind === 'tab') return; // let the tab switch happen
+        if (kind === 'inpage') {
+          // Tengill niður síðuna (t.d. „Panta veislu“ → #fyrirspurn): stökkinu er seinkað eins og hjá öðrum
+          // tenglum, svo tvísmellur breyti textanum í stað þess að síðan stökkvi frá honum.
+          // „#“ eitt og sér (valmyndin o.fl.) sér skrifta síðunnar um.
+          const h = a.getAttribute('href') || '';
+          let mark = null; try { mark = h.length > 1 && document.getElementById(decodeURIComponent(h.slice(1))); } catch (er) {}
+          if (!mark) return;
+          e.preventDefault();
+          clearTimeout(navTimer);
+          navTimer = setTimeout(() => mark.scrollIntoView({ block: 'start' }), 340);
+          return;
+        }
         e.preventDefault();
         clearTimeout(navTimer);
         navTimer = setTimeout(() => navigate(a), 340); // delay so a double-click reliably edits instead of navigating
@@ -841,7 +853,7 @@
   // ================= KASSASTJÓRN (draga kassa saman / út) =================
   // Smellur á auða svæðið í kassa velur hann: rammi + handfang neðst sem má draga
   // til að gera hann þynnri eða þykkari. Vistast sem padding í 'style'.
-  const BOX_SEL = '.ta-hero, .hg-hero, .gbox-top, .gbox-bot, .card, .hh, .lunch, .ginfo, .gbox2, .redbox, .rg-gallery, .shortcuts, .introp, .mcols';
+  const BOX_SEL = '.ta-hero, .hg-hero, .gbox-top, .gbox-bot, .card, .hh, .lunch, .ginfo, .gbox2, .redbox, .rg-gallery, .shortcuts, .introp, .mcols, .v-pakki';
   let boxSel = null, boxBar = null, boxHandle = null;
 
   function padOf(el, side) {
