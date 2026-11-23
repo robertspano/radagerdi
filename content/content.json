@@ -99,7 +99,8 @@
     },
     "veisluthjonusta-nytt.html": {
       "MAIN0>SECTION0>DIV0>DIV0": "\n          <a class=\"v-btn\" href=\"#fyrirspurn\">Panta veislu</a>\n        ",
-      "MAIN0>SECTION1>UL0>LI3>H30": "Sérsniðin Veisla"
+      "MAIN0>SECTION1>UL0>LI3>H30": "Sérsniðin Veisla",
+      "MAIN0>SECTION1>UL0>LI3>P0": "HANNAÐU ÞÍNA EIGIN"
     }
   },
   "images": {
