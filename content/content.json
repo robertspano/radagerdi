@@ -280,6 +280,9 @@
       "MAIN0>SECTION1>ARTICLE0>FOOTER0>P1": true,
       "MAIN0>SECTION2>DIV0>DIV2>OL0>LI6>SPAN1>SPAN1": true,
       "MAIN0>SECTION4>DIV0>DIV0>P1": true
+    },
+    "veisluthjonusta-nytt.html": {
+      "MAIN0>SECTION1>UL0>LI3>P1>B0": true
     }
   },
   "order": {
