@@ -520,6 +520,10 @@
       "MAIN0>SECTION2>DIV0>DIV1>DIV0": {
         "padding-top": "34px",
         "padding-bottom": "30px"
+      },
+      "MAIN0>SECTION2>DIV0>DIV1>DIV2": {
+        "padding-top": "36px",
+        "padding-bottom": "32px"
       }
     }
   }
