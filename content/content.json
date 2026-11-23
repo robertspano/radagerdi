@@ -289,7 +289,8 @@
       "MAIN0>SECTION4>DIV0>DIV0>P1": true
     },
     "veisluthjonusta-nytt.html": {
-      "MAIN0>SECTION1>UL0>LI3>P1>B0": true
+      "MAIN0>SECTION1>UL0>LI3>P1>B0": true,
+      "MAIN0>FORM0>DIV1>DIV0>FIELDSET0>DIV0>DIV3>LABEL0": true
     }
   },
   "order": {
