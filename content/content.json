@@ -109,6 +109,9 @@
     "en-hoparhadegi.html": {
       "DIV1>DIV2>P0": "For groups of more than 10 guests we offer two options.<br>One option must be chosen for the whole group.",
       "DIV1>DIV2>P1": "The dinner options can also be ordered at lunchtime<br>"
+    },
+    "en-hoparbrons.html": {
+      "DIV1>DIV2>P1": "The reason for this is to ensure the kitchen is able to keep up and avoid long waiting times. <br>All members of the party can order one dish from the group brunch menu."
     }
   },
   "images": {
