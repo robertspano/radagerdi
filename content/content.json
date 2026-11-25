@@ -100,7 +100,7 @@
     "veisluthjonusta-nytt.html": {
       "MAIN0>SECTION0>DIV0>DIV0": "\n          <a class=\"v-btn\" href=\"#fyrirspurn\">Panta veislu</a>\n        ",
       "MAIN0>SECTION1>UL0>LI2>H30": "Sérsniðin Veisla",
-      "MAIN0>SECTION1>UL0>LI2>P0": "HANNAÐU ÞÍNA EIGIN",
+      "MAIN0>SECTION1>UL0>LI2>P0": "HANNAÐU ÞÍNA EIGIN Veislu",
       "MAIN0>SECTION1>UL0>LI2>P1": "Veldu þá rétti sem þú vilt",
       "MAIN0>SECTION1>UL0>LI2>UL0>LI0": "Lágmark 12 stk af hveri tegund",
       "MAIN0>SECTION1>UL0>LI2>UL0>LI2": "Fullkomið á fundinn eða viðbót við aðrar veitingar",
@@ -545,7 +545,7 @@
         "font-size": "23px"
       },
       "MAIN0>SECTION1>UL0>LI2>P0": {
-        "font-size": "clamp(14px, 1.33vw, 16px)"
+        "font-size": "clamp(14px, 1.67vw, 20px)"
       }
     }
   }
