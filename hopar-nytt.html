@@ -131,14 +131,6 @@
   .v-stjarna{color:var(--red)}
   .v-skylda{margin-top:6px}
 
-  /* réttirnir sem fylgja völdu veislunni (smíðað úr matseðlinum á síðunni) */
-
-  /* áætlað verð: strikaði rammi Take Away-tilboðsins */
-  .v-verd{border:3px dashed var(--gr);border-radius:20px;text-align:center;padding:20px 18px 22px}
-  .v-verd-merki{display:block;font-weight:700;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gr-d)}
-  /* Windsord sest neðarlega í línuna (sjá teljarann): hærri línuhæð svo talan rekist ekki í skýringuna */
-  .v-verd-tala{display:block;font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,7vw,50px);line-height:1.7;letter-spacing:.03em;margin:-.12em 0 0}
-  .v-verd-skyring{display:block;font-size:15px;line-height:1.5}
 
   .v-tvo{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
   .v-reitur input,.v-reitur textarea{width:100%;font:500 16px/1.5 'Montserrat',sans-serif;color:#2c3a2d;background:#fff;border:2px solid var(--gr);border-radius:14px;padding:12px 16px;min-height:52px}
@@ -503,11 +495,7 @@
           <p class="h-brons-ath" id="h-brons-ath" hidden>Hver gestur velur sér einn rétt af bröns-seðlinum.</p>
           <noscript><p class="v-hjalp">Takið fram í óskunum hvaða hópaseðil þið viljið.</p></noscript>
 
-          <div class="v-verd" id="v-verd" hidden>
-            <div class="v-verd-merki">Áætlað verð</div>
-            <div class="v-verd-tala" id="v-verd-tala"></div>
-            <div class="v-verd-skyring" id="v-verd-skyring"></div>
-          </div>
+          <div class="v-verd" id="v-verd" hidden></div>   <!-- tómt: áætlaða verðið var tekið út; reiturinn er hafður svo slóðir í ritlinum haldist -->
 
           <div>
             <div class="v-tvo">
@@ -704,15 +692,6 @@
     i.checked = true; i.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
-  function reikna() {
-    var verd = $('v-verd'), vt = $('v-verd-tala'), vs = $('v-verd-skyring'); if (!verd) return;
-    if (ritill()) { verd.hidden = false; return; }      // eigandinn sér textana til að breyta þeim
-    var s = f.querySelector('input[name="sedill"]:checked'), g = fjoldi(), p = s ? +s.dataset.verd : 0;
-    verd.hidden = !(g && p);
-    if (vt) vt.textContent = g && p ? kr(g * p) : '';
-    if (vs) vs.textContent = g && p ? g + ' × ' + kr(p) : '';
-  }
-
   // Hvaða dagar og klukka passa við hvern tíma (sömu orð og í api/hopur.js)
   function reglur(t, d, k) {
     var helgi = d && (d.getDay() === 0 || d.getDay() === 6), a = [];
@@ -738,7 +717,6 @@
       if (v && fv) { fv.hidden = true; n.removeAttribute('aria-invalid'); n.setAttribute('aria-describedby', 'v-gestir'); }
       if (fae) fae.hidden = !(v && v <= 10);
     }
-    reikna();
     var t = gildi('timi'), dags = $('v-dags'), kl = $('v-klukkan'), d = dags && dags.value ? new Date(dags.value + 'T12:00:00') : null;
     if (d && isNaN(d)) d = null;
     // Dagur og klukka verða að passa við seðilinn: hádegi virka daga 11:30–15:00, bröns um helgar 11:00–15:00,
@@ -885,8 +863,6 @@
       var fv = $('v-fjoldi-villa'); fv.hidden = false; n.setAttribute('aria-invalid', 'true'); n.setAttribute('aria-describedby', 'v-gestir v-fjoldi-villa'); n.focus(); return;
     }
     g.fjoldi = String(fjoldi()); g.timi = gildi('timi'); g.sedill = gildi('sedill');
-    var verd = $('v-verd');
-    g.aaetlad = verd.hidden ? '' : $('v-verd-tala').textContent + ($('v-verd-skyring').textContent ? ' (' + $('v-verd-skyring').textContent + ')' : '');
     if ($('v-dags').validity.badInput) return synaVillu('Klárið að skrifa dagsetninguna.', $('v-dags'));
     if (!g.dagsetning) return synaVillu('Veljið dagsetningu.', $('v-dags'));
     if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
