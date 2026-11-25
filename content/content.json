@@ -538,6 +538,9 @@
       "MAIN0>SECTION2>DIV0>DIV1>DIV2": {
         "padding-top": "34px",
         "padding-bottom": "30px"
+      },
+      "MAIN0>SECTION1>UL0>LI3>H30": {
+        "font-size": "23px"
       }
     }
   }
