@@ -268,6 +268,14 @@
   .h-sedlar .card.valin{background:var(--gr-d);border-color:var(--gr-d);color:#fff}
   .h-sedlar .card.valin .ti{border-color:rgba(255,255,255,.4)}
   .h-sedlar .card.valin:focus-visible{outline-color:var(--gr-d)}
+  /* Jólaseðillinn: eins og hinir, en rauður þar sem hinir eru grænir */
+  .h-sedlar .card.jol{grid-column:1/-1;width:100%;max-width:430px;justify-self:center;box-sizing:border-box;color:var(--red);border-color:var(--red)}
+  .h-sedlar .card.jol .ti{border-color:rgba(255,49,50,.3)}
+  .h-sedlar .card.jol .ti:last-of-type{border-bottom-color:rgba(255,49,50,.3)}
+  .h-sedlar .card.jol[role="radio"]:not(.valin):hover{background:rgba(255,49,50,.07)}
+  .h-sedlar .card.jol.valin{background:var(--red);border-color:var(--red);color:#fff}
+  .h-sedlar .card.jol.valin .ti{border-color:rgba(255,255,255,.45)}
+  .h-sedlar .card.jol:focus-visible,.h-sedlar .card.jol.valin:focus-visible{outline-color:var(--red)}
   .h-radio{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;margin:0}
   @media (min-width:700px){.h-sedlar .h-flipi .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
   .h-sedlar .h-flipi .cols.h-einn{grid-template-columns:minmax(0,1fr);max-width:430px;margin-left:auto;margin-right:auto}
@@ -469,6 +477,20 @@
                 <p class="ti-desc">Pizzur af matseðli til að deila.</p></div>
               <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span></div>
                 <p class="ti-desc">Tiramisu að hætti hússins.</p></div>
+            </div>
+            <div class="card jol" data-sedill="">
+              <h2>Jólaseðill 2026</h2>
+              <p class="vnote">10.900 kr á mann</p>
+              <div class="ti"><div class="ti-head"><span class="ti-nm">Forréttur</span></div>
+                <p class="ti-desc"><b>Graflax bruschetta</b> með heimagerðri graflaxsósu, radísum og kapers.</p>
+                <p class="ti-desc">og</p>
+                <p class="ti-desc"><b>Hráskinkukróketta</b> með sveppum og jólasultu.</p></div>
+              <div class="ti"><div class="ti-head"><span class="ti-nm">Aðalréttur</span></div>
+                <p class="ti-desc"><b>Confit andalæri</b> með kartöflugratíni, gljáðum gulrótum og soðsósu.</p></div>
+              <div class="ti"><div class="ti-head"><span class="ti-nm">Eftirréttur</span></div>
+                <p class="ti-desc"><b>Jóla tiramisu</b> — Baileys- og piparkökuútgáfa af okkar heimagerða tiramisu.</p></div>
+              <div class="ti"><div class="ti-head"><span class="ti-nm">Forréttur, aðalréttur og eftirréttur</span></div>
+                <p class="ti-desc">Í boði frá 19. nóvember 2026 til 6. janúar 2027.</p></div>
             </div>
           </div>
         </div>
