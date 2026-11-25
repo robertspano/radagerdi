@@ -99,11 +99,11 @@
     },
     "veisluthjonusta-nytt.html": {
       "MAIN0>SECTION0>DIV0>DIV0": "\n          <a class=\"v-btn\" href=\"#fyrirspurn\">Panta veislu</a>\n        ",
-      "MAIN0>SECTION1>UL0>LI3>H30": "Sérsniðin Veisla",
-      "MAIN0>SECTION1>UL0>LI3>P0": "HANNAÐU ÞÍNA EIGIN",
-      "MAIN0>SECTION1>UL0>LI3>P1": "Veldu þá rétti sem þú vilt",
-      "MAIN0>SECTION1>UL0>LI3>UL0>LI0": "Lágmark 12 stk af hveri tegund",
-      "MAIN0>SECTION1>UL0>LI3>UL0>LI2": "Fullkomið á fundinn eða viðbót við aðrar veitingar",
+      "MAIN0>SECTION1>UL0>LI2>H30": "Sérsniðin Veisla",
+      "MAIN0>SECTION1>UL0>LI2>P0": "HANNAÐU ÞÍNA EIGIN",
+      "MAIN0>SECTION1>UL0>LI2>P1": "Veldu þá rétti sem þú vilt",
+      "MAIN0>SECTION1>UL0>LI2>UL0>LI0": "Lágmark 12 stk af hveri tegund",
+      "MAIN0>SECTION1>UL0>LI2>UL0>LI2": "Fullkomið á fundinn eða viðbót við aðrar veitingar",
       "MAIN0>FORM0>DIV1>DIV0>FIELDSET0>DIV0>DIV4>LABEL0": "Sérsniðin"
     },
     "en-hoparhadegi.html": {
@@ -299,9 +299,9 @@
       "MAIN0>SECTION4>DIV0>DIV0>P1": true
     },
     "veisluthjonusta-nytt.html": {
-      "MAIN0>SECTION1>UL0>LI3>P1>B0": true,
+      "MAIN0>SECTION1>UL0>LI2>P1>B0": true,
       "MAIN0>FORM0>DIV1>DIV0>FIELDSET0>DIV0>DIV3>LABEL0": true,
-      "MAIN0>SECTION1>UL0>LI3>P1": true
+      "MAIN0>SECTION1>UL0>LI2>P1": true
     },
     "hopar-nytt.html": {
       "MAIN0>FORM0>DIV1>DIV0>DIV4>P0": true
@@ -540,7 +540,7 @@
         "padding-top": "34px",
         "padding-bottom": "30px"
       },
-      "MAIN0>SECTION1>UL0>LI3>H30": {
+      "MAIN0>SECTION1>UL0>LI2>H30": {
         "font-size": "23px"
       }
     }
