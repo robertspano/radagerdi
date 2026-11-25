@@ -972,24 +972,39 @@
 })();
 </script>
 <script>
-/* Spjöldin í sömu röð: fyrsta strikið fyrir ofan listann á að vera í sömu hæð í öllum, svo listinn í þeim sem hafa lægri haus
-   (t.d. Sérsniðin veisla, sem hefur ekkert verð) lækkar; fyrirsögnin helst efst. Mælt eftir að letur og efni eigandans er komið inn og þegar stærð breytist. */
+/* Spjöldin í sömu röð: fyrirsögnin er efst í öllum. Spjald án verðs (Sérsniðin veisla) setur línuna undir fyrirsögninni
+   („Hannaðu þína eigin veislu“) í miðju verðsins í hinum spjöldunum, og fyrsta strikið fyrir ofan listann er í sömu hæð í öllum.
+   Mælt eftir að letur og efni eigandans er komið inn og þegar stærð breytist. */
 (function () {
   var ul = document.querySelector('.v-pakkar'); if (!ul) return;
   var busy = false;
+  var q = function (c, sel) { return c.querySelector(':scope > ' + sel); };
+  var sest = function (e) { return !!(e && e.getClientRects().length); };
+  var px = function (e, p) { return parseFloat(getComputedStyle(e)[p]) || 0; };
   function jafna() {
     if (busy) return; busy = true;
     var cards = [].slice.call(ul.querySelectorAll(':scope > .v-pakki')), rows = {};
-    cards.forEach(function (c) { var l = c.querySelector(':scope > ul'); if (l) l.style.marginTop = ''; });
+    cards.forEach(function (c) { ['ul', 'h3', 'p.v-pk-tag'].forEach(function (s) { var e = q(c, s); if (e) e.style.marginTop = ''; }); });
     cards.forEach(function (c) {
-      var l = c.querySelector(':scope > ul'); if (!l || !c.getClientRects().length) return;
-      var ct = c.getBoundingClientRect().top, k = Math.round(ct);
-      (rows[k] = rows[k] || []).push({ l: l, h: l.getBoundingClientRect().top - ct, m: parseFloat(getComputedStyle(l).marginTop) || 0 });
+      if (!c.getClientRects().length) return;
+      var k = Math.round(c.getBoundingClientRect().top); (rows[k] = rows[k] || []).push(c);
     });
     Object.keys(rows).forEach(function (k) {
       var r = rows[k]; if (r.length < 2) return;
-      var mx = Math.max.apply(null, r.map(function (x) { return x.h; }));
-      r.forEach(function (x) { var d = mx - x.h; if (d > 0.5) x.l.style.marginTop = (x.m + d) + 'px'; });
+      // 1. spjald án verðs: línan undir fyrirsögninni í miðju verðsins í hinum
+      var ref = r.filter(function (c) { return sest(q(c, 'p.v-pk-verd')); })[0];
+      if (ref) {
+        var rc = ref.getBoundingClientRect(), vb = q(ref, 'p.v-pk-verd').getBoundingClientRect(), midja = (vb.top + vb.bottom) / 2 - rc.top;
+        r.forEach(function (c) {
+          var tag = q(c, 'p.v-pk-tag'); if (c === ref || sest(q(c, 'p.v-pk-verd')) || !sest(tag)) return;
+          var tb = tag.getBoundingClientRect(), d = midja - tb.height / 2 - (tb.top - c.getBoundingClientRect().top);
+          if (d > 0.5) tag.style.marginTop = (px(tag, 'marginTop') + d) + 'px';
+        });
+      }
+      // 2. fyrsta strikið fyrir ofan listann í sömu hæð í öllum
+      var m = r.map(function (c) { var l = q(c, 'ul'); return l ? { l: l, h: l.getBoundingClientRect().top - c.getBoundingClientRect().top, m: px(l, 'marginTop') } : null; }).filter(Boolean);
+      var mx = Math.max.apply(null, m.map(function (x) { return x.h; }));
+      m.forEach(function (x) { var d = mx - x.h; if (d > 0.5) x.l.style.marginTop = (x.m + d) + 'px'; });
     });
     busy = false;
   }
