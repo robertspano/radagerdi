@@ -256,6 +256,8 @@
   .h-sedlar .card.valin{background:var(--gr-d);border-color:var(--gr-d);color:#fff}
   .h-sedlar .card.valin .ti{border-color:rgba(255,255,255,.4)}
   .h-sedlar .card.valin:focus-visible{outline-color:var(--gr-d)}
+  .h-sedlar .card.valin[role="radio"]:hover{color:var(--gr)}   /* valið spjald á hover: ljós bakgrunnur, svo textinn verður grænn */
+  .h-sedlar .card.valin[role="radio"]:hover .ti{border-color:rgba(98,159,103,.3)}
   .h-radio{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;margin:0}
   @media (min-width:700px){.h-sedlar .h-flipi .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
   .h-sedlar .h-flipi .cols.h-einn{grid-template-columns:minmax(0,1fr);max-width:430px;margin-left:auto;margin-right:auto}
@@ -693,6 +695,21 @@
     if (vs) vs.textContent = g && p ? g + ' × ' + kr(p) : '';
   }
 
+  // Hvaða dagar og klukka passa við hvern tíma (sömu orð og í api/hopur.js)
+  function reglur(t, d, k) {
+    var helgi = d && (d.getDay() === 0 || d.getDay() === 6), a = [];
+    if (t === 'Bröns') {
+      if (d && !helgi) a.push({ r: 'v-dags', t: 'Bröns er aðeins um helgar — veljið laugardag eða sunnudag.' });
+      if (k && (k < '11:00' || k > '15:00')) a.push({ r: 'v-klukkan', t: 'Bröns er frá kl. 11:00 til 15:00.' });
+    } else if (t === 'Hádegi') {
+      if (d && helgi) a.push({ r: 'v-dags', t: 'Hádegi er aðeins á virkum dögum — um helgar er bröns.' });
+      if (k && (k < '11:30' || k > '15:00')) a.push({ r: 'v-klukkan', t: 'Hádegi er frá kl. 11:30 til 15:00.' });
+    } else if (t === 'Kvöld') {
+      if (helgi && k && k < '16:00') a.push({ r: 'v-klukkan', t: 'Kvöld er ekki í boði fyrir kl. 16:00 um helgar.' });
+    }
+    return a;
+  }
+
   function uppfaera() {
     if (n.value !== '' && n.valueAsNumber > 30) n.value = 30;
     var v = fjoldi(), gm = $('v-gestir'), fv = $('v-fjoldi-villa'), sam = $('v-samantekt'), fae = $('h-faerri'), ath = $('h-dags-ath');
@@ -706,18 +723,19 @@
     reikna();
     var t = gildi('timi'), dags = $('v-dags'), kl = $('v-klukkan'), d = dags && dags.value ? new Date(dags.value + 'T12:00:00') : null;
     if (d && isNaN(d)) d = null;
-    // Hádegisseðlar eru virka daga 11:30–16:00, kvöldseðlar frá 16:00 og bröns um helgar 11:00–15:30 —
-    // gesturinn er látinn vita ef dagur eða klukka passar ekki, en beiðnin fer samt
+    // Dagur og klukka verða að passa við seðilinn: hádegi virka daga 11:30–15:00, bröns um helgar 11:00–15:00,
+    // kvöld ekki fyrir kl. 16:00 um helgar (kvöldseðlar fást í hádeginu virka daga)
     if (ath && !ritill()) {
-      var helgi = d && (d.getDay() === 0 || d.getDay() === 6), k = kl && kl.value, a = [];
-      if (d && t === 'Hádegi' && helgi) a.push('hádegisseðlarnir eru virka daga, um helgar er bröns');
-      if (d && t === 'Bröns' && !helgi) a.push('bröns er um helgar, laugardaga og sunnudaga');
-      if (k && t === 'Hádegi' && (k < '11:30' || k > '16:00')) a.push('hádegisseðlarnir eru frá 11:30 til 16:00');
-      if (k && t === 'Kvöld' && k < '16:00') a.push('kvöldið byrjar kl. 16:00 — viljið þið kvöldseðil í hádeginu, veljið Hádegi');
-      if (k && t === 'Bröns' && (k < '11:00' || k > '15:30')) a.push('bröns er frá 11:00 til 15:30');
-      var at = a.length ? 'Athugið: ' + a.join('; ') + '.' : '';
+      var k = kl && kl.value, br = reglur(t, d, k);
+      var at = br.map(function (x) { return x.t; }).join(' ');
       if (ath.textContent !== at) ath.textContent = at;
       ath.hidden = !at;
+      if (kl) {                                  // vísbending til tímavalsins í vöfrum sem nota hana
+        var hel = d && (d.getDay() === 0 || d.getDay() === 6);
+        var lo = t === 'Bröns' ? '11:00' : t === 'Hádegi' ? '11:30' : t === 'Kvöld' && hel ? '16:00' : '', hi = t === 'Bröns' || t === 'Hádegi' ? '15:00' : '';
+        if (lo) kl.min = lo; else kl.removeAttribute('min');
+        if (hi) kl.max = hi; else kl.removeAttribute('max');
+      }
     }
     var bitar = [];
     if (v) bitar.push(v + (eintala(v) ? ' gestur' : ' gestir'));
@@ -775,7 +793,9 @@
     var villa = $('v-villa'); villa.textContent = t; villa.hidden = false;
     if (reitur) { reitur.setAttribute('aria-invalid', 'true'); reitur.focus(); }
   }
-  var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Dagsetningin er liðin.': 'v-dags', 'Veljið dagsetningu.': 'v-dags', 'Veljið klukkan hvað.': 'v-klukkan', 'Nafn vantar.': 'v-nafn',
+  var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Dagsetningin er liðin.': 'v-dags', 'Veljið dagsetningu.': 'v-dags', 'Veljið klukkan hvað.': 'v-klukkan',
+    'Bröns er aðeins um helgar — veljið laugardag eða sunnudag.': 'v-dags', 'Hádegi er aðeins á virkum dögum — um helgar er bröns.': 'v-dags',
+    'Bröns er frá kl. 11:00 til 15:00.': 'v-klukkan', 'Hádegi er frá kl. 11:30 til 15:00.': 'v-klukkan', 'Kvöld er ekki í boði fyrir kl. 16:00 um helgar.': 'v-klukkan', 'Nafn vantar.': 'v-nafn',
     'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfang vantar.': 'v-netfang', 'Símanúmer vantar.': 'v-simi', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -794,6 +814,8 @@
     if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
     if ($('v-klukkan').validity.badInput) return synaVillu('Klárið að skrifa klukkuna.', $('v-klukkan'));
     if (!g.klukkan) return synaVillu('Veljið klukkan hvað.', $('v-klukkan'));
+    var dg0 = g.dagsetning ? new Date(g.dagsetning + 'T12:00:00') : null, br = reglur(g.timi, dg0, g.klukkan);
+    if (br.length) return synaVillu(br[0].t, $(br[0].r));
     if (!g.nafn) return synaVillu('Skrifið nafnið ykkar.', $('v-nafn'));
     if (!g.simi) return synaVillu('Skrifið símanúmerið ykkar.', $('v-simi'));
     if (!g.netfang) return synaVillu('Skrifið netfangið ykkar.', $('v-netfang'));
