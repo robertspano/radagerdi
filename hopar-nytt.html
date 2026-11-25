@@ -493,11 +493,11 @@
             <div class="v-tvo">
               <div class="v-reitur">
                 <label class="v-merki" for="v-dags">Dagsetning</label>
-                <input id="v-dags" name="dagsetning" type="date" aria-describedby="h-dags-ath">
+                <input id="v-dags" name="dagsetning" type="date" required aria-describedby="h-dags-ath">
               </div>
               <div class="v-reitur">
                 <label class="v-merki" for="v-klukkan">Klukkan hvað?</label>
-                <input id="v-klukkan" name="klukkan" type="time" step="900" aria-describedby="h-dags-ath">
+                <input id="v-klukkan" name="klukkan" type="time" step="900" required aria-describedby="h-dags-ath">
               </div>
             </div>
             <p class="h-dags-ath" id="h-dags-ath" role="status" hidden></p>
@@ -531,7 +531,7 @@
 
           <p class="v-samantekt" id="v-samantekt" aria-live="polite"></p>
           <div class="v-senda">
-            <p class="v-villa" id="v-villa-anjs">Ekki tókst að senda beiðnina. Athugið að fjöldi gesta, nafn, sími og netfang séu rétt útfyllt og að dagsetningin sé ekki liðin — eða hringið í <a href="tel:+3545461700">546-1700</a>.</p>
+            <p class="v-villa" id="v-villa-anjs">Ekki tókst að senda beiðnina. Athugið að fjöldi gesta, nafn, sími, netfang, dagsetning og klukka séu rétt útfyllt og að dagsetningin sé ekki liðin — eða hringið í <a href="tel:+3545461700">546-1700</a>.</p>
             <p class="v-villa" id="v-villa" role="alert" hidden></p>
             <button class="v-takki" type="submit">Senda beiðni</button>
             <p class="v-smatt">Beiðnin fer beint til okkar. Við bókum ykkur inn ef borð er laust og staðfestum það við ykkur.</p>
@@ -775,7 +775,7 @@
     var villa = $('v-villa'); villa.textContent = t; villa.hidden = false;
     if (reitur) { reitur.setAttribute('aria-invalid', 'true'); reitur.focus(); }
   }
-  var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Dagsetningin er liðin.': 'v-dags', 'Nafn vantar.': 'v-nafn',
+  var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Dagsetningin er liðin.': 'v-dags', 'Veljið dagsetningu.': 'v-dags', 'Veljið klukkan hvað.': 'v-klukkan', 'Nafn vantar.': 'v-nafn',
     'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfang vantar.': 'v-netfang', 'Símanúmer vantar.': 'v-simi', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -790,8 +790,10 @@
     var verd = $('v-verd');
     g.aaetlad = verd.hidden ? '' : $('v-verd-tala').textContent + ($('v-verd-skyring').textContent ? ' (' + $('v-verd-skyring').textContent + ')' : '');
     if ($('v-dags').validity.badInput) return synaVillu('Klárið að skrifa dagsetninguna.', $('v-dags'));
+    if (!g.dagsetning) return synaVillu('Veljið dagsetningu.', $('v-dags'));
     if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
     if ($('v-klukkan').validity.badInput) return synaVillu('Klárið að skrifa klukkuna.', $('v-klukkan'));
+    if (!g.klukkan) return synaVillu('Veljið klukkan hvað.', $('v-klukkan'));
     if (!g.nafn) return synaVillu('Skrifið nafnið ykkar.', $('v-nafn'));
     if (!g.simi) return synaVillu('Skrifið símanúmerið ykkar.', $('v-simi'));
     if (!g.netfang) return synaVillu('Skrifið netfangið ykkar.', $('v-netfang'));

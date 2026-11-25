@@ -90,7 +90,7 @@ const GOD = { fjoldi: '14', timi: 'Kvöld', sedill: 'Kvöld · Valkostur 2 · 9.
 
   console.log('\nreitir');
   for (const [lbl, patch, villa] of [['enginn fjöldi', { fjoldi: '' }, 'Veljið fjölda gesta.'], ['liðin dagsetning', { dagsetning: '2020-01-01' }, 'Dagsetningin er liðin.'],
-    ['ekkert nafn', { nafn: '' }, 'Nafn vantar.'], ['ekkert netfang', { netfang: '' }, 'Netfang vantar.'], ['enginn sími', { simi: '' }, 'Símanúmer vantar.'], ['hvorki netfang né sími', { netfang: '', simi: '' }, 'Netfang vantar.'],
+    ['ekkert nafn', { nafn: '' }, 'Nafn vantar.'], ['ekkert netfang', { netfang: '' }, 'Netfang vantar.'], ['enginn sími', { simi: '' }, 'Símanúmer vantar.'], ['engin dagsetning', { dagsetning: '' }, 'Veljið dagsetningu.'], ['engin klukka', { klukkan: '' }, 'Veljið klukkan hvað.'], ['hvorki netfang né sími', { netfang: '', simi: '' }, 'Netfang vantar.'],
     ['rangt netfang', { netfang: 'anna@' }, 'Netfangið virðist ekki rétt.'], ['of stuttur sími', { simi: '1234' }, 'Símanúmerið virðist ekki rétt.']]) {
     sent = [];
     r = await call({ body: Object.assign({}, GOD, patch) });
@@ -100,7 +100,7 @@ const GOD = { fjoldi: '14', timi: 'Kvöld', sedill: 'Kvöld · Valkostur 2 · 9.
   r = await call({ body: Object.assign({}, GOD, { timi: 'toString' }) });
   ok('óþekktur tími („toString“) → sleppt, ekki villa', r.status === 200 && sent[0] && !/Hvenær: /.test(sent[0].body.text));
   sent = [];
-  r = await call({ body: { fjoldi: '8', nafn: 'Siggi', simi: '5551234', netfang: 'siggi@example.com' } });
+  r = await call({ body: { fjoldi: '8', nafn: 'Siggi', simi: '5551234', netfang: 'siggi@example.com', dagsetning: GOD.dagsetning, klukkan: GOD.klukkan } });
   ok('færri en 11 og ekkert annað valið → samt sent (starfsfólkið metur)', r.status === 200 && sent[0] && sent[0].body.subject === 'Hópabókun: 8 gestir — Siggi');
   sent = [];
   await call({ body: Object.assign({}, GOD, { sedill: '<img src=x onerror=alert(1)>', oskir: '<script>x</script>' }) });

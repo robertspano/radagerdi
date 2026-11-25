@@ -28,6 +28,8 @@ module.exports = P.bua({
     if (v && v !== 'Netfang eða símanúmer vantar svo hægt sé að svara.') return v;
     if (!g.netfang) return 'Netfang vantar.';
     if (!g.simi) return 'Símanúmer vantar.';
+    if (!g.dagIso) return 'Veljið dagsetningu.';
+    if (!g.klukkan) return 'Veljið klukkan hvað.';
     return null;
   },
 
