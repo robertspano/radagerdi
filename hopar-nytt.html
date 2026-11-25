@@ -517,21 +517,21 @@
               </div>
               <div class="v-reitur">
                 <label class="v-merki" for="v-simi">Sími<span class="v-stjarna" aria-hidden="true"> *</span></label>
-                <input id="v-simi" name="simi" type="tel" autocomplete="tel" maxlength="30" aria-describedby="v-samband-hjalp">
+                <input id="v-simi" name="simi" type="tel" autocomplete="tel" maxlength="30" required aria-describedby="v-samband-hjalp">
               </div>
             </div>
             <div class="v-reitur" style="margin-top:22px">
               <label class="v-merki" for="v-netfang">Netfang<span class="v-stjarna" aria-hidden="true"> *</span></label>
-              <input id="v-netfang" name="netfang" type="email" autocomplete="email" maxlength="200" aria-describedby="v-samband-hjalp">
+              <input id="v-netfang" name="netfang" type="email" autocomplete="email" maxlength="200" required aria-describedby="v-samband-hjalp">
             </div>
-            <p class="v-hjalp" id="v-samband-hjalp">Sími eða netfang — annað hvort dugar.</p>
+            <p class="v-hjalp" id="v-samband-hjalp">Við notum þetta til að staðfesta bókunina.</p>
             <p class="v-hjalp v-skylda">* Nauðsynlegir reitir</p>
           </div>
           <div class="v-gildra" aria-hidden="true"><label for="v-vefsida">Vefsíða</label><input id="v-vefsida" name="vefsida" type="text" tabindex="-1" autocomplete="off"></div>
 
           <p class="v-samantekt" id="v-samantekt" aria-live="polite"></p>
           <div class="v-senda">
-            <p class="v-villa" id="v-villa-anjs">Ekki tókst að senda beiðnina. Athugið að fjöldi gesta, nafn og sími eða netfang séu rétt útfyllt og að dagsetningin sé ekki liðin — eða hringið í <a href="tel:+3545461700">546-1700</a>.</p>
+            <p class="v-villa" id="v-villa-anjs">Ekki tókst að senda beiðnina. Athugið að fjöldi gesta, nafn, sími og netfang séu rétt útfyllt og að dagsetningin sé ekki liðin — eða hringið í <a href="tel:+3545461700">546-1700</a>.</p>
             <p class="v-villa" id="v-villa" role="alert" hidden></p>
             <button class="v-takki" type="submit">Senda beiðni</button>
             <p class="v-smatt">Beiðnin fer beint til okkar. Við bókum ykkur inn ef borð er laust og staðfestum það við ykkur.</p>
@@ -740,7 +740,7 @@
   function vidBreytingu(e) {
     var t = e.target; if (!t || !t.name) return;
     if (t.closest('.v-reitur')) t.removeAttribute('aria-invalid');
-    // sími eða netfang dugar: þegar annað er skrifað er hvorugt lengur merkt rangt
+    // þegar annað er skrifað er hvorugt lengur merkt rangt
     if (t.name === 'simi' || t.name === 'netfang') ['v-simi', 'v-netfang'].forEach(function (id) { $(id).removeAttribute('aria-invalid'); });
     if (t.name === 'timi' && e.type === 'change') {
       // Flipinn fyrir ofan formið skiptir um seðil og breytir hæð síðunnar: smellta valið er haldið
@@ -776,7 +776,7 @@
     if (reitur) { reitur.setAttribute('aria-invalid', 'true'); reitur.focus(); }
   }
   var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Dagsetningin er liðin.': 'v-dags', 'Nafn vantar.': 'v-nafn',
-    'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
+    'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfang vantar.': 'v-netfang', 'Símanúmer vantar.': 'v-simi', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     if (ritill()) return;                     // í ritlinum er smellur á hnappinn „breyta textanum“, ekki „senda“
@@ -793,7 +793,8 @@
     if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
     if ($('v-klukkan').validity.badInput) return synaVillu('Klárið að skrifa klukkuna.', $('v-klukkan'));
     if (!g.nafn) return synaVillu('Skrifið nafnið ykkar.', $('v-nafn'));
-    if (!g.netfang && !g.simi) return synaVillu('Skrifið síma eða netfang svo við getum svarað.', $('v-simi'));
+    if (!g.simi) return synaVillu('Skrifið símanúmerið ykkar.', $('v-simi'));
+    if (!g.netfang) return synaVillu('Skrifið netfangið ykkar.', $('v-netfang'));
     if (g.simi && (g.simi.match(/\d/g) || []).length < 7) return synaVillu('Símanúmerið virðist ekki rétt.', $('v-simi'));
     if (g.netfang && !/^[^\s@<>,;]+@[^\s@<>,;.]+(\.[^\s@<>,;.]+)+$/.test(g.netfang)) return synaVillu('Netfangið virðist ekki rétt.', $('v-netfang'));
     var takki = f.querySelector('.v-takki'), merki = takki.textContent; takki.disabled = true; takki.textContent = 'Sendi…';

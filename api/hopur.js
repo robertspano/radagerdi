@@ -23,7 +23,12 @@ module.exports = P.bua({
 
   athuga(g) {
     if (!g.fjoldi) return 'Veljið fjölda gesta.';
-    return P.athugaGrunn(g);
+    // Hópabókun þarf bæði netfang og síma (veisluþjónustan lætur annað duga, svo þetta er hér en ekki í _pontun.js)
+    const v = P.athugaGrunn(g);
+    if (v && v !== 'Netfang eða símanúmer vantar svo hægt sé að svara.') return v;
+    if (!g.netfang) return 'Netfang vantar.';
+    if (!g.simi) return 'Símanúmer vantar.';
+    return null;
   },
 
   skeyti(g) {
