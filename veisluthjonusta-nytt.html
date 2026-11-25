@@ -973,27 +973,23 @@
 </script>
 <script>
 /* Spjöldin í sömu röð: fyrsta strikið fyrir ofan listann á að vera í sömu hæð í öllum, svo listinn í þeim sem hafa lægri haus
-   (t.d. Sérsniðin veisla, sem hefur ekkert verð) lækkar og fyrirsögnin færist í miðjuna. Mælt eftir að letur og efni eigandans er komið inn og þegar stærð breytist. */
+   (t.d. Sérsniðin veisla, sem hefur ekkert verð) lækkar; fyrirsögnin helst efst. Mælt eftir að letur og efni eigandans er komið inn og þegar stærð breytist. */
 (function () {
   var ul = document.querySelector('.v-pakkar'); if (!ul) return;
   var busy = false;
   function jafna() {
     if (busy) return; busy = true;
     var cards = [].slice.call(ul.querySelectorAll(':scope > .v-pakki')), rows = {};
-    cards.forEach(function (c) { var l = c.querySelector(':scope > ul'), t3 = c.querySelector(':scope > h3'); if (l) l.style.marginTop = ''; if (t3) t3.style.marginTop = ''; });
+    cards.forEach(function (c) { var l = c.querySelector(':scope > ul'); if (l) l.style.marginTop = ''; });
     cards.forEach(function (c) {
       var l = c.querySelector(':scope > ul'); if (!l || !c.getClientRects().length) return;
       var ct = c.getBoundingClientRect().top, k = Math.round(ct);
-      var t3 = c.querySelector(':scope > h3');
-      (rows[k] = rows[k] || []).push({ l: l, t3: t3, h: l.getBoundingClientRect().top - ct, m: parseFloat(getComputedStyle(l).marginTop) || 0, m3: t3 ? parseFloat(getComputedStyle(t3).marginTop) || 0 : 0 });
+      (rows[k] = rows[k] || []).push({ l: l, h: l.getBoundingClientRect().top - ct, m: parseFloat(getComputedStyle(l).marginTop) || 0 });
     });
     Object.keys(rows).forEach(function (k) {
       var r = rows[k]; if (r.length < 2) return;
       var mx = Math.max.apply(null, r.map(function (x) { return x.h; }));
-      r.forEach(function (x) {                  // munurinn skiptist jafnt fyrir ofan og neðan fyrirsögnina, svo hún sé í miðju haussins
-        var d = mx - x.h; if (d <= 0.5) return;
-        x.l.style.marginTop = (x.m + d / 2) + 'px'; if (x.t3) x.t3.style.marginTop = (x.m3 + d / 2) + 'px';
-      });
+      r.forEach(function (x) { var d = mx - x.h; if (d > 0.5) x.l.style.marginTop = (x.m + d) + 'px'; });
     });
     busy = false;
   }
