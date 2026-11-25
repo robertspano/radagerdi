@@ -143,6 +143,26 @@
   .v-tvo{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
   .v-reitur input,.v-reitur textarea{width:100%;font:500 16px/1.5 'Montserrat',sans-serif;color:#2c3a2d;background:#fff;border:2px solid var(--gr);border-radius:14px;padding:12px 16px;min-height:52px}
   .v-reitur textarea{min-height:128px;resize:vertical}
+  .v-reitur select{width:100%;font:500 16px/1.5 'Montserrat',sans-serif;color:#2c3a2d;background:#fff;border:2px solid var(--gr);border-radius:14px;padding:12px 16px;min-height:52px;cursor:pointer}
+  .v-reitur select option:disabled{color:#b5bbb6}
+  /* dagatalið: dagar sem passa ekki við valinn seðil eru gráir */
+  .v-dagatal{position:relative}
+  .v-dg-takki{width:100%;text-align:left;font:500 16px/1.5 'Montserrat',sans-serif;color:#2c3a2d;background:#fff;border:2px solid var(--gr);border-radius:14px;padding:12px 16px;min-height:52px;cursor:pointer}
+  .v-dg-takki.tomt{color:#6f7f72}
+  .v-dg-takki:focus-visible{outline:3px solid var(--gr);outline-offset:2px}
+  .v-dg-popup{position:absolute;z-index:30;top:calc(100% + 6px);left:0;width:min(330px,100%);min-width:min(290px,100%);box-sizing:border-box;background:#fff;border:2px solid var(--gr);border-radius:16px;padding:12px;box-shadow:0 10px 34px rgba(0,0,0,.2)}
+  .v-dg-popup[hidden]{display:none}
+  .v-dg-haus{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:700;color:var(--gr-d)}
+  .v-dg-haus button{width:38px;height:38px;border:2px solid var(--gr);border-radius:10px;background:#fff;color:var(--gr);font-size:20px;line-height:1;cursor:pointer}
+  .v-dg-haus button:disabled{border-color:#d3d8d4;color:#c4c9c5;cursor:not-allowed}
+  .v-dg-vikud,.v-dg-dagar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+  .v-dg-vikud{font-size:12px;font-weight:700;color:var(--gr-d);margin-bottom:4px}
+  .v-dg-dagur{height:38px;border:0;border-radius:10px;background:transparent;color:#2c3a2d;font:600 15px 'Montserrat',sans-serif;cursor:pointer;padding:0}
+  .v-dg-dagur:hover:not(:disabled){background:rgba(98,159,103,.15)}
+  .v-dg-dagur:disabled{color:#c4c9c5;cursor:not-allowed}
+  .v-dg-dagur.idag{box-shadow:inset 0 0 0 2px var(--gr)}
+  .v-dg-dagur.valinn{background:var(--gr);color:#fff}
+  .v-dg-dagur:focus-visible,.v-dg-haus button:focus-visible{outline:3px solid var(--gr);outline-offset:1px}
   .v-reitur input:focus,.v-reitur textarea:focus{outline:none}
   .v-reitur input:focus-visible,.v-reitur textarea:focus-visible{outline:3px solid var(--gr);outline-offset:2px}
   .v-reitur [aria-invalid="true"]{border-color:#c0262a}
@@ -251,13 +271,11 @@
   .h-sedlar .card .ti-head .ti-nm{flex:0 1 auto}
   .h-sedlar .card .ti-desc{font-size:15.5px;line-height:1.6;margin:6px 0 0}
   .h-sedlar .card[role="radio"]{cursor:pointer}
-  .h-sedlar .card[role="radio"]:hover{background:rgba(98,159,103,.08)}
+  .h-sedlar .card[role="radio"]:not(.valin):hover{background:rgba(98,159,103,.08)}
   .h-sedlar .card[role="radio"]:focus-visible{outline:3px solid var(--gr);outline-offset:4px}
   .h-sedlar .card.valin{background:var(--gr-d);border-color:var(--gr-d);color:#fff}
   .h-sedlar .card.valin .ti{border-color:rgba(255,255,255,.4)}
   .h-sedlar .card.valin:focus-visible{outline-color:var(--gr-d)}
-  .h-sedlar .card.valin[role="radio"]:hover{color:var(--gr)}   /* valið spjald á hover: ljós bakgrunnur, svo textinn verður grænn */
-  .h-sedlar .card.valin[role="radio"]:hover .ti{border-color:rgba(98,159,103,.3)}
   .h-radio{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;margin:0}
   @media (min-width:700px){.h-sedlar .h-flipi .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
   .h-sedlar .h-flipi .cols.h-einn{grid-template-columns:minmax(0,1fr);max-width:430px;margin-left:auto;margin-right:auto}
@@ -499,7 +517,7 @@
               </div>
               <div class="v-reitur">
                 <label class="v-merki" for="v-klukkan">Klukkan hvað?</label>
-                <input id="v-klukkan" name="klukkan" type="time" step="900" required aria-describedby="h-dags-ath">
+                <select id="v-klukkan" name="klukkan" required aria-describedby="h-dags-ath"><option value="">Veljið tíma</option><option value="11:00">11:00</option><option value="11:15">11:15</option><option value="11:30">11:30</option><option value="11:45">11:45</option><option value="12:00">12:00</option><option value="12:15">12:15</option><option value="12:30">12:30</option><option value="12:45">12:45</option><option value="13:00">13:00</option><option value="13:15">13:15</option><option value="13:30">13:30</option><option value="13:45">13:45</option><option value="14:00">14:00</option><option value="14:15">14:15</option><option value="14:30">14:30</option><option value="14:45">14:45</option><option value="15:00">15:00</option><option value="15:15">15:15</option><option value="15:30">15:30</option><option value="15:45">15:45</option><option value="16:00">16:00</option><option value="16:15">16:15</option><option value="16:30">16:30</option><option value="16:45">16:45</option><option value="17:00">17:00</option><option value="17:15">17:15</option><option value="17:30">17:30</option><option value="17:45">17:45</option><option value="18:00">18:00</option><option value="18:15">18:15</option><option value="18:30">18:30</option><option value="18:45">18:45</option><option value="19:00">19:00</option><option value="19:15">19:15</option><option value="19:30">19:30</option><option value="19:45">19:45</option><option value="20:00">20:00</option><option value="20:15">20:15</option><option value="20:30">20:30</option><option value="20:45">20:45</option><option value="21:00">21:00</option></select>
               </div>
             </div>
             <p class="h-dags-ath" id="h-dags-ath" role="status" hidden></p>
@@ -730,13 +748,11 @@
       var at = br.map(function (x) { return x.t; }).join(' ');
       if (ath.textContent !== at) ath.textContent = at;
       ath.hidden = !at;
-      if (kl) {                                  // vísbending til tímavalsins í vöfrum sem nota hana
-        var hel = d && (d.getDay() === 0 || d.getDay() === 6);
-        var lo = t === 'Bröns' ? '11:00' : t === 'Hádegi' ? '11:30' : t === 'Kvöld' && hel ? '16:00' : '', hi = t === 'Bröns' || t === 'Hádegi' ? '15:00' : '';
-        if (lo) kl.min = lo; else kl.removeAttribute('min');
-        if (hi) kl.max = hi; else kl.removeAttribute('max');
-      }
+      if (kl && kl.options) [].forEach.call(kl.options, function (o) {   // tímar sem passa ekki við seðilinn eru gráir
+        o.disabled = !!o.value && reglur(t, d, o.value).some(function (x) { return x.r === 'v-klukkan'; });
+      });
     }
+    uppfaeraTakka();
     var bitar = [];
     if (v) bitar.push(v + (eintala(v) ? ' gestur' : ' gestir'));
     if (t) bitar.push(valid('timi'));
@@ -789,7 +805,69 @@
     if (c && e.target === c && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); velja(c); }
   });
 
+  // ---- dagatal: sérsmíðað svo dagar sem passa ekki við valinn seðil séu gráir (vafrinn getur það ekki) ----
+  var dagsReitur = $('v-dags'), dagsTakki = null, dg = null, dgAr = 0, dgMan = 0;
+  function dagsTexti(iso) { var x = new Date(iso + 'T12:00:00'); return DAG[x.getDay()] + ' ' + x.getDate() + '. ' + MAN[x.getMonth()] + ' ' + x.getFullYear(); }
+  function dagurOk(iso) {
+    if (iso < IDAG) return false;
+    return !reglur(gildi('timi'), new Date(iso + 'T12:00:00'), '').some(function (x) { return x.r === 'v-dags'; });
+  }
+  function uppfaeraTakka() {
+    if (!dagsTakki) return;
+    dagsTakki.textContent = dagsReitur.value ? dagsTexti(dagsReitur.value) : 'Veljið dag';
+    dagsTakki.classList.toggle('tomt', !dagsReitur.value);
+  }
+  function teiknaDagatal() {
+    $('v-dg-heiti').textContent = MAN[dgMan] + ' ' + dgAr;
+    var box = $('v-dg-dagar'); box.textContent = '';
+    var fyrstiV = (new Date(dgAr, dgMan, 1).getDay() + 6) % 7, fj = new Date(dgAr, dgMan + 1, 0).getDate();
+    for (var i = 0; i < fyrstiV; i++) box.appendChild(el('span'));
+    for (var n2 = 1; n2 <= fj; n2++) {
+      var iso = dgAr + '-' + pad(dgMan + 1) + '-' + pad(n2), b = el('button', 'v-dg-dagur', String(n2));
+      b.type = 'button'; b.dataset.dags = iso; b.setAttribute('aria-label', dagsTexti(iso)); b.disabled = !dagurOk(iso);
+      if (iso === IDAG) b.classList.add('idag');
+      if (dagsReitur.value === iso) { b.classList.add('valinn'); b.setAttribute('aria-pressed', 'true'); }
+      box.appendChild(b);
+    }
+    var td = new Date(IDAG + 'T12:00:00'); $('v-dg-fyrri').disabled = dgAr === td.getFullYear() && dgMan <= td.getMonth();
+  }
+  function opnaDagatal() {
+    var x = new Date((dagsReitur.value || IDAG) + 'T12:00:00'); dgAr = x.getFullYear(); dgMan = x.getMonth();
+    teiknaDagatal(); dg.hidden = false; dagsTakki.setAttribute('aria-expanded', 'true');
+    var v = dg.querySelector('.valinn:not(:disabled)') || dg.querySelector('.v-dg-dagur:not(:disabled)'); if (v) v.focus();
+  }
+  function lokaDagatali(fokus) {
+    if (!dg || dg.hidden) return;
+    dg.hidden = true; dagsTakki.setAttribute('aria-expanded', 'false'); if (fokus) dagsTakki.focus();
+  }
+  function smidaDagatal() {
+    if (ritill() || !dagsReitur || $('v-dags-takki')) return;    // í ritlinum er reiturinn óbreyttur; án JavaScript dugar dagsetningarreitur vafrans
+    var lab = f.querySelector('label[for="v-dags"]');
+    var w = el('div', 'v-dagatal'), t0 = el('button', 'v-dg-takki'), pop = el('div', 'v-dg-popup');
+    t0.type = 'button'; t0.id = 'v-dags-takki'; t0.setAttribute('aria-haspopup', 'dialog'); t0.setAttribute('aria-expanded', 'false'); t0.setAttribute('aria-describedby', 'h-dags-ath');
+    pop.id = 'v-dg-popup'; pop.hidden = true; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', 'Veljið dagsetningu');
+    pop.innerHTML = '<div class="v-dg-haus"><button type="button" id="v-dg-fyrri" aria-label="Fyrri mánuður">‹</button><span id="v-dg-heiti" aria-live="polite"></span><button type="button" id="v-dg-naesti" aria-label="Næsti mánuður">›</button></div>'
+      + '<div class="v-dg-vikud" aria-hidden="true"><span>má</span><span>þr</span><span>mi</span><span>fi</span><span>fö</span><span>la</span><span>su</span></div><div class="v-dg-dagar" id="v-dg-dagar"></div>';
+    dagsReitur.parentNode.insertBefore(w, dagsReitur); w.appendChild(t0); w.appendChild(pop);
+    dagsReitur.type = 'hidden'; if (lab) lab.htmlFor = 'v-dags-takki';
+    dagsTakki = t0; dg = pop; uppfaeraTakka();
+  }
+  document.addEventListener('click', function (e) {
+    if (!dg || !e.target.closest) return;
+    var tk = e.target.closest('#v-dags-takki'), dag = e.target.closest('.v-dg-dagur');
+    if (tk) { if (dg.hidden) opnaDagatal(); else lokaDagatali(false); return; }
+    if (dag && !dag.disabled && dg.contains(dag)) {
+      dagsReitur.value = dag.dataset.dags; dagsTakki.removeAttribute('aria-invalid');
+      uppfaeraTakka(); dagsReitur.dispatchEvent(new Event('change', { bubbles: true })); lokaDagatali(true); return;
+    }
+    var man = e.target.closest('#v-dg-fyrri, #v-dg-naesti');
+    if (man && !man.disabled) { dgMan += man.id === 'v-dg-fyrri' ? -1 : 1; if (dgMan < 0) { dgMan = 11; dgAr--; } if (dgMan > 11) { dgMan = 0; dgAr++; } teiknaDagatal(); var nu = $(man.id); if (nu && !nu.disabled) nu.focus(); return; }
+    if (!e.target.closest('.v-dagatal')) lokaDagatali(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dg && !dg.hidden) { e.preventDefault(); lokaDagatali(true); } });
+
   function synaVillu(t, reitur) {
+    if (reitur && reitur.id === 'v-dags' && dagsTakki) reitur = dagsTakki;
     var villa = $('v-villa'); villa.textContent = t; villa.hidden = false;
     if (reitur) { reitur.setAttribute('aria-invalid', 'true'); reitur.focus(); }
   }
@@ -851,7 +929,7 @@
   // inn það sem gesturinn hafði valið áður en hann fór af síðunni og kom aftur (pageshow)
   function endurnyja() {
     try { var hv = history.state && history.state.hoparValinn; if (hv) Object.keys(hv).forEach(function (k) { if (!valinn[k]) valinn[k] = hv[k]; }); } catch (er) {}
-    teikna(); uppfaera();
+    smidaDagatal(); teikna(); uppfaera();
   }
   endurnyja();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', endurnyja);
