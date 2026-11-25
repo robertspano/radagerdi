@@ -970,5 +970,35 @@
   window.addEventListener('pageshow', endurnyja);
 })();
 </script>
+<script>
+/* Spjöldin í sömu röð: fyrsta strikið fyrir ofan listann á að vera í sömu hæð í öllum, svo listinn í þeim sem hafa lægri haus
+   (t.d. Sérsniðin veisla, sem hefur ekkert verð) lækkar. Mælt eftir að letur og efni eigandans er komið inn og þegar stærð breytist. */
+(function () {
+  var ul = document.querySelector('.v-pakkar'); if (!ul) return;
+  var busy = false;
+  function jafna() {
+    if (busy) return; busy = true;
+    var cards = [].slice.call(ul.querySelectorAll(':scope > .v-pakki')), rows = {};
+    cards.forEach(function (c) { var l = c.querySelector(':scope > ul'); if (l) l.style.marginTop = ''; });
+    cards.forEach(function (c) {
+      var l = c.querySelector(':scope > ul'); if (!l || !c.getClientRects().length) return;
+      var ct = c.getBoundingClientRect().top, k = Math.round(ct);
+      (rows[k] = rows[k] || []).push({ l: l, h: l.getBoundingClientRect().top - ct, m: parseFloat(getComputedStyle(l).marginTop) || 0 });
+    });
+    Object.keys(rows).forEach(function (k) {
+      var r = rows[k]; if (r.length < 2) return;
+      var mx = Math.max.apply(null, r.map(function (x) { return x.h; }));
+      r.forEach(function (x) { var d = mx - x.h; if (d > 0.5) x.l.style.marginTop = (x.m + d) + 'px'; });
+    });
+    busy = false;
+  }
+  var t = null;
+  function seinna() { clearTimeout(t); t = setTimeout(jafna, 60); }
+  window.addEventListener('resize', seinna); window.addEventListener('load', seinna);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(seinna);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(seinna); [].forEach.call(ul.querySelectorAll(':scope > .v-pakki > :not(ul):not(a)'), function (e) { ro.observe(e); }); }
+  jafna();
+})();
+</script>
 </body>
 </html>
