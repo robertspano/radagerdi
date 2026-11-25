@@ -543,6 +543,9 @@
       },
       "MAIN0>SECTION1>UL0>LI2>H30": {
         "font-size": "23px"
+      },
+      "MAIN0>SECTION1>UL0>LI2>P0": {
+        "font-size": "clamp(14px, 2.17vw, 26px)"
       }
     }
   }
