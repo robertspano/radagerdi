@@ -78,6 +78,7 @@
   .v-pk-verd{margin:22px 0 0;font-size:15px;font-weight:600}
   .v-pk-verd b{display:block;font-family:'Windsord',serif;font-weight:400;font-size:clamp(34px,8.6vw,44px);letter-spacing:.03em;line-height:1.6;margin:-.15em 0 0}
   .v-pakki ul{list-style:none;margin:22px 0 26px;padding:0;width:100%}
+  .v-pk-tag{text-wrap:balance}
   .v-pakki li{padding:11px 4px;border-top:1.5px solid rgba(98,159,103,.3);font-size:15.5px;line-height:1.5}
   .v-pakki li:last-child{border-bottom:1.5px solid rgba(98,159,103,.3)}
   .v-pk-velja{margin-top:auto;display:inline-block;text-align:center;padding:17px 34px;line-height:1.1;border:2px solid var(--gr);border-radius:14px;color:var(--gr);background:#fff;text-decoration:none;
@@ -972,23 +973,27 @@
 </script>
 <script>
 /* Spjöldin í sömu röð: fyrsta strikið fyrir ofan listann á að vera í sömu hæð í öllum, svo listinn í þeim sem hafa lægri haus
-   (t.d. Sérsniðin veisla, sem hefur ekkert verð) lækkar. Mælt eftir að letur og efni eigandans er komið inn og þegar stærð breytist. */
+   (t.d. Sérsniðin veisla, sem hefur ekkert verð) lækkar og fyrirsögnin færist í miðjuna. Mælt eftir að letur og efni eigandans er komið inn og þegar stærð breytist. */
 (function () {
   var ul = document.querySelector('.v-pakkar'); if (!ul) return;
   var busy = false;
   function jafna() {
     if (busy) return; busy = true;
     var cards = [].slice.call(ul.querySelectorAll(':scope > .v-pakki')), rows = {};
-    cards.forEach(function (c) { var l = c.querySelector(':scope > ul'); if (l) l.style.marginTop = ''; });
+    cards.forEach(function (c) { var l = c.querySelector(':scope > ul'), t3 = c.querySelector(':scope > h3'); if (l) l.style.marginTop = ''; if (t3) t3.style.marginTop = ''; });
     cards.forEach(function (c) {
       var l = c.querySelector(':scope > ul'); if (!l || !c.getClientRects().length) return;
       var ct = c.getBoundingClientRect().top, k = Math.round(ct);
-      (rows[k] = rows[k] || []).push({ l: l, h: l.getBoundingClientRect().top - ct, m: parseFloat(getComputedStyle(l).marginTop) || 0 });
+      var t3 = c.querySelector(':scope > h3');
+      (rows[k] = rows[k] || []).push({ l: l, t3: t3, h: l.getBoundingClientRect().top - ct, m: parseFloat(getComputedStyle(l).marginTop) || 0, m3: t3 ? parseFloat(getComputedStyle(t3).marginTop) || 0 : 0 });
     });
     Object.keys(rows).forEach(function (k) {
       var r = rows[k]; if (r.length < 2) return;
       var mx = Math.max.apply(null, r.map(function (x) { return x.h; }));
-      r.forEach(function (x) { var d = mx - x.h; if (d > 0.5) x.l.style.marginTop = (x.m + d) + 'px'; });
+      r.forEach(function (x) {                  // munurinn skiptist jafnt fyrir ofan og neðan fyrirsögnina, svo hún sé í miðju haussins
+        var d = mx - x.h; if (d <= 0.5) return;
+        x.l.style.marginTop = (x.m + d / 2) + 'px'; if (x.t3) x.t3.style.marginTop = (x.m3 + d / 2) + 'px';
+      });
     });
     busy = false;
   }
