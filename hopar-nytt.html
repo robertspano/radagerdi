@@ -507,12 +507,12 @@
         <h2 class="v-h2" id="v-fjoldi-h">Hvað verðið þið mörg?</h2>
         <div class="v-teljari">
           <button type="button" class="v-hring" data-skref="-1" aria-label="Fækka gestum">−</button>
-          <input class="v-fjoldi" id="v-fjoldi" name="fjoldi" type="number" inputmode="numeric" min="1" max="500" placeholder="–" required aria-labelledby="v-fjoldi-h" aria-describedby="v-gestir">
+          <input class="v-fjoldi" id="v-fjoldi" name="fjoldi" type="number" inputmode="numeric" min="1" max="30" placeholder="–" required aria-labelledby="v-fjoldi-h" aria-describedby="v-gestir">
           <button type="button" class="v-hring" data-skref="1" aria-label="Fjölga gestum">+</button>
         </div>
         <p class="v-gestir" id="v-gestir">gestir</p>
         <div class="v-flyti" role="group" aria-label="Algengur fjöldi">
-          <button type="button" data-fjoldi="12">12</button><button type="button" data-fjoldi="15">15</button><button type="button" data-fjoldi="20">20</button><button type="button" data-fjoldi="30">30</button><button type="button" data-fjoldi="40">40</button>
+          <button type="button" data-fjoldi="11">11</button><button type="button" data-fjoldi="15">15</button><button type="button" data-fjoldi="20">20</button><button type="button" data-fjoldi="25">25</button><button type="button" data-fjoldi="30">30</button>
         </div>
         <p class="v-villa-topp" id="v-fjoldi-villa" hidden>Veljið fjölda gesta.</p>
         <p class="h-faerri" id="h-faerri" hidden>Hópaseðlarnir eru fyrir fleiri en 10 manns. Minni hópar geta bókað borð á <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Dineout</a>.</p>
@@ -672,9 +672,9 @@
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
   function fjoldi() {                        // valueAsNumber: „1e3“ er 1000, ekki 1
     var v = n.valueAsNumber; if (!isFinite(v)) v = parseInt(n.value, 10); v = Math.floor(v);
-    return v > 0 ? Math.min(v, 500) : 0;
+    return v > 0 ? Math.min(v, 30) : 0;
   }
-  function setja(v) { n.value = v ? Math.max(1, Math.min(500, v)) : ''; uppfaera(); }
+  function setja(v) { n.value = v ? Math.max(1, Math.min(30, v)) : ''; uppfaera(); }
   // Textinn sem gesturinn sér (eigandinn getur breytt honum í ritlinum), ekki fasta gildið í kóðanum
   function hnappTala(b) { return parseInt(b.textContent, 10) || +b.dataset.fjoldi; }
   function gildi(nafn) { var x = f.querySelector('input[name="' + nafn + '"]:checked'); return x ? x.value : ''; }
@@ -750,6 +750,7 @@
   }
 
   function uppfaera() {
+    if (n.value !== '' && n.valueAsNumber > 30) n.value = 30;
     var v = fjoldi(), gm = $('v-gestir'), fv = $('v-fjoldi-villa'), sam = $('v-samantekt'), fae = $('h-faerri'), ath = $('h-dags-ath');
     f.querySelectorAll('.v-flyti button').forEach(function (b) { b.setAttribute('aria-pressed', String(hnappTala(b) === v)); });
     // eintala/fleirtala — nema eigandinn hafi skrifað annað orð í ritlinum
