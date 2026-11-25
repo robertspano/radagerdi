@@ -122,6 +122,12 @@
   .v-ch input:checked + label{background:var(--gr);color:#fff}
   .v-ch input:focus-visible + label{outline:3px solid var(--gr);outline-offset:3px}
   .v-ch input:disabled + label{opacity:.38;cursor:not-allowed;background:#fff}
+  /* „Hvenær?“ og „Hvaða seðill?“: í miðjunni, stærri hnappar */
+  .v-reitir legend,.h-sedlar > .v-merki{text-align:center;font-size:clamp(20px,2.4vw,26px);margin-bottom:18px}
+  .v-reitir legend{width:100%}
+  .v-val{justify-content:center;gap:14px}
+  .v-ch label{min-height:64px;padding:10px clamp(22px,5vw,40px);font-size:clamp(18px,2vw,22px);border-radius:16px}
+  .h-born{text-align:center}
 
   /* réttirnir sem fylgja völdu veislunni (smíðað úr matseðlinum á síðunni) */
 
