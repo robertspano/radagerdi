@@ -1,31 +1,56 @@
 # Ráðagerði Veitingahús
 
-> Fjölskyldurekinn veitingastaður í sögufrægu húsi við Gróttu á Seltjarnarnesi (170), Íslandi.
-> Ítölsk matargerð: eldbakaðar pizzur, ferskt pasta og árstíðabundnir réttir — og bröns um helgar.
-> Family-run restaurant by the Grótta lighthouse in Seltjarnarnes, Iceland. Italian cuisine: wood-fired pizzas, fresh pasta, weekend brunch.
+> Veitingastaður í gömlu timburhúsi, byggðu fyrir aldamótin 1900, við Gróttu á Seltjarnarnesi (170), um 7 mínútna akstur frá miðborg Reykjavíkur. Matseðill með innblæstri frá ítalskri matargerð: pizzur, pasta, smáréttir og bröns um helgar.
+> Restaurant in an old timber house built before 1900, by the Grótta lighthouse in Seltjarnarnes, Iceland — a short drive from downtown Reykjavík. Italian-inspired menu: pizza, pasta, small plates and weekend brunch.
 
+Síðast yfirfarið / Last reviewed: 2026-11-26. Verð og seðlar breytast — síðurnar sjálfar gilda / Prices and menus change — the pages themselves are authoritative.
+
+- Nafn / Name: Ráðagerði Veitingahús (einnig / also: Ráðagerði, Radagerdi, Ráðagerði Restaurant)
 - Sími / Phone: +354 546 1700
 - Netfang / Email: radagerdi@radagerdi170.is
-- Heimilisfang / Address: Ráðagerði, 170 Seltjarnarnes, Iceland
-- Opnunartímar / Hours: mán–fim 11:30–22, fös 11:30–23, lau 11–23, sun 11–22 (eldhúsið lokar klukkutíma fyrir lokun / kitchen closes one hour before closing)
-- Borðapantanir / Reservations: https://www.dineout.is/radagerdi
+- Heimilisfang / Address: Ráðagerði, 170 Seltjarnarnes, Iceland — við Gróttu / by Grótta
+- Opnunartímar / Hours: mán–fim 11:30–22, fös 11:30–23, lau 11–23, sun 11–22; eldhúsið lokar klukkutíma fyrir lokun / Mon–Thu 11:30–22, Fri 11:30–23, Sat 11–23, Sun 11–22; the kitchen closes one hour before closing
+- Bröns / Brunch: um helgar 11:00–15:30 / weekends 11:00–15:30
+- Hádegistilboð / Lunch offer: virka daga 11:30–15:30, 2.990 kr — tómat-basil súpa og focaccia-samloka / weekdays 11:30–15:30, 2,990 ISK — tomato-basil soup and focaccia sandwich
+- Happy hour: alla daga 15–18 — bjór á krana, húsvín og Aperol Spritz / daily 15–18 — draught beer, house wine and Aperol Spritz
+- Þriggja rétta seðill / Three-course menu: 7.590 kr — forréttur, aðalréttur og eftirréttur að eigin vali; hægt að fá vegan og/eða glútenlaust / starter, main and dessert of your choice; vegan and/or gluten-free available
+- Take away: 10% afsláttur af sóttum mat (gildir ekki á tilboðum eða barnaréttum); hádegistilboð í take away 2.000 kr — pizza af matseðli, virka daga 11:30–15:30 / 10% off pick-up orders (not offers or kids' meals); take-away lunch offer 2,000 ISK — any pizza on the menu, weekdays 11:30–15:30
+- Barnamatseðill / Kids menu: 12 ára og yngri, réttir á 1.990 kr / age 12 and under, dishes 1,990 ISK
+- Borðapantanir / Reservations: https://www.dineout.is/radagerdi — eða í síma / or by phone +354 546 1700
+- Hópar / Groups: fleiri en 10 manns — bókunarbeiðni á https://radagerdi.is/hopar eða í síma 546 1700 / more than 10 guests — booking request at https://radagerdi.is/hopar or by phone
 - Gjafakort / Gift cards: https://bookings.dineout.is/radagerdi/order
 
 ## Síður / Pages
 - [Forsíða / Home](https://radagerdi.is/): Ráðagerði Veitingahús við Gróttu á Seltjarnarnesi
-- [Jólaseðill / Christmas menu](https://radagerdi.is/jolasedill): Jólaseðill 2026, í boði 19. nóvember 2026 – 6. janúar 2027, 10.900 kr. — og opnunartímar yfir hátíðirnar ([English](https://radagerdi.is/en-jolasedill))
-- [Matseðill / Menu](https://radagerdi.is/matsedlar): Aðalmatseðill — Þriggja rétta (7290 kr.), eldbakaðar pizzur, pasta, aðalréttir og krakkaseðill
-- [Drykkjarseðill / Drinks](https://radagerdi.is/drykkir): Vínseðill (Cà dei Frati o.fl.), bjór, kokteilar, spritzar, óáfengt, kaffi og eftirréttir — happy hour alla daga 15–18
-- [Eftirréttir / Desserts](https://radagerdi.is/eftirrettir): Tiramisu, affogato, ostakaka, vöfflur o.fl.
-- [Take Away](https://radagerdi.is/takeaway): Sóttur matur — 10% afsláttur af öllum sóttum mat
+- [Matseðill / Menu](https://radagerdi.is/matsedlar): Hádegistilboð (2.990 kr.), þriggja rétta seðill (7.590 kr.), bruschettur, smáréttir, pizzur, aðalréttir, salöt og súpa
+- [Drykkjarseðill / Drinks](https://radagerdi.is/drykkir): Vín, bjór, kokteilar, spritzar, óáfengt og kaffi — happy hour alla daga 15–18
+- [Eftirréttir / Desserts](https://radagerdi.is/eftirrettir): Tiramisu, limoncello-kaka, brennd basknesk ostakaka, affogato, vöfflur o.fl.
 - [Bröns / Brunch](https://radagerdi.is/brons): Um helgar 11:00–15:30
-- [Hópar / Groups](https://radagerdi.is/hopar): Hópamatseðlar fyrir fleiri en 10 manns — „Brot af því besta“: Valkostur 1 (6.900 kr.) og Valkostur 2 (9.900 kr.), hópabröns og barnamatseðill
-- [Veisluþjónusta / Catering](https://radagerdi.is/veisluthjonusta): Veislur og viðburðir
-- [Myndir / Gallery](https://radagerdi.is/myndir): Myndir af matnum, húsinu og umhverfinu
-- [Barnamatseðill / Kids menu](https://radagerdi.is/barnamatsedill): Pizza, kjötbollur og barnalasagna
-- [Um okkur / About us](https://radagerdi.is/um-okkur): Gamalt timburhús frá því fyrir 1900 í náttúruperlunni við Gróttu
+- [Take Away](https://radagerdi.is/takeaway): Sóttur matur — 10% afsláttur (ekki af tilboðum eða barnaréttum), hádegistilboð 2.000 kr
+- [Barnamatseðill / Kids menu](https://radagerdi.is/barnamatsedill): Fyrir 12 ára og yngri — 9" pizza, kjötbollur og barnalasagna, 1.990 kr
+- [Hópar / Groups](https://radagerdi.is/hopar): Hópaseðlar fyrir fleiri en 10 manns (börn eldri en 12 ára teljast með) í hádeginu, á kvöldin og í bröns — bókunarbeiðni send beint af síðunni
+- [Hópar – hádegi / Group lunch](https://radagerdi.is/hoparhadegi): Virka daga 11:30–16:00 — Valkostur 1: 2.990 kr., Valkostur 2: 4.990 kr.
+- [Hópar – kvöld / Group dinner](https://radagerdi.is/hoparkvold): Alla daga frá kl. 16:00 — Valkostur 1: 6.900 kr., Valkostur 2: 9.900 kr.
+- [Hópar – bröns / Group brunch](https://radagerdi.is/hoparbrons): Um helgar 11:00–15:30 — smækkaður brönsseðill fyrir hópa
+- [Jólaseðill / Christmas menu](https://radagerdi.is/jolasedill): 19. nóvember 2026 – 6. janúar 2027, 10.900 kr. — og opnunartímar yfir hátíðirnar
+- [Veisluþjónusta / Catering](https://radagerdi.is/veisluthjonusta): Veislur og viðburðir — hafið samband í síma 546 1700 eða á radagerdi@radagerdi170.is
+- [Myndir / Gallery](https://radagerdi.is/myndir): Maturinn, húsið og umhverfið við Gróttu
+- [Um okkur / About us](https://radagerdi.is/um-okkur): Gamalt timburhús frá því fyrir 1900 við Gróttu; útsýni til Esjunnar, Snæfellsjökuls og Gróttuvita
 - [Hafa samband / Contact](https://radagerdi.is/hafa-samband): Sími 546 1700, radagerdi@radagerdi170.is
+- [Starfsumsókn / Jobs](https://radagerdi.is/starfsumsokn): Umsóknir um starf í Ráðagerði
 
 ## English pages
-- [Home](https://radagerdi.is/en) · [Menu](https://radagerdi.is/en-matsedlar) · [Drinks](https://radagerdi.is/en-drykkir) · [Desserts](https://radagerdi.is/en-eftirrettir) · [Take Away](https://radagerdi.is/en-takeaway) · [Brunch](https://radagerdi.is/en-brons) · [Groups](https://radagerdi.is/en-hopar) · [Catering](https://radagerdi.is/en-veisluthjonusta) · [Gallery](https://radagerdi.is/en-myndir) · [Kids Menu](https://radagerdi.is/en-barnamatsedill) · [About us](https://radagerdi.is/en-about-us) · [Contact](https://radagerdi.is/en-contact-us)
-- [Guide to Seltjarnarnes](https://radagerdi.is/en-seltjarnarnes-iceland-travel-guide): what to see and do around the Grótta lighthouse
+- [Home](https://radagerdi.is/en): Ráðagerði Restaurant by the Grótta lighthouse in Seltjarnarnes
+- [Menu](https://radagerdi.is/en-matsedlar): Lunch offer, three-course menu, pizza, small plates and mains
+- [Drinks](https://radagerdi.is/en-drykkir): Wine, beer, cocktails, spritzes, alcohol-free and coffee — happy hour daily 15–18
+- [Desserts](https://radagerdi.is/en-eftirrettir): Tiramisu, limoncello cake, burnt Basque cheesecake, affogato, waffles
+- [Brunch](https://radagerdi.is/en-brons): Weekends 11:00–15:30
+- [Take Away](https://radagerdi.is/en-takeaway): 10% off pick-up orders (not offers or kids' meals); take-away lunch offer 2,000 ISK
+- [Kids Menu](https://radagerdi.is/en-barnamatsedill): Age 12 and under, dishes 1,990 ISK
+- [Groups](https://radagerdi.is/en-hopar): Group menus for parties of more than 10 — lunch, dinner and brunch
+- [Christmas menu](https://radagerdi.is/en-jolasedill): 19 November 2026 – 6 January 2027, 10,900 ISK, holiday opening hours
+- [Catering](https://radagerdi.is/en-veisluthjonusta): Catering for events — contact us
+- [Gallery](https://radagerdi.is/en-myndir): The food, the house and the surroundings
+- [About us](https://radagerdi.is/en-about-us): A historic timber house built before 1900 by the Grótta lighthouse
+- [Contact](https://radagerdi.is/en-contact-us): Phone +354 546 1700, radagerdi@radagerdi170.is
+- [Guide to Seltjarnarnes](https://radagerdi.is/en-seltjarnarnes-iceland-travel-guide): Getting there from Reykjavík, the Grótta lighthouse, northern lights, birdlife and more
