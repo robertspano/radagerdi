@@ -103,6 +103,11 @@ console.log('sérstök tilvik');
 t('/', 'rw /api/page?p=index.html');
 t('/index', '301 /');
 t('/index.html?cms=1', '301 /?cms=1');
+// Search Console fann þessar sem 404 (26.11.2026)
+t('/matsedill-en', '301 /en-matsedlar');
+t('/matsedill-en?tab=tab-brunch-en', '301 /en-brons');
+t('/en)restaurant', '301 /en');
+t('/en%29restaurant', '301 /en');
 t('/matsedlar?cms=1', 'rw /api/page?cms=1&p=matsedlar.html');
 t('/matsedlar.html?tab=tab-brons-is', '301 /matsedlar?tab=tab-brons-is');
 t('/matsedlar.html/', '301 /matsedlar');

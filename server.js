@@ -530,6 +530,8 @@ const LEGACY_REDIRECTS = new Map([
   ['/inactive/jolasedill', { to: '/jolasedill' }],
   ['/en/christmas-menu', { to: '/en-jolasedill' }],
   ['/hopar-nytt', { to: '/hopar' }],
+  ['/matsedill-en', { to: '/en-matsedlar', tabs: EN_MENU_TABS }],
+  ['/en)restaurant', { to: '/en' }],
 ]);
 // Slóð síðu: eitt orð án endingar (/matsedlar → matsedlar.html)
 const PAGE_PATH = /^\/[A-Za-z0-9_-]+$/;

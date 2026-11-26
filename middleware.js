@@ -41,6 +41,9 @@ const LEGACY = {
   '/inactive/jolasedill': { to: '/jolasedill' },
   '/en/christmas-menu': { to: '/en-jolasedill' },
   '/hopar-nytt': { to: '/hopar' },              // nýja Hópa-síðan var falin þar á meðan eigendur unnu í henni (birt 26.11.2026)
+  // Google Search Console fann þessar tvær sem 404 (26.11.2026): gömul Webflow-slóð og innsláttarvilla í tengli annars staðar
+  '/matsedill-en': { to: '/en-matsedlar', tabs: EN_MENU_TABS },
+  '/en)restaurant': { to: '/en' },
 };
 
 // Slóð síðu: eitt orð án endingar (/matsedlar). /admin og /skann eru ritillinn, ekki síður.
