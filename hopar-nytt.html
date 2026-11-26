@@ -139,12 +139,15 @@
   .v-reitur select option:disabled{color:#b5bbb6}
   /* dagatalið: dagar sem passa ekki við valinn seðil eru gráir */
   .v-dagatal{position:relative}
-  .v-dg-takki{width:100%;text-align:left;font:500 16px/1.5 'Montserrat',sans-serif;color:#2c3a2d;background:#fff;border:2px solid var(--gr);border-radius:14px;padding:12px 16px;min-height:52px;cursor:pointer}
+  .v-dg-takki{width:100%;text-align:left;font:500 16px/1.5 'Montserrat',sans-serif;color:#2c3a2d;background:#fff;border:2px solid var(--gr);border-radius:14px;padding:12px 16px;min-height:52px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .h-dags-ath.villa{color:#c0262a}
   .v-dg-takki.tomt{color:#6f7f72}
   .v-dg-takki:focus-visible{outline:3px solid var(--gr);outline-offset:2px}
   .v-dg-popup{position:absolute;z-index:30;top:calc(100% + 6px);left:0;width:min(330px,100%);min-width:min(290px,100%);box-sizing:border-box;background:#fff;border:2px solid var(--gr);border-radius:16px;padding:12px;box-shadow:0 10px 34px rgba(0,0,0,.2)}
   .v-dg-popup[hidden]{display:none}
-  .v-dg-haus{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:700;color:var(--gr-d)}
+  .v-dg-haus{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px;font-weight:700;color:var(--gr-d)}
+  #v-dg-heiti{flex:1;min-width:0;text-align:center;white-space:nowrap}
+  @media (max-width:360px){#v-dg-heiti{font-size:14.5px}.v-dg-haus button{width:34px;height:34px}}
   .v-dg-haus button{width:38px;height:38px;border:2px solid var(--gr);border-radius:10px;background:#fff;color:var(--gr);font-size:20px;line-height:1;cursor:pointer}
   .v-dg-haus button:disabled{border-color:#d3d8d4;color:#c4c9c5;cursor:not-allowed}
   .v-dg-vikud,.v-dg-dagar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
@@ -418,7 +421,7 @@
           <!-- Seðlarnir: .card[data-sedill] > .ti (sama og á Take Away, svo ritillinn getur bætt við og tekið út rétti).
                Gesturinn velur boga; JavaScript bætir földu valhnappi (name="sedill") í spjaldið. Bókunin les nafnið (h2)
                og verðið (.vnote) af spjöldunum. Á hádegi eru kvöldseðlarnir líka í boði (data-lika). Án JavaScript sjást allir. -->
-          <div class="h-sedlar" id="h-sedlar" role="radiogroup" aria-labelledby="h-sedlar-h">
+          <div class="h-sedlar h-fleiri" id="h-sedlar" role="radiogroup" aria-labelledby="h-sedlar-h">
             <p class="v-merki" id="h-sedlar-h">Hvaða seðill?</p>
             <p class="h-born">Athugið að börn eldri en 12 ára teljast til fjölda gesta.</p>
         <div class="h-flipi" data-flipi="hadegi" data-timi="Hádegi" data-lika="kvold">
@@ -478,7 +481,7 @@
               <div class="ti"><div class="ti-head"><span class="ti-nm">Tiramisu</span></div>
                 <p class="ti-desc">Tiramisu að hætti hússins.</p></div>
             </div>
-            <div class="card jol" data-sedill="">
+            <div class="card jol" data-sedill="" data-fra="2026-11-19" data-til="2027-01-06">
               <h2>Jólaseðill 2026</h2>
               <p class="vnote">10.900 kr á mann</p>
               <div class="ti"><div class="ti-head"><span class="ti-nm">Forréttur</span></div>
@@ -637,7 +640,8 @@
   // aðeins eigin lyklar: „#sedill-toString“ í slóðinni má ekki finna Object.prototype.toString
   var er = function (o, k) { return Object.prototype.hasOwnProperty.call(o, k); };
   var pad = function (x) { return String(x).padStart(2, '0'); };
-  var d0 = new Date(), IDAG = d0.getFullYear() + '-' + pad(d0.getMonth() + 1) + '-' + pad(d0.getDate());
+  // Dagurinn og klukkan á Íslandi (UTC allt árið), eins og þjónninn reiknar — ekki tímabelti tækis gestsins
+  var d0 = new Date(), IDAG = d0.toISOString().slice(0, 10), KLNU = d0.toISOString().slice(11, 16);
   $('v-dags').min = IDAG;
   var MAN = ['janúar','febrúar','mars','apríl','maí','júní','júlí','ágúst','september','október','nóvember','desember'];
   var DAG = ['sunnudagur','mánudagur','þriðjudagur','miðvikudagur','fimmtudagur','föstudagur','laugardagur'];
@@ -668,7 +672,7 @@
       fp.querySelectorAll('.card[data-sedill]').forEach(function (c) {
         if (c.closest('[style*="display: none"]') || (!fp.hidden && !synilegt(c))) return;
         var h = c.querySelector('h2'), v = c.querySelector('.vnote'), nafn = h ? h.textContent.trim() : '', verdT = v ? v.textContent.trim() : '';
-        if (!nafn) return;
+        if (!nafn) nafn = 'Seðill';            // eigandinn eyddi fyrirsögninni: spjaldið sést samt og má velja það
         var hvadan = i ? fp.dataset.timi + ' · ' : '';
         out.push({ card: c, merki: hvadan + nafn + (tala(verdT) ? ' · ' + kr(tala(verdT)) : ''), gildi: fp.dataset.timi + ' · ' + nafn + (verdT ? ' · ' + verdT : ''), verd: tala(verdT) });
       });
@@ -715,17 +719,31 @@
   }
 
   // Hvaða dagar og klukka passa við hvern tíma (sömu orð og í api/hopur.js)
+  // Valinn seðill (spjaldið sem valhnappurinn er í), t.d. til að vita hvort jólaseðillinn er valinn
+  function validSpjald() { var r = f.querySelector('input[name="sedill"]:checked'); return r ? r.closest('.card') : null; }
+  function stuttDags(iso) { var x = new Date(iso + 'T12:00:00'); return x.getDate() + '. ' + MAN[x.getMonth()]; }
+  // Sömu reglur og api/hopur.js (sömu orð, svo villa þjónsins bendi á réttan reit). Seðlarnir eru bornir
+  // fram lengur en til 15:00 — það er síðasti komutími hópa í hádeginu og í bröns.
   function reglur(t, d, k) {
     var helgi = d && (d.getDay() === 0 || d.getDay() === 6), a = [];
+    var iso = d ? d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) : '';
     if (t === 'Bröns') {
       if (d && !helgi) a.push({ r: 'v-dags', t: 'Bröns er aðeins um helgar — veljið laugardag eða sunnudag.' });
-      if (k && (k < '11:00' || k > '15:00')) a.push({ r: 'v-klukkan', t: 'Bröns er frá kl. 11:00 til 15:00.' });
+      if (k && k < '11:00') a.push({ r: 'v-klukkan', t: 'Bröns byrjar kl. 11:00.' });
+      if (k && k > '15:00') a.push({ r: 'v-klukkan', t: 'Síðasti komutími hópa í bröns er kl. 15:00.' });
     } else if (t === 'Hádegi') {
       if (d && helgi) a.push({ r: 'v-dags', t: 'Hádegi er aðeins á virkum dögum — um helgar er bröns.' });
-      if (k && (k < '11:30' || k > '15:00')) a.push({ r: 'v-klukkan', t: 'Hádegi er frá kl. 11:30 til 15:00.' });
+      if (k && k < '11:30') a.push({ r: 'v-klukkan', t: 'Hádegi byrjar kl. 11:30.' });
+      if (k && k > '15:00') a.push({ r: 'v-klukkan', t: 'Síðasti komutími hópa í hádeginu er kl. 15:00.' });
     } else if (t === 'Kvöld') {
       if (helgi && k && k < '16:00') a.push({ r: 'v-klukkan', t: 'Kvöld er ekki í boði fyrir kl. 16:00 um helgar.' });
     }
+    // Opnunartíminn (fótur síðunnar): virka daga frá 11:30
+    if (d && !helgi && k && k < '11:30' && !a.some(function (x) { return x.r === 'v-klukkan'; })) a.push({ r: 'v-klukkan', t: 'Við opnum kl. 11:30 á virkum dögum.' });
+    if (iso && iso === IDAG && k && k <= KLNU) a.push({ r: 'v-klukkan', t: 'Þessi tími er liðinn í dag.' });
+    var sp = validSpjald();
+    if (iso && sp && sp.dataset.fra && sp.dataset.til && (iso < sp.dataset.fra || iso > sp.dataset.til))
+      a.push({ r: 'v-dags', t: 'Jólaseðillinn er í boði ' + stuttDags(sp.dataset.fra) + ' – ' + stuttDags(sp.dataset.til) + '.' });
     return a;
   }
 
@@ -746,6 +764,7 @@
     if (ath && !ritill()) {
       var k = kl && kl.value, br = reglur(t, d, k);
       var at = br.map(function (x) { return x.t; }).join(' ');
+      ath.classList.remove('villa');
       if (ath.textContent !== at) ath.textContent = at;
       ath.hidden = !at;
       if (kl && kl.options) [].forEach.call(kl.options, function (o) {   // tímar sem passa ekki við seðilinn eru gráir
@@ -851,6 +870,7 @@
     dagsReitur.parentNode.insertBefore(w, dagsReitur); w.appendChild(t0); w.appendChild(pop);
     dagsReitur.type = 'hidden'; if (lab) lab.htmlFor = 'v-dags-takki';
     dagsTakki = t0; dg = pop; uppfaeraTakka();
+    w.addEventListener('focusout', function (e) { if (e.relatedTarget && !w.contains(e.relatedTarget)) lokaDagatali(false); });
   }
   document.addEventListener('click', function (e) {
     if (!dg || !e.target.closest) return;
@@ -858,6 +878,7 @@
     if (tk) { if (dg.hidden) opnaDagatal(); else lokaDagatali(false); return; }
     if (dag && !dag.disabled && dg.contains(dag)) {
       dagsReitur.value = dag.dataset.dags; dagsTakki.removeAttribute('aria-invalid');
+      try { history.replaceState(Object.assign({}, history.state, { hoparDags: dagsReitur.value }), ''); } catch (er) {}
       uppfaeraTakka(); dagsReitur.dispatchEvent(new Event('change', { bubbles: true })); lokaDagatali(true); return;
     }
     var man = e.target.closest('#v-dg-fyrri, #v-dg-naesti');
@@ -867,13 +888,18 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dg && !dg.hidden) { e.preventDefault(); lokaDagatali(true); } });
 
   function synaVillu(t, reitur) {
+    var vidDag = reitur && (reitur.id === 'v-dags' || reitur.id === 'v-klukkan'), ath = $('h-dags-ath');
     if (reitur && reitur.id === 'v-dags' && dagsTakki) reitur = dagsTakki;
     var villa = $('v-villa'); villa.textContent = t; villa.hidden = false;
+    // Dagur og klukka eru langt fyrir ofan hnappinn: skilaboðin birtast líka beint undir þeim
+    if (vidDag && ath) { ath.textContent = t; ath.hidden = false; ath.classList.add('villa'); }
     if (reitur) { reitur.setAttribute('aria-invalid', 'true'); reitur.focus(); }
   }
   var SVIDUR = { 'Veljið fjölda gesta.': 'v-fjoldi', 'Dagsetningin er liðin.': 'v-dags', 'Veljið dagsetningu.': 'v-dags', 'Veljið klukkan hvað.': 'v-klukkan',
     'Bröns er aðeins um helgar — veljið laugardag eða sunnudag.': 'v-dags', 'Hádegi er aðeins á virkum dögum — um helgar er bröns.': 'v-dags',
-    'Bröns er frá kl. 11:00 til 15:00.': 'v-klukkan', 'Hádegi er frá kl. 11:30 til 15:00.': 'v-klukkan', 'Kvöld er ekki í boði fyrir kl. 16:00 um helgar.': 'v-klukkan', 'Nafn vantar.': 'v-nafn',
+    'Bröns byrjar kl. 11:00.': 'v-klukkan', 'Síðasti komutími hópa í bröns er kl. 15:00.': 'v-klukkan', 'Hádegi byrjar kl. 11:30.': 'v-klukkan',
+    'Síðasti komutími hópa í hádeginu er kl. 15:00.': 'v-klukkan', 'Kvöld er ekki í boði fyrir kl. 16:00 um helgar.': 'v-klukkan', 'Við opnum kl. 11:30 á virkum dögum.': 'v-klukkan',
+    'Þessi tími er liðinn í dag.': 'v-klukkan', 'Jólaseðillinn er í boði 19. nóvember – 6. janúar.': 'v-dags', 'Nafn vantar.': 'v-nafn',
     'Netfang eða símanúmer vantar svo hægt sé að svara.': 'v-netfang', 'Netfang vantar.': 'v-netfang', 'Símanúmer vantar.': 'v-simi', 'Netfangið virðist ekki rétt.': 'v-netfang', 'Símanúmerið virðist ekki rétt.': 'v-simi' };
   f.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -885,6 +911,7 @@
       var fv = $('v-fjoldi-villa'); fv.hidden = false; n.setAttribute('aria-invalid', 'true'); n.setAttribute('aria-describedby', 'v-gestir v-fjoldi-villa'); n.focus(); return;
     }
     g.fjoldi = String(fjoldi()); g.timi = gildi('timi'); g.sedill = gildi('sedill');
+    g.klukkan = $('v-klukkan').value;          // grár (óvirkur) valinn tími er ekki í FormData — reglurnar segja þá hvað er að
     if ($('v-dags').validity.badInput) return synaVillu('Klárið að skrifa dagsetninguna.', $('v-dags'));
     if (!g.dagsetning) return synaVillu('Veljið dagsetningu.', $('v-dags'));
     if (g.dagsetning && g.dagsetning < IDAG) return synaVillu('Dagsetningin er liðin. Veljið dag frá og með deginum í dag.', $('v-dags'));
@@ -927,6 +954,7 @@
   // inn það sem gesturinn hafði valið áður en hann fór af síðunni og kom aftur (pageshow)
   function endurnyja() {
     try { var hv = history.state && history.state.hoparValinn; if (hv) Object.keys(hv).forEach(function (k) { if (!valinn[k]) valinn[k] = hv[k]; }); } catch (er) {}
+    try { var hd = history.state && history.state.hoparDags; if (hd && dagsReitur && !dagsReitur.value) dagsReitur.value = hd; } catch (er) {}
     smidaDagatal(); teikna(); uppfaera();
   }
   endurnyja();

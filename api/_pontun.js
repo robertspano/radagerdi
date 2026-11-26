@@ -74,7 +74,7 @@ function grunnur(body) {
   const fjoldi = parseInt(line(body.fjoldi, 5), 10), dags = dagsetning(body.dagsetning), kl = line(body.klukkan, 5);
   const netfang = line(body.netfang, 200).toLowerCase();
   return {
-    fjoldi: fjoldi >= 1 && fjoldi <= 30 ? fjoldi : 0,
+    fjoldi: fjoldi >= 1 && fjoldi <= 500 ? fjoldi : 0,   // hvert form getur haft lægra hámark (hópar: 30, í api/hopur.js)
     dagsetning: dags.texti, dagIso: dags.iso, vikudagur: dags.vikudagur,
     klukkan: /^([01]\d|2[0-3]):[0-5]\d$/.test(kl) ? kl : '',
     oskir: txt(body.oskir, 3000),

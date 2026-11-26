@@ -90,6 +90,9 @@ const GOD = { fjoldi: '30', veisla: 'Stórveisla', val: 'Focaccia-samlokur: Parm
   sent = [];
   r = await call({ body: Object.assign({}, GOD, { dagsetning: new Date().toISOString().slice(0, 10) }) });
   ok('dagurinn í dag er í lagi', r.status === 200 && sent.length === 1);
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { fjoldi: '120' }) });
+  ok('120 manna veisla er í lagi (30 gesta hámark hópabókunar gildir ekki hér)', r.status === 200 && sent.length === 1 && /^Veislupöntun: 120 gestir/.test(sent[0].body.subject));
   for (const x of ['toString', 'valueOf', '__proto__', 'constructor']) {
     sent = [];
     r = await call({ body: Object.assign({}, GOD, { afhending: x }) });

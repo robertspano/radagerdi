@@ -149,14 +149,16 @@
       // við stillingar eigandans á hvern hluta um leið og hann verður til — og alltaf
       // rétt á undan næstu teikningu (requestAnimationFrame). Þannig er ekkert teiknað
       // fyrst í röngu útliti og leiðrétt á eftir; það var hoppið sem sást.
-      let pending = false;
+      let pending = false, raf = 0;
       const schedule = () => {
         if (pending) return; pending = true;
-        requestAnimationFrame(() => { pending = false; run(); });
+        raf = requestAnimationFrame(() => { pending = false; run(); });
       };
       const mo = new MutationObserver(schedule);
       mo.observe(document.documentElement, { childList: true, subtree: true });
-      document.addEventListener('DOMContentLoaded', () => { mo.disconnect(); run(); });
+      // Síðasta beitingin er hér. Biðin eftir næstu teikningu er felld niður: annars gæti hún keyrt
+      // eftir að skriftur síðunnar hafa smíðað sitt (t.d. valhnappa inni í .card) og þurrkað það út.
+      document.addEventListener('DOMContentLoaded', () => { mo.disconnect(); cancelAnimationFrame(raf); pending = false; run(); });
     }
   }
 

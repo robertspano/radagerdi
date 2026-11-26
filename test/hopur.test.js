@@ -49,12 +49,21 @@ const GOD = { fjoldi: '14', timi: 'Kvöld', sedill: 'Kvöld · Valkostur 2 · 9.
   // 2026-12-10 fim, 11 fös, 12 lau, 13 sun
   await hafna('hádegi á laugardegi', { timi: 'Hádegi', dagsetning: '2026-12-12', klukkan: '12:00' }, 'Hádegi er aðeins á virkum dögum — um helgar er bröns.');
   await hafna('hádegi á sunnudegi', { timi: 'Hádegi', dagsetning: '2026-12-13', klukkan: '12:00' }, 'Hádegi er aðeins á virkum dögum — um helgar er bröns.');
-  await hafna('hádegi kl. 15:15', { timi: 'Hádegi', dagsetning: '2026-12-10', klukkan: '15:15' }, 'Hádegi er frá kl. 11:30 til 15:00.');
-  await hafna('hádegi kl. 11:00', { timi: 'Hádegi', dagsetning: '2026-12-10', klukkan: '11:00' }, 'Hádegi er frá kl. 11:30 til 15:00.');
+  await hafna('hádegi kl. 15:15', { timi: 'Hádegi', dagsetning: '2026-12-10', klukkan: '15:15' }, 'Síðasti komutími hópa í hádeginu er kl. 15:00.');
+  await hafna('hádegi kl. 11:00', { timi: 'Hádegi', dagsetning: '2026-12-10', klukkan: '11:00' }, 'Hádegi byrjar kl. 11:30.');
   await taka('hádegi á fimmtudegi kl. 15:00', { timi: 'Hádegi', dagsetning: '2026-12-10', klukkan: '15:00' });
   await hafna('bröns á föstudegi', { timi: 'Bröns', dagsetning: '2026-12-11', klukkan: '12:00' }, 'Bröns er aðeins um helgar — veljið laugardag eða sunnudag.');
-  await hafna('bröns kl. 15:15', { timi: 'Bröns', dagsetning: '2026-12-13', klukkan: '15:15' }, 'Bröns er frá kl. 11:00 til 15:00.');
-  await hafna('bröns kl. 10:45', { timi: 'Bröns', dagsetning: '2026-12-12', klukkan: '10:45' }, 'Bröns er frá kl. 11:00 til 15:00.');
+  await hafna('bröns kl. 15:15', { timi: 'Bröns', dagsetning: '2026-12-13', klukkan: '15:15' }, 'Síðasti komutími hópa í bröns er kl. 15:00.');
+  await hafna('bröns kl. 10:45', { timi: 'Bröns', dagsetning: '2026-12-12', klukkan: '10:45' }, 'Bröns byrjar kl. 11:00.');
+  await hafna('kvöld á virkum degi kl. 11:00 (fyrir opnun)', { timi: 'Kvöld', dagsetning: '2026-12-10', klukkan: '11:00' }, 'Við opnum kl. 11:30 á virkum dögum.');
+  await hafna('enginn tími valinn, virkur dagur kl. 11:15', { timi: '', dagsetning: '2026-12-10', klukkan: '11:15' }, 'Við opnum kl. 11:30 á virkum dögum.');
+  await hafna('jólaseðill 5. febrúar', { timi: 'Kvöld', sedill: 'Kvöld · Jólaseðill 2026 · 10.900 kr á mann', dagsetning: '2027-02-05', klukkan: '19:00' }, 'Jólaseðillinn er í boði 19. nóvember – 6. janúar.');
+  {
+    // Tími sem er liðinn í dag en eftir opnun (prófið á aðeins við eftir kl. 11:31 UTC)
+    const nu = new Date().toISOString(), kl = nu.slice(11, 16), helgi = [0, 6].includes(new Date().getUTCDay());
+    if (kl > '11:31') await hafna('liðinn tími í dag', { timi: '', dagsetning: nu.slice(0, 10), klukkan: '11:30' }, 'Þessi tími er liðinn í dag.');
+    else console.log('  – liðinn tími í dag: sleppt (prófið keyrt fyrir kl. 11:31)' + (helgi ? '' : ''));
+  }
   await taka('bröns á sunnudegi kl. 11:00', { timi: 'Bröns', dagsetning: '2026-12-13', klukkan: '11:00' });
   await taka('bröns á laugardegi kl. 15:00', { timi: 'Bröns', dagsetning: '2026-12-12', klukkan: '15:00' });
   await hafna('kvöld á laugardegi kl. 15:00', { timi: 'Kvöld', dagsetning: '2026-12-12', klukkan: '15:00' }, 'Kvöld er ekki í boði fyrir kl. 16:00 um helgar.');
@@ -97,7 +106,13 @@ const GOD = { fjoldi: '14', timi: 'Kvöld', sedill: 'Kvöld · Valkostur 2 · 9.
   ok('óþekktur tími („toString“) → sleppt, ekki villa', r.status === 200 && sent[0] && !/Hvenær: /.test(sent[0].body.text));
   sent = [];
   r = await call({ body: { fjoldi: '8', nafn: 'Siggi', simi: '5551234', netfang: 'siggi@example.com', dagsetning: GOD.dagsetning, klukkan: GOD.klukkan } });
-  ok('færri en 11 og ekkert annað valið → samt sent (starfsfólkið metur)', r.status === 200 && sent[0] && sent[0].body.subject === 'Hópabókun: 8 gestir — Siggi');
+  ok('færri en 11 og ekkert annað valið → samt sent (starfsfólkið metur)', r.status === 200 && sent[0] && /^Hópabókun: 8 gestir · .+ kl\. \d\d:\d\d — Siggi$/.test(sent[0].body.subject));
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { timi: 'Kvöld', sedill: 'Kvöld · Jólaseðill 2026 · 10.900 kr á mann', dagsetning: '2026-12-18', klukkan: '19:00' }) });
+  ok('jólaseðill 18. desember kl. 19 → sent', r.status === 200 && sent.length === 1);
+  sent = [];
+  r = await call({ body: Object.assign({}, GOD, { fjoldi: '31' }) });
+  ok('31 gestur → 400 (hópabókunin tekur að hámarki 30, eins og síðan)', r.status === 400 && sent.length === 0 && r.json.error === 'Veljið fjölda gesta.');
   sent = [];
   await call({ body: Object.assign({}, GOD, { sedill: '<img src=x onerror=alert(1)>', oskir: '<script>x</script>' }) });
   ok('allt stafað út í HTML-póstinum', sent[0] && !/<img |<script>/.test(sent[0].body.html) && /&lt;img/.test(sent[0].body.html));

@@ -635,7 +635,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var n = $('v-fjoldi'), EIGIN = 'Eigin veisla';
   var pad = function (x) { return String(x).padStart(2, '0'); };
-  var d0 = new Date(), IDAG = d0.getFullYear() + '-' + pad(d0.getMonth() + 1) + '-' + pad(d0.getDate());
+  var d0 = new Date(), IDAG = d0.toISOString().slice(0, 10);   // dagurinn á Íslandi (UTC), eins og þjónninn
   $('v-dags').min = IDAG;
   var MAN = ['janúar','febrúar','mars','apríl','maí','júní','júlí','ágúst','september','október','nóvember','desember'];
   var DAG = ['sunnudagur','mánudagur','þriðjudagur','miðvikudagur','fimmtudagur','föstudagur','laugardagur'];
