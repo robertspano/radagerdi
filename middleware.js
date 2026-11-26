@@ -40,6 +40,7 @@ const LEGACY = {
   '/en/seltjarnarnes-iceland-travel-guide': { to: '/en-seltjarnarnes-iceland-travel-guide' },
   '/inactive/jolasedill': { to: '/jolasedill' },
   '/en/christmas-menu': { to: '/en-jolasedill' },
+  '/hopar-nytt': { to: '/hopar' },              // nýja Hópa-síðan var falin þar á meðan eigendur unnu í henni (birt 26.11.2026)
 };
 
 // Slóð síðu: eitt orð án endingar (/matsedlar). /admin og /skann eru ritillinn, ekki síður.

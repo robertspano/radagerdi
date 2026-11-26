@@ -529,6 +529,7 @@ const LEGACY_REDIRECTS = new Map([
   ['/en/seltjarnarnes-iceland-travel-guide', { to: '/en-seltjarnarnes-iceland-travel-guide' }],
   ['/inactive/jolasedill', { to: '/jolasedill' }],
   ['/en/christmas-menu', { to: '/en-jolasedill' }],
+  ['/hopar-nytt', { to: '/hopar' }],
 ]);
 // Slóð síðu: eitt orð án endingar (/matsedlar → matsedlar.html)
 const PAGE_PATH = /^\/[A-Za-z0-9_-]+$/;

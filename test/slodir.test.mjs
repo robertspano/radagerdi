@@ -59,7 +59,7 @@ const stubs = files.filter(noindex);
 const pages = files.filter(f => !noindex(f));
 
 console.log('\nhver síða vísar á hreinu slóðina sína (canonical) — annars fer hún ekki í sitemap');
-// Falin síða sem á að taka við af annarri (api/_drog.js: 'hopar-nytt.html' → '/hopar') vísar strax á
+// Falin síða sem á að taka við af annarri (api/_drog.js: 'veisluthjonusta-nytt.html' → '/veisluthjonusta') vísar strax á
 // lokaslóðina sína; hún er aldrei í sitemap og gestir fá hana ekki fyrr en hún er birt.
 const DROG = createRequire(import.meta.url)('../api/_drog.js');
 for (const f of pages) {
