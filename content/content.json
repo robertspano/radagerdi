@@ -14,9 +14,6 @@
       "DIV1>DIV0>P0": "10% afsláttur af öllum sóttum réttum<br>(Gildir ekki á tilboðum eða barnaréttum)"
     },
     "barnamatsedill.html": {},
-    "hopar.html": {
-      "DIV1>DIV0>DIV1>P0": "Hringið eða sendið okkur tölvupóst varðandi <b class=\"\">fjölda gesta, dagsetningu, tíma og hvaða hópaseðill</b> hentar ykkar hóp. Við bókum ykkur þá inn að því gefnu að það sé laust borð.<br><b class=\"\">Radagerdi@radagerdi170.is</b>"
-    },
     "hafa-samband.html": {
       "DIV1>DIV0>DIV0>H10>SPAN0": "",
       "DIV1>DIV0>DIV1>P0": "Við tökum vel á móti ykkur alla daga&nbsp;<br>&nbsp;<b class=\"\">mán–fim 11:30–22 <br>fös 11:30–23 <br>lau 11–23 <br>sun 11–22</b> <br><b class=\"\">(eldhúsið lokar klukkutíma fyrir lokun) <br></b>Hringið eða sendið okkur línu og við svörum eins fljótt og við getum.",
@@ -263,7 +260,9 @@
     "brons.html": {},
     "takeaway.html": {},
     "barnamatsedill.html": {},
-    "hopar.html": {},
+    "hopar.html": {
+      "MAIN0>FORM0>DIV1>DIV0>DIV4>P0": true
+    },
     "hafa-samband.html": {},
     "en-brons.html": {},
     "en-matsedlar.html": {
@@ -304,9 +303,6 @@
       "MAIN0>SECTION1>UL0>LI2>P1>B0": true,
       "MAIN0>FORM0>DIV1>DIV0>FIELDSET0>DIV0>DIV3>LABEL0": true,
       "MAIN0>SECTION1>UL0>LI2>P1": true
-    },
-    "hopar-nytt.html": {
-      "MAIN0>FORM0>DIV1>DIV0>DIV4>P0": true
     }
   },
   "order": {
@@ -396,19 +392,6 @@
       "DIV1>DIV0": {
         "padding-top": "21px",
         "padding-bottom": "1px"
-      }
-    },
-    "hopar.html": {
-      "DIV1>DIV0>DIV0": {
-        "padding-top": "40px",
-        "padding-bottom": "36px"
-      },
-      "DIV1>DIV0>DIV1>P0": {
-        "font-weight": "400"
-      },
-      "DIV1>DIV0>DIV1": {
-        "padding-top": "15px",
-        "padding-bottom": "19px"
       }
     },
     "hafa-samband.html": {
