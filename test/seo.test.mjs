@@ -137,10 +137,12 @@ for (const f of files) {
 console.log('6. opnunartímar í JSON-LD: hátíðartímar sem eru liðnir eru teknir út');
 const IDAG = new Date().toISOString().slice(0, 10);
 const allirHlutir = x => x && typeof x === 'object' ? [x, ...Object.values(x).flatMap(allirHlutir)] : [];
-for (const [f, d] of ldAll) for (const o of allirHlutir(d)) {
-  if (o['@type'] !== 'OpeningHoursSpecification') continue;
-  if (o.validThrough) ok(`${f}: hátíðartími ${o.validFrom}–${o.validThrough} er liðinn — takið hann út úr JSON-LD (eða setjið næstu hátíðar inn)`, o.validThrough >= IDAG);
-  ok(`${f}: opnunartími hefur opens og closes`, /^\d\d:\d\d$/.test(o.opens) && /^\d\d:\d\d$/.test(o.closes));
+for (const [f, d] of ldAll) {
+  const timar = allirHlutir(d).filter(o => o['@type'] === 'OpeningHoursSpecification');
+  for (const o of timar) ok(`${f}: opnunartími hefur opens og closes`, /^\d\d:\d\d$/.test(o.opens) && /^\d\d:\d\d$/.test(o.closes));
+  // Fellur fyrst þegar ALLIR hátíðartímarnir eru liðnir (ekki 24. des. þótt 23. des. sé liðinn).
+  const lok = timar.map(o => o.validThrough).filter(Boolean).sort().pop();
+  if (lok) ok(`${f}: allir hátíðartímar í JSON-LD liðnir (síðasti ${lok}) — takið þá út (eða setjið næstu hátíðar inn)`, lok >= IDAG);
 }
 
 console.log('7. llms.txt: aðeins birtar síður, og verðin standa á síðunni');
