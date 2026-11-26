@@ -128,6 +128,8 @@
   .rg-menu.open{transform:translateX(0);visibility:visible}
   .rg-menu a{color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,2.6vh,29px);letter-spacing:.12em;text-indent:.12em;text-transform:uppercase;line-height:1.3;text-align:left}
   .rg-menu a:hover{text-decoration:underline}
+  .rg-menu a.rg-menu-off{opacity:.5;cursor:default;pointer-events:none}
+  .rg-menu a.rg-menu-off .tag{display:block;font-size:.48em;letter-spacing:.05em;margin-top:2px}
   .rg-menu .sep{width:44px;border-top:2px solid rgba(255,255,255,.7);margin:6px 0}
   .rg-close{position:absolute;top:20px;right:24px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
   /* Bröns: myndir sitthvoru megin við seðilinn — breytanlegar í CMS (bæta við / eyða / raða) */
@@ -205,8 +207,8 @@
     <div class="cols">
       <div class="col">
         <div class="card">
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's Brunch Platter</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
-            <p class="ti-desc">Two fried eggs, bacon, avocado, fresh tomato salsa, Gullauga baby potatoes with yogurt sauce and salad. Served with wood-fired bread</p></div>
+          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's Brunch Platter</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
+            <p class="ti-desc">Two fried eggs, bacon, avocado, fresh tomato salsa, salad and fried baby potatoes with yogurt sauce. Served with wood-fired bread</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Shakshuka</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Two fried eggs in a thick sauce of bell peppers, tomatoes, onion and garlic, topped with feta cheese and parsley, served with wood-fired bread</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Vegan Brunch Platter (V)</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
@@ -229,8 +231,6 @@
             <p class="ti-desc">Waffle, bacon, fried eggs and syrup</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Brunch Pizza</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
             <p class="ti-desc">Mascarpone, cheese, bacon, potatoes, gremolata, parmesan, egg yolks and a fried egg</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði's Brunch Platter</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Two fried eggs, bacon, avocado, fresh tomato salsa, salad and fried baby potatoes with yogurt sauce. Served with wood-fired bread</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Turkish Eggs</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Two poached eggs served on spiced Greek yogurt with dill, lemon, garlic and mint. Topped with nduja butter and served with wood-fired bread</p></div>
           <div class="ti"><div class="ti-head"><span class="ti-nm">Avocado Bruschetta</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
@@ -273,7 +273,7 @@
       <a href="/en-brons">Brunch</a>
       <a href="/en-hopar">Groups</a>
     </div>
-    <a href="/en-veisluthjonusta">Catering</a>
+    <a href="#" class="rg-menu-off" aria-disabled="true" tabindex="-1" onclick="return false">Catering<span class="tag">(Coming Soon)</span></a>
     <div class="sep"></div>
     <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Book a table</a>
     <a href="https://bookings.dineout.is/radagerdi/order?lng=en" target="_blank">Gift cards</a>

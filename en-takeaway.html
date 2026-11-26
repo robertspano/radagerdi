@@ -128,6 +128,8 @@
   .rg-menu.open{transform:translateX(0);visibility:visible}
   .rg-menu a{color:#fff;text-decoration:none;font-family:'Windsord',serif;font-size:clamp(19px,2.6vh,29px);letter-spacing:.12em;text-indent:.12em;text-transform:uppercase;line-height:1.3;text-align:left}
   .rg-menu a:hover{text-decoration:underline}
+  .rg-menu a.rg-menu-off{opacity:.5;cursor:default;pointer-events:none}
+  .rg-menu a.rg-menu-off .tag{display:block;font-size:.48em;letter-spacing:.05em;margin-top:2px}
   .rg-menu .sep{width:44px;border-top:2px solid rgba(255,255,255,.7);margin:6px 0}
   .rg-close{position:absolute;top:20px;right:24px;background:none;border:0;color:#fff;cursor:pointer;padding:6px}
   .rg-gallery{overflow:hidden;margin:70px 0 44px}
@@ -192,85 +194,88 @@
     </div>
 
     <div class="lunch">
-      <h2>Lunch Offer 2890 kr</h2>
+      <h2>Lunch Offer 2000 kr</h2>
       <p>(Weekdays 11:30–15:30)</p>
-      <p class="combo">Creamy Tomato &amp; Basil Soup &amp; Focaccia Sandwich</p>
-      <p>Choose a filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p>
+      <p class="combo">ANY PIZZA ON THE MENU</p>
+      <p>Only applies for take away and not if eaten on the premises</p>
       <p class="fine">(discount does not apply to the lunch offer)</p>
     </div>
 
     <div class="cols">
       <div class="col">
         <div class="card">
-          <h2><span>Small Plates</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Creamy Tomato &amp; Basil Soup</span><span class="ti-pr"><b class="ti-new">2190 kr</b></span></div>
-            <p class="ti-desc">Homemade hot soup made from premium Italian tomatoes, served with crispy wood-fired garlic bread.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Burrata</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
+          <h2 class=""><span class="">Antipasti</span></h2>
+          
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Warm Olives (V)</span><span class="ti-pr"><b class="ti-new">1790 kr</b></span></div>
+            <p class="ti-desc">Wood-fired olives in oil, seasoned with oregano, rosemary and chili flakes, served with bread</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Burrata</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
             <p class="ti-desc">Italian burrata cheese, tomatoes, pistachio pesto dressing and crushed pistachios. Served with crispy wood-fired bread.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Arancini</span><span class="ti-pr"><b class="ti-new">2690 kr</b></span></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">ARANCINI (2PC)</span><span class="ti-pr"><b class="ti-new">1990 KR&nbsp;&nbsp;</b></span></div>
+            <p class="ti-desc">Crispy mushroom risotto balls filled with mozzarella cheese, served with homemade marinara sauce and sautéed chestnut mushrooms, topped with gremolata and parmesan cheese</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Arancini (4 pc)</span><span class="ti-pr"><b class="ti-new">2990 kr</b></span></div>
             <p class="ti-desc">Crispy mushroom risotto balls filled with mozzarella cheese, served with homemade marinara sauce and sautéed chestnut mushrooms, topped with gremolata and parmesan cheese</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Warm Olives (V)</span><span class="ti-pr"><b class="ti-new">1390 kr</b></span></div>
-            <p class="ti-desc">Wood-fired olives in oil, seasoned with oregano, rosemary and chili flakes, served with bread</p></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Creamy Tomato &amp; Basil Soup</span><span class="ti-pr"><b class="ti-new">2690 kr</b></span></div>
+            <p class="ti-desc">Homemade hot soup made from premium Italian tomatoes, served with crispy wood-fired garlic bread.</p></div>
         </div>
 
         <div class="card">
-          <h2><span>Salads</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">House Caesar Salad</span><span class="ti-pr"><b class="ti-new">3690 kr</b></span></div>
-            <p class="ti-desc">Romaine lettuce, parmesan, fresh and semi-dried tomatoes, crispy prosciutto, crispy bread and herb dressing. Add feta cheese for an extra charge.</p>
+          <h2 class=""><span>Salads</span></h2>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm">House Caesar Salad</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
+            <p class="ti-desc">Romaine lettuce, parmesan, fresh and semi-dried tomatoes, crispy prosciutto, crispy bread and herb dressing. Add feta cheese for 500 kr.</p>
             <p class="ti-note">Choose: chicken, shrimp or grilled zucchini.</p>
             <p class="ti-note">Vegan option available</p></div>
         </div>
 
         <div class="card">
-          <h2><span>Main Courses</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Chicken Milanese</span><span class="ti-pr"><b class="ti-new">5990 kr</b></span></div>
+          <h2 class=""><span class="">Main Courses</span></h2>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Chicken Milanese</span><span class="ti-pr"><b class="ti-new">5990 kr</b></span></div>
             <p class="ti-desc">Deep-fried chicken breast in breadcrumbs, served with baby potatoes, gremolata, arugula and parmesan.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Truffle Penne Pasta (V)</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
-            <p class="ti-desc">Penne pasta with garlic and truffle vegan cream cheese, semi-dried tomatoes and spinach, drenched in our homemade marinara sauce and baked in the wood-fired oven, topped with gremolata and crushed pistachios. Served with soft wood-fired focaccia bread.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði Lasagna</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
-            <p class="ti-desc">Three layers of bolognese meat sauce, béchamel sauce, mozzarella and pasta, topped with parmesan and baked in our wood-fired oven. Served with crispy wood-fired garlic bread.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Mascarpone Meatballs</span><span class="ti-pr"><b class="ti-new">4390 kr</b></span></div>
-            <p class="ti-desc">Wood-fired meatballs with mascarpone mushroom sauce, sautéed mushrooms, potatoes, red onion, gremolata, parmesan and spinach. Served with wood-fired bread.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Ráðagerði Bacalao</span><span class="ti-pr"><b class="ti-new">4390 kr</b></span></div>
+          
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Ráðagerði Lasagna</span><span class="ti-pr"><b class="ti-new">4190 kr</b></span></div>
+            <p class="ti-desc">Three layers of bolognese meat sauce, béchamel sauce, mozzarella and pasta, topped with parmesan and baked in our wood-fired oven. Served with crispy wood-fired garlic bread.</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Ráðagerði Bacalao</span><span class="ti-pr"><b class="ti-new">4690 kr</b></span></div>
             <p class="ti-desc">Salted cod in homemade marinara sauce with mixed olives, semi-dried tomatoes, gremolata and parsnip crisps. Served with wood-fired bread.</p></div>
-        </div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Mascarpone Meatballs</span><span class="ti-pr"><b class="ti-new">4690 kr</b></span></div>
+            <p class="ti-desc">Wood-fired meatballs with mascarpone mushroom sauce, sautéed mushrooms, potatoes, red onion, gremolata, parmesan and spinach. Served with wood-fired bread.</p></div>
+          
+        <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Truffle Penne Pasta (V)</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
+            <p class="ti-desc">Penne pasta with garlic and truffle vegan cream cheese, semi-dried tomatoes and spinach, drenched in our homemade marinara sauce and baked in the wood-fired oven, topped with gremolata and crushed pistachios. Served with soft wood-fired focaccia bread.</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Penne alla Vodka</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
+            <p class="ti-desc">Penne pasta drenched in vodka sauce, topped with burrata stracciatella and basil. Add nduja for 500 kr.</p></div></div>
       </div>
 
       <div class="col">
         <div class="card">
           <h2><span>Focaccia</span></h2>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Focaccia Sandwich</span><span class="ti-pr"><b class="ti-new">3290 kr</b></span></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm"><span style="font-size: 23px; letter-spacing: 0.864px;" class="">Focaccia Sandwich - Half</span></span><span class="ti-pr"><b class="ti-new">2690 kr</b></span></div>
+            <p class="ti-desc">Wood-fired focaccia sandwich with arugula, burrata stracciatella, pistachio pesto, tomatoes, red onion and mixed olives. Choose a filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Focaccia Sandwich - Whole</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
             <p class="ti-desc">Wood-fired focaccia sandwich with arugula, burrata stracciatella, pistachio pesto, tomatoes, red onion and mixed olives. Choose a filling: prosciutto, mortadella, smoked salmon or grilled zucchini.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Garlic Focaccia</span><span class="ti-pr"><b class="ti-new">2490 kr</b></span></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Garlic Focaccia</span><span class="ti-pr"><b class="ti-new">2890 kr</b></span></div>
             <p class="ti-desc">Focaccia bread with mozzarella cheese, garlic and gremolata.</p></div>
         </div>
 
         <div class="card">
-          <h2><span>Pizza</span></h2>
+          <h2 class=""><span class="">Pizza</span></h2>
           <p class="vnote">Swap the cheese for vegan cheese</p>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Margherita</span><span class="ti-pr"><b class="ti-new">2790 kr</b></span></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Margherita</span><span class="ti-pr"><b class="ti-new">2890 kr</b></span></div>
             <p class="ti-desc">Tomatoes, fresh mozzarella and fresh basil</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Pepperoni &amp; Olives</span><span class="ti-pr"><b class="ti-new">3390 kr</b></span></div>
-            <p class="ti-desc">Tomatoes, cheese, pepperoni, mixed olives and gremolata</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Pepperoni &amp; Chili</span><span class="ti-pr"><b class="ti-new">3690 kr</b></span></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Burrata Stracciatella</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, semi-dried tomatoes, burrata stracciatella and herb oil</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Truffle &amp; Potatoes</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
+            <p class="ti-desc">Mascarpone, oven-baked potatoes, truffle aioli, arugula and parmesan</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Pear</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
+            <p class="ti-desc">Mascarpone, pears, fresh mozzarella, blue cheese, caramelized walnuts and arugula</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Funghi &amp; Feykir</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
+            <p class="ti-desc">Mascarpone, fresh mozzarella, enoki mushrooms, gremolata, pine nuts and Feykir cheese.</p></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Pepperoni &amp; Chili</span><span class="ti-pr"><b class="ti-new">3890 kr</b></span></div>
             <p class="ti-desc">Tomatoes, cheese, pepperoni, fresh chili, dates and mascarpone, topped with chili honey</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Pepperoni &amp; Nduja</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Pepperoni &amp; Nduja</span><span class="ti-pr"><b class="ti-new">3890 kr</b></span></div>
             <p class="ti-desc">Tomatoes, cheese, pepperoni, nduja and blue cheese.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Parma &amp; Arugula</span><span class="ti-pr"><b class="ti-new">3690 kr</b></span></div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Parma &amp; Arugula</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
             <p class="ti-desc">Tomatoes, mozzarella, prosciutto, arugula and parmesan</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Prawns &amp; Gremolata</span><span class="ti-pr"><b class="ti-new">3890 kr</b></span></div>
-            <p class="ti-desc">Olive and anchovy mascarpone, cheese, chili-marinated tiger prawns, artichoke hearts, gremolata and parmesan.</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Burrata Stracciatella</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Tomatoes, semi-dried tomatoes, burrata stracciatella and herb oil</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Truffle &amp; Potatoes</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Mascarpone, oven-baked potatoes, truffle aioli, arugula and parmesan</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Pears</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Mascarpone, pears, fresh mozzarella, blue cheese, caramelized walnuts and arugula</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Half Moon</span><span class="ti-pr"><b class="ti-new">3590 kr</b></span></div>
-            <p class="ti-desc">Tomatoes, mozzarella, mushrooms, thinly sliced ham or pepperoni</p></div>
-          <div class="ti"><div class="ti-head"><span class="ti-nm">Mortadella &amp; Pistachios</span><span class="ti-pr"><b class="ti-new">3690 kr</b></span></div>
-            <p class="ti-desc">Tomatoes, fresh mozzarella, mortadella, burrata stracciatella, pistachio pesto and crushed pistachios.</p></div>
-        </div>
+          <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Mortadella &amp; Pistachios</span><span class="ti-pr"><b class="ti-new">3990 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, fresh mozzarella, mortadella, burrata stracciatella, pistachio pesto and crushed pistachios.</p></div><div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">Shrimp &amp; ARTICHOKEs</span><span class="ti-pr"><b class="ti-new">4090 kr</b></span></div>
+            <p class="ti-desc">Mascarpone, cheese, chili-marinated tiger shrimp, artichoke hearts, gremolata and parmigiano.</p></div>
+          
+          
+          
+          
+          
+        <div class="ti" style="position: relative;"><div class="ti-head"><span class="ti-nm" style="font-size: 23px !important;">CALZONE</span><span class="ti-pr"><b class="ti-new">3790 kr</b></span></div>
+            <p class="ti-desc">Tomatoes, mozzarella, mushrooms, thinly sliced ham or pepperoni</p></div></div>
       </div>
     </div>
   </div>
@@ -307,7 +312,7 @@
       <a href="/en-brons">Brunch</a>
       <a href="/en-hopar">Groups</a>
     </div>
-    <a href="/en-veisluthjonusta">Catering</a>
+    <a href="#" class="rg-menu-off" aria-disabled="true" tabindex="-1" onclick="return false">Catering<span class="tag">(Coming Soon)</span></a>
     <div class="sep"></div>
     <a href="https://www.dineout.is/radagerdi?isolation=true" target="_blank">Book a table</a>
     <a href="https://bookings.dineout.is/radagerdi/order?lng=en" target="_blank">Gift cards</a>
