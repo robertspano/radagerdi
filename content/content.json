@@ -33,10 +33,7 @@
       "DIV1>DIV0>P0": "10% off all pick up orders<br>(Not including offers or children's meals)"
     },
     "en-barnamatsedill.html": {},
-    "en-hopar.html": {
-      "DIV1>DIV0>DIV1>P0": "Call us on 546-1700 or send us an email with the&nbsp;<b>number of guests, date, time and which group menu</b> suits your party. We will then book you in, provided a table is available.<br><b class=\"\">R</b><b class=\"\" style=\"\">adagerdi@radagerdi170.is<br></b>",
-      "DIV1>DIV0>DIV1>P0>B2": "adagerdi@radagerdi170.is<br>"
-    },
+    "en-hopar.html": {},
     "hoparkvold.html": {
       "DIV1>DIV2>P0": "Fyrir hópa sem telja fleiri en 10 gesti bjóðum við upp á Hópaseðla sem má sjá hér að neðan",
       "DIV1>DIV2>P1": "Matseðlarnir eru&nbsp;<div>brot af því besta sem við höfum upp á að bjóða.&nbsp;</div>",
@@ -276,7 +273,9 @@
     "en-eftirrettir.html": {},
     "en-takeaway.html": {},
     "en-barnamatsedill.html": {},
-    "en-hopar.html": {},
+    "en-hopar.html": {
+      "MAIN0>FORM0>DIV1>DIV0>DIV4>P0": true
+    },
     "hoparkvold.html": {},
     "hoparbrons.html": {},
     "hoparhadegi.html": {
@@ -450,16 +449,7 @@
         "padding-bottom": "1px"
       }
     },
-    "en-hopar.html": {
-      "DIV1>DIV0>DIV0": {
-        "padding-top": "39px",
-        "padding-bottom": "35px"
-      },
-      "DIV1>DIV0>DIV1": {
-        "padding-top": "16px",
-        "padding-bottom": "20px"
-      }
-    },
+    "en-hopar.html": {},
     "hoparkvold.html": {
       "DIV1>DIV1": {
         "padding-top": "0px",
