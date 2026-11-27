@@ -131,13 +131,17 @@ async function lesaBody(req) {
  *   ord:    orðin í svörunum, t.d. { nefn: 'pöntun', eint: 'pöntunina', ft: 'pantanir', thgf: 'pöntunum',
  *           titill: 'Pöntunarformið', uppsett: 'Pantanir eru ekki uppsettar hér', log: 'fyrirspurn' }
  *   lesa(body) → g,  athuga(g) → villuboð eða null,  skeyti(g) → { fyrirsogn, efni, rows, blokkir, slod }
+ *   svor(g) → valfrjálst: svör fyrir þessa sendingu sem koma í stað þeirra sjálfgefnu, t.d. fyrir
+ *           enska síðu { sida: '/en-hopar', margar, lokad, sending, uppsett } (429 frá IP-tölu,
+ *           429 dagsþak, 502, 503). Hvern lið má vanta, og null → allt sjálfgefið. Villur áður en
+ *           sendingin er lesin (of löng, ógild) fara alltaf á sjálfgefnu síðuna á íslensku.
  */
-function bua({ sida, takk, villa, ord, lesa, athuga, skeyti }) {
-  function svara(req, res, code, obj) {
+function bua({ sida, takk, villa, ord, lesa, athuga, skeyti, svor }) {
+  function svara(req, res, code, obj, heim) {
     // Án JavaScript kemur formið sem venjuleg sending: þá er vísað aftur á síðuna
     if (/application\/x-www-form-urlencoded/.test(req.headers['content-type'] || '')) {
       res.statusCode = 303;
-      res.setHeader('Location', sida + (obj.ok ? '?sent=1#' + takk : '?villa=1#' + villa));   // síðan birtir þetta með :target
+      res.setHeader('Location', (heim || sida) + (obj.ok ? '?sent=1#' + takk : '?villa=1#' + villa));   // síðan birtir þetta með :target
       res.setHeader('Cache-Control', 'no-store');
       return res.end();
     }
@@ -151,23 +155,25 @@ function bua({ sida, takk, villa, ord, lesa, athuga, skeyti }) {
     try { body = await lesaBody(req); } catch (e) { return svara(req, res, 413, { ok: false, error: 'Of löng ' + ord.nefn }); }
     if (!body || typeof body !== 'object') return svara(req, res, 400, { ok: false, error: 'Ógild ' + ord.nefn });
     const g = lesa(body);
+    // Svör fyrir þessa sendingu (t.d. á ensku); svor kemur úr okkar eigin kóða, aldrei frá gestinum
+    const s = (svor && svor(g)) || {}, heim = s.sida || sida;
 
     // Vélmenni fylla út falda reitinn: þau fá „í lagi" en ekkert er sent
-    if (g.gildra) return svara(req, res, 200, { ok: true });
+    if (g.gildra) return svara(req, res, 200, { ok: true }, heim);
 
     const v = athuga(g);
-    if (v) return svara(req, res, 400, { ok: false, error: v });
+    if (v) return svara(req, res, 400, { ok: false, error: v }, heim);
 
     if (S.overLimit('fyrirspurn:' + ipLykill(clientIp(req)), ...LIMIT)) {
-      return svara(req, res, 429, { ok: false, error: 'Of margar ' + ord.ft + ' í röð — hringið í 546-1700 eða sendið póst á radagerdi@radagerdi170.is' });
+      return svara(req, res, 429, { ok: false, error: s.margar || 'Of margar ' + ord.ft + ' í röð — hringið í 546-1700 eða sendið póst á radagerdi@radagerdi170.is' }, heim);
     }
     if (S.overLimit('fyrirspurn:dagur', ...DAGUR)) {
       // Þakið á öllu tilvikinu, ekki gestinum að kenna — og sést í loggum Vercel
       console.error(ord.log + ': dagsþak náð (' + DAGUR[0] + ' á sólarhring) — ' + ord.thgf + ' hafnað');
-      return svara(req, res, 429, { ok: false, error: ord.titill + ' er lokað í bili — hringið í 546-1700 eða sendið póst á radagerdi@radagerdi170.is' });
+      return svara(req, res, 429, { ok: false, error: s.lokad || ord.titill + ' er lokað í bili — hringið í 546-1700 eða sendið póst á radagerdi@radagerdi170.is' }, heim);
     }
     const key = process.env.RESEND_API_KEY;
-    if (!key) return svara(req, res, 503, { ok: false, error: ord.uppsett });
+    if (!key) return svara(req, res, 503, { ok: false, error: s.uppsett || ord.uppsett }, heim);
 
     const post = (m) => fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -182,9 +188,9 @@ function bua({ sida, takk, villa, ord, lesa, athuga, skeyti }) {
       if (!r.ok) throw new Error('Resend ' + r.status + ': ' + (await r.text()).slice(0, 200));
     } catch (e) {
       console.error(ord.log + ' failed:', e.message);
-      return svara(req, res, 502, { ok: false, error: 'Ekki tókst að senda ' + ord.eint });
+      return svara(req, res, 502, { ok: false, error: s.sending || 'Ekki tókst að senda ' + ord.eint }, heim);
     }
-    return svara(req, res, 200, { ok: true });
+    return svara(req, res, 200, { ok: true }, heim);
   };
 }
 
